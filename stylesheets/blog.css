@@ -175,7 +175,7 @@ table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
 table.sourceCode { width: 100%; line-height: 100%;  }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-pre, code { background: #2e3436; color: #eeeeec;font-size:17px;}
+pre, code { background: #2e3436; color: #eeeeec;font-size:17px;padding:0px;}
 code > span.kw { color: #FFC125; font-weight: bold; }
 code > span.dt { color: #FFC125; }
 code > span.dv { color: #4BC98A; }
