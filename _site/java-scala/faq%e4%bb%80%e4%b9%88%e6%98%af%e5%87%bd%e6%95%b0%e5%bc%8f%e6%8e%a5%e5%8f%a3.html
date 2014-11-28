@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="java, java8"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/java-scala/faq%25e4%25bb%2580%25e4%25b9%2588%25e6%2598%25af%25e5%2587%25bd%25e6%2595%25b0%25e5%25bc%258f%25e6%258e%25a5%25e5%258f%25a3.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>[FAQ]什么是函数式接口 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">[FAQ]什么是函数式接口</h2>
+
+    <p class="post-meta">By 07月03日  2013  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> java-scala (20)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#java"><i class="fa fa-tags"></i> java (16)</a>
+ 
+<a class="post-category " href="/tag/#java"><i class="fa fa-tags"></i> java8 (3)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <p>
+	<br />
+	<span style="color:black"><span style="background-color:white"><span style="font-family:微软雅黑">一般来说，函数式接口是这样一种类型，它可以作为方法参数，而实际上真正的参数是其包含的方法。举例来说</span>,forEach<span style="font-family:微软雅黑">方法签名如下：</span></span></span></p>
+<p>
+	<span style="color:black; font-family:Courier New; font-size:10pt"><span style="background-color:white"><strong>public void forEach(Consumer&lt;? super T&gt; consumer); </strong></span></span></p>
+<p>
+	<span style="color:black"><span style="font-family:Tahoma; background-color:white">forEach</span><span style="font-family:微软雅黑; background-color:white">必须接受一个包含单个方法的</span><span style="font-family:Tahoma; background-color:white">Consumer</span><span style="font-family:微软雅黑; background-color:white">实例。这个实例可以是一个</span><span style="font-family:Tahoma; background-color:white">lambda</span><span style="font-family:微软雅黑; background-color:white">表达式。在这种情况下</span><span style="font-family:Tahoma; background-color:white">lambda</span><span style="font-family:微软雅黑"><span style="background-color:white">表达式相当于只包含一个方法的接口，因为只有一个方法，所以调用方法清楚的知道要调用哪个方法。</span></span></span></p>
+<p>
+	<br />
+	<span style="color:black"><span style="font-family:微软雅黑; background-color:white">更精确点来说，函数式接口实际上就是只包含一个抽象方法的接口</span><span style="font-family:Tahoma; background-color:white">(</span><span style="font-family:微软雅黑; background-color:white">请记住，是抽象方法。因为在</span><span style="font-family:Tahoma; background-color:white">Java8</span><span style="font-family:微软雅黑; background-color:white">中，接口不再只包含抽象方法，还可以包含默认方法</span><span style="font-family:Tahoma; background-color:white">)</span><span style="font-family:微软雅黑; background-color:white">。这就是为什么函数式接口一般被称为单一抽象方法接口</span><span style="font-family:Tahoma; background-color:white">(SAM)</span></span></p>
+<p>
+	<span style="color:black; font-family:微软雅黑; font-size:14pt"><span style="background-color:white"><strong>下面是例子</strong></span></span></p>
+<p>
+	<br />
+	<span style="color:black"><span style="font-family:微软雅黑"><span style="background-color:white">根据上面的定义，下面的接口就是函数式接口：</span></span></span></p>
+<p>
+	<span style="color:black; font-family:Courier New; font-size:10pt"><span style="background-color:white"><strong>public interface Runnable { void run(); }<br />
+	public interface Callable&lt;V&gt; { V call() throws Exception; }<br />
+	public interface ActionListener { void actionPerformed(ActionEvent e); }<br />
+	public interface Comparator&lt;T&gt; { int compare(T o1, T o2); boolean equals(Object obj); } </strong></span></span></p>
+<p>
+	<span style="color:black; font-family:微软雅黑; font-size:14pt"><span style="background-color:white"><strong>语法点</strong></span></span></p>
+<ul>
+<li>
+		<span style="color:black"><span style="font-family:微软雅黑; background-color:white">虽然</span><span style="font-family:Courier New; background-color:white">Comparator</span><span style="font-family:微软雅黑; background-color:white">定义了两个抽象方法，但它依然是函数式接口。因为其中的一个方法</span><span style="font-family:Courier New; background-color:white">equals</span><span style="font-family:微软雅黑; background-color:white">继承自</span><span style="font-family:Courier New; background-color:white">Object</span><span style="font-family:微软雅黑; background-color:white">。继承自</span><span style="font-family:Courier New; background-color:white">Object</span><span style="font-family:微软雅黑"><span style="background-color:white">的方法不算是接口自己定义的方法。</span></span></span>
+	</li>
+<li>
+		<span style="color:black"><span style="font-family:微软雅黑; background-color:white">当两个接口包含的类似如下的方法，情况就变得比较复杂了</span></p>
+<p>		<span style="font-family:Courier New"><span style="font-size:10pt; background-color:white"><strong>interface Foo1 { void bar(List&lt;String&gt; arg); }<br />
+		interface Foo2 { void bar(List arg); }</strong></span><br />
+		<span style="background-color:white">Foo1</span></span><span style="font-family:微软雅黑; background-color:white">和</span><span style="font-family:Courier New; background-color:white">Foo2</span><span style="font-family:微软雅黑; background-color:white">包含的方法几乎相同，除了集合的类型。但是在</span><span style="font-family:Courier New; background-color:white">Java</span><span style="font-family:微软雅黑; background-color:white">中，泛型在编译后是被擦除的，所以在编译后，这两个方法无法区分开。这种情况称为等价重载</span><span style="font-family:Courier New; background-color:white">(override-equivalent).</span><span style="font-family:微软雅黑; background-color:white">如果一个接口的多个父接口出现等价重载的情况，那么此接口需要定义一个方法覆盖所有继承的方法。在此例中，像如下的接口就会出现等价重载</span><span style="font-family:Courier New; background-color:white">:</p>
+<p>		<span style="font-size:10pt"><strong>interface Foo extends Foo1, Foo2 {}</strong></span></span><br />
+		<span style="font-family:微软雅黑; font-size:10pt; background-color:white">此时方法需要定义如下：</span></p>
+<p>		<span style="font-family:Courier New; font-size:10pt; background-color:white"><strong>void bar(List arg);</strong></span></span>
+	</li>
+</ul>
+<p>
+	<img alt="" src="assets/070313_1405_FAQ1.png" /></p>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/faq%25e4%25b8%25ba%25e4%25bb%2580%25e4%25b9%2588%25e5%25bc%2595%25e5%2585%25a5lambda%25e8%25a1%25a8%25e8%25be%25be%25e5%25bc%258f.html" title="[FAQ]为什么引入lambda表达式 "><p> <i class="fa fa-mail-reply"></i>&nbsp;[FAQ]为什么引入lambda表达式</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/clojure/clojure%25e6%2595%2599%25e7%25a8%258b-%25e7%258e%25af%25e5%25a2%2583%25e6%2590%25ad%25e5%25bb%25ba%25e4%25b8%258ehello-world-2.html" title="Clojure教程-环境搭建与Hello World"><p>Clojure教程-环境搭建与Hello World&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="[FAQ]什么是函数式接口"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

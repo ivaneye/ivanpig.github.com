@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="design pattern, observer, 观察者模式, 设计模式"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/pig%25e8%25ae%25be%25e8%25ae%25a1%25e6%25a8%25a1%25e5%25bc%258f%25ef%25bc%259a%25e8%25a7%2582%25e5%25af%259f%25e8%2580%2585%25e6%25a8%25a1%25e5%25bc%258f.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>Pig设计模式：观察者模式 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">Pig设计模式：观察者模式</h2>
+
+    <p class="post-meta">By 10月06日  2011  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> 设计模式 (17)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#design pattern"><i class="fa fa-tags"></i> design pattern (15)</a>
+ 
+<a class="post-category " href="/tag/#design pattern"><i class="fa fa-tags"></i> observer (1)</a>
+ 
+<a class="post-category " href="/tag/#design pattern"><i class="fa fa-tags"></i> 观察者模式 (1)</a>
+ 
+<a class="post-category " href="/tag/#design pattern"><i class="fa fa-tags"></i> 设计模式 (17)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <p>     我更愿意称观察者模式为通知模式，我觉得“通知模式”更能反应这个模式的主旨----你该干嘛干嘛去，有事我通知你！<br />
+     此模式的最佳应用在哪里呢？3Q大战。我们来模拟一下！</p>
+<pre class="brush:java">
+//QQ Client
+public interface QQ{
+     public boolean login(String username,String password);
+     public void popWin(String msg);
+}
+
+//QQ Server
+public interface QQServer{
+
+    private List<qq> list = new ArrayList(); 
+    public void addQQ(QQ qq){
+         list.add(qq);
+    }
+
+    public void popAll(String msg){
+        for(QQ qq : list) qq.popWin(msg);
+    }
+}
+
+//QQ实现
+public class MyQQ implements QQ{
+     public boolean login(String username,String password){
+           //这里使用网络发送请求到QQServer，如果用户名密码正确，就调用addQQ方法,于是我们的QQ就上战场了
+     }
+
+     public void popWin(String msg){
+          System.out.println(msg);
+     }
+}
+</qq></pre>
+<p>     这样，只要QQServer一做出"艰难的决定"，我们就都遭殃了！<br />
+     当然，这只是一个模拟，真实代码就不得而知了！在Web中，这种模式也叫做“消息推送”。相对的客户端定时向服务器请求，叫“拉”模式。</p>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/pig%25e8%25ae%25be%25e8%25ae%25a1%25e6%25a8%25a1%25e5%25bc%258f%25ef%25bc%259a%25e9%2580%2582%25e9%2585%258d%25e5%2599%25a8%25e6%25a8%25a1%25e5%25bc%258f.html" title="Pig设计模式：适配器模式 "><p> <i class="fa fa-mail-reply"></i>&nbsp;Pig设计模式：适配器模式</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/pig%25e8%25ae%25be%25e8%25ae%25a1%25e6%25a8%25a1%25e5%25bc%258f%25ef%25bc%259a%25e5%258e%259f%25e5%259e%258b%25e6%25a8%25a1%25e5%25bc%258f.html" title="Pig设计模式：原型模式"><p>Pig设计模式：原型模式&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Pig设计模式：观察者模式"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

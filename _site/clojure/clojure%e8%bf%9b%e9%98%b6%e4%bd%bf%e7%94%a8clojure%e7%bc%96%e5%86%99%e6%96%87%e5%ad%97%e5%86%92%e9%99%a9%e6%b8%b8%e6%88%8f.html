@@ -1,0 +1,905 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content=""/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/clojure/clojure%25e8%25bf%259b%25e9%2598%25b6%25e4%25bd%25bf%25e7%2594%25a8clojure%25e7%25bc%2596%25e5%2586%2599%25e6%2596%2587%25e5%25ad%2597%25e5%2586%2592%25e9%2599%25a9%25e6%25b8%25b8%25e6%2588%258f.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>Clojure进阶:使用Clojure编写文字冒险游戏 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">Clojure进阶:使用Clojure编写文字冒险游戏</h2>
+
+    <p class="post-meta">By 05月16日  2014  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> clojure (11)</a>
+
+
+  
+
+  
+</header>
+<div class="article pure-u-22-24">
+    <div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. 准备</a></li>
+<li><a href="#sec-2">2. 语法和语义</a></li>
+<li><a href="#sec-3">3. 为我们的游戏世界定义数据</a></li>
+<li><a href="#sec-4">4. 环顾我们的游戏世界</a></li>
+<li><a href="#sec-5">5. 函数式编码风格</a></li>
+<li><a href="#sec-6">6. 环游我们的游戏世界</a></li>
+<li><a href="#sec-7">7. 构建SPELs</a></li>
+<li><a href="#sec-8">8. 创建特殊操作</a></li>
+<li><a href="#sec-9">9. 附录</a></li>
+<li><a href="#sec-10">10. 为什么没有使用"宏"这个词</a></li>
+<li><a href="#sec-11">11. 译者感想</a></li>
+</ul>
+</div>
+</div>
+<p>
+本文翻译自:<a href="http://www.lisperati.com/clojure-spels/casting.html">Casting SPELs in Clojure</a><br />
+<img src="assets/wpid-cs_016.jpg" alt="cs_01.jpg" /></p>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 准备</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+任何学过Lisp的人都会说List和其它语言有很大的不同.它有很多不可思议的地<br />
+方.本文将告诉你它有哪些独特之处!<br />
+本文适用于Clojure,它是一个运行在JVM上的Lisp方言.Clojure的API和语法和<br />
+Common Lisp很类似,但是还是有足够多的区别,需要单独为其写个教程.<br />
+在大部分情况下,我们会说Lisp而不是Clojure,因为大部分的概念在Lisp中是通<br />
+用的.我们会指出Clojure特有的内容.<br />
+<img src="assets/wpid-cs_026.jpg" alt="cs_02.jpg" /><br />
+Clojure是运行在JVM之上的,所以你需要先安装JVM.如果你是MAC机,那么Java已<br />
+经被安装过了.如果是Linux或者Windows系统,你需要到<a href="http://java.sun.com/javase/downloads/index.jsp">Oracle Java官网</a>下载对<br />
+应版本的Java.而Clojure,你可以从它的<a href="http://clojure.org/">官网</a>获得最新版本.<br />
+下载完成后,你只需要解压缩,打开命令行,切换到解压缩目录,输入:</p>
+<div class="org-src-container">
+<pre class="src src-sh">java -jar clojure.jar
+</pre>
+</div>
+<p>
+如果没有问题,那么你将会看到Clojure输出提示</p>
+<div class="org-src-container">
+<pre class="src src-sh">Clojure 1.6.0
+<span style="color: #268bd2;">user</span>=&gt;
+</pre>
+</div>
+<p>
+教程中有很多Clojure代码片段,类似下面的样子:</p>
+<div class="org-src-container">
+<pre class="src src-clojure">'<span style="color: #8c8c8c;">(</span>these kinds of boxes<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+你只需要将这些代码片段拷贝到Clojure REPL中运行就可以了!当你学习完此教<br />
+程,你将会有一个你自己的文字冒险游戏了!</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 语法和语义</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+每一个编程语言是由语法和语义组成的.语法是组成你的程序的骨架,你必须要<br />
+遵循它们,这样编译器才能知道你的程序里什么是什么,比如说什么是函数,什么<br />
+是变量,等等!而语义是个比较"随便"的东西,例如你的程序里有哪些不同的命令,<br />
+或者在程序的哪个部分能访问到哪些变量!这里Lisp比较特别的地方就是,Lisp的<br />
+语法笔其它任何语言都要简单.</p>
+<p>
+首先,Lisp语法规定,所有传递给Lisp编译器的文本需要是个list,当然这个list<br />
+可以无限嵌套.每个list都必须使用括号包裹.<br />
+<img src="assets/wpid-cs_036.jpg" alt="cs_03.jpg" /></p>
+<p>
+另外,Lisp编译器使用两种模式来读取你的代码:代码模式和数据模式.当你在数<br />
+据模式下,你可以将任何东西塞到你的list中.但是在代码模式下,你的list需要<br />
+是叫做form的特殊类型.<br />
+<img src="assets/wpid-cs_046.jpg" alt="cs_04.jpg" /></p>
+<p>
+form也是个list,不过它的第一个符号被lisp编译器特殊对待了&#x2014;一般被当做函<br />
+数的名字.在这种情况下,编译器会将list中的其它元素作为函数参数传递给这个<br />
+函数.默认情况下,编译器运行在代码模式下,除非你特意告诉它进入数据模式.</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> 为我们的游戏世界定义数据</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+为了进一步的学习form,让我们来创建一些form,来定义我们游戏世界里的数据.首<br />
+先,我们的游戏有一些对象,玩家可以使用他们&#x2013;让我们来定义吧:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">objects</span> '<span style="color: #8c8c8c;">(</span>whiskey-bottle bucket frog chain<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+让我们来看看这行代码是什么意思:Lisp编译器总是使用代码模式来读取内容,所<br />
+以第一个符号(这里是def),肯定是个命令.在这里,它的作用就是给某个变量设<br />
+值:这里变量就是objects,而值是一个包含四个对象的list.这个list是数据(我<br />
+们可不想编译器去调用一个叫做whiskey-bottle的函数),所以在读取这个list时<br />
+我们需要将其设值为数据模式.在list前面的哪个单引号就是干这个的:<br />
+<img src="assets/wpid-cs_056.jpg" alt="cs_05.jpg" /><br />
+def命令就是用来设值的(如果你学过Common Lisp,你应该会知道它和Common<br />
+Lisp中的setf命令等价,但是Clojure中没有setf命令)<br />
+现在我们在游戏里定义了一些对象,现在让我们来定义一下游戏地图.下面是我们<br />
+的游戏世界:<br />
+<img src="assets/wpid-cs_066.jpg" alt="cs_06.jpg" /><br />
+在这个简单的游戏里,只有三个地点:一个房子,它包含起居室,阁楼和花园.让我<br />
+们来定义一个新变量,叫做game-map来描述这个游戏地图:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">game-map</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">hash-map</span>
+   'living-room '<span style="color: #8c8c8c;">((</span>you are in the living room
+                   of a wizards house - there is a wizard
+                   snoring loudly on the couch -<span style="color: #8c8c8c;">)</span>
+                  <span style="color: #8c8c8c;">(</span>west door garden<span style="color: #8c8c8c;">)</span>
+                  <span style="color: #8c8c8c;">(</span>upstairs stairway attic<span style="color: #8c8c8c;">))</span>
+   'garden '<span style="color: #8c8c8c;">((</span>you are in a beautiful garden -
+              there is a well in front of you -<span style="color: #8c8c8c;">)</span>
+             <span style="color: #8c8c8c;">(</span>east door living-room<span style="color: #8c8c8c;">))</span>
+   'attic '<span style="color: #8c8c8c;">((</span>you are in the attic of the
+             wizards house - there is a giant
+             welding torch in the corner -<span style="color: #8c8c8c;">)</span>
+            <span style="color: #8c8c8c;">(</span>downstairs stairway living-room<span style="color: #8c8c8c;">))))</span>
+</pre>
+</div>
+<p>
+这个map包含了三个地点的所有重要信息:每个地点都有个独立的名字,一个简短<br />
+的描述,描述了我们能在这些地点看到什么,以及如何进入此处或从此处出去.请<br />
+注意这个包含了丰富信息的变量是如何定义的&#x2014;Lisp程序员更喜欢用小巧的代<br />
+码片段而不是一大片代码,因为小代码更容易理解.</p>
+<p>
+现在我们有了一个地图和一组对象,让我们来创建另一个变量,来描述这些对象在<br />
+地图的哪些地方.</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">object-locations</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">hash-map</span>
+                       'whiskey-bottle 'living-room
+                       'bucket 'living-room
+                       'chain 'garden
+                       'frog 'garden<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+这里我们将每个对象和地点进行了关联.Clojure提供了Map这个数据结构.Map使<br />
+用hash-map函数来创建,它需要一组参数类似(key1 value1 keys value2&#x2026;).我<br />
+们的game-map变量也是个Map&#x2014;三个key分别是living-room,garden和attic.</p>
+<p>
+我们定义了游戏世界,以及游戏世界中的对象,现在就剩下一件事了,就是描述玩<br />
+家的地点!</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">location</span> 'living-room<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+搞定,现在让我们来定义游戏操作吧!<br />
+<img src="assets/wpid-cs_076.jpg" alt="cs_07.jpg" /></p>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 环顾我们的游戏世界</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+我们想要的第一个命令能够告诉我们该地点的描述.那么我们该怎么定义这个函<br />
+数呢?它要知道我们想要描述的地点以及能够从map中查找地点的描述.如下:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">describe-location</span> [location game-map]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">first</span> <span style="color: #8c8c8c;">(</span>location game-map<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+defn定义了一个函数.函数的名字叫做describe-location,它需要两个参数:地点<br />
+和游戏地图.这两个变量在函数定义的括号内,所以它们是局部变量,因此对于全<br />
+局的location和game-map没有关系.注意到了吗?Lisp中的函数与其它语言中的函<br />
+数定义相比,更像是数学中的函数:它不打印信息或者弹出消息框:它所作的就是<br />
+返回结果.我们假设现在我们在起居室里!<br />
+<img src="assets/wpid-cs_086.jpg" alt="cs_08.jpg" /><br />
+为了能找到起居室的描述,describe-locatin函数首先需要从地图中找到起居<br />
+室.(location game-map)就是进行从game-map中查找内容的,并返回起居室的描<br />
+述.然后first命令来处理返回值,取得返回的list的第一个元素,这个就是起居室<br />
+的描述了.<br />
+现在我们来测试一下</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>describe-location 'living-room game-map<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (describe-location 'living-room game-map)
+(you are in the living-room of a wizard's house -
+there is a wizard snoring loudly on the couch -)
+</pre>
+<p>
+很完美!这就是我们要的结果!请注意我们在living-room前添加了一个单引号,因<br />
+为这个符号是地点map的一个名称!但是,为什么我们没有在game-map前面添加单<br />
+引号呢?这是因为我们需要编译器去查询这个符号所指向的数据(就是那个map)</p>
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> 函数式编码风格</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+你可能已经发现了describe-location函数有几个让人不太舒服的地方.第一,为<br />
+什么要传递位置和map参数,而不是直接使用已经定义的全局变量?原因是Lisp程<br />
+序员喜欢写函数式风格的代码.函数式风格的代码,主要遵循下面三条规则:</p>
+<ul class="org-ul">
+<li>只读取函数传递的参数或在函数内创建的变量
+</li>
+<li>不改变已经被设值的变量的值
+</li>
+<li>除了返回值,不去影响函数外的任何内容
+</li>
+</ul>
+<p>
+你也许会怀疑在这种限制下你还能写代码吗?答案是:可以!为什么很多人对这些<br />
+规则感到疑惑呢?一个很重要的原因是:遵循此种风格的代码更加的引用透明<br />
+(referential transparency):这意味着,对于给定的代码,你传入相同的参数,永<br />
+远返回相同的结果&#x2014;这能减少程序的错误,也能提高程序的生产力!</p>
+<p>
+当然了,你也会有一些非函数式风格的代码,因为不这么做,你无法和其它用户或<br />
+外部内容进行交互.教程后面会有这些函数,他们不遵循上面的规则.</p>
+<p>
+describe-location函数的另一个问题是,它没告诉我们怎么进入一个位置或者怎<br />
+么从某个位置出来.让我们来编写这样的函数:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">describe-path</span> [path]
+  `<span style="color: #8c8c8c;">(</span>there is a ~<span style="color: #8c8c8c;">(</span><span style="color: #859900;">second</span> path<span style="color: #8c8c8c;">)</span> going ~<span style="color: #8c8c8c;">(</span><span style="color: #859900;">first</span> path<span style="color: #8c8c8c;">)</span> from here -<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+这个函数看起来很明了:它看起来更像是数据而不是函数.我们先来尝试调用它,看<br />
+它做了些什么:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>describe-path '<span style="color: #8c8c8c;">(</span>west door garden<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (describe-path '(west door garden))
+(user/there user/is user/a door user/going west user/from user/here clojure.core/-)
+</pre>
+<p>
+这是什么?!结果看起来很乱,包含了很多的/和一些其它的文字!这是因为Clojure<br />
+会将命名空间的名字添加到表达式的前面.我们这里不深究细节,只给你提供消除<br />
+这些内容的函数:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">spel-print</span> [list] <span style="color: #8c8c8c;">(</span><span style="color: #859900;">map</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [x] <span style="color: #8c8c8c;">(</span><span style="color: #859900;">symbol</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">name</span> x<span style="color: #8c8c8c;">)))</span> list<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+修改调用方式</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>spel-print <span style="color: #8c8c8c;">(</span>describe-path '<span style="color: #8c8c8c;">(</span>west door garden<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (spel-print (describe-path '(west door garden)))
+(there is a door going west from here -)
+</pre>
+<p>
+现在结果很清晰了:这个函数接收一个描述路径的list然后将其解析到一个句子<br />
+里面.我们回过头来看这个函数,这个函数和它产生的数据非常的像:它就是拼接<br />
+第一个和第二个list的元素到语句中!它是怎么做到的?使用语法quote!</p>
+<p>
+还记得我们使用quote来从代码模式切换到数据模式吗?语法quote的功能类似,但<br />
+是还不只这样.在语法quote里,我们还能使用'~'再次从数据模式切换回代码模式.<br />
+<img src="assets/wpid-cs_096.png" alt="cs_09.png" /><br />
+语法quote是List的一个很强大的功能!它能使我们的代码看起来像它创建的数据.这<br />
+在函数式编码中很常见:创建这种样子的函数,使得我们的代码更易读也更稳健:<br />
+只要数据不变,函数就不需要修改.想象一下,你能否在VB或C中编写类似的代码?<br />
+你可能需要将文字切成小块,然后在一点点的组装-这和数据本身看起来差距很大,更<br />
+别说代码的稳健性了!</p>
+<p>
+现在我们能描述一个路径,但是一个地点可能会有多个路径,所以让我们来创建一<br />
+个函数叫做describe-paths:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">describe-paths</span> [location game-map]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">apply</span> concat <span style="color: #8c8c8c;">(</span><span style="color: #859900;">map</span> describe-path <span style="color: #8c8c8c;">(</span><span style="color: #859900;">rest</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">get</span> game-map location<span style="color: #8c8c8c;">)))))</span>
+</pre>
+</div>
+<p>
+这个函数使用了另一个在函数式编程中很常用的技术:高阶函数.apply和map这两<br />
+个函数能将其它的函数作为参数.map函数将另一个函数分别作用到list中的每个<br />
+对象上,这里是调用describe-path函数.apply concat是为了减少多余的括号,没<br />
+有多少功能性操作!我们来试试新函数</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>spel-print <span style="color: #8c8c8c;">(</span>describe-paths 'living-room game-map<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (spel-print (describe-paths 'living-room game-map))
+(there is a door going west from here -
+there is a stairway going upstairs from here -)
+</pre>
+<p>
+漂亮!<br />
+最后,我们还剩下一件事要做:描述某个地点的某个对象!我们先写个帮助函数来<br />
+告诉我们在某个地方是否有某个对象!</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">is-at?</span> [obj loc obj-loc] <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> <span style="color: #8c8c8c;">(</span>obj obj-loc<span style="color: #8c8c8c;">)</span> loc<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+=也是个函数,它判断对象的地点是否和当前地点相同!<br />
+<img src="assets/wpid-cs_096.jpg" alt="cs_09.jpg" /><br />
+我们来尝试一下:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>is-at? 'whiskey-bottle 'living-room object-locations<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (is-at? 'whiskey-bottle 'living-room object-locations)
+true
+</pre>
+<p>
+返回结果是true,意味着whiskey-bottle在起居室.</p>
+<p>
+现在让我们来使用这个函数描述地板:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">describe-floor</span> [loc objs obj-loc]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">apply</span> concat <span style="color: #8c8c8c;">(</span><span style="color: #859900;">map</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [x]
+                       `<span style="color: #8c8c8c;">(</span>you see a ~x on the floor -<span style="color: #8c8c8c;">))</span>
+                     <span style="color: #8c8c8c;">(</span><span style="color: #859900;">filter</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [x] 
+                               <span style="color: #8c8c8c;">(</span>is-at? x loc obj-loc<span style="color: #8c8c8c;">))</span> objs<span style="color: #8c8c8c;">))))</span>
+</pre>
+</div>
+<p>
+这个函数包含了很多新事物:首先,它有匿名函数(fn定义的函数).第一个fn干的<br />
+事,和下面的函数做的事情是一样的:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">blabla</span> [x] `<span style="color: #8c8c8c;">(</span>you see a ~x on the floor.<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+然后将这个blabla函数传递给map函数.filter函数是过滤掉那些在当前位置没有<br />
+出现的物体.我们来试一下新函数:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>spel-print <span style="color: #8c8c8c;">(</span>describe-floor 'living-room objects object-locations<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (spel-print (describe-floor 'living-room objects object-locations))
+(you see a whiskey-bottle on the floor - you see a bucket on the floor -)
+</pre>
+<p>
+现在,让我们来将这些函数串联起来,定义一个叫look的函数,使用全局变量(这个<br />
+函数就不是函数式的了!)来描述所有的内容:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">look</span> []
+  <span style="color: #8c8c8c;">(</span>spel-print <span style="color: #8c8c8c;">(</span><span style="color: #859900;">concat</span> <span style="color: #8c8c8c;">(</span>describe-location location game-map<span style="color: #8c8c8c;">)</span>
+          <span style="color: #8c8c8c;">(</span>describe-paths location game-map<span style="color: #8c8c8c;">)</span>
+          <span style="color: #8c8c8c;">(</span>describe-floor location objects object-locations<span style="color: #8c8c8c;">))))</span>
+</pre>
+</div>
+<p>
+<img src="assets/wpid-cs_106.jpg" alt="cs_10.jpg" /><br />
+我们来试一下:</p>
+<pre class="example">
+user=&gt; (look)
+(you are in the living room of a wizards house -
+there is a wizard snoring loudly on the couch -
+there is a door going west from here -
+there is a stairway going upstairs from here -
+you see a whiskey-bottle on the floor -
+you see a bucket on the floor -)
+</pre>
+<p>
+很酷吧!</p>
+</div>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> 环游我们的游戏世界</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+好了,现在我们能看我们的世界了,让我们来写一些代码来环游我们的世<br />
+界.walk-direction包含了一些方向可以使我们走到那里:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">walk-direction</span> [direction]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [next <span style="color: #8c8c8c;">(</span><span style="color: #859900;">first</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">filter</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [x] <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> direction <span style="color: #8c8c8c;">(</span><span style="color: #859900;">first</span> x<span style="color: #8c8c8c;">)))</span>
+                            <span style="color: #8c8c8c;">(</span><span style="color: #859900;">rest</span> <span style="color: #8c8c8c;">(</span>location game-map<span style="color: #8c8c8c;">))))</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">cond</span> next <span style="color: #8c8c8c;">(</span><span style="color: #859900;">do</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">location</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">nth</span> next 2<span style="color: #8c8c8c;">))</span> <span style="color: #8c8c8c;">(</span>look<span style="color: #8c8c8c;">))</span>
+          <span style="color: #2aa198;">:else</span> '<span style="color: #8c8c8c;">(</span>you cannot go that way -<span style="color: #8c8c8c;">))))</span>
+</pre>
+</div>
+<p>
+这里的let用来创建局部变量next,用来描述玩家的方向.rest返回一个list,包含<br />
+原list中除了第一个元素外的全部元素.如果用户输入了错误的方向,next会返回<br />
+().cond类似于if-then条件:每个cond都包含一个值,lisp检查该值是否为真,如<br />
+果为真则执行其后的动作.在这里,如果下一个位置不是nil,则会定义玩家的<br />
+location到新位置,然后告诉玩家该位置的描述!如果next是nil,则告诉玩家,无<br />
+法到达,请重试:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>walk-direction 'west<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (walk-direction 'west)
+(you are in a beautiful garden -
+there is a well in front of you -
+there is a door going east from here -
+you see a frog on the floor -
+you see a chain on the floor -)
+</pre>
+<p>
+现在,我们通过创建look函数来简化描述.walk-direction也是类似的功能.但是<br />
+它需要输入方向,而且还有个quote.我们能否告诉编译器west仅仅是个数据,而不是<br />
+代码呢?</p>
+</div>
+</div>
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> 构建SPELs</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+现在我们开始学习Lisp中一个很强大的功能:创建SPELs!<br />
+SPEL是"语义增强逻辑"的简称,它能够从语言级别,按照我们的需求定制,对我们的代码添加新的行为-这<br />
+是Lisp最为强大的一部分.为了开启SPELs,我们需要先激活Lisp编译器的SPEL</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmacro</span> <span style="color: #268bd2;">defspel</span> [&amp; rest] `<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmacro</span> <span style="color: #268bd2;">~@rest</span><span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+现在,我们来编写我们的SPEL,叫做walk:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defspel</span> <span style="color: #268bd2;">walk</span> [direction] `<span style="color: #8c8c8c;">(</span>walk-direction '~direction<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+这段代码干了什么?它告诉编译器walk不是实际的名称,实际的名字叫<br />
+walk-direction,并且direction前面有个quote.SPEL的主要功能就是能在我们的<br />
+代码被编译器编译之前插入一些内容!<br />
+<img src="assets/wpid-cs_116.jpg" alt="cs_11.jpg" /><br />
+注意到了吗?这段代码和我们之前写的describe-path很类似:在Lisp中,不只是代<br />
+码和数据看起来很像,代码和特殊形式对于编译器来说也是一样的-高度的统一带<br />
+来简明的设计!我们来试试新代码:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #b58900;">walk</span> east<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (walk east)                                             
+(you are in the living room of a wizards house -
+there is a wizard snoring loudly on the couch -
+there is a door going west from here -
+there is a stairway going upstairs from here -
+you see a whiskey-bottle on the floor -
+you see a bucket on the floor -)
+</pre>
+<p>
+感觉好多了!<br />
+现在我们来创建一个命令来收集游戏里的物品</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">pickup-object</span> [object]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">cond</span> <span style="color: #8c8c8c;">(</span>is-at? object location object-locations<span style="color: #8c8c8c;">)</span>
+        <span style="color: #8c8c8c;">(</span><span style="color: #859900;">do</span>
+          <span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">object-locations</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">assoc</span> object-locations object 'body<span style="color: #8c8c8c;">))</span>
+          `<span style="color: #8c8c8c;">(</span>you are now carrying the ~object<span style="color: #8c8c8c;">))</span>
+        <span style="color: #2aa198;">:else</span> '<span style="color: #8c8c8c;">(</span>you cannot get that.<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+这个函数检查物品是否在当前地点的地上-如果在,则将它放到list里面,并返回<br />
+成功提示!否则提示失败!<br />
+现在我们来创建另一个SPEL来简化这条命令:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defspel</span> <span style="color: #268bd2;">pickup</span> [object] `<span style="color: #8c8c8c;">(</span>spel-print <span style="color: #8c8c8c;">(</span>pickup-object '~object<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+调用</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>pickup whiskey-bottle<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (pickup whiskey-bottle)
+(you are now carrying the whiskey-bottle)
+</pre>
+<p>
+现在我们来添加更多有用的命令-首先,一个能让我们查看我们捡到的物品的函<br />
+数:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">inventory</span> []
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">filter</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [x] <span style="color: #8c8c8c;">(</span>is-at? x 'body object-locations<span style="color: #8c8c8c;">))</span> objects<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+以及一个检查我们是否有某个物品的函数:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">have?</span> [object]
+   <span style="color: #8c8c8c;">(</span><span style="color: #859900;">some</span> #{object} <span style="color: #8c8c8c;">(</span>inventory<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> 创建特殊操作</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+现在我们只剩下一件事情需要做了:添加一些特殊动作,使得玩家能够赢得游戏.第<br />
+一条命令是让玩家在阁楼里给水桶焊接链条.</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">chain-welded</span> false<span style="color: #8c8c8c;">)</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">weld</span> [subject object]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">cond</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">and</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> location 'attic<span style="color: #8c8c8c;">)</span>
+             <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> subject 'chain<span style="color: #8c8c8c;">)</span>
+             <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> object 'bucket<span style="color: #8c8c8c;">)</span>
+             <span style="color: #8c8c8c;">(</span>have? 'chain<span style="color: #8c8c8c;">)</span>
+             <span style="color: #8c8c8c;">(</span>have? 'bucket<span style="color: #8c8c8c;">)</span>
+             <span style="color: #8c8c8c;">(</span><span style="color: #859900;">not</span> chain-welded<span style="color: #8c8c8c;">))</span>
+        <span style="color: #8c8c8c;">(</span><span style="color: #859900;">do</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">chain-welded</span> true<span style="color: #8c8c8c;">)</span>
+            '<span style="color: #8c8c8c;">(</span>the chain is now securely welded to the bucket -<span style="color: #8c8c8c;">))</span>
+        <span style="color: #2aa198;">:else</span> '<span style="color: #8c8c8c;">(</span>you cannot weld like that -<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+首先我们创建了一个新的全局变量来进行判断,我们是否进行了此操作.然后我们<br />
+创建了一个weld函数,来确认此操作的条件是否完成,如果已完成则进行此操作.<br />
+<img src="assets/wpid-cs_126.jpg" alt="cs_12.jpg" /><br />
+来试一下:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>weld 'chain 'bucket<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (weld 'chain 'bucket)
+(you cannot weld like that -)
+</pre>
+<p>
+Oops&#x2026;我们没有水桶,也没有链条,是吧?周围也没有焊接的机器!<br />
+现在,让我们创建一条命令来将链条和水桶放到井里:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">bucket-filled</span> false<span style="color: #8c8c8c;">)</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">dunk</span> [subject object]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">cond</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">and</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> location 'garden<span style="color: #8c8c8c;">)</span>
+             <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> subject 'bucket<span style="color: #8c8c8c;">)</span>
+             <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> object 'well<span style="color: #8c8c8c;">)</span>
+             <span style="color: #8c8c8c;">(</span>have? 'bucket<span style="color: #8c8c8c;">)</span>
+             chain-welded<span style="color: #8c8c8c;">)</span>
+        <span style="color: #8c8c8c;">(</span><span style="color: #859900;">do</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">bucket-filled</span> true<span style="color: #8c8c8c;">)</span>
+            '<span style="color: #8c8c8c;">(</span>the bucket is now full of water<span style="color: #8c8c8c;">))</span>
+        <span style="color: #2aa198;">:else</span> '<span style="color: #8c8c8c;">(</span>you cannot dunk like that -<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+注意到了吗?这个命令和weld命令看起来好像!两条命令都需要检查位置,物体和<br />
+对象!但是它们还是有不同,以至于我们不能将它们抽到一个函数里.太可惜了!<br />
+但是&#x2026;这可是Lisp.我们不止能写函数,还能写SPEL!我们来创建了SPEL来处理:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defspel</span> <span style="color: #268bd2;">game-action</span> [command subj obj place &amp; args]
+  `<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defspel</span> <span style="color: #268bd2;">~command</span> [subject# object#]
+     `<span style="color: #8c8c8c;">(</span>spel-print <span style="color: #8c8c8c;">(</span><span style="color: #859900;">cond</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">and</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> location '~'~place<span style="color: #8c8c8c;">)</span>
+                             <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> '~subject# '~'~subj<span style="color: #8c8c8c;">)</span>
+                             <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> '~object# '~'~obj<span style="color: #8c8c8c;">)</span>
+                             <span style="color: #8c8c8c;">(</span>have? '~'~subj<span style="color: #8c8c8c;">))</span>
+                        ~@'~args
+                        <span style="color: #2aa198;">:else</span> '<span style="color: #8c8c8c;">(</span>i cannot ~'~command like that -<span style="color: #8c8c8c;">)))))</span>
+</pre>
+</div>
+<p>
+非常复杂的SPEL!它有很多怪异的quote,语法quote,逗号以及很多怪异的符号!更<br />
+重要的是他是一个构建SPEL的SPEL!!即使是很有经验的Lisp程序员,也需要费下<br />
+脑细胞才能写出这么个玩样!!(这里我们不管)<br />
+<img src="assets/wpid-cs_135.jpg" alt="cs_13.jpg" /><br />
+这个SPEL的只是向你展示,你是否够聪明来理解这么复杂的SPEL.而且,即使这段<br />
+代码很丑陋,如果它只需要写依次,并且能生成几百个命令,那么也是可以接受的!<br />
+让我们使用这个新的SPEL来替换我们的weld命令:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>game-action weld chain bucket attic
+   <span style="color: #8c8c8c;">(</span><span style="color: #859900;">cond</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">and</span> <span style="color: #8c8c8c;">(</span>have? 'bucket<span style="color: #8c8c8c;">)</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">chain-welded</span> true<span style="color: #8c8c8c;">))</span>
+              '<span style="color: #8c8c8c;">(</span>the chain is now securely welded to the bucket -<span style="color: #8c8c8c;">)</span>
+         <span style="color: #2aa198;">:else</span> '<span style="color: #8c8c8c;">(</span>you do not have a bucket -<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+现在我们来看看这条命令变得多容易理解- game-action这个SPEL使得我们能编<br />
+写我们想要的核心代码,而不需要额外的信息.这就像我们创建了我们自己的专门<br />
+创建游戏命令的编程语言.使用SPEL创建伪语言称为领域特定语言编程(DSL),它<br />
+使得你的编码更加的快捷优美!</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>weld chain bucket<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<pre class="example">
+user=&gt; (weld chain bucket)
+(you do not have a chain -)
+</pre>
+<p>
+&#x2026;我们还没有做好焊接前的准备工作,但是这条命令生效了!<br />
+<img src="assets/wpid-cs_144.jpg" alt="cs_14.jpg" /><br />
+下面我们重写dunk命令:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>game-action dunk bucket well garden
+             <span style="color: #8c8c8c;">(</span><span style="color: #859900;">cond</span> chain-welded 
+                   <span style="color: #8c8c8c;">(</span><span style="color: #859900;">do</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">bucket-filled</span> true<span style="color: #8c8c8c;">)</span>
+                       '<span style="color: #8c8c8c;">(</span>the bucket is now full of water<span style="color: #8c8c8c;">))</span>
+                   <span style="color: #2aa198;">:else</span> '<span style="color: #8c8c8c;">(</span>the water level is too low to reach -<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+注意weld命令需要检验我们是否有物体,但是dunk不需要.我们的game-action这<br />
+个SPEL使得这段代码易写易读.<br />
+<img src="assets/wpid-cs_153.jpg" alt="cs_15.jpg" /><br />
+最后,就是将水泼到巫师身上:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>game-action splash bucket wizard living-room
+             <span style="color: #8c8c8c;">(</span><span style="color: #859900;">cond</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">not</span> bucket-filled<span style="color: #8c8c8c;">)</span> '<span style="color: #8c8c8c;">(</span>the bucket has nothing in it -<span style="color: #8c8c8c;">)</span>
+                   <span style="color: #8c8c8c;">(</span>have? 'frog<span style="color: #8c8c8c;">)</span> '<span style="color: #8c8c8c;">(</span>the wizard awakens and sees that you stole
+                                       his frog -
+                                       he is so upset he banishes you to the
+                                       netherworlds - you lose! the end -<span style="color: #8c8c8c;">)</span>
+                   <span style="color: #2aa198;">:else</span> '<span style="color: #8c8c8c;">(</span>the wizard awakens from his slumber and greets you
+                               warmly -
+                               he hands you the magic low-carb donut - you win!
+                               the end -<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+<img src="assets/wpid-cs_162.jpg" alt="cs_16.jpg" /><br />
+现在你已经编写完成了一个文字冒险游戏了!<br />
+点击<a href="http://www.lisperati.com/clojure-spels/cheat.html">这里</a>是完整的游戏.<br />
+点击<a href="http://www.lisperati.com/clojure-spels/code.html">这里</a>是代码.<br />
+为了使教程尽可能的简单,很多Lisp的执行细节被忽略了,所以最后,让我们来看<br />
+看这些细节!</p>
+</div>
+</div>
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> 附录</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+现在,我们来聊一聊被忽略的细节!<br />
+首先,Clojure有一套很成熟的定义变量以及改变变量值的系统.在此教程中,我们<br />
+只使用了def来设置和改变全局变量的值.而在真正的Clojure代码里,你不会这么<br />
+做.取而代之,你会使用<a href="http://clojure.org/refs">Refs</a>,<a href="http://clojure.org/atoms">Atoms和</a><a href="http://clojure.org/agents">Agents</a>,它们提供了更清晰,以及线程安全的<br />
+方式来管理数据.</p>
+<p>
+另一个问题就是我们在代码中大量使用了符号(symbol)</p>
+<div class="org-src-container">
+<pre class="src src-clojure">'<span style="color: #8c8c8c;">(</span>this is not how <span style="color: #cb4b16;">Lispers</span> usually write text<span style="color: #8c8c8c;">)</span>
+<span style="color: #2aa198;">"Lispers write text using double quotes"</span>
+</pre>
+</div>
+<p>
+符号在Clojure有特殊含义,主要是用来持有函数,变量或其它内容的.所以,在<br />
+Lisp中将符号作为文本信息描述是很奇怪的事情!使用字符串来显示文本信息可<br />
+以避免这样的尴尬!不过,使用字符串的话,在教程里就没法讲很多关于符号的内<br />
+容了!</p>
+<p>
+还有就是SPEL在Lisp里面更普遍的叫法是"宏",使用defmacro来定义,但是这个名<br />
+字不易于教学,所以没有提及.你可以阅读<a href="http://www.lisperati.com/clojure-spels/no_macros.html">此文</a>,这是我为什么没有使用"宏"这个<br />
+名字的原因.最后,在编写类似game-action这样的SPEL的时候,很可能会发生命名<br />
+重复的问题.当你编写了足够多的lisp的时候,你会越来越能体会到这个问题了.</p>
+<p>
+Q. 后面我该阅读哪些内容来扩充我的Lisp知识?<br />
+A. 在<a href="http://www.cliki.net/Lisp%2520books">cliki网站</a>有很多Lisp书籍可以下载.</p>
+<p>
+如果你对于理论上的内容很感兴趣,那么我推荐Paul Graham的<br />
+<a href="http://www.paulgraham.com/onlisp.html">On Lisp</a>电子书,它是免费的.他网站上的一些短文也很精彩.<br />
+如果你对实际应用比较感兴趣,那么大多数Lisp程序员对Perter Seibel编写的"Practical Common<br />
+Lisp"这本书推崇有加,你可以从<a href="http://www.gigamonkeys.com/book/">这里</a>获得</p>
+</div>
+</div>
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> 为什么没有使用"宏"这个词</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+编写这个教程的一个意图是使用宏来解决真实的难题.而经常的,当我向没有Lisp<br />
+经验的人解释宏这个概念的时候,我得到的答复往往是,"哦!C++里也有宏".当发<br />
+生这种事情的时候,我就很难去解释宏的概念了.的确,Lisp中的宏和C++中的宏的<br />
+确有几分相似,它们都是为了能通过编译器来改进代码的编写&#x2026;</p>
+<p>
+&#x2026;所以,假设一下,如果John McCarthy使用了"add"而不是"cons"这个词来将元<br />
+素添加到list中:我就真的很难解释cons是如何工作的了!</p>
+<p>
+所以,我决定在此文中使用一个新的词汇:SPEL,语义增强逻辑的简称,它更易理解<br />
+一些:</p>
+<ul class="org-ul">
+<li>它解释了Lisp宏的核心功能,能改变Lisp运行环境的行为
+</li>
+<li>SPEL这个术语可以被用来很高雅的解释很多语言上观念.
+</li>
+<li>这个术语不会导致Lisp中的宏与其它的宏被混为一谈
+</li>
+<li>SPEL这个词重复的可能性非常低.Google搜索"macro 或者 macros 程序 -lisp<br />
+-scheme"返回大概1150000条结果.而搜索"spel 或者 spels 程序 -lisp<br />
+-scheme"值返回28400条结果.
+</li>
+</ul>
+<p>
+所以,我希望,作为一个Lisp程序员,你能接受这个术语-当然了,像这样的新词汇<br />
+会被接受的可能性非常低.</p>
+<p>
+如果你有一个库或者是一个Lisp实现者,请先放下你手头上的工作,先在你的库里,添<br />
+加下面这行代码:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmacro</span> <span style="color: #268bd2;">defspel</span> [&amp; rest] `<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmacro</span> <span style="color: #268bd2;">~@rest</span><span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> 译者感想</h2>
+<div class="outline-text-2" id="text-11">
+<ul class="org-ul">
+<li>本人对Lisp的宏还是有些了解的,所以个人无法接受SPEL这个新词汇
+</li>
+<li>且SPEL使得代码不易阅读,就game-action这个SPEL来说,使用了两层,而使用宏<br />
+只需要一层
+</li>
+<li>附录中是我使用Clojure的惯用法重新改写的代码,且文字翻译成了中文.以及<br />
+使用了宏而不是SPEL.各位可比较,自行选择
+</li>
+</ul>
+<p>
+<a href="http://www.ivanpig.com/blog/wp-content/uploads/2014/05/wpid-game.zip">源代码</a></p>
+</div>
+</div>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/clojure/clojure%25e6%2595%2599%25e7%25a8%258brecord%25e5%2592%258cprotocol.html" title="Clojure教程:Record和Protocol "><p> <i class="fa fa-mail-reply"></i>&nbsp;Clojure教程:Record和Protocol</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/%E5%BB%BA%E7%AB%99%E6%97%A5%E8%AE%B0/%25e5%259c%25a8github%25e9%2583%25a8%25e7%25bd%25b2octopress.html" title="在GitHub部署OctoPress"><p>在GitHub部署OctoPress&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Clojure进阶:使用Clojure编写文字冒险游戏"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

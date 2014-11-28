@@ -1,0 +1,736 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content=""/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/clojure/clojure%25e6%2595%2599%25e7%25a8%258b%25e5%2587%25bd%25e6%2595%25b0.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>Clojure教程:函数 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">Clojure教程:函数</h2>
+
+    <p class="post-meta">By 03月15日  2014  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> clojure (11)</a>
+
+
+  
+
+  
+</header>
+<div class="article pure-u-22-24">
+    <div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. 针对Clojure版本</a></li>
+<li><a href="#sec-2">2. 简介</a></li>
+<li><a href="#sec-3">3. 如何定义函数</a></li>
+<li><a href="#sec-4">4. 匿名函数</a></li>
+<li><a href="#sec-5">5. 如何执行函数</a></li>
+<li><a href="#sec-6">6. 多元数函数</a></li>
+<li><a href="#sec-7">7. 解构函数参数</a>
+<ul>
+<li><a href="#sec-7-1">7.1. 基于位置的解构</a></li>
+<li><a href="#sec-7-2">7.2. 解构Map</a></li>
+</ul>
+</li>
+<li><a href="#sec-8">8. 变参函数</a>
+<ul>
+<li><a href="#sec-8-1">8.1. 具名参数(Named Parameters)</a></li>
+</ul>
+</li>
+<li><a href="#sec-9">9. 高阶函数</a></li>
+<li><a href="#sec-10">10. 私有函数</a></li>
+<li><a href="#sec-11">11. 关键字作为函数</a></li>
+<li><a href="#sec-12">12. Map作为函数</a></li>
+<li><a href="#sec-13">13. Set作为函数</a></li>
+<li><a href="#sec-14">14. 函数作为比较器</a></li>
+<li><a href="#sec-15">15. 结束语</a></li>
+<li><a href="#sec-16">16. 贡献</a></li>
+</ul>
+</div>
+</div>
+<p>
+本文翻译自<a href="http://clojure-doc.org/articles/language/functions.html">Functions in Clojure</a><br />
+本文包括如下内容:</p>
+<ul class="org-ul">
+<li>如何定义函数
+</li>
+<li>如何执行函数
+</li>
+<li>多元数函数(Multi-arity Functions)
+</li>
+<li>不定参函数(Variadic Functions)
+</li>
+<li>高阶函数
+</li>
+<li>其它函数相关内容
+</li>
+</ul>
+<p>
+版权:<br />
+This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 针对Clojure版本</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Clojure 1.5</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 简介</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Clojure是函数式编程语言.自然的,函数是Clojure非常重要的一部分.</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> 如何定义函数</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+函数定义一般使用defn宏:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">round</span>
+  [d precision]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [factor <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Math/pow</span> 10 precision<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">/</span> <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Math/floor</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">*</span> d factor<span style="color: #8c8c8c;">))</span> factor<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+类型提示有时能避免编译器使用反射,从而能生成更高效的字节码.但是,基本上<br />
+你没必要使用类型提示.后期优化时再考虑.<br />
+函数可以添加注释文档,给API添加文档说明是个好习惯:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">round</span>
+  <span style="color: #93a1a1; font-style: italic;">"Round down a double to the given precision (number of significant digits)"</span>
+  [d precision]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [factor <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Math/pow</span> 10 precision<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">/</span> <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Math/floor</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">*</span> d factor<span style="color: #8c8c8c;">))</span> factor<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+在Clojure中函数参数可以有类型提示,不过是可选的.</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">round</span>
+  [<span style="color: #cb4b16;">^double</span> d <span style="color: #cb4b16;">^long</span> precision]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [factor <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Math/pow</span> 10 precision<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">/</span> <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Math/floor</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">*</span> d factor<span style="color: #8c8c8c;">))</span> factor<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+函数还可以定义前置和后置条件来限制函数的参数和返回值.</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">round</span>
+  <span style="color: #93a1a1; font-style: italic;">"Round down a double to the given precision (number of significant digits)"</span>
+  [<span style="color: #cb4b16;">^double</span> d <span style="color: #cb4b16;">^long</span> precision]
+  {<span style="color: #2aa198;">:pre</span> [<span style="color: #8c8c8c;">(</span>not-nil? d<span style="color: #8c8c8c;">)</span> <span style="color: #8c8c8c;">(</span>not-nil? precision<span style="color: #8c8c8c;">)</span>]}
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [factor <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Math/pow</span> 10 precision<span style="color: #8c8c8c;">)</span>]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">/</span> <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Math/floor</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">*</span> d factor<span style="color: #8c8c8c;">))</span> factor<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+在上面的例子中,我没使用了前置条件来检查两个参数是否为nil.not-nil?宏(或<br />
+函数),没有在该例子中展示,我们假设它已经在其它地方实现了.</p>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 匿名函数</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+匿名函数使用fn特殊形式来定义;</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [x]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">*</span> 2 x<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+匿名函数可以赋给局部变量,作为参数传递给函数或作为函数的返回值.</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [f <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [x]
+          <span style="color: #8c8c8c;">(</span><span style="color: #859900;">*</span> 2 x<span style="color: #8c8c8c;">))</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">map</span> f <span style="color: #8c8c8c;">(</span><span style="color: #859900;">range</span> 0 10<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+Clojure提供了语法糖来简化匿名函数的编写:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [f #<span style="color: #8c8c8c;">(</span><span style="color: #859900;">*</span> 2 %<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">map</span> f <span style="color: #8c8c8c;">(</span><span style="color: #859900;">range</span> 0 10<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+%表示第一个参数.如果要引用多个参数,可以使用%1,%2.以此类推:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#19968;&#20010;&#21253;&#21547;&#20102;&#19977;&#20010;&#21442;&#25968;&#30340;&#21311;&#21517;&#20989;&#25968;,&#36820;&#22238;&#19977;&#20010;&#21442;&#25968;&#30340;&#21644;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [f #<span style="color: #8c8c8c;">(</span><span style="color: #859900;">+</span> %1 %2 %3<span style="color: #8c8c8c;">)</span>]
+  <span style="color: #8c8c8c;">(</span>f 1 2 3<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+语法糖简化了代码,但是降低了代码的可读性.所以使用前请斟酌.</p>
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> 如何执行函数</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+要执行函数,只需要将函数名放在list的第一个位置就行了:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">format</span> <span style="color: #2aa198;">"Hello, %s"</span> <span style="color: #2aa198;">"world"</span><span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+对于赋给局部变量,变量或这从参数传递的函数,此法同样适用:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [f format]
+  <span style="color: #8c8c8c;">(</span>f <span style="color: #2aa198;">"Hello, %s"</span> <span style="color: #2aa198;">"world"</span><span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+另外你也可以使用clojure.core/apply来执行函数</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">apply</span> format <span style="color: #2aa198;">"Hello, %s"</span> [<span style="color: #2aa198;">"world"</span>]<span style="color: #8c8c8c;">)</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">apply</span> format <span style="color: #2aa198;">"Hello, %s %s"</span> [<span style="color: #2aa198;">"Clojure"</span> <span style="color: #2aa198;">"world"</span>]<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+clojure.core/apply一般在调用不定参函数或者需要将参数作为集合传递时才会<br />
+使用</p>
+</div>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> 多元数函数</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+在Clojure中有多元数函数:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">tax-amount</span>
+  <span style="color: #8c8c8c;">(</span>[amount]
+     <span style="color: #8c8c8c;">(</span>tax-amount amount 35<span style="color: #8c8c8c;">))</span>
+  <span style="color: #8c8c8c;">(</span>[amount rate]
+     <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Math/round</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">double</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">*</span> amount <span style="color: #8c8c8c;">(</span><span style="color: #859900;">/</span> rate 100<span style="color: #8c8c8c;">))))))</span>
+</pre>
+</div>
+<p>
+在上面的例子中,只有一个参数的函数调用了有两个参数的函数.这在多参函数中<br />
+很常见(相当于默认值的功能).Clojure没有提供默认值的功能,是因为JVM不支持.<br />
+在Clojure中,元数只和参数个数有关,而和参数类型无关.这是因为Clojure是动<br />
+态语言,类型信息可能在编译期是无效的.</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">range</span>
+  <span style="color: #8c8c8c;">(</span>[]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">range</span> 0 <span style="color: #cb4b16;">Double/POSITIVE_INFINITY</span> 1<span style="color: #8c8c8c;">))</span>
+  <span style="color: #8c8c8c;">(</span>[end]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">range</span> 0 end 1<span style="color: #8c8c8c;">))</span>
+  <span style="color: #8c8c8c;">(</span>[start end]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">range</span> start end 1<span style="color: #8c8c8c;">))</span>
+  <span style="color: #8c8c8c;">(</span>[start end step]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">comment</span> <span style="color: #cb4b16;">Omitted</span> for clarity<span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> 解构函数参数</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+有时函数的参数是数据结构:向量,序列,map.当你想访问这些数据结构的其中一<br />
+部分数据时,你可能需要编写类似下面的代码</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [m]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [currency <span style="color: #8c8c8c;">(</span><span style="color: #859900;">get</span> m <span style="color: #2aa198;">:currency</span><span style="color: #8c8c8c;">)</span>]
+    currency<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+对向量来说,需要编写类似这样的代码:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [pair]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [amount   <span style="color: #8c8c8c;">(</span><span style="color: #859900;">first</span>  pair<span style="color: #8c8c8c;">)</span>
+        currency <span style="color: #8c8c8c;">(</span><span style="color: #859900;">second</span> pair<span style="color: #8c8c8c;">)</span>]
+    currency<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+但是呢,这样的样板代码可重用性并不高.所以Clojure提供了解构.</p>
+</div>
+<div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> 基于位置的解构</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+解构向量的方式如下:使用一个向量替换原来作为函数参数的数据结构,这个向量包含了占位符,<br />
+而占位符会将对应位置的数据结构的值绑定过来.举例来说,如果一个参数是一对<br />
+值,你想要获得第二个参数值,那么代码可以这样写:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [[amount currency]]
+  currency<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+在上面的例子中,参数的第一个值被绑定到了amount上,第二个参数是被绑定到了<br />
+currency上.看起来很棒,但是,这里我们并没有使用amount.在这种情况下,我们<br />
+可以使用下划线来忽略它:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [[_ currency]]
+  currency<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+解构是能够嵌套的:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">first-first</span>
+  [[[i _] _]]
+  i<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+虽然本文不会涉及到let这个form和本地变量.但是需要提一下,解构对let也生效,而<br />
+且作用一模一样</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [pair         [10 <span style="color: #2aa198;">:gbp</span>]
+      [_ currency] pair]
+  currency<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-7-2" class="outline-3">
+<h3 id="sec-7-2"><span class="section-number-3">7.2</span> 解构Map</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+对Map和Record的解构方式与解构向量略有不同:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [{currency <span style="color: #2aa198;">:currency</span>}]
+  currency<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+在上面的例子中,我们想把:currency这个key对应的value绑定到currency上.Key<br />
+并不一定需要是关键字:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [{currency <span style="color: #2aa198;">"currency"</span>}]
+  currency<span style="color: #8c8c8c;">)</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [{currency 'currency}]
+  currency<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+我们可以一次性解构多个key:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [{<span style="color: #2aa198;">:keys</span> [currency amount]}]
+  currency<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+上面的例子中,keys需要为关键字,其名字与currency和amount相同<br />
+(即:currency,:amount).如果keys是字符串,则将上面的:keys改为:strs即可:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [{<span style="color: #2aa198;">:strs</span> [currency amount]}]
+  currency<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+当然也可以是symbol:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [{<span style="color: #2aa198;">:syms</span> [currency amount]}]
+  currency<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+当然了,使用关键字作为key在Clojure中是推荐做法.<br />
+解构Map时,如果找不到我们需要的key的值,我们可以设置默认值:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">currency-of</span>
+  [{<span style="color: #2aa198;">:keys</span> [currency amount] <span style="color: #2aa198;">:or</span> {currency <span style="color: #2aa198;">:gbp</span>}}]
+  currency<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+此功能对于编写包含额外属性的函数大有裨益.<br />
+和基于位置的解构相同,Map解构对let同样适用:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [money               {<span style="color: #2aa198;">:currency</span> <span style="color: #2aa198;">:gbp</span> <span style="color: #2aa198;">:amount</span> 10}
+     {currency <span style="color: #2aa198;">:currency</span>} money]
+  currency<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> 变参函数</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+参数数量可变的函数叫做变参函数.clojure.core/str和clojure.core/format就<br />
+是两个变参函数:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> <span style="color: #2aa198;">"a"</span> <span style="color: #2aa198;">"b"</span><span style="color: #8c8c8c;">)</span>      <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; "ab"</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> <span style="color: #2aa198;">"a"</span> <span style="color: #2aa198;">"b"</span> <span style="color: #2aa198;">"c"</span><span style="color: #8c8c8c;">)</span>  <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; "abc"</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">format</span> <span style="color: #2aa198;">"Hello, %s"</span> <span style="color: #2aa198;">"world"</span><span style="color: #8c8c8c;">)</span>               <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; "Hello, world"</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">format</span> <span style="color: #2aa198;">"Hello, %s %s"</span> <span style="color: #2aa198;">"Clojure"</span> <span style="color: #2aa198;">"world"</span><span style="color: #8c8c8c;">)</span>  <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; "Hello, Clojure world"</span>
+</pre>
+</div>
+<p>
+要定义变参函数,只需要在变参前面加个&amp;就可以了:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">log</span>
+  [message &amp; args]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">comment</span> ...<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+在上面的例子中,只有一个参数是必须的.变参函数的调用方式和普通函数相同:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">log</span>
+  [message &amp; args]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"args: "</span> args<span style="color: #8c8c8c;">))</span>
+
+<span style="color: #8c8c8c;">(</span>log <span style="color: #2aa198;">"message from "</span> <span style="color: #2aa198;">"192.0.0.76"</span><span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+<p>
+在REPL中执行:</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (log <span style="color: #2aa198;">"message from "</span> <span style="color: #2aa198;">"192.0.0.76"</span>)
+args:  (192.0.0.76)
+
+<span style="color: #268bd2;">user</span>=&gt; (log <span style="color: #2aa198;">"message from "</span> <span style="color: #2aa198;">"192.0.0.76"</span> <span style="color: #2aa198;">"service:xyz"</span>)
+args:  (192.0.0.76 service:xyz)
+</pre>
+</div>
+<p>
+你可以看到,可选的参数被包装到了一个list里面.</p>
+</div>
+<div id="outline-container-sec-8-1" class="outline-3">
+<h3 id="sec-8-1"><span class="section-number-3">8.1</span> 具名参数(Named Parameters)</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+具名参数是通过对变参函数的解构来实现的.<br />
+从解构变参函数的立场上来看,具名参数具有较好的可读性.下面是一个例子:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">job-info</span>
+  [&amp; {<span style="color: #2aa198;">:keys</span> [name job income] <span style="color: #2aa198;">:or</span> {job <span style="color: #2aa198;">"unemployed"</span> income <span style="color: #2aa198;">"$0.00"</span>}}]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">if</span> name
+    [name job income]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"No name specified"</span><span style="color: #8c8c8c;">)))</span>
+</pre>
+</div>
+<p>
+使用函数方式如下:</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (job-info :name <span style="color: #2aa198;">"Robert"</span> :job <span style="color: #2aa198;">"Engineer"</span>)
+[<span style="color: #2aa198;">"Robert"</span> <span style="color: #2aa198;">"Engineer"</span> <span style="color: #2aa198;">"$0.00"</span>]
+
+<span style="color: #268bd2;">user</span>=&gt; (job-info :job <span style="color: #2aa198;">"Engineer"</span>)
+No name specified
+</pre>
+</div>
+<p>
+如果不使用变参列表,那么你需要使用形如{:name "Robert" :job "Engineer"}这<br />
+样的map作为参数.<br />
+关键字的默认值依据:as后跟的map来确定.如果关键字没有传递值,且无默认值,<br />
+则为nil.</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> 高阶函数</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+高阶函数是将其它函数作为参数的函数.高阶函数在函数式编程中是很重要的技<br />
+术,在Clojure中经常使用到.一个高阶函数的例子是将一个函数和一个集合作为<br />
+参数,返回符合这个函数条件的集合.在Clojure中,这叫做clojure.core/filter:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">filter</span> even? <span style="color: #8c8c8c;">(</span><span style="color: #859900;">range</span> 0 10<span style="color: #8c8c8c;">))</span>  <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt;(0 2 4 6 8)</span>
+</pre>
+</div>
+<p>
+上面的例子中,clojure.core/filter函数接收clojure.core/even?作为参数.<br />
+clojure.core中有很多高阶函数.经常使用的函数请参见<a href="http://clojure-doc.org/articles/language/core_overview.html">clojure.core</a></p>
+</div>
+</div>
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> 私有函数</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+在Clojure中,函数可以在其命名空间中设置为私有的.<br />
+具体细节请参考<a href="http://clojure-doc.org/articles/language/namespaces.html">这里</a></p>
+</div>
+</div>
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> 关键字作为函数</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+在Clojure中,关键字可以作为函数使用.他们接收map或record并从中查找信息:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #2aa198;">:age</span> {<span style="color: #2aa198;">:age</span> 27 <span style="color: #2aa198;">:name</span> <span style="color: #2aa198;">"Michael"</span>}<span style="color: #8c8c8c;">)</span>  <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; 27</span>
+</pre>
+</div>
+<p>
+他们经常和高阶函数结合使用:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">map</span> <span style="color: #2aa198;">:age</span> [{<span style="color: #2aa198;">:age</span> 45 <span style="color: #2aa198;">:name</span> <span style="color: #2aa198;">"Joe"</span>} {<span style="color: #2aa198;">:age</span> 42 <span style="color: #2aa198;">:name</span> <span style="color: #2aa198;">"Jill"</span>} {<span style="color: #2aa198;">:age</span> 17 <span style="color: #2aa198;">:name</span> <span style="color: #2aa198;">"Matt"</span>}]<span style="color: #8c8c8c;">)</span>  <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; (45 42 17)</span>
+</pre>
+</div>
+<p>
+也能和-&gt;宏一起使用:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">-&gt;</span> [{<span style="color: #2aa198;">:age</span> 45 <span style="color: #2aa198;">:name</span> <span style="color: #2aa198;">"Joe"</span>} {<span style="color: #2aa198;">:age</span> 42 <span style="color: #2aa198;">:name</span> <span style="color: #2aa198;">"Jill"</span>}] first <span style="color: #2aa198;">:name</span><span style="color: #8c8c8c;">)</span>  <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; "Joe"</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> Map作为函数</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+Clojure的Map也能作为函数使用,来查找key对应的value:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>{<span style="color: #2aa198;">:age</span> 42 <span style="color: #2aa198;">:name</span> <span style="color: #2aa198;">"Joe"</span>} <span style="color: #2aa198;">:name</span><span style="color: #8c8c8c;">)</span>     <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; "Joe"</span>
+<span style="color: #8c8c8c;">(</span>{<span style="color: #2aa198;">:age</span> 42 <span style="color: #2aa198;">:name</span> <span style="color: #2aa198;">"Joe"</span>} <span style="color: #2aa198;">:age</span><span style="color: #8c8c8c;">)</span>      <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; 42</span>
+<span style="color: #8c8c8c;">(</span>{<span style="color: #2aa198;">:age</span> 42 <span style="color: #2aa198;">:name</span> <span style="color: #2aa198;">"Joe"</span>} <span style="color: #2aa198;">:unknown</span><span style="color: #8c8c8c;">)</span>  <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; nil</span>
+</pre>
+</div>
+<p>
+需要注意的是,虽然大部分情况下map和record可以等同对待,但是这里不<br />
+行!record不能作为函数使用!</p>
+</div>
+</div>
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> Set作为函数</h2>
+<div class="outline-text-2" id="text-13">
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>#{1 2 3} 1<span style="color: #8c8c8c;">)</span>   <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; 1</span>
+<span style="color: #8c8c8c;">(</span>#{1 2 3} 10<span style="color: #8c8c8c;">)</span>  <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; nil</span>
+
+<span style="color: #8c8c8c;">(</span>#{<span style="color: #2aa198;">:us</span> <span style="color: #2aa198;">:au</span> <span style="color: #2aa198;">:ru</span> <span style="color: #2aa198;">:uk</span>} <span style="color: #2aa198;">:uk</span><span style="color: #8c8c8c;">)</span>  <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; :uk</span>
+<span style="color: #8c8c8c;">(</span>#{<span style="color: #2aa198;">:us</span> <span style="color: #2aa198;">:au</span> <span style="color: #2aa198;">:ru</span> <span style="color: #2aa198;">:uk</span>} <span style="color: #2aa198;">:cn</span><span style="color: #8c8c8c;">)</span>  <span style="color: #93a1a1; font-style: italic;">; </span><span style="color: #93a1a1; font-style: italic;">&#8658; nil</span>
+</pre>
+</div>
+<p>
+此功能被用来验证某值是否set中:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">when</span> <span style="color: #8c8c8c;">(</span>countries <span style="color: #2aa198;">:in</span><span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">comment</span> ...<span style="color: #8c8c8c;">))</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">if</span> <span style="color: #8c8c8c;">(</span>countries <span style="color: #2aa198;">:in</span><span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">comment</span> <span style="color: #cb4b16;">Implement</span> positive case<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">comment</span> <span style="color: #cb4b16;">Implement</span> negative case<span style="color: #8c8c8c;">))</span>
+</pre>
+</div>
+<p>
+因为在Clojure中除了false和nil,其它值都是true.</p>
+</div>
+</div>
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14"><span class="section-number-2">14</span> 函数作为比较器</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+Clojure函数实现了java.util.Comparator接口,所以能作为比较器使用.</p>
+</div>
+</div>
+<div id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15"><span class="section-number-2">15</span> 结束语</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+函数是Clojure的核心.他们通过defn宏来定义,可以有多个元数,不定参数并支持<br />
+参数解构.函数参数和返回值可以有类型提示,当然这不是必须的.<br />
+函数是一等值,它能被传递给其它函数.这是函数式编程的基石.<br />
+有一些数据类型有函数特性.适时的使用这些特性可以是代码更简洁易读.</p>
+</div>
+</div>
+<div id="outline-container-sec-16" class="outline-2">
+<h2 id="sec-16"><span class="section-number-2">16</span> 贡献</h2>
+<div class="outline-text-2" id="text-16">
+<p>
+Michael Klishin michael@defprotocol.org, 2012 (original author)<br />
+Translated by Ivan 2014</p>
+</div>
+</div>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/clojure/clojure%25e8%25bf%259b%25e9%2598%25b6%25e4%25bd%25bf%25e7%2594%25a8clojure%25e6%259e%2584%25e5%25bb%25badsl.html" title="Clojure进阶:使用Clojure构建DSL "><p> <i class="fa fa-mail-reply"></i>&nbsp;Clojure进阶:使用Clojure构建DSL</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/%E5%BB%BA%E7%AB%99%E6%97%A5%E8%AE%B0/%25e5%25bc%2580%25e9%2580%259a%25e4%25ba%2586%25e5%25be%25ae%25e4%25bf%25a1%25e5%2585%25ac%25e4%25bc%2597%25e8%25b4%25a6%25e5%258f%25b7.html" title="开通了微信公众账号"><p>开通了微信公众账号&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Clojure教程:函数"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

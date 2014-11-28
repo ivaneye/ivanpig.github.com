@@ -1,0 +1,843 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="scala, tomcat"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/scala-tomcat/how-tomcat-worksscala%25e8%25af%25ad%25e8%25a8%2580-02-%25e4%25b8%2580%25e4%25b8%25aa%25e7%25ae%2580%25e5%258d%2595%25e7%259a%2584servlet%25e5%25ae%25b9%25e5%2599%25a8.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>How Tomcat Works(Scala语言) 02 一个简单的Servlet容器 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">How Tomcat Works(Scala语言) 02 一个简单的Servlet容器</h2>
+
+    <p class="post-meta">By 01月03日  2013  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> scala-tomcat (2)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#scala"><i class="fa fa-tags"></i> scala (19)</a>
+ 
+<a class="post-category " href="/tag/#scala"><i class="fa fa-tags"></i> tomcat (2)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <p>
+	&nbsp;</p>
+<h2 id="sec-3" style="margin: 5px; color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; background-color: rgb(253, 246, 227);">
+	<span class="section-number-2">3</span>&nbsp;一个简单的Servlet容器<br />
+</h2>
+<div class="outline-text-2" id="text-3" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<ul>
+<li>
+			Servlet容器除了能访问静态资源以外，还能访问Servlet。所以比前一章多了两个类StaticResourceProcessor和ServletProcessor
+		</li>
+<li>
+			此处的Servlet依据Servlet规范实现，所以需要servlet.jar。后续会自己实现此接口
+		</li>
+<li>
+			访问静态资源的方式和前篇代码完全相同，只是将response.sendStaticResource()抽成单独的StaticResourceProcessor类
+		</li>
+<li>
+			根据url来区分访问的内容，类似/servlet/*的uri会调用ServletProcessor否则调用StaticResourceProcessor
+		</li>
+<li>
+			ServletProcessor的功能是根据url来加载指定路径下的class,并调用相应的方法
+		</li>
+<li>
+			具体区别请见类内注释
+		</li>
+</ul>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">package</span> simple
+
+<span style="color: rgb(133, 153, 0);">import</span> java.io.InputStream
+<span style="color: rgb(133, 153, 0);">import</span> java.io.BufferedReader
+<span style="color: rgb(133, 153, 0);">import</span> java.util.Enumeration
+<span style="color: rgb(133, 153, 0);">import</span> java.util.Locale
+<span style="color: rgb(133, 153, 0);">import</span> java.util.Map
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.{ServletInputStream, RequestDispatcher, ServletRequest}
+<span style="color: rgb(133, 153, 0);">import</span> io.Source
+
+<span style="color: rgb(147, 161, 161); font-style: italic;">/**</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Created with IntelliJ IDEA.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * User: Administrator</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Date: 13-1-2</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Time: 下午10:32</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * To change this template use File | Settings | File Templates.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> */</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">Request类和前一章的类完全相同</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">区别在于，由于此类继承了ServletRequest，所以必须要实现其所有的抽象方法，这里都是空实现</span>
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Request</span>(<span style="color: rgb(38, 139, 210);">input</span>: <span style="color: rgb(181, 137, 0);">InputStream</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">ServletRequest</span> {
+
+  <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">uri</span>: <span style="color: rgb(181, 137, 0);">String </span>= _
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">parseUri</span>(<span style="color: rgb(38, 139, 210);">requestString</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">pattern</span> = <span style="color: rgb(42, 161, 152);">&quot;&quot;&quot;[^ ]* *([^ ]*) *[\s\S]*&quot;&quot;&quot;</span>.r
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">pattern</span>(<span style="color: rgb(38, 139, 210);">result</span>) = requestString
+    result
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">parse</span> {
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">lines</span> = Source.fromInputStream(input).getLines()
+    <span style="color: rgb(133, 153, 0);">if</span> (lines.hasNext) {
+      uri = parseUri(lines.next())
+    }
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getAttribute</span>(<span style="color: rgb(38, 139, 210);">attribute</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">AnyRef </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getAttributeNames</span>: <span style="color: rgb(181, 137, 0);">Enumeration[_]</span> = {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getRealPath</span>(<span style="color: rgb(38, 139, 210);">path</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getRequestDispatcher</span>(<span style="color: rgb(38, 139, 210);">path</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">RequestDispatcher </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">isSecure</span>: <span style="color: rgb(181, 137, 0);">Boolean </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">false</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getCharacterEncoding</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getContentLength</span>: <span style="color: rgb(181, 137, 0);">Int </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> 0
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getContentType</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getInputStream</span>: <span style="color: rgb(181, 137, 0);">ServletInputStream </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getLocale</span>: <span style="color: rgb(181, 137, 0);">Locale </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getLocales</span>: <span style="color: rgb(181, 137, 0);">Enumeration[_]</span> = {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getParameter</span>(<span style="color: rgb(38, 139, 210);">name</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getParameterMap</span>: <span style="color: rgb(181, 137, 0);">Map[_, _]</span> = {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getParameterNames</span>: <span style="color: rgb(181, 137, 0);">Enumeration[_]</span> = {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getParameterValues</span>(<span style="color: rgb(38, 139, 210);">parameter</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">Array[String]</span> = {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getProtocol</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getReader</span>: <span style="color: rgb(181, 137, 0);">BufferedReader </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getRemoteAddr</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getRemoteHost</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getScheme</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getServerName</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getServerPort</span>: <span style="color: rgb(181, 137, 0);">Int </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> 0
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">removeAttribute</span>(<span style="color: rgb(38, 139, 210);">attribute</span>: <span style="color: rgb(181, 137, 0);">String</span>) {
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setAttribute</span>(<span style="color: rgb(38, 139, 210);">key</span>: <span style="color: rgb(181, 137, 0);">String</span>, <span style="color: rgb(38, 139, 210);">value</span>: <span style="color: rgb(181, 137, 0);">AnyRef</span>) {
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setCharacterEncoding</span>(<span style="color: rgb(38, 139, 210);">encoding</span>: <span style="color: rgb(181, 137, 0);">String</span>) {
+  }
+}
+</pre>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">package</span> simple
+
+<span style="color: rgb(133, 153, 0);">import</span> java.io.OutputStream
+<span style="color: rgb(133, 153, 0);">import</span> java.io.FileInputStream
+<span style="color: rgb(133, 153, 0);">import</span> java.io.FileNotFoundException
+<span style="color: rgb(133, 153, 0);">import</span> java.io.File
+<span style="color: rgb(133, 153, 0);">import</span> java.io.PrintWriter
+<span style="color: rgb(133, 153, 0);">import</span> java.util.Locale
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.ServletResponse
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.ServletOutputStream
+
+<span style="color: rgb(147, 161, 161); font-style: italic;">/**</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Created with IntelliJ IDEA.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * User: Administrator</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Date: 13-1-2</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Time: 下午10:34</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * To change this template use File | Settings | File Templates.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> */</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">Response类和前一章的类完全相同</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">区别在于，由于此类继承了ServletResponse，所以必须要实现其所有的抽象方法，这里都是空实现</span>
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Response</span> {
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(181, 137, 0);">BUFFER_SIZE</span>: Int = 1024
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">bytes</span>: <span style="color: rgb(181, 137, 0);">Array[Byte]</span> = <span style="color: rgb(133, 153, 0);">new</span> Array[Byte](Response.BUFFER_SIZE)
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(181, 137, 0);">FileNotFoundMessage</span> = <span style="color: rgb(42, 161, 152);">&quot;&quot;&quot;HTTP/1.1 404 File Not Found</span>
+<span style="color: rgb(42, 161, 152);">                              |Content-Type: text/html</span>
+<span style="color: rgb(42, 161, 152);">                              |Content-Length: 23</span>
+<span style="color: rgb(42, 161, 152);">                              |</span>
+<span style="color: rgb(42, 161, 152);">                              |&lt;h1&gt;File Not Found&lt;/h1&gt;&quot;&quot;&quot;</span>
+}
+
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Response</span>(<span style="color: rgb(38, 139, 210);">output</span>: <span style="color: rgb(181, 137, 0);">OutputStream</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">ServletResponse</span> {
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">sendStaticResource</span>() {
+    <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">fis</span>: <span style="color: rgb(181, 137, 0);">FileInputStream </span>= <span style="color: rgb(42, 161, 152);">null</span>
+    <span style="color: rgb(133, 153, 0);">try</span> {
+      <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">file</span>: <span style="color: rgb(181, 137, 0);">File </span>= <span style="color: rgb(133, 153, 0);">new</span> File(HttpServer.WEB_ROOT, request.uri)
+      fis = <span style="color: rgb(133, 153, 0);">new</span> FileInputStream(file)
+      <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">将文件内容写到响应中</span>
+      writeToResponse(fis)
+    } <span style="color: rgb(133, 153, 0);">catch</span> {
+      <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(38, 139, 210);">e</span>: <span style="color: rgb(181, 137, 0);">FileNotFoundException =&gt; {</span>
+        <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">将文件内容写到响应中</span>
+        output.write(Response.FileNotFoundMessage.getBytes())
+      }
+    } <span style="color: rgb(133, 153, 0);">finally</span> {
+      <span style="color: rgb(133, 153, 0);">if</span> (fis != <span style="color: rgb(42, 161, 152);">null</span>) fis.close
+    }
+  }
+
+  <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">递归读取文件，写入到响应流</span>
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">writeToResponse</span>(<span style="color: rgb(38, 139, 210);">fis</span>: <span style="color: rgb(181, 137, 0);">FileInputStream</span>) {
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">ch</span> = fis.read(Response.bytes, 0, Response.BUFFER_SIZE)
+    <span style="color: rgb(133, 153, 0);">if</span> (ch != -1) {
+      output.write(Response.bytes, 0, ch)
+      writeToResponse(fis)
+    }
+  }
+
+  <span style="color: rgb(147, 161, 161); font-style: italic;">/** </span><span style="color: rgb(147, 161, 161); font-style: italic;">implementation of ServletResponse  */</span>
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">flushBuffer</span> {
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getBufferSize</span>: <span style="color: rgb(181, 137, 0);">Int </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> 0
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getCharacterEncoding</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getLocale</span>: <span style="color: rgb(181, 137, 0);">Locale </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getOutputStream</span>: <span style="color: rgb(181, 137, 0);">ServletOutputStream </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">null</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getWriter</span>: <span style="color: rgb(181, 137, 0);">PrintWriter </span>= {
+    writer = <span style="color: rgb(133, 153, 0);">new</span> PrintWriter(output, <span style="color: rgb(42, 161, 152);">true</span>)
+    <span style="color: rgb(133, 153, 0);">return</span> writer
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">isCommitted</span>: <span style="color: rgb(181, 137, 0);">Boolean </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> <span style="color: rgb(42, 161, 152);">false</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">reset</span> {
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">resetBuffer</span> {
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setBufferSize</span>(<span style="color: rgb(38, 139, 210);">size</span>: <span style="color: rgb(181, 137, 0);">Int</span>) {
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setContentLength</span>(<span style="color: rgb(38, 139, 210);">length</span>: <span style="color: rgb(181, 137, 0);">Int</span>) {
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setContentType</span>(<span style="color: rgb(38, 139, 210);">`type`:</span> <span style="color: rgb(38, 139, 210);">String</span>) {
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setLocale</span>(<span style="color: rgb(38, 139, 210);">locale</span>: <span style="color: rgb(181, 137, 0);">Locale</span>) {
+  }
+
+  <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">request</span>: <span style="color: rgb(181, 137, 0);">Request </span>= _
+  <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">writer</span>: <span style="color: rgb(181, 137, 0);">PrintWriter </span>= _
+}
+</pre>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">package</span> simple
+
+<span style="color: rgb(133, 153, 0);">import</span> java.net.ServerSocket
+<span style="color: rgb(133, 153, 0);">import</span> java.net.InetAddress
+<span style="color: rgb(133, 153, 0);">import</span> java.io.File
+
+<span style="color: rgb(147, 161, 161); font-style: italic;">/**</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Created with IntelliJ IDEA.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * User: Administrator</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Date: 13-1-2</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Time: 下午10:28</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * To change this template use File | Settings | File Templates.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> */</span>
+
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">HttpServer</span> {
+
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(181, 137, 0);">WEB_ROOT</span>: String = System.getProperty(<span style="color: rgb(42, 161, 152);">&quot;user.dir&quot;</span>) + File.separator + <span style="color: rgb(42, 161, 152);">&quot;webroot&quot;</span>
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(181, 137, 0);">SHUTDOWN_COMMAND</span>: String = <span style="color: rgb(42, 161, 152);">&quot;/SHUTDOWN&quot;</span>
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">main</span>(<span style="color: rgb(38, 139, 210);">args</span>: <span style="color: rgb(181, 137, 0);">Array[String]</span>) {
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">server</span>: <span style="color: rgb(181, 137, 0);">HttpServer </span>= <span style="color: rgb(133, 153, 0);">new</span> HttpServer
+    server.await
+  }
+}
+
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">HttpServer</span> {
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">await</span> {
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">port</span>: <span style="color: rgb(181, 137, 0);">Int </span>= 8080
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">serverSocket</span> = <span style="color: rgb(133, 153, 0);">new</span> ServerSocket(port, 1, InetAddress.getByName(<span style="color: rgb(42, 161, 152);">&quot;127.0.0.1&quot;</span>))
+
+    <span style="color: rgb(133, 153, 0);">while</span> (!shutdown) {
+      <span style="color: rgb(133, 153, 0);">try</span> {
+        <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">socket</span> = serverSocket.accept
+        <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">input</span> = socket.getInputStream
+        <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">output</span> = socket.getOutputStream
+
+        <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">request</span>: <span style="color: rgb(181, 137, 0);">Request </span>= <span style="color: rgb(133, 153, 0);">new</span> Request(input)
+        request.parse
+
+        <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">response</span>: <span style="color: rgb(181, 137, 0);">Response </span>= <span style="color: rgb(133, 153, 0);">new</span> Response(output)
+        response.request = request
+
+        <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">此处是HttpServer与前一章不同的地方</span>
+        <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">根据uri是否以/servlet/开头，来判断是静态资源，还是servlet</span>
+        <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">如果是静态资源则调用StaticResourceProcessor，否则调用ServletProcessor</span>
+        <span style="color: rgb(133, 153, 0);">if</span> (request.uri.startsWith(<span style="color: rgb(42, 161, 152);">&quot;/servlet/&quot;</span>)) {
+          <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">processor</span>: <span style="color: rgb(181, 137, 0);">ServletProcessor </span>= <span style="color: rgb(133, 153, 0);">new</span> ServletProcessor
+          processor.process(request, response)
+        } <span style="color: rgb(133, 153, 0);">else</span> {
+          <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">processor</span>: <span style="color: rgb(181, 137, 0);">StaticResourceProcessor </span>= <span style="color: rgb(133, 153, 0);">new</span> StaticResourceProcessor
+          processor.process(request, response)
+        }
+
+        socket.close
+        shutdown = request.uri == HttpServer.SHUTDOWN_COMMAND
+      } <span style="color: rgb(133, 153, 0);">catch</span> {
+        <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(38, 139, 210);">e</span>: <span style="color: rgb(181, 137, 0);">Exception =&gt; e.printStackTrace</span>
+      }
+    }
+  }
+
+  <span style="color: rgb(133, 153, 0);">private</span> <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">shutdown</span>: <span style="color: rgb(181, 137, 0);">Boolean </span>= <span style="color: rgb(42, 161, 152);">false</span>
+}
+</pre>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">package</span> simple
+
+<span style="color: rgb(147, 161, 161); font-style: italic;">/**</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Created with IntelliJ IDEA.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * User: Administrator</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Date: 13-1-2</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Time: 下午10:36</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * To change this template use File | Settings | File Templates.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> */</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">仅一行，调用response的sendStaticResource返回静态资源</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">此代码原来在HttpServer中，现单独为一个类</span>
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">StaticResourceProcessor</span> {
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">process</span>(<span style="color: rgb(38, 139, 210);">request</span>: <span style="color: rgb(181, 137, 0);">Request</span>, <span style="color: rgb(38, 139, 210);">response</span>: <span style="color: rgb(181, 137, 0);">Response</span>) {
+      response.sendStaticResource
+  }
+}
+</pre>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">package</span> simple
+
+<span style="color: rgb(133, 153, 0);">import</span> java.net.URL
+<span style="color: rgb(133, 153, 0);">import</span> java.net.URLClassLoader
+<span style="color: rgb(133, 153, 0);">import</span> java.net.URLStreamHandler
+<span style="color: rgb(133, 153, 0);">import</span> java.io.File
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.Servlet
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.ServletRequest
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.ServletResponse
+
+<span style="color: rgb(147, 161, 161); font-style: italic;">/**</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Created with IntelliJ IDEA.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * User: Administrator</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Date: 13-1-2</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Time: 下午10:37</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * To change this template use File | Settings | File Templates.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> */</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">根据url,从类路径下加载相应的servlet类</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">并相继调用service方法</span>
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">ServletProcessor</span> {
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">process</span>(<span style="color: rgb(38, 139, 210);">request</span>: <span style="color: rgb(181, 137, 0);">Request</span>, <span style="color: rgb(38, 139, 210);">response</span>: <span style="color: rgb(181, 137, 0);">Response</span>) {
+    <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">根据url找到servletName</span>
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">servletName</span>: <span style="color: rgb(181, 137, 0);">String </span>= request.uri.substring(request.uri.lastIndexOf(<span style="color: rgb(42, 161, 152);">&quot;/&quot;</span>) + 1)
+    <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">根据class路径，创建classLoader</span>
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">urls</span>: <span style="color: rgb(181, 137, 0);">Array[URL]</span> = <span style="color: rgb(133, 153, 0);">new</span> Array[URL](1)
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">streamHandler</span>: <span style="color: rgb(181, 137, 0);">URLStreamHandler </span>= <span style="color: rgb(42, 161, 152);">null</span>
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">classPath</span>: <span style="color: rgb(181, 137, 0);">File </span>= <span style="color: rgb(133, 153, 0);">new</span> File(HttpServer.WEB_ROOT)
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">repository</span>: <span style="color: rgb(181, 137, 0);">String </span>= (<span style="color: rgb(133, 153, 0);">new</span> URL(<span style="color: rgb(42, 161, 152);">&quot;file&quot;</span>, <span style="color: rgb(42, 161, 152);">null</span>, classPath.getCanonicalPath + File.separator)).toString
+    urls(0) = <span style="color: rgb(133, 153, 0);">new</span> URL(<span style="color: rgb(42, 161, 152);">null</span>, repository, streamHandler)
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">loader</span> = <span style="color: rgb(133, 153, 0);">new</span> URLClassLoader(urls)
+
+    <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">使用classLoader根据servletName加载类</span>
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">myClass</span> = loader.loadClass(servletName)
+    <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">实例化类并调用service方法</span>
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">servlet</span> = myClass.newInstance.asInstanceOf[Servlet]
+    servlet.service(request.asInstanceOf[ServletRequest], response.asInstanceOf[ServletResponse])
+  }
+}
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+		上面的代码完成了基本的Servlet容器功能。但是在ServletProcessor中有个问题，就是当你把Request和Response传递给servlet时，你需要强制转换为ServletRequest和 ServletResponse。而如果开发人员知道ServletRequest和ServletResponse是Request和Response的话，他就可以强制转回去，并调用parse和sendStaticResource方法。 由于其他类需要调用这两个方法，所以你不能将其设为private。当然你可以设为private[simple]，使得其只能在simple包内访问，但是开发人员依然可以将servlet包设为simple来进行访问。 这里可以使用Facade来解决这个问题。
+	</p>
+<ul>
+<li>
+			添加RequestFacade和ResponseFacade方法
+		</li>
+<li>
+			修改ServletProcessor类，使用RequestFacade和ResponseFacade来封装request和response
+		</li>
+</ul>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">package</span> facade
+
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.{RequestDispatcher, ServletInputStream, ServletRequest}
+<span style="color: rgb(133, 153, 0);">import</span> java.util.{Map, Enumeration, Locale}
+<span style="color: rgb(133, 153, 0);">import</span> java.io.BufferedReader
+
+<span style="color: rgb(147, 161, 161); font-style: italic;">/**</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Created with IntelliJ IDEA.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * User: Administrator</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Date: 13-1-3</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Time: 下午8:31</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * To change this template use File | Settings | File Templates.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> */</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">仅仅是对request对应方法的调用</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">屏蔽了parse方法</span>
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">RequestFacade</span>(<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">request</span>: <span style="color: rgb(181, 137, 0);">Request</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">ServletRequest</span> {
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getAttribute</span>(<span style="color: rgb(38, 139, 210);">attribute</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">AnyRef </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getAttribute(attribute)
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getAttributeNames</span>: <span style="color: rgb(181, 137, 0);">Enumeration[_]</span> = {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getAttributeNames
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getRealPath</span>(<span style="color: rgb(38, 139, 210);">path</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getRealPath(path)
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getRequestDispatcher</span>(<span style="color: rgb(38, 139, 210);">path</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">RequestDispatcher </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getRequestDispatcher(path)
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">isSecure</span>: <span style="color: rgb(181, 137, 0);">Boolean </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.isSecure
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getCharacterEncoding</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getCharacterEncoding
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getContentLength</span>: <span style="color: rgb(181, 137, 0);">Int </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getContentLength
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getContentType</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getContentType
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getInputStream</span>: <span style="color: rgb(181, 137, 0);">ServletInputStream </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getInputStream
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getLocale</span>: <span style="color: rgb(181, 137, 0);">Locale </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getLocale
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getLocales</span>: <span style="color: rgb(181, 137, 0);">Enumeration[_]</span> = {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getLocales
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getParameter</span>(<span style="color: rgb(38, 139, 210);">name</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getParameter(name)
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getParameterMap</span>: <span style="color: rgb(181, 137, 0);">Map[_, _]</span> = {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getParameterMap
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getParameterNames</span>: <span style="color: rgb(181, 137, 0);">Enumeration[_]</span> = {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getParameterNames
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getParameterValues</span>(<span style="color: rgb(38, 139, 210);">parameter</span>: <span style="color: rgb(181, 137, 0);">String</span>): <span style="color: rgb(181, 137, 0);">Array[String]</span> = {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getParameterValues(parameter)
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getProtocol</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getProtocol
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getReader</span>: <span style="color: rgb(181, 137, 0);">BufferedReader </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getReader
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getRemoteAddr</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getRemoteAddr
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getRemoteHost</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getRemoteHost
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getScheme</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getScheme
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getServerName</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getServerName
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getServerPort</span>: <span style="color: rgb(181, 137, 0);">Int </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> request.getServerPort
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">removeAttribute</span>(<span style="color: rgb(38, 139, 210);">attribute</span>: <span style="color: rgb(181, 137, 0);">String</span>) {
+    request.removeAttribute(attribute)
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setAttribute</span>(<span style="color: rgb(38, 139, 210);">key</span>: <span style="color: rgb(181, 137, 0);">String</span>, <span style="color: rgb(38, 139, 210);">value</span>: <span style="color: rgb(181, 137, 0);">AnyRef</span>) {
+    request.setAttribute(key, value)
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setCharacterEncoding</span>(<span style="color: rgb(38, 139, 210);">encoding</span>: <span style="color: rgb(181, 137, 0);">String</span>) {
+    request.setCharacterEncoding(encoding)
+  }
+}
+</pre>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">package</span> facade
+
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.{ServletOutputStream, ServletResponse}
+<span style="color: rgb(133, 153, 0);">import</span> java.util.Locale
+<span style="color: rgb(133, 153, 0);">import</span> java.io.PrintWriter
+
+
+<span style="color: rgb(147, 161, 161); font-style: italic;">/**</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Created with IntelliJ IDEA.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * User: Administrator</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Date: 13-1-3</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Time: 下午8:31</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * To change this template use File | Settings | File Templates.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> */</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">仅仅是对response相应方法的调用</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">屏蔽了sendStaticResource方法</span>
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">ResponseFacade</span>(<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">response</span>: <span style="color: rgb(181, 137, 0);">Response</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">ServletResponse</span> {
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">flushBuffer</span> {
+    response.flushBuffer
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getBufferSize</span>: <span style="color: rgb(181, 137, 0);">Int </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> response.getBufferSize
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getCharacterEncoding</span>: <span style="color: rgb(181, 137, 0);">String </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> response.getCharacterEncoding
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getLocale</span>: <span style="color: rgb(181, 137, 0);">Locale </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> response.getLocale
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getOutputStream</span>: <span style="color: rgb(181, 137, 0);">ServletOutputStream </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> response.getOutputStream
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">getWriter</span>: <span style="color: rgb(181, 137, 0);">PrintWriter </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> response.getWriter
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">isCommitted</span>: <span style="color: rgb(181, 137, 0);">Boolean </span>= {
+    <span style="color: rgb(133, 153, 0);">return</span> response.isCommitted
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">reset</span> {
+    response.reset
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">resetBuffer</span> {
+    response.resetBuffer
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setBufferSize</span>(<span style="color: rgb(38, 139, 210);">size</span>: <span style="color: rgb(181, 137, 0);">Int</span>) {
+    response.setBufferSize(size)
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setContentLength</span>(<span style="color: rgb(38, 139, 210);">length</span>: <span style="color: rgb(181, 137, 0);">Int</span>) {
+    response.setContentLength(length)
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setContentType</span>(<span style="color: rgb(38, 139, 210);">`type`:</span> <span style="color: rgb(38, 139, 210);">String</span>) {
+    response.setContentType(`type`)
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">setLocale</span>(<span style="color: rgb(38, 139, 210);">locale</span>: <span style="color: rgb(181, 137, 0);">Locale</span>) {
+    response.setLocale(locale)
+  }
+}
+</pre>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">package</span> facade
+
+<span style="color: rgb(133, 153, 0);">import</span> java.net.URL
+<span style="color: rgb(133, 153, 0);">import</span> java.net.URLClassLoader
+<span style="color: rgb(133, 153, 0);">import</span> java.net.URLStreamHandler
+<span style="color: rgb(133, 153, 0);">import</span> java.io.File
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.Servlet
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.ServletRequest
+<span style="color: rgb(133, 153, 0);">import</span> javax.servlet.ServletResponse
+
+<span style="color: rgb(147, 161, 161); font-style: italic;">/**</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Created with IntelliJ IDEA.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * User: Administrator</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Date: 13-1-2</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * Time: 下午10:37</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> * To change this template use File | Settings | File Templates.</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;"> */</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">根据url,从类路径下加载相应的servlet类</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">并相继调用service方法</span>
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">ServletProcessor</span> {
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">process</span>(<span style="color: rgb(38, 139, 210);">request</span>: <span style="color: rgb(181, 137, 0);">Request</span>, <span style="color: rgb(38, 139, 210);">response</span>: <span style="color: rgb(181, 137, 0);">Response</span>) {
+    <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">根据url找到servletName</span>
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">servletName</span>: <span style="color: rgb(181, 137, 0);">String </span>= request.uri.substring(request.uri.lastIndexOf(<span style="color: rgb(42, 161, 152);">&quot;/&quot;</span>) + 1)
+    <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">根据class路径，创建classLoader</span>
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">urls</span>: <span style="color: rgb(181, 137, 0);">Array[URL]</span> = <span style="color: rgb(133, 153, 0);">new</span> Array[URL](1)
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">streamHandler</span>: <span style="color: rgb(181, 137, 0);">URLStreamHandler </span>= <span style="color: rgb(42, 161, 152);">null</span>
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">classPath</span>: <span style="color: rgb(181, 137, 0);">File </span>= <span style="color: rgb(133, 153, 0);">new</span> File(HttpServer.WEB_ROOT)
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">repository</span>: <span style="color: rgb(181, 137, 0);">String </span>= (<span style="color: rgb(133, 153, 0);">new</span> URL(<span style="color: rgb(42, 161, 152);">&quot;file&quot;</span>, <span style="color: rgb(42, 161, 152);">null</span>, classPath.getCanonicalPath + File.separator)).toString
+    urls(0) = <span style="color: rgb(133, 153, 0);">new</span> URL(<span style="color: rgb(42, 161, 152);">null</span>, repository, streamHandler)
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">loader</span> = <span style="color: rgb(133, 153, 0);">new</span> URLClassLoader(urls)
+
+    <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">使用classLoader根据servletName加载类</span>
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">myClass</span> = loader.loadClass(servletName)
+    <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">实例化类并调用service方法</span>
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">servlet</span> = myClass.newInstance.asInstanceOf[Servlet]
+    <span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">是用facade封装request和response，屏蔽parse和sendStaticResource方法</span>
+    servlet.service(<span style="color: rgb(133, 153, 0);">new</span> RequestFacade(request).asInstanceOf[ServletRequest],
+                    <span style="color: rgb(133, 153, 0);">new</span> ResponseFacade(response).asInstanceOf[ServletResponse])
+  }
+}</pre>
+</div>
+<p>
+	&nbsp;</p>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%258d%2581%25e4%25b8%2580%25e7%25ab%25a0-%25e6%2593%258d%25e4%25bd%259c%25e7%25ac%25a6.html" title="快学Scala习题解答—第十一章 操作符 "><p> <i class="fa fa-mail-reply"></i>&nbsp;快学Scala习题解答—第十一章 操作符</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%258d%2581%25e4%25ba%258c%25e7%25ab%25a0-%25e9%25ab%2598%25e9%2598%25b6%25e5%2587%25bd%25e6%2595%25b0.html" title="快学Scala习题解答—第十二章 高阶函数"><p>快学Scala习题解答—第十二章 高阶函数&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="How Tomcat Works(Scala语言) 02 一个简单的Servlet容器"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

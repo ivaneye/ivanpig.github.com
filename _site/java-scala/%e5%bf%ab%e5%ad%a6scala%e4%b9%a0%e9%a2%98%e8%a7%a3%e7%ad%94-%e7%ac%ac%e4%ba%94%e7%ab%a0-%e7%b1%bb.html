@@ -1,0 +1,435 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="scala"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e4%25ba%2594%25e7%25ab%25a0-%25e7%25b1%25bb.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>快学Scala习题解答—第五章 类 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">快学Scala习题解答—第五章 类</h2>
+
+    <p class="post-meta">By 12月06日  2012  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> java-scala (20)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#scala"><i class="fa fa-tags"></i> scala (19)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <p>
+	&nbsp;</p>
+<h2 id="sec-6" style="margin: 5px; color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; background-color: rgb(253, 246, 227);">
+	<span class="section-number-2">6</span>&nbsp;类<br />
+</h2>
+<div class="outline-text-2" id="text-6" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+	&nbsp;
+</div>
+<div class="outline-3" id="outline-container-6-1" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-6-1" style="margin: 5px 10px;">
+		<span class="section-number-3">6.1</span>&nbsp;改进5.1节的Counter类,让它不要在Int.MaxValue时变成负数<br />
+	</h3>
+<div class="outline-text-3" id="text-6-1">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			加个判断就OK了
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Count</span>{
+  <span style="color: rgb(133, 153, 0);">private</span> <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">value</span> = Int.MaxValue
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">increment</span>(){<span style="color: rgb(133, 153, 0);">if</span>(value &lt; Int.MaxValue) value + 1 <span style="color: rgb(133, 153, 0);">else</span> value }
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">current</span> = value
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-6-2" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-6-2" style="margin: 5px 10px;">
+		<span class="section-number-3">6.2</span>&nbsp;编写一个BankAccount类，加入deposit和withdraw方法，和一个只读的balance属性<br />
+	</h3>
+<div class="outline-text-3" id="text-6-2">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">BankAccount</span>(<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">balance</span>:<span style="color: rgb(181, 137, 0);">Int </span>= 0){
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">deposit</span>(){}
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">withdraw</span>(){}
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-6-3" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-6-3" style="margin: 5px 10px;">
+		<span class="section-number-3">6.3</span>&nbsp;编写一个Time类，加入只读属性hours和minutes，和一个检查某一时刻是否早于另一时刻的方法before(other:Time):Boolean。Time对象应该以new Time(hrs,min)方式构建。其中hrs以军用时间格式呈现(介于0和23之间)<br />
+	</h3>
+<div class="outline-text-3" id="text-6-3">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Time</span>(<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">hours</span>:<span style="color: rgb(181, 137, 0);">Int</span>,<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">minutes</span>:<span style="color: rgb(181, 137, 0);">Int</span>){
+
+   <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">before</span>(<span style="color: rgb(38, 139, 210);">other</span>:<span style="color: rgb(181, 137, 0);">Time</span>):<span style="color: rgb(181, 137, 0);">Boolean</span>={
+     hours &lt; other.hours || (hours == other.hours &amp;&amp; minutes &lt; other.minutes)
+   }
+
+   <span style="color: rgb(133, 153, 0);">override</span> <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">toString</span>():<span style="color: rgb(181, 137, 0);">String</span>={
+     hours + <span style="color: rgb(42, 161, 152);">&quot; : &quot;</span> + minutes
+   }
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-6-4" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-6-4" style="margin: 5px 10px;">
+		<span class="section-number-3">6.4</span>&nbsp;重新实现前一个类中的Time类，将内部呈现改成午夜起的分钟数(介于0到24*60-1之间)。不要改变公有接口。也就是说，客户端代码不应因你的修改而受影响<br />
+	</h3>
+<div class="outline-text-3" id="text-6-4">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Time</span>(<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">hours</span>:<span style="color: rgb(181, 137, 0);">Int</span>,<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">minutes</span>:<span style="color: rgb(181, 137, 0);">Int</span>){
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">before</span>(<span style="color: rgb(38, 139, 210);">other</span>:<span style="color: rgb(181, 137, 0);">Time</span>):<span style="color: rgb(181, 137, 0);">Boolean</span>={
+    hours &lt; other.hours || (hours == other.hours &amp;&amp; minutes &lt; other.minutes)
+  }
+
+  <span style="color: rgb(133, 153, 0);">override</span> <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">toString</span>():<span style="color: rgb(181, 137, 0);">String</span>={
+     hours * 60 + minutes 
+  }
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-6-5" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-6-5" style="margin: 5px 10px;">
+		<span class="section-number-3">6.5</span>&nbsp;创建一个Student类，加入可读写的JavaBeans属性name(类型为String)和id(类型为Long)。有哪些方法被生产？(用javap查看。)你可以在Scala中调用JavaBeans的getter和setter方法吗？应该这样做吗？<br />
+	</h3>
+<div class="outline-text-3" id="text-6-5">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			生成了name(),name_=(),id(),id_=(),setName(),getName(),setId(),getId() 编写代码如下
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">import</span> scala.reflect.BeanProperty
+
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Student</span>{
+
+    @BeanProperty <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">name</span>:<span style="color: rgb(181, 137, 0);">String </span>= _
+    @BeanProperty <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">id</span>:<span style="color: rgb(181, 137, 0);">Long </span>= _
+}
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			javap -c Student 后显示如下
+		</p>
+<pre class="example" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+Compiled from &quot;Student.scala&quot;
+public class Student extends java.lang.Object implements scala.ScalaObject{
+public java.lang.String name();
+  Code:
+   0:   aload_0
+   1:   getfield        #13; //Field name:Ljava/lang/String;
+   4:   areturn
+
+public void name_$eq(java.lang.String);
+  Code:
+   0:   aload_0
+   1:   aload_1
+   2:   putfield        #13; //Field name:Ljava/lang/String;
+   5:   return
+
+public void setName(java.lang.String);
+  Code:
+   0:   aload_0
+   1:   aload_1
+   2:   putfield        #13; //Field name:Ljava/lang/String;
+   5:   return
+
+public long id();
+  Code:
+   0:   aload_0
+   1:   getfield        #19; //Field id:J
+   4:   lreturn
+
+public void id_$eq(long);
+  Code:
+   0:   aload_0
+   1:   lload_1
+   2:   putfield        #19; //Field id:J
+   5:   return
+
+public void setId(long);
+  Code:
+   0:   aload_0
+   1:   lload_1
+   2:   putfield        #19; //Field id:J
+   5:   return
+
+public long getId();
+  Code:
+   0:   aload_0
+   1:   invokevirtual   #25; //Method id:()J
+   4:   lreturn
+
+public java.lang.String getName();
+  Code:
+   0:   aload_0
+   1:   invokevirtual   #28; //Method name:()Ljava/lang/String;
+   4:   areturn
+
+public Student();
+  Code:
+   0:   aload_0
+   1:   invokespecial   #34; //Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
+   4:   return
+
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-6-6" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-6-6" style="margin: 5px 10px;">
+		<span class="section-number-3">6.6</span>&nbsp;在5.2节的Person类中提供一个主构造器,将负年龄转换为0<br />
+	</h3>
+<div class="outline-text-3" id="text-6-6">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Person</span>(<span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">age</span>:<span style="color: rgb(181, 137, 0);">Int</span>){
+  age = <span style="color: rgb(133, 153, 0);">if</span>(age &lt; 0) 0 <span style="color: rgb(133, 153, 0);">else</span> age
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-6-7" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-6-7" style="margin: 5px 10px;">
+		<span class="section-number-3">6.7</span>&nbsp;编写一个Person类，其主构造器接受一个字符串，该字符串包含名字，空格和姓，如new Person(&quot;Fred Smith&quot;)。提供只读属性firstName和lastName。主构造器参数应该是var,val还是普通参数？为什么？<br />
+	</h3>
+<div class="outline-text-3" id="text-6-7">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			必须为val。如果为var，则对应的此字符串有get和set方法，而Person中的firstName和lastName为只读的,所以不能重复赋值。如果为var则会重复赋值而报错
+		</p>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-6-8" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-6-8" style="margin: 5px 10px;">
+		<span class="section-number-3">6.8</span>&nbsp;创建一个Car类，以只读属性对应制造商，型号名称，型号年份以及一个可读写的属性用于车牌。提供四组构造器。每个构造器fc都要求制造商和型号为必填。型号年份和车牌可选，如果未填，则型号年份为-1，车牌为空串。你会选择哪一个作为你的主构造器？为什么？<br />
+	</h3>
+<div class="outline-text-3" id="text-6-8">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			这个没太明白题意。。。
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Car</span>(<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">maker</span>:<span style="color: rgb(181, 137, 0);">String</span>,<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">typeName</span>:<span style="color: rgb(181, 137, 0);">String</span>,<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">year</span>:<span style="color: rgb(181, 137, 0);">Int </span>= -1,<span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">carLice</span>:<span style="color: rgb(181, 137, 0);">String </span>= <span style="color: rgb(42, 161, 152);">&quot;&quot;</span>){
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-6-9" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-6-9" style="margin: 5px 10px;">
+		<span class="section-number-3">6.9</span>&nbsp;在Java,C#或C++重做前一个练习。Scala相比之下精简多少？<br />
+	</h3>
+<div class="outline-text-3" id="text-6-9">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			这个就不写了。
+		</p>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-6-10" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-6-10" style="margin: 5px 10px;">
+		<span class="section-number-3">6.10</span>&nbsp;考虑如下的类<br />
+	</h3>
+<div class="outline-text-3" id="text-6-10">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Employ</span>(<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">name</span>:<span style="color: rgb(181, 137, 0);">String</span>,<span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">salary</span>:<span style="color: rgb(181, 137, 0);">Double</span>){
+    <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(133, 153, 0);">this</span>(){<span style="color: rgb(133, 153, 0);">this</span>(<span style="color: rgb(42, 161, 152);">&quot;John Q. Public&quot;</span>,0.0)}
+}
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			重写该类,使用显示的字段定义，和一个缺省主构造器。你更倾向于使用哪种形式？为什么？
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Employ</span>{
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">name</span>:<span style="color: rgb(181, 137, 0);">String </span>= <span style="color: rgb(42, 161, 152);">&quot;John Q. Public&quot;</span> 
+    <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">salary</span>:<span style="color: rgb(181, 137, 0);">Double </span>= 0.0
+}
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			个人更喜欢第二种方式，简单明了。
+		</p>
+</p></div>
+</div>
+<p>
+	&nbsp;</p>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%259b%259b%25e7%25ab%25a0-%25e6%2598%25a0%25e5%25b0%2584%25e5%2592%258c%25e5%2585%2583%25e7%25bb%2584.html" title="快学Scala习题解答—第四章 映射和元组 "><p> <i class="fa fa-mail-reply"></i>&nbsp;快学Scala习题解答—第四章 映射和元组</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%2585%25ad%25e7%25ab%25a0-%25e5%25af%25b9%25e8%25b1%25a1.html" title="快学Scala习题解答—第六章 对象"><p>快学Scala习题解答—第六章 对象&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="快学Scala习题解答—第五章 类"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="scala"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e4%25b8%2589%25e7%25ab%25a0-%25e6%2595%25b0%25e7%25bb%2584%25e7%259b%25b8%25e5%2585%25b3%25e6%2593%258d%25e4%25bd%259c.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>快学Scala习题解答—第三章 数组相关操作 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">快学Scala习题解答—第三章 数组相关操作</h2>
+
+    <p class="post-meta">By 12月04日  2012  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> java-scala (20)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#scala"><i class="fa fa-tags"></i> scala (19)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <p>
+	&nbsp;</p>
+<h2 id="sec-4" style="margin: 5px; color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; background-color: rgb(253, 246, 227);">
+	<span class="section-number-2">4</span>&nbsp;数组相关操作<br />
+</h2>
+<div class="outline-text-2" id="text-4" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+	&nbsp;
+</div>
+<div class="outline-3" id="outline-container-4-1" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-4-1" style="margin: 5px 10px;">
+		<span class="section-number-3">4.1</span>&nbsp;编写一段代码，将a设置为一个n个随机整数的数组，要求随机数介于0(包含)和n(不包含)之间<br />
+	</h3>
+<div class="outline-text-3" id="text-4-1">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			random和yield的使用
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">import</span> scala.collection.mutable.ArrayBuffer
+<span style="color: rgb(133, 153, 0);">import</span> scala.math.random
+
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">randomArray</span>(<span style="color: rgb(38, 139, 210);">n</span>:<span style="color: rgb(181, 137, 0);">Int</span>):<span style="color: rgb(181, 137, 0);">Array[Int]</span>={
+     <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">a</span> = <span style="color: rgb(133, 153, 0);">for</span>(i &lt;- 0 until n) <span style="color: rgb(133, 153, 0);">yield</span> (random * n).toInt
+     a.toArray
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-4-2" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-4-2" style="margin: 5px 10px;">
+		<span class="section-number-3">4.2</span>&nbsp;编写一个循环，将整数数组中相邻的元素置换。例如,Array(1,2,3,4,5)经过置换后变为Array(2,1,4,3,5)<br />
+	</h3>
+<div class="outline-text-3" id="text-4-2">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			对数组方法的使用
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">reorderArray</span>(<span style="color: rgb(38, 139, 210);">arr</span>:<span style="color: rgb(181, 137, 0);">Array[Int]</span>):<span style="color: rgb(181, 137, 0);">Array[Int]</span>={
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">t</span> = arr.toBuffer
+    <span style="color: rgb(133, 153, 0);">for</span>(i &lt;- 0 until (t.length,2) <span style="color: rgb(133, 153, 0);">if</span> i + 1 &lt; t.length){
+        <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">a</span> = t(i)
+        <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">b</span> = t(i + 1)
+        t.remove(i,2)
+        t.insert(i,b)
+        t.insert(i + 1,a)
+    }
+    t.toArray
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-4-3" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-4-3" style="margin: 5px 10px;">
+		<span class="section-number-3">4.3</span>&nbsp;重复前一个练习，不过这一次生成一个新的值交换过的数组。用for/yield<br />
+	</h3>
+<div class="outline-text-3" id="text-4-3">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">reorderArray</span>(<span style="color: rgb(38, 139, 210);">arr</span>:<span style="color: rgb(181, 137, 0);">Array[Int]</span>):<span style="color: rgb(181, 137, 0);">Array[Int]</span>={
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">t</span> = arr.toBuffer
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">result</span> = <span style="color: rgb(133, 153, 0);">for</span>(i &lt;- 0 until t.length)
+                    <span style="color: rgb(133, 153, 0);">yield</span> <span style="color: rgb(133, 153, 0);">if</span>(i%2==0 &amp;&amp; i + 1 &lt; t.length)t(i + 1)
+                          <span style="color: rgb(133, 153, 0);">else</span> <span style="color: rgb(133, 153, 0);">if</span>(i%2==0 &amp;&amp; i + 1 &gt;= t.length)t(i)
+                          <span style="color: rgb(133, 153, 0);">else</span> t(i - 1)
+    result.toArray
+}
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			感觉代码有点丑也难读。需要优化。
+		</p>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-4-4" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-4-4" style="margin: 5px 10px;">
+		<span class="section-number-3">4.4</span>&nbsp;给定一个整数数组，产生一个新的数组，包含元数组中的所有正值，以原有顺序排列，之后的元素是所有零或负值，以原有顺序排列<br />
+	</h3>
+<div class="outline-text-3" id="text-4-4">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">使用循环</span>
+ <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">reorderArray</span>(<span style="color: rgb(38, 139, 210);">arr</span>:<span style="color: rgb(181, 137, 0);">Array[Int]</span>):<span style="color: rgb(181, 137, 0);">Array[Int]</span>={
+     <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">a</span> = ArrayBuffer[Int]()
+     <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">b</span> = ArrayBuffer[Int]()
+     arr.foreach(arg =&gt; <span style="color: rgb(133, 153, 0);">if</span>(arg &gt; 0) a += arg <span style="color: rgb(133, 153, 0);">else</span> b += arg)
+     a ++= b
+     a.toArray
+ }
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">使用filter</span>
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">reorderArray</span>(<span style="color: rgb(38, 139, 210);">arr</span>:<span style="color: rgb(181, 137, 0);">Array[Int]</span>):<span style="color: rgb(181, 137, 0);">Array[Int]</span>={
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">a</span> = arr.filter(_ &gt; 0).map(1 * _)
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">b</span> = arr.filter(_ &lt;= 0).map(1 * _)
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">c</span> = a.toBuffer
+  c ++= b
+  c.toArray
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-4-5" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-4-5" style="margin: 5px 10px;">
+		<span class="section-number-3">4.5</span>&nbsp;如何计算Array[Double]的平均值？<br />
+	</h3>
+<div class="outline-text-3" id="text-4-5">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">aveArray</span>(<span style="color: rgb(38, 139, 210);">arr</span>:<span style="color: rgb(181, 137, 0);">Array[Double]</span>):<span style="color: rgb(181, 137, 0);">Double</span>={
+  arr.sum/arr.length
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-4-6" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-4-6" style="margin: 5px 10px;">
+		<span class="section-number-3">4.6</span>&nbsp;如何重新组织Array[Int]的元素将他们以反序排列？对于ArrayBuffer[Int]你又会怎么做呢？<br />
+	</h3>
+<div class="outline-text-3" id="text-4-6">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">reverseArray</span>(<span style="color: rgb(38, 139, 210);">arr</span>:<span style="color: rgb(181, 137, 0);">Array[Int]</span>):<span style="color: rgb(181, 137, 0);">Array[Int]</span>={
+  arr.reverse
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-4-7" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-4-7" style="margin: 5px 10px;">
+		<span class="section-number-3">4.7</span>&nbsp;编写一段代码，产出数组中的所有值，去掉重复项。(提示：查看Scaladoc)<br />
+	</h3>
+<div class="outline-text-3" id="text-4-7">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			产出数组的代码就不编写了。去重只需要调用api即可
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">distinctArray</span>(<span style="color: rgb(38, 139, 210);">arr</span>:<span style="color: rgb(181, 137, 0);">Array[Int]</span>):<span style="color: rgb(181, 137, 0);">Array[Int]</span>={
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">t</span> = arr.toBuffer
+  t.distinct.toArray
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-4-8" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-4-8" style="margin: 5px 10px;">
+		<span class="section-number-3">4.8</span>&nbsp;重新编写3.4节结尾的示例。收集负值元素的下标，反序，去掉最后一个下标，然后对每个下标调用a.remove(i)。比较这样做的效率和3.4节中另外两种方法的效率<br />
+	</h3>
+<div class="outline-text-3" id="text-4-8">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			性能嘛，自己比较吧!
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">removeArray</span>(<span style="color: rgb(38, 139, 210);">arr</span>:<span style="color: rgb(181, 137, 0);">Array[Int]</span>):<span style="color: rgb(181, 137, 0);">Array[Int]</span>={
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">t</span> = arr.toBuffer
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">idx</span> = ArrayBuffer[Int]()
+  <span style="color: rgb(133, 153, 0);">for</span>(i &lt;- 0 until t.length){
+    <span style="color: rgb(133, 153, 0);">if</span>(t(i) &lt; 0)idx += i
+  }
+  idx.remove(0)
+  idx.reverse
+  idx.foreach(t.remove(_))
+  t.toArray
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-4-9" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-4-9" style="margin: 5px 10px;">
+		<span class="section-number-3">4.9</span>&nbsp;创建一个由java.util.TimeZone.getAvailableIDs返回ide时区集合，判断条件是它们在美洲。去掉&quot;America/&quot;前缀并排序<br />
+	</h3>
+<div class="outline-text-3" id="text-4-9">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			显示的都是中文时间，后续的过滤无法操作。只列出所有的时区
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">t</span> = <span style="color: rgb(133, 153, 0);">for</span>(i &lt;- getAvailableIDs) <span style="color: rgb(133, 153, 0);">yield</span>
+          getTimeZone(i).getDisplayName()
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-4-10" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-4-10" style="margin: 5px 10px;">
+		<span class="section-number-3">4.10</span>&nbsp;引入java.awt.datatransfer.<sub>并构建一个类型为SystemFlavorMap类型的对象</sub>:<br />
+	</h3>
+<div class="outline-text-3" id="text-4-10">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			val flavors = SystemFlavorMap.getDefaultFlavorMap().asInstanceOf[SystemFlavorMap] 然后以DataFlavor.imageFlavor为参数调用getNativesForFlavor方法，以Scala缓冲保存返回值。 (为什么用这样一个晦涩难懂的类？因为在Java标准库中很难找到使用java.util.List的代码)
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">flavors</span> = SystemFlavorMap.getDefaultFlavorMap().asInstanceOf[SystemFlavorMap]
+println(flavors.getNativesForFlavor(DataFlavor.imageFlavor).toArray.toBuffer.mkString(<span style="color: rgb(42, 161, 152);">&quot; | &quot;</span>)</pre>
+</p></div>
+</div>
+<p>
+	&nbsp;</p>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e4%25b8%2580%25e7%25ab%25a0-%25e6%258e%25a7%25e5%2588%25b6%25e7%25bb%2593%25e6%259e%2584%25e5%2592%258c%25e5%2587%25bd%25e6%2595%25b0.html" title="快学Scala习题解答—第二章 控制结构和函数 "><p> <i class="fa fa-mail-reply"></i>&nbsp;快学Scala习题解答—第二章 控制结构和函数</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%259b%259b%25e7%25ab%25a0-%25e6%2598%25a0%25e5%25b0%2584%25e5%2592%258c%25e5%2585%2583%25e7%25bb%2584.html" title="快学Scala习题解答—第四章 映射和元组"><p>快学Scala习题解答—第四章 映射和元组&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="快学Scala习题解答—第三章 数组相关操作"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="java, scala"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%258d%2581%25e5%259b%259b%25e7%25ab%25a0-%25e6%25a8%25a1%25e5%25bc%258f%25e5%258c%25b9%25e9%2585%258d%25e5%2592%258c%25e6%25a0%25b7%25e4%25be%258b%25e7%25b1%25bb.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>快学Scala习题解答—第十四章 模式匹配和样例类 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">快学Scala习题解答—第十四章 模式匹配和样例类</h2>
+
+    <p class="post-meta">By 03月10日  2013  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> java-scala (20)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#java"><i class="fa fa-tags"></i> java (16)</a>
+ 
+<a class="post-category " href="/tag/#java"><i class="fa fa-tags"></i> scala (19)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <h2 id="sec-15" style="margin: 5px; color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; line-height: normal; background-color: rgb(253, 246, 227);">
+	<span class="section-number-2">15</span>&nbsp;模式匹配和样例类<br />
+</h2>
+<div class="outline-text-2" id="text-15" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+	&nbsp;
+</div>
+<div class="outline-3" id="outline-container-15-1" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+<h3 id="sec-15-1" style="margin: 5px 10px;">
+		<span class="section-number-3">15.1</span>&nbsp;JDK发行包有一个src.zip文件包含了JDK的大多数源代码。解压并搜索样例标签(用正则表达式case [^:]+:)。然后查找以//开头并包含[Ff]alls?thr的注释，捕获类似// Falls through或// just fall thru这样的注释。假定JDK的程序员们遵守Java编码习惯，在该写注释的地方写下了这些注释，有多少百分比的样例是会掉入到下一个分支的？<br />
+	</h3>
+<div class="outline-text-3" id="text-15-1">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			没读懂题意。。。。
+		</p>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-15-2" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+<h3 id="sec-15-2" style="margin: 5px 10px;">
+		<span class="section-number-3">15.2</span>&nbsp;利用模式匹配，编写一个swap函数，接受一个整数的对偶，返回对偶的两个组成部件互换位置的新对偶<br />
+	</h3>
+<div class="outline-text-3" id="text-15-2">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">swap</span>[<span style="color: rgb(181, 137, 0);">S</span>,<span style="color: rgb(181, 137, 0);">T</span>](<span style="color: rgb(38, 139, 210);">tup</span>: <span style="color: rgb(181, 137, 0);">(S,T)</span>) = {
+        tup <span style="color: rgb(133, 153, 0);">match</span> {
+                <span style="color: rgb(133, 153, 0);">case</span> (<span style="color: rgb(38, 139, 210);">a</span> ,<span style="color: rgb(38, 139, 210);">b</span>) =&gt; (b,a)
+        }
+}
+
+println(swap[String,Int]((<span style="color: rgb(42, 161, 152);">&quot;1&quot;</span>,2)))
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-15-3" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+<h3 id="sec-15-3" style="margin: 5px 10px;">
+		<span class="section-number-3">15.3</span>&nbsp;利用模式匹配，编写一个swap函数，交换数组中的前两个元素的位置，前提条件是数组长度至少为2<br />
+	</h3>
+<div class="outline-text-3" id="text-15-3">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">swap</span>(<span style="color: rgb(38, 139, 210);">arr</span>: <span style="color: rgb(181, 137, 0);">Array[String]</span>) = {
+  arr <span style="color: rgb(133, 153, 0);">match</span> {
+    <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(181, 137, 0);">Array</span>(<span style="color: rgb(38, 139, 210);">a</span>,<span style="color: rgb(38, 139, 210);">b</span>, <span style="color: rgb(38, 139, 210);">ar</span> <span style="color: rgb(38, 139, 210);">@</span> <span style="color: rgb(38, 139, 210);">_*</span>) =&gt; Array(b,a) ++ ar
+    <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(38, 139, 210);">_</span> =&gt; arr
+  }
+}
+
+println(swap(Array(<span style="color: rgb(42, 161, 152);">&quot;1&quot;</span>,<span style="color: rgb(42, 161, 152);">&quot;2&quot;</span>,<span style="color: rgb(42, 161, 152);">&quot;3&quot;</span>,<span style="color: rgb(42, 161, 152);">&quot;4&quot;</span>)).mkString)
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-15-4" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+<h3 id="sec-15-4" style="margin: 5px 10px;">
+		<span class="section-number-3">15.4</span>&nbsp;添加一个样例类Multiple，作为Item的子类。举例来说，Multiple(10,Article(&quot;Blackwell Toster&quot;,29.95))描述的是10个烤面包机。当然了，你应该可以在第二个参数的位置接受任何Item，无论是Bundle还是另一个Multiple。扩展price函数以应对新的样例。<br />
+	</h3>
+<div class="outline-text-3" id="text-15-4">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">abstract</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Item</span>
+
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Multiple</span>(<span style="color: rgb(38, 139, 210);">num</span> : <span style="color: rgb(181, 137, 0);">Int</span>,<span style="color: rgb(38, 139, 210);">item</span> : <span style="color: rgb(181, 137, 0);">Item</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">Item</span>
+
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Article</span>(<span style="color: rgb(38, 139, 210);">description</span> : <span style="color: rgb(181, 137, 0);">String </span>, <span style="color: rgb(38, 139, 210);">price</span> : <span style="color: rgb(181, 137, 0);">Double</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">Item</span>
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Bundle</span>(<span style="color: rgb(38, 139, 210);">description</span> : <span style="color: rgb(181, 137, 0);">String </span>, <span style="color: rgb(38, 139, 210);">discount</span> : <span style="color: rgb(181, 137, 0);">Double </span>, <span style="color: rgb(38, 139, 210);">item</span> : <span style="color: rgb(181, 137, 0);">Item*</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">Item</span>
+
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Test</span> <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">App</span>{
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">price</span>(<span style="color: rgb(38, 139, 210);">it</span> : <span style="color: rgb(181, 137, 0);">Item</span>) : <span style="color: rgb(181, 137, 0);">Double </span>= it <span style="color: rgb(133, 153, 0);">match</span> {
+      <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(181, 137, 0);">Article</span>(<span style="color: rgb(38, 139, 210);">_</span>,<span style="color: rgb(38, 139, 210);">p</span>) =&gt; p
+      <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(181, 137, 0);">Bundle</span>(<span style="color: rgb(38, 139, 210);">_</span>,<span style="color: rgb(38, 139, 210);">disc</span>,<span style="color: rgb(38, 139, 210);">its</span> <span style="color: rgb(38, 139, 210);">@</span> <span style="color: rgb(38, 139, 210);">_*</span>) =&gt; its.map(price _).sum - disc
+      <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(181, 137, 0);">Multiple</span>(<span style="color: rgb(38, 139, 210);">n</span>,<span style="color: rgb(38, 139, 210);">it</span>) =&gt; n * price(it)
+  }
+
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">p</span> = price(Multiple(10,Article(<span style="color: rgb(42, 161, 152);">&quot;Blackwell Toster&quot;</span>,29.95)))
+  println(p)
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-15-5" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+<h3 id="sec-15-5" style="margin: 5px 10px;">
+		<span class="section-number-3">15.5</span>&nbsp;我们可以用列表制作只在叶子节点存放值的树。举例来说，列表((3 8) 2 (5))描述的是如下这样一棵树:<br />
+	</h3>
+<div class="outline-text-3" id="text-15-5">
+<pre class="example" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+      *
+    / | \
+   *  2  *
+ /  \    |
+3   8    5
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			不过，有些列表元素是数字，而另一些是列表。在Scala中，你不能拥有异构的列表，因此你必须使用List[Any]。编写一个leafSum函数，计算所有叶子节点中的元素之和，用模式匹配来区分数字和列表。
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">l</span>: <span style="color: rgb(181, 137, 0);">List[Any]</span> = List(List(3, 8), 2, List(5))
+
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">leafSum</span>(<span style="color: rgb(38, 139, 210);">list</span>: <span style="color: rgb(181, 137, 0);">List[Any]</span>): <span style="color: rgb(181, 137, 0);">Int </span>= {
+
+  <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">total</span> = 0
+
+  list.foreach {
+    lst =&gt;
+      lst <span style="color: rgb(133, 153, 0);">match</span> {
+        <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(38, 139, 210);">l</span>: <span style="color: rgb(181, 137, 0);">List[Any] =&gt; total </span><span style="color: rgb(38, 139, 210);">+=</span> <span style="color: rgb(38, 139, 210);">leafSum</span>(<span style="color: rgb(38, 139, 210);">l</span>)
+        <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(38, 139, 210);">i</span>: <span style="color: rgb(181, 137, 0);">Int =&gt; total </span><span style="color: rgb(38, 139, 210);">+=</span> <span style="color: rgb(38, 139, 210);">i</span>
+      }
+  }
+  total
+}
+
+println(leafSum(l))
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-15-6" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+<h3 id="sec-15-6" style="margin: 5px 10px;">
+		<span class="section-number-3">15.6</span>&nbsp;制作这样的树更好的做法是使用样例类。我们不妨从二叉树开始。<br />
+	</h3>
+<div class="outline-text-3" id="text-15-6">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">sealed</span> <span style="color: rgb(133, 153, 0);">abstract</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Leaf</span>(<span style="color: rgb(38, 139, 210);">value</span> : <span style="color: rgb(181, 137, 0);">Int</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Node</span>(<span style="color: rgb(38, 139, 210);">left</span> : <span style="color: rgb(181, 137, 0);">BinaryTree</span>,<span style="color: rgb(38, 139, 210);">right</span> : <span style="color: rgb(181, 137, 0);">BinaryTree</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			编写一个函数计算所有叶子节点中的元素之和。
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">sealed</span> <span style="color: rgb(133, 153, 0);">abstract</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Leaf</span>(<span style="color: rgb(38, 139, 210);">value</span> : <span style="color: rgb(181, 137, 0);">Int</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Node</span>(<span style="color: rgb(38, 139, 210);">left</span> : <span style="color: rgb(181, 137, 0);">BinaryTree</span>,<span style="color: rgb(38, 139, 210);">right</span> : <span style="color: rgb(181, 137, 0);">BinaryTree</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">r</span> = Node(Leaf(3),Node(Leaf(3),Leaf(9)))
+
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">leafSum</span>(<span style="color: rgb(38, 139, 210);">tree</span>: <span style="color: rgb(181, 137, 0);">BinaryTree</span>): <span style="color: rgb(181, 137, 0);">Int </span>= {
+
+      tree <span style="color: rgb(133, 153, 0);">match</span> {
+        <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(181, 137, 0);">Node</span>(<span style="color: rgb(38, 139, 210);">a</span>,<span style="color: rgb(38, 139, 210);">b</span>) =&gt; leafSum(a) + leafSum(b)
+        <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(181, 137, 0);">Leaf</span>(<span style="color: rgb(38, 139, 210);">v</span>) =&gt; v
+      }
+
+}
+
+println(leafSum(r))
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-15-7" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+<h3 id="sec-15-7" style="margin: 5px 10px;">
+		<span class="section-number-3">15.7</span>&nbsp;扩展前一个练习中的树，使得每个节点可以有任意多的后代，并重新实现leafSum函数。第五题中的树应该能够通过下述代码表示：<br />
+	</h3>
+<div class="outline-text-3" id="text-15-7">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+Node(Node(Leaf(3),Leaf(8)),Leaf(2),Node(Leaf(5)))
+</pre>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">sealed</span> <span style="color: rgb(133, 153, 0);">abstract</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Leaf</span>(<span style="color: rgb(38, 139, 210);">value</span>: <span style="color: rgb(181, 137, 0);">Int</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Node</span>(<span style="color: rgb(38, 139, 210);">tr</span>: <span style="color: rgb(181, 137, 0);">BinaryTree*</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Test</span> <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">App</span> {
+
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">r</span> = Node(Node(Leaf(3), Leaf(8)), Leaf(2), Node(Leaf(5)))
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">leafSum</span>(<span style="color: rgb(38, 139, 210);">tree</span>: <span style="color: rgb(181, 137, 0);">BinaryTree</span>): <span style="color: rgb(181, 137, 0);">Int </span>= {
+    tree <span style="color: rgb(133, 153, 0);">match</span> {
+      <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(181, 137, 0);">Node</span>(<span style="color: rgb(38, 139, 210);">r</span> <span style="color: rgb(38, 139, 210);">@</span> <span style="color: rgb(38, 139, 210);">_*</span>) =&gt; r.map(leafSum).sum
+      <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(181, 137, 0);">Leaf</span>(<span style="color: rgb(38, 139, 210);">v</span>) =&gt; v
+    }
+  }
+
+  println(leafSum(r))
+
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-15-8" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+<h3 id="sec-15-8" style="margin: 5px 10px;">
+		<span class="section-number-3">15.8</span>&nbsp;扩展前一个练习中的树，使得每个非叶子节点除了后代之外，能够存放一个操作符。然后编写一个eval函数来计算它的值。举例来说：<br />
+	</h3>
+<div class="outline-text-3" id="text-15-8">
+<pre class="example" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+      +
+    / | \
+   *  2  -
+ /  \    |
+3   8    5
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			上面这棵树的值为(3 * 8) + 2 + (-5) = 21
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">sealed</span> <span style="color: rgb(133, 153, 0);">abstract</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Leaf</span>(<span style="color: rgb(38, 139, 210);">value</span>: <span style="color: rgb(181, 137, 0);">Int</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+<span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(133, 153, 0);">class</span> <span style="color: rgb(181, 137, 0);">Node</span>(<span style="color: rgb(38, 139, 210);">ch</span> : <span style="color: rgb(181, 137, 0);">Char </span>, <span style="color: rgb(38, 139, 210);">tr</span>: <span style="color: rgb(181, 137, 0);">BinaryTree*</span>) <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">BinaryTree</span>
+
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Test</span> <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">App</span> {
+
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">r</span> = Node(<span style="color: rgb(42, 161, 152);">&#39;+&#39;</span> , Node(<span style="color: rgb(42, 161, 152);">&#39;*&#39;</span>,Leaf(3), Leaf(8)), Leaf(2), Node(<span style="color: rgb(42, 161, 152);">&#39;-&#39;</span> , Leaf(5)))
+
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">eval</span>(<span style="color: rgb(38, 139, 210);">tree</span>: <span style="color: rgb(181, 137, 0);">BinaryTree</span>): <span style="color: rgb(181, 137, 0);">Int </span>= {
+    tree <span style="color: rgb(133, 153, 0);">match</span> {
+      <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(181, 137, 0);">Node</span>(<span style="color: rgb(38, 139, 210);">c</span> : <span style="color: rgb(181, 137, 0);">Char </span>, <span style="color: rgb(38, 139, 210);">r</span> <span style="color: rgb(38, 139, 210);">@</span> <span style="color: rgb(38, 139, 210);">_*</span>) =&gt; <span style="color: rgb(133, 153, 0);">if</span>( c == <span style="color: rgb(42, 161, 152);">&#39;+&#39;</span>) r.map(eval).sum <span style="color: rgb(133, 153, 0);">else</span> <span style="color: rgb(133, 153, 0);">if</span> (c == <span style="color: rgb(42, 161, 152);">&#39;*&#39;</span>) r.map(eval).reduceLeft(_ * _) <span style="color: rgb(133, 153, 0);">else</span> r.map(eval).foldLeft(0)(_ - _)
+      <span style="color: rgb(133, 153, 0);">case</span> <span style="color: rgb(181, 137, 0);">Leaf</span>(<span style="color: rgb(38, 139, 210);">v</span>) =&gt; v
+    }
+  }
+
+println(eval(r))
+
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-15-9" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+<h3 id="sec-15-9" style="margin: 5px 10px;">
+		<span class="section-number-3">15.9</span>&nbsp;编写一个函数，计算List[Option[Int]]中所有非None值之和。不得使用match语句。<br />
+	</h3>
+<div class="outline-text-3" id="text-15-9">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">l</span> : <span style="color: rgb(181, 137, 0);">List[Option[Int]]</span> = List(Option(-1),None,Option(2))
+println(l.map(_.getOrElse(0)).sum)
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-15-10" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; line-height: normal; background-color: rgb(253, 246, 227);">
+<h3 id="sec-15-10" style="margin: 5px 10px;">
+		<span class="section-number-3">15.10</span>&nbsp;编写一个函数，将两个类型为Double=&gt;Option[Double]的函数组合在一起，产生另一个同样类型的函数。如果其中一个函数返回None，则组合函数也应返回None。例如：<br />
+	</h3>
+<div class="outline-text-3" id="text-15-10">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">f</span>(<span style="color: rgb(38, 139, 210);">x</span> : <span style="color: rgb(181, 137, 0);">Double</span>) = <span style="color: rgb(133, 153, 0);">if</span> ( x &gt;= 0) Some(sqrt(x)) <span style="color: rgb(133, 153, 0);">else</span> None
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">g</span>(<span style="color: rgb(38, 139, 210);">x</span> : <span style="color: rgb(181, 137, 0);">Double</span>) = <span style="color: rgb(133, 153, 0);">if</span> ( x != 1) Some( 1 / ( x - 1)) <span style="color: rgb(133, 153, 0);">else</span> None
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">h</span> = compose(f,g)
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			h(2)将得到Some(1)，而h(1)和h(0)将得到None
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">import</span> scala.math.sqrt
+
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">f</span>(<span style="color: rgb(38, 139, 210);">x</span> : <span style="color: rgb(181, 137, 0);">Double</span>) = <span style="color: rgb(133, 153, 0);">if</span> ( x &gt;= 0) Some(sqrt(x)) <span style="color: rgb(133, 153, 0);">else</span> None
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">g</span>(<span style="color: rgb(38, 139, 210);">x</span> : <span style="color: rgb(181, 137, 0);">Double</span>) = <span style="color: rgb(133, 153, 0);">if</span> ( x != 1) Some( 1 / ( x - 1)) <span style="color: rgb(133, 153, 0);">else</span> None
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">h</span> = compose(f,g)
+
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">compose</span>(<span style="color: rgb(38, 139, 210);">f</span> : <span style="color: rgb(181, 137, 0);">(Double =&gt; Option[Double])</span>, <span style="color: rgb(38, 139, 210);">g</span> : <span style="color: rgb(181, 137, 0);">(Double =&gt; Option[Double])</span>):<span style="color: rgb(181, 137, 0);">(Double =&gt; Option[Double])</span>={
+  (x : Double) =&gt;
+    <span style="color: rgb(133, 153, 0);">if</span> (f(x) == None || g(x) == None) None
+    <span style="color: rgb(133, 153, 0);">else</span> g(x)
+}
+
+println(h(2))</pre>
+</p></div>
+</div>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%258d%2581%25e4%25b8%2589%25e7%25ab%25a0-%25e9%259b%2586%25e5%2590%2588.html" title="快学Scala习题解答—第十三章 集合 "><p> <i class="fa fa-mail-reply"></i>&nbsp;快学Scala习题解答—第十三章 集合</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%258d%2581%25e4%25ba%2594%25e7%25ab%25a0-%25e6%25b3%25a8%25e8%25a7%25a3.html" title="快学Scala习题解答—第十五章 注解"><p>快学Scala习题解答—第十五章 注解&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="快学Scala习题解答—第十四章 模式匹配和样例类"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

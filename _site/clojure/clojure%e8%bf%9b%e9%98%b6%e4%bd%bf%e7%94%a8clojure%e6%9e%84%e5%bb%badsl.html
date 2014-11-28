@@ -1,0 +1,698 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="clojure"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/clojure/clojure%25e8%25bf%259b%25e9%2598%25b6%25e4%25bd%25bf%25e7%2594%25a8clojure%25e6%259e%2584%25e5%25bb%25badsl.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>Clojure进阶:使用Clojure构建DSL - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">Clojure进阶:使用Clojure构建DSL</h2>
+
+    <p class="post-meta">By 03月01日  2014  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> clojure (11)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#clojure"><i class="fa fa-tags"></i> clojure (10)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <p>翻译自<a href="http://clojure-doc.org/articles/tutorials/growing_a_dsl_with_clojure.html">Growing a DSL with Clojure</a>.主要讲解如何使用Clojure来创建一个简单的DSL.包括如下知识点:</p>
+<ul>
+<li>多重方法(Multimethods)
+</li>
+<li>继承(Hierarchies)
+</li>
+<li>元编程及"代码即数据"哲学(Metaprogramming and the "Code as data" philosophy)
+</li>
+</ul>
+<p>
+Lisp及其方言(比如Clojure)可以很方便的创建DSL并能和源语言无缝的集成.<br />
+Lisp界鼓吹的优点中，提到最多的可能就是:数据即代码，代码即数据了。在此<br />
+文中我们将依此特性来定义一个DSL。</p>
+<p>
+我们将渐进式的开发这个DSL，不断的加入Clojure的特性和抽象。</p>
+<div id="table-of-contents">
+<h2>目录</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 任务</a></li>
+<li><a href="#sec-2">2 第一步:构建我们的领域语言</a></li>
+<li><a href="#sec-3">3 Echo和Print</a></li>
+<li><a href="#sec-4">4 Lisp代码即数据</a></li>
+<li><a href="#sec-5">5 细窥Clojure</a></li>
+<li><a href="#sec-6">6 使用多重方法对分支进行抽象</a></li>
+<li><a href="#sec-7">7 扩展我们的DSL实现Windows批处理</a></li>
+<li><a href="#sec-8">8 Ad-hoc继承</a></li>
+<li><a href="#sec-9">9 多重方法中使用继承</a></li>
+<li><a href="#sec-10">10 饭后甜点</a></li>
+<li><a href="#sec-11">11 总结</a></li>
+<li><a href="#sec-12">12 Copyright</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">任务</h2>
+<div class="outline-text-2" id="text-1">
+<p>我们的目标是定义一个可以生成各种脚本语言的DSL.而且DSL代码看起来和普通<br />
+的Clojure代码没有区别。</p>
+<p>
+例如,我们使用Clojure形式(form)来生成Bash脚本或者Windows批处理脚本:<br />
+输入(Clojure形式):</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">if</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> 1 2<span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"a"</span><span style="color: #8c8c8c;">)</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"b"</span><span style="color: #8c8c8c;">))</span>
+</pre>
+<p>
+输出(Bash脚本):</p>
+<pre class="src src-sh"><span style="color: #859900;">if</span> [ 1 -eq 2 ]; <span style="color: #859900;">then</span>
+  <span style="color: #859900;">echo</span> <span style="color: #2aa198;">"a"</span>
+<span style="color: #859900;">else</span>
+  <span style="color: #859900;">echo</span> <span style="color: #2aa198;">"b"</span>
+<span style="color: #859900;">fi</span>
+</pre>
+<p>
+输出(Windows批处理):</p>
+<pre class="src src-sh">IF <span style="color: #268bd2;">1</span>==2 (
+  ECHO a
+) ELSE (
+  ECHO b
+)
+</pre>
+</div>
+</div>
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">第一步:构建我们的领域语言</h2>
+<div class="outline-text-2" id="text-2">
+<p>我们先从Bash脚本开始。<br />
+在开始之前，我们先看看Clojure核心类型是否有什么类型我们可以直接拿到领域<br />
+语言中使用。在Clojure类型中是否有和Bash脚本类似的类型呢？<br />
+那就是字符串和基本类型，我们先从这里开始。<br />
+我们来定义一个emit-bash-form函数，它接受一个Clojure形式并返回一个符合<br />
+Bash脚本定义的字符串。</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">emit-bash-form</span>
+  <span style="color: #93a1a1; font-style: italic;">"Returns a String containing the equivalent Bash script</span>
+<span style="color: #93a1a1; font-style: italic;">  to its argument."</span>
+  [a]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">cond</span> 
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> a<span style="color: #8c8c8c;">)</span> <span style="color: #cb4b16;">java.lang.String</span><span style="color: #8c8c8c;">)</span> a
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> a<span style="color: #8c8c8c;">)</span> <span style="color: #cb4b16;">java.lang.Long</span><span style="color: #8c8c8c;">)</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> a<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> a<span style="color: #8c8c8c;">)</span> <span style="color: #cb4b16;">java.lang.Double</span><span style="color: #8c8c8c;">)</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> a<span style="color: #8c8c8c;">)</span>
+    <span style="color: #2aa198;">:else</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">throw</span> <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Exception.</span> <span style="color: #2aa198;">"Fell through"</span><span style="color: #8c8c8c;">))))</span>
+</pre>
+<p>
+cond表达式根据传入参数的类型来进行相应的操作。</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (emit-bash-form 1)
+<span style="color: #2aa198;">"1"</span>
+<span style="color: #268bd2;">user</span>=&gt; (emit-bash-form <span style="color: #2aa198;">"a"</span>)
+<span style="color: #2aa198;">"a"</span>
+</pre>
+<p>
+那么我们为什么要选择Long而不是Integer呢？因为在Clojure中，默认数据类型<br />
+是Long.<br />
+虽然Clojure支持Java所有的基本类型,但是默认情况下Clojure使用的是long和<br />
+double.Clojure会自动将int转成long，float转成double.可以简单的测试一下:</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (class 7)
+java.lang.Long
+</pre>
+<p>
+现在，如果我们想添加条件判断，我们只需要在cond表达式中添加相应的分支即<br />
+可。</p>
+</div>
+</div>
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">Echo和Print</h2>
+<div class="outline-text-2" id="text-3">
+<p>让我们继续添加功能。<br />
+Bash使用echo在屏幕上打印信息。如果你玩过Linux shell那么你应该对此不陌<br />
+生。</p>
+<pre class="src src-sh">ambrose@ambrose-desktop&gt; echo asdf
+asdf
+</pre>
+<p>
+clojure.core命名空间也包含了一个和Bash的echo类似功能的函数，叫println.</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (println <span style="color: #2aa198;">"asdf"</span>)
+asdf
+;=&gt; nil
+</pre>
+<p>
+如果我们能直接将(println "a")传递给emit-bash-form是不是很酷?</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (emit-bash-form (println <span style="color: #2aa198;">"asdf"</span>))
+asdf
+;=&gt; nil
+</pre>
+<p>
+那么首先，需要看看这是否可行.<br />
+我们使用Java来进行一下类比，假设我们要调用的是这样一段Java代码，它的第一个参数<br />
+类似于System.out.println("asdf").</p>
+<pre class="src src-java">foo(System.out.println(<span style="color: #2aa198;">"asdf"</span>));
+</pre>
+<p>
+(我们先忽略System.out.println(&hellip;)返回的是void)<br />
+在Java中，参数会被先求值，然后再传递，也就是说，这里会先打印出asdf，然<br />
+后将println的返回值给foo方法。<br />
+我们如何能阻止参数被先求值呢?<br />
+很遗憾，在Java中这是不可能完成的任务。即使这在Java中可以实现，那后续我们能对<br />
+这段源代码做什么处理呢?<br />
+System.out.println("asdf")不是集合,所以我们不能遍历它；它也不是字符串，<br />
+我们也不能用正则表达式来切割它。不管System.out.println("asdf")是什么类<br />
+型，除了编译器，没人认识它。<br />
+Lisp则不会有这样的尴尬!</p>
+</div>
+</div>
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">Lisp代码即数据</h2>
+<div class="outline-text-2" id="text-4">
+<p>上节说到的Java的主要问题是没有能处理源代码的工具。Clojure是怎么解决这个问题的呢?<br />
+首先，为了能获得源码，Clojure提供了quote来阻止求值过程。<br />
+只需要在不需要求值的形式前面添加quote即可阻止该形式被求值。</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; <span style="color: #2aa198;">'(println "a")</span>
+<span style="color: #2aa198;">;=&gt; (println "a")</span>
+</pre>
+<p>
+那么我们的返回值是什么类型呢?</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (class <span style="color: #2aa198;">'(println "a"))</span>
+<span style="color: #2aa198;">;=&gt; clojure.lang.PersistentList</span>
+</pre>
+<p>
+我们可以将返回值当成原始的Clojure列表(实际上它就是)</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (first <span style="color: #2aa198;">'(println "a"))</span>
+<span style="color: #2aa198;">;=&gt; println</span>
+
+<span style="color: #2aa198;">user=&gt; (second '</span>(println <span style="color: #2aa198;">"a"</span>))
+;=&gt; <span style="color: #2aa198;">"a"</span>
+</pre>
+<p>
+这就是Lisp代码即数据所带来的一个好处.</p>
+</div>
+</div>
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">细窥Clojure</h2>
+<div class="outline-text-2" id="text-5">
+<p>使用了quote，我们就离DSL近了一步。</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>emit-bash-form
+  '<span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"a"</span><span style="color: #8c8c8c;">))</span>
+</pre>
+<p>
+让我们将这个分支添加到emit-bash-form函数中。我们需要添加一个新的判断条<br />
+件。<br />
+但是这个分支该用什么类型来判断呢?</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (class <span style="color: #2aa198;">'(println "a"))</span>
+<span style="color: #2aa198;">clojure.lang.PersistentList</span>
+</pre>
+<p>
+所以让我们来添加一个clojure.lang.PersistentList判断分支.</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defn</span> <span style="color: #268bd2;">emit-bash-form</span> [a]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">cond</span> 
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> a<span style="color: #8c8c8c;">)</span> <span style="color: #cb4b16;">clojure.lang.PersistentList</span><span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">case</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">name</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">first</span> a<span style="color: #8c8c8c;">))</span>
+      <span style="color: #2aa198;">"println"</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> <span style="color: #2aa198;">"echo "</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">second</span> a<span style="color: #8c8c8c;">)))</span>
+
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> a<span style="color: #8c8c8c;">)</span> <span style="color: #cb4b16;">java.lang.String</span><span style="color: #8c8c8c;">)</span> a
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> a<span style="color: #8c8c8c;">)</span> <span style="color: #cb4b16;">java.lang.Long</span><span style="color: #8c8c8c;">)</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> a<span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">=</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> a<span style="color: #8c8c8c;">)</span> <span style="color: #cb4b16;">java.lang.Double</span><span style="color: #8c8c8c;">)</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> a<span style="color: #8c8c8c;">)</span>
+    <span style="color: #2aa198;">:else</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">throw</span> <span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Exception.</span> <span style="color: #2aa198;">"Fell through"</span><span style="color: #8c8c8c;">))))</span>
+</pre>
+<p>
+看看调用:</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (emit-bash-form <span style="color: #2aa198;">'(println "a"))</span>
+<span style="color: #2aa198;">"echo a"</span>
+<span style="color: #2aa198;">user=&gt; (emit-bash-form '</span>(println <span style="color: #2aa198;">"hello"</span>))
+<span style="color: #2aa198;">"echo hello"</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6">使用多重方法对分支进行抽象</h2>
+<div class="outline-text-2" id="text-6">
+<p>我们有一个好的开始，现在在我们进行下一步前，先进行一下重构。<br />
+现在，我们要添加新的分支，那么就要在emit-bash-form函数中添加新的判断逻<br />
+辑。随着添加的分支越来越多，这个函数将越来越难维护了。我们需要将这个函<br />
+数切分成易于维护的片段.<br />
+emit-bash-form的调度是依据其参数的类型来进行的。而这可以通过Clojure的<br />
+多重方法来进行抽象。<br />
+我们来定义一个叫emit-bash的多重方法。</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmulti</span> <span style="color: #268bd2;">emit-bash</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [form]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> form<span style="color: #8c8c8c;">)))</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit-bash</span>
+  <span style="color: #cb4b16;">clojure.lang.PersistentList</span>
+  [form]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">case</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">name</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">first</span> form<span style="color: #8c8c8c;">))</span>
+    <span style="color: #2aa198;">"println"</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> <span style="color: #2aa198;">"echo "</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">second</span> form<span style="color: #8c8c8c;">))))</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit-bash</span>
+  <span style="color: #cb4b16;">java.lang.String</span>
+  [form]
+  form<span style="color: #8c8c8c;">)</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit-bash</span>
+  <span style="color: #cb4b16;">java.lang.Long</span>
+  [form]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> form<span style="color: #8c8c8c;">))</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit-bash</span>
+  <span style="color: #cb4b16;">java.lang.Double</span>
+  [form]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> form<span style="color: #8c8c8c;">))</span>
+</pre>
+<p>
+多重方法的分派和cond很类似，但是不需要去写实际的分派代码。让我们来对比<br />
+一下多重方法和之前的代码。defmulti用来创建一个新的多重方法，并和分派函<br />
+数来关联。</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmulti</span> <span style="color: #268bd2;">emit-bash</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [form]
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> form<span style="color: #8c8c8c;">)))</span>
+</pre>
+<p>
+defmethod用来添加具体的方法到多重方法中。在这里java.lang.String是指派<br />
+所依赖的值,而方法直接返回form自身.</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit-bash</span>
+  <span style="color: #cb4b16;">java.lang.String</span>
+  [form]
+  form<span style="color: #8c8c8c;">)</span>
+</pre>
+<p>
+添加新方法和扩展cond表达式的效果相同，差别就是:<br />
+多重方法来控制指派，不需要你去写控制代码。<br />
+那么我们该如何使用emit-bash呢？调用多重方法和调用普通的Clojure函数一模<br />
+一样:</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (emit-bash <span style="color: #2aa198;">'(println "a"))</span>
+<span style="color: #2aa198;">"echo a"</span>
+</pre>
+<p>
+分支判断由多重方法自己去判断了。</p>
+</div>
+</div>
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7">扩展我们的DSL实现Windows批处理</h2>
+<div class="outline-text-2" id="text-7">
+<p>现在我们来实现Windows批处理.我们来定义一个新的多重方法,emit-batch:</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmulti</span> <span style="color: #268bd2;">emit-batch</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [form] <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> form<span style="color: #8c8c8c;">)))</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit-batch</span> <span style="color: #cb4b16;">clojure.lang.PersistentList</span>
+  [form]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">case</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">name</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">first</span> form<span style="color: #8c8c8c;">))</span>
+    <span style="color: #2aa198;">"println"</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> <span style="color: #2aa198;">"ECHO "</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">second</span> form<span style="color: #8c8c8c;">))</span>
+    nil<span style="color: #8c8c8c;">))</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit-batch</span> <span style="color: #cb4b16;">java.lang.String</span>
+  [form]
+  form<span style="color: #8c8c8c;">)</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit-batch</span> <span style="color: #cb4b16;">java.lang.Long</span>
+  [form]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> form<span style="color: #8c8c8c;">))</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit-batch</span> <span style="color: #cb4b16;">java.lang.Double</span>
+  [form]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> form<span style="color: #8c8c8c;">))</span>
+</pre>
+<p>
+现在我们能使用emit-batch和emit-bash了。</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (emit-batch <span style="color: #2aa198;">'(println "a"))</span>
+<span style="color: #2aa198;">"ECHO a"</span>
+<span style="color: #2aa198;">user=&gt; (emit-bash '</span>(println <span style="color: #2aa198;">"a"</span>))
+<span style="color: #2aa198;">"echo a"</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8">Ad-hoc继承</h2>
+<div class="outline-text-2" id="text-8">
+<p>比较一下两个实现，有很多相似的地方。实际上，只有<br />
+clojure.lang.PersistentList分支有区别。<br />
+我们想到了继承，Clojure可以很方便的实现继承。<br />
+当我说继承的时候，我可不是指依赖于类或者命名空间的那种继承，实际上继承<br />
+是一个与类或命名空间无关的独立功能。<br />
+但是像Java这样的语言，继承是绑定到了类层级上的.<br />
+我们能从一个名字派生到另一个名字，或者从类派生到名字。而这个名字可以是symbol<br />
+或者keyword.这样的话继承就更加的灵活和强大!<br />
+我们将使用(derive child parent)来定义父子关系。isa?来判断第一个参数是<br />
+不是派生自第二个参数。</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (derive ::child ::parent)
+nil
+
+<span style="color: #268bd2;">user</span>=&gt; (isa? ::child ::parent)
+true
+</pre>
+<p>
+我们来定义Bash和Batch的继承关系</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">derive</span> <span style="color: #2aa198;">::bash</span> <span style="color: #2aa198;">::common</span><span style="color: #8c8c8c;">)</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">derive</span> <span style="color: #2aa198;">::batch</span> <span style="color: #2aa198;">::common</span><span style="color: #8c8c8c;">)</span>
+</pre>
+<p>
+测试一下</p>
+<pre class="src src-sh"><span style="color: #268bd2;">user</span>=&gt; (parents ::bash)
+;=&gt; <span style="color: #93a1a1; font-style: italic;">#</span><span style="color: #93a1a1; font-style: italic;">{:user/common}</span>
+
+<span style="color: #268bd2;">user</span>=&gt; (parents ::batch)
+;=&gt; <span style="color: #93a1a1; font-style: italic;">#</span><span style="color: #93a1a1; font-style: italic;">{:user/common}</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9">多重方法中使用继承</h2>
+<div class="outline-text-2" id="text-9">
+<p>现在我们可以利用继承关系来定义一个新的多重方法emit了。</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmulti</span> <span style="color: #268bd2;">emit</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [form]
+    [*current-implementation* <span style="color: #8c8c8c;">(</span><span style="color: #859900;">class</span> form<span style="color: #8c8c8c;">)</span>]<span style="color: #8c8c8c;">))</span>
+</pre>
+<p>
+这个函数返回了一个包含两个元素的vector。一个是当前的实现(::bash或<br />
+者::batch)和指派类型。*current-implementation*是个动态var,你可以把他看<br />
+做一个线程安全的全局变量。</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> ^{<span style="color: #2aa198;">:dynamic</span> true}
+  <span style="color: #2aa198;">"The current script language implementation to generate"</span>
+  *current-implementation*<span style="color: #8c8c8c;">)</span>
+</pre>
+<p>
+在我们的继承关系中，::common是父，这就意味着它需要提供公共方法。<br />
+需要记住的是，现在的指派值是个vector。所以在每个defmethod中，都需要包<br />
+含一个vector，其中第一个元素是指派值.</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit</span> [<span style="color: #2aa198;">::common</span> <span style="color: #cb4b16;">java.lang.String</span>]
+  [form]
+  form<span style="color: #8c8c8c;">)</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit</span> [<span style="color: #2aa198;">::common</span> <span style="color: #cb4b16;">java.lang.Long</span>]
+  [form]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> form<span style="color: #8c8c8c;">))</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit</span> [<span style="color: #2aa198;">::common</span> <span style="color: #cb4b16;">java.lang.Double</span>]
+  [form]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> form<span style="color: #8c8c8c;">))</span>
+</pre>
+<p>
+代码很类似。只有clojure.lang.PersistentList分支需要特别处理，其vector<br />
+的第一个元素需要为::bash或者::batch，而不能是::common了。</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit</span> [<span style="color: #2aa198;">::bash</span> <span style="color: #cb4b16;">clojure.lang.PersistentList</span>]
+  [form]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">case</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">name</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">first</span> form<span style="color: #8c8c8c;">))</span>
+    <span style="color: #2aa198;">"println"</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> <span style="color: #2aa198;">"echo "</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">second</span> form<span style="color: #8c8c8c;">))</span>
+    nil<span style="color: #8c8c8c;">))</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmethod</span> <span style="color: #268bd2;">emit</span> [<span style="color: #2aa198;">::batch</span> <span style="color: #cb4b16;">clojure.lang.PersistentList</span>]
+  [form]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">case</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">name</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">first</span> form<span style="color: #8c8c8c;">))</span>
+    <span style="color: #2aa198;">"println"</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> <span style="color: #2aa198;">"ECHO "</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">second</span> form<span style="color: #8c8c8c;">))</span>
+    nil<span style="color: #8c8c8c;">))</span>
+</pre>
+<p>
+我们来测试一下</p>
+<pre class="src src-clojure">user=&gt; <span style="color: #8c8c8c;">(</span><span style="color: #859900;">binding</span> [*current-implementation* <span style="color: #2aa198;">::common</span>]
+         <span style="color: #8c8c8c;">(</span><span style="color: #b58900;">emit</span> <span style="color: #2aa198;">"a"</span><span style="color: #8c8c8c;">))</span>
+<span style="color: #2aa198;">"a"</span>
+
+user=&gt; <span style="color: #8c8c8c;">(</span><span style="color: #859900;">binding</span> [*current-implementation* <span style="color: #2aa198;">::batch</span>]
+         <span style="color: #8c8c8c;">(</span><span style="color: #b58900;">emit</span> '<span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"a"</span><span style="color: #8c8c8c;">)))</span>
+<span style="color: #2aa198;">"ECHO a"</span>
+
+user=&gt; <span style="color: #8c8c8c;">(</span><span style="color: #859900;">binding</span> [*current-implementation* <span style="color: #2aa198;">::bash</span>]
+         <span style="color: #8c8c8c;">(</span><span style="color: #b58900;">emit</span> '<span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"a"</span><span style="color: #8c8c8c;">)))</span>
+<span style="color: #2aa198;">"echo a"</span>
+
+user=&gt; <span style="color: #8c8c8c;">(</span><span style="color: #859900;">binding</span> [*current-implementation* <span style="color: #2aa198;">::common</span>]
+         <span style="color: #8c8c8c;">(</span><span style="color: #b58900;">emit</span> '<span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"a"</span><span style="color: #8c8c8c;">)))</span>
+#&lt;<span style="color: #cb4b16;">CompilerException</span> java.lang.IllegalArgumentException:
+<span style="color: #cb4b16;">No</span> method in multimethod 'emit' for dispatch value:
+[<span style="color: #2aa198;">:user/common</span> <span style="color: #cb4b16;">clojure.lang.PersistentList</span>] <span style="color: #8c8c8c;">(</span>REPL:31<span style="color: #8c8c8c;">)</span>&gt;
+</pre>
+<p>
+因为我们没有定义[::common clojure.lang.PersistentList]的实现，多重方法<br />
+报错了。<br />
+多重方法非常强大且非常灵活，但是能力越强责任越大。我们可以将我们的多重<br />
+方法放在同一个命名空间下，但是不代表我们就需要这么做。当我们的DSL越来<br />
+越大的时候，我们需要将其分开到独立的命名空间下去。</p>
+<p>
+这是个小例子，但是很好的展示了命名空间和继承的功能。</p>
+</div>
+</div>
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10">饭后甜点</h2>
+<div class="outline-text-2" id="text-10">
+<p>我们使用多重方法，动态var和ad-hoc继承创建了一个漂亮的，细粒度的DSL，但<br />
+是在使用的时候还是有些许的不便。</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">binding</span> [*current-implementation* <span style="color: #2aa198;">::bash</span>]
+  <span style="color: #8c8c8c;">(</span><span style="color: #b58900;">emit</span> '<span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"a"</span><span style="color: #8c8c8c;">)))</span>
+</pre>
+<p>
+我们来消除样板代码.但是它在哪呢？<br />
+binding表达式就是个样板代码，我们可以将binding的工作封装到<br />
+with-implementation中</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>with-implementation <span style="color: #2aa198;">::bash</span>
+  <span style="color: #8c8c8c;">(</span><span style="color: #b58900;">emit</span> '<span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"a"</span><span style="color: #8c8c8c;">)))</span>
+</pre>
+<p>
+这是个改进。但是还有个改进没有这么的明显:用来延迟求值的quote。我们使用<br />
+script来消除这个quote.</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span>with-implementation <span style="color: #2aa198;">::bash</span>
+  <span style="color: #8c8c8c;">(</span>script
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span> <span style="color: #2aa198;">"a"</span><span style="color: #8c8c8c;">)))</span>
+</pre>
+<p>
+这样看起来好多了，但我们如何来实现script呢？Clojure函数会在求函数值前<br />
+对所有的参数进行求值，而quote就是用来解决这个问题。而现在我们要消除这<br />
+个quote。只能使用Lisp中的宏来处理。<br />
+宏不会去立即对参数求值，这正是我们需要的。</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmacro</span> <span style="color: #268bd2;">script</span> [form]
+  `<span style="color: #8c8c8c;">(</span><span style="color: #b58900;">emit</span> '~form<span style="color: #8c8c8c;">))</span>
+</pre>
+<p>
+看看调用结果</p>
+<pre class="src src-sh">(script (println <span style="color: #2aa198;">"a"</span>))
+=&gt;
+(emit <span style="color: #2aa198;">'(println "a"))</span>
+</pre>
+<p>
+比起欣赏宏美化语法的功能，记住宏的特性对你更有帮助。<br />
+对于with-implementation来说，也需要宏来解决，与script不同，它不是为了<br />
+延迟求值这个功能，而是对于其中的script来说，需要先将script的内容添加到binding<br />
+形式中，才能进行求值.</p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">defmacro</span> <span style="color: #268bd2;">with-implementation</span>
+  [impl &amp; body]
+  `<span style="color: #8c8c8c;">(</span><span style="color: #859900;">binding</span> [*current-implementation* impl]
+    ~@body<span style="color: #8c8c8c;">))</span>
+</pre>
+<p>
+好了,这就是DSL的所有内容了,实际上就添加了语法糖.</p>
+<pre class="src src-sh">(with-implementation ::bash
+  (script
+    (println <span style="color: #2aa198;">"a"</span>)))
+=&gt;
+(with-implementation ::bash
+  (emit
+    <span style="color: #2aa198;">'(println "a"))</span>
+<span style="color: #2aa198;">=&gt;</span>
+<span style="color: #2aa198;">(binding [*current-implementation* ::bash]</span>
+<span style="color: #2aa198;">  (emit</span>
+<span style="color: #2aa198;">    '</span>(println <span style="color: #2aa198;">"a"</span>)))
+</pre>
+<p>
+可以看出一个定义良好的宏如何来给代码添加语法糖.我们的DSL和普通的<br />
+Clojure代码看起来没啥区别.</p>
+</div>
+</div>
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11">总结</h2>
+<div class="outline-text-2" id="text-11">
+<p>在这个DSL中,我们看到了Clojure的很多高级特性.<br />
+我们来回顾一下我们构建DSL的过程.<br />
+一开始,我们使用了简单的cond表达式,然后变成了两个多重方法.接着我们使用<br />
+了继承和动态var来消除重复代码.最后我们使用宏来简化调用.<br />
+这个DSL是<a href="https://github.com/pallet/stevedore">Stevedore</a>的一个简化版本,Stevedore是Hugo Duncan开发的开源项目.如<br />
+果你对这个DSL的实现感兴趣,那么最好的方法就是去看Stevedore的源码了.</p>
+</div>
+</div>
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12">Copyright</h2>
+<div class="outline-text-2" id="text-12">
+<p>Copyright Ambrose Bonnaire-Sergeant, 2013<br />
+Translated By Ivan 2014.02</p>
+</div>
+</div>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/clojure/clojure%25e8%25bf%259b%25e9%2598%25b6%25e6%2595%25b0%25e5%25ad%25a6%25e8%25ae%25a1%25e7%25ae%2597.html" title="Clojure进阶:数学计算 "><p> <i class="fa fa-mail-reply"></i>&nbsp;Clojure进阶:数学计算</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/clojure/clojure%25e6%2595%2599%25e7%25a8%258b%25e5%2587%25bd%25e6%2595%25b0.html" title="Clojure教程:函数"><p>Clojure教程:函数&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Clojure进阶:使用Clojure构建DSL"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

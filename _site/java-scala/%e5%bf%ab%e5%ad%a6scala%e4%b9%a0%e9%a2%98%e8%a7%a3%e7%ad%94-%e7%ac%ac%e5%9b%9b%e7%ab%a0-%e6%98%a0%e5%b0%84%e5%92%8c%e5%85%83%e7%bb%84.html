@@ -1,0 +1,450 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="scala"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%259b%259b%25e7%25ab%25a0-%25e6%2598%25a0%25e5%25b0%2584%25e5%2592%258c%25e5%2585%2583%25e7%25bb%2584.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>快学Scala习题解答—第四章 映射和元组 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">快学Scala习题解答—第四章 映射和元组</h2>
+
+    <p class="post-meta">By 12月05日  2012  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> java-scala (20)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#scala"><i class="fa fa-tags"></i> scala (19)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <p>
+	&nbsp;</p>
+<h2 id="sec-5" style="margin: 5px; color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; background-color: rgb(253, 246, 227);">
+	<span class="section-number-2">5</span>&nbsp;映射和元组<br />
+</h2>
+<div class="outline-text-2" id="text-5" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+	&nbsp;
+</div>
+<div class="outline-3" id="outline-container-5-1" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-5-1" style="margin: 5px 10px;">
+		<span class="section-number-3">5.1</span>&nbsp;设置一个映射,其中包含你想要的一些装备，以及它们的价格。然后构建另一个映射，采用同一组键，但是价格上打9折<br />
+	</h3>
+<div class="outline-text-3" id="text-5-1">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			映射的简单操作
+		</p>
+<pre class="example" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+scala&gt; val map = Map(&quot;book&quot;-&gt;10,&quot;gun&quot;-&gt;18,&quot;ipad&quot;-&gt;1000)
+map: scala.collection.immutable.Map[java.lang.String,Int] = Map(book -&gt; 10, gun -&gt; 18, ipad -&gt; 1000)
+
+scala&gt; for((k,v) &lt;- map) yield (k,v * 0.9)
+res3: scala.collection.immutable.Map[java.lang.String,Double] = Map(book -&gt; 9.0, gun -&gt; 16.2, ipad -&gt; 900.0)
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-5-2" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-5-2" style="margin: 5px 10px;">
+		<span class="section-number-3">5.2</span>&nbsp;编写一段程序，从文件中读取单词。用一个可变映射来清点每个单词出现的频率。读取这些单词的操作可以使用java.util.Scanner:<br />
+	</h3>
+<div class="outline-text-3" id="text-5-2">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			val in = new java.util.Scanner(new java.io.File(&quot;myfile.txt&quot;)) while(in.hasNext()) 处理 in.next() 或者翻到第9章看看更Scala的做法。 最后，打印出所有单词和它们出现的次数。
+		</p>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			当然使用Scala的方法啦。参考第9章
+		</p>
+<p>		首先，创建一个文件myfile.txt。输入如下内容</p>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			&nbsp;
+		</p>
+<pre class="example" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+test test ttt test ttt t test sss s
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			Scala代码如下
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">import</span> scala.io.Source
+<span style="color: rgb(133, 153, 0);">import</span> scala.collection.mutable.HashMap
+
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">val source = Source.fromFile(&quot;myfile.txt&quot;)</span>
+<span style="color: rgb(147, 161, 161); font-style: italic;">//</span><span style="color: rgb(147, 161, 161); font-style: italic;">val tokens = source.mkString.split(&quot;\s+&quot;)  //此写法tokens为空，不知为何</span>
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">source</span> = Source.fromFile(<span style="color: rgb(42, 161, 152);">&quot;myfile.txt&quot;</span>).mkString
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">tokens</span> = source.split(<span style="color: rgb(42, 161, 152);">&quot;\s+&quot;</span>)
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">map</span> = <span style="color: rgb(133, 153, 0);">new</span> HashMap[String,Int]
+
+<span style="color: rgb(133, 153, 0);">for</span>(key &lt;- tokens){
+    map(key) = map.getOrElse(key,0) + 1
+}
+
+println(map.mkString(<span style="color: rgb(42, 161, 152);">&quot;,&quot;</span>))
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-5-3" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-5-3" style="margin: 5px 10px;">
+		<span class="section-number-3">5.3</span>&nbsp;重复前一个练习，这次用不可变的映射<br />
+	</h3>
+<div class="outline-text-3" id="text-5-3">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			不可变映射与可变映射的区别就是，每次添加元素，都会返回一个新的映射
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">import</span> scala.io.Source
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">source</span> = Source.fromFile(<span style="color: rgb(42, 161, 152);">&quot;myfile.txt&quot;</span>).mkString
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">tokens</span> = source.split(<span style="color: rgb(42, 161, 152);">&quot;\s+&quot;</span>)
+
+<span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">map</span> = Map[String,Int]()
+
+<span style="color: rgb(133, 153, 0);">for</span>(key &lt;- tokens){
+  map += (key -&gt; (map.getOrElse(key,0) + 1))
+}
+
+println(map.mkString(<span style="color: rgb(42, 161, 152);">&quot;,&quot;</span>))
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-5-4" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-5-4" style="margin: 5px 10px;">
+		<span class="section-number-3">5.4</span>&nbsp;重复前一个练习，这次使用已排序的映射，以便单词可以按顺序打印出来<br />
+	</h3>
+<div class="outline-text-3" id="text-5-4">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			和上面的代码没有什么区别，只是将映射修改为SortedMap
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">import</span> scala.io.Source
+<span style="color: rgb(133, 153, 0);">import</span> scala.collection.SortedMap
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">source</span> = Source.fromFile(<span style="color: rgb(42, 161, 152);">&quot;myfile.txt&quot;</span>).mkString
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">tokens</span> = source.split(<span style="color: rgb(42, 161, 152);">&quot;\s+&quot;</span>)
+
+<span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">map</span> = SortedMap[String,Int]()
+
+<span style="color: rgb(133, 153, 0);">for</span>(key &lt;- tokens){
+  map += (key -&gt; (map.getOrElse(key,0) + 1))
+}
+
+println(map.mkString(<span style="color: rgb(42, 161, 152);">&quot;,&quot;</span>))
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-5-5" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-5-5" style="margin: 5px 10px;">
+		<span class="section-number-3">5.5</span>&nbsp;重复前一个练习，这次使用java.util.TreeMap并使之适用于Scala API<br />
+	</h3>
+<div class="outline-text-3" id="text-5-5">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			主要涉及java与scala的转换类的使用
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">import</span> scala.io.Source
+<span style="color: rgb(133, 153, 0);">import</span> scala.collection.mutable.Map
+<span style="color: rgb(133, 153, 0);">import</span> scala.collection.JavaConversions.mapAsScalaMap
+<span style="color: rgb(133, 153, 0);">import</span> java.util.TreeMap
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">source</span> = Source.fromFile(<span style="color: rgb(42, 161, 152);">&quot;myfile.txt&quot;</span>).mkString
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">tokens</span> = source.split(<span style="color: rgb(42, 161, 152);">&quot;\s+&quot;</span>)
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">map</span>:<span style="color: rgb(181, 137, 0);">Map[String,Int]</span> = <span style="color: rgb(133, 153, 0);">new</span> TreeMap[String,Int]
+
+<span style="color: rgb(133, 153, 0);">for</span>(key &lt;- tokens){
+  map(key) = map.getOrElse(key,0) + 1
+}
+
+println(map.mkString(<span style="color: rgb(42, 161, 152);">&quot;,&quot;</span>))
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-5-6" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-5-6" style="margin: 5px 10px;">
+		<span class="section-number-3">5.6</span>&nbsp;定义一个链式哈希映射,将&quot;Monday&quot;映射到java.util.Calendar.MONDAY,依次类推加入其他日期。展示元素是以插入的顺序被访问的<br />
+	</h3>
+<div class="outline-text-3" id="text-5-6">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			LinkedHashMap的使用
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">import</span> scala.collection.mutable.LinkedHashMap
+<span style="color: rgb(133, 153, 0);">import</span> java.util.Calendar
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">map</span> = <span style="color: rgb(133, 153, 0);">new</span> LinkedHashMap[String,Int]
+
+map += (<span style="color: rgb(42, 161, 152);">&quot;Monday&quot;</span>-&gt;Calendar.MONDAY)
+map += (<span style="color: rgb(42, 161, 152);">&quot;Tuesday&quot;</span>-&gt;Calendar.TUESDAY)
+map += (<span style="color: rgb(42, 161, 152);">&quot;Wednesday&quot;</span>-&gt;Calendar.WEDNESDAY)
+map += (<span style="color: rgb(42, 161, 152);">&quot;Thursday&quot;</span>-&gt;Calendar.THURSDAY)
+map += (<span style="color: rgb(42, 161, 152);">&quot;Friday&quot;</span>-&gt;Calendar.FRIDAY)
+map += (<span style="color: rgb(42, 161, 152);">&quot;Saturday&quot;</span>-&gt;Calendar.SATURDAY)
+map += (<span style="color: rgb(42, 161, 152);">&quot;Sunday&quot;</span>-&gt;Calendar.SUNDAY)
+
+
+println(map.mkString(<span style="color: rgb(42, 161, 152);">&quot;,&quot;</span>))
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-5-7" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-5-7" style="margin: 5px 10px;">
+		<span class="section-number-3">5.7</span>&nbsp;打印出所有Java系统属性的表格，<br />
+	</h3>
+<div class="outline-text-3" id="text-5-7">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			属性转scala map的使用
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">import</span> scala.collection.JavaConversions.propertiesAsScalaMap
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">props</span>:<span style="color: rgb(181, 137, 0);">scala.collection.Map[String,String]</span> = System.getProperties()
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">keys</span> = props.keySet
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">keyLengths</span> = <span style="color: rgb(133, 153, 0);">for</span>( key &lt;- keys ) <span style="color: rgb(133, 153, 0);">yield</span> key.length
+
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">maxKeyLength</span> = keyLengths.max
+
+<span style="color: rgb(133, 153, 0);">for</span>(key &lt;- keys) {
+  print(key)
+  print(<span style="color: rgb(42, 161, 152);">&quot; &quot;</span> * (maxKeyLength - key.length))
+  print(<span style="color: rgb(42, 161, 152);">&quot; | &quot;</span>)
+  println(props(key))
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-5-8" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-5-8" style="margin: 5px 10px;">
+		<span class="section-number-3">5.8</span>&nbsp;编写一个函数minmax(values:Array[Int]),返回数组中最小值和最大值的对偶<br />
+	</h3>
+<div class="outline-text-3" id="text-5-8">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">minmax</span>(<span style="color: rgb(38, 139, 210);">values</span>:<span style="color: rgb(181, 137, 0);">Array[Int]</span>)={
+  (values.max,values.min)
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-5-9" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-5-9" style="margin: 5px 10px;">
+		<span class="section-number-3">5.9</span>&nbsp;编写一个函数Iteqgt(values:Array[int],v:Int),返回数组中小于v,等于v和大于v的数量，要求三个值一起返回<br />
+	</h3>
+<div class="outline-text-3" id="text-5-9">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">iteqgt</span>(<span style="color: rgb(38, 139, 210);">values</span>:<span style="color: rgb(181, 137, 0);">Array[Int]</span>,<span style="color: rgb(38, 139, 210);">v</span>:<span style="color: rgb(181, 137, 0);">Int</span>)={
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">buf</span> = values.toBuffer
+  (values.count(_ &lt; v),values.count(_ == v),values.count(_ &gt; v))
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-5-10" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-5-10" style="margin: 5px 10px;">
+		<span class="section-number-3">5.10</span>&nbsp;当你将两个字符串拉链在一起，比如&quot;Hello&quot;.zip(&quot;World&quot;)，会是什么结果？想出一个讲得通的用例<br />
+	</h3>
+<div class="outline-text-3" id="text-5-10">
+<pre class="example" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+scala&gt; &quot;Hello&quot;.zip(&quot;World&quot;)
+res0: scala.collection.immutable.IndexedSeq[(Char, Char)] = Vector((H,W), (e,o), (l,r), (l,l), (o,d))  
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			StringOps中的zip定义如下
+		</p>
+<pre class="example" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+abstract def zip[B](that: GenIterable[B]): StringOps[(A, B)]
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			GenIterable是可遍历对象需要包含的trait，对于String来说，它是可遍历的。但是它的遍历是遍历单个字母。 所以拉链就针对每个字母来进行。
+		</p>
+</p></div>
+</div>
+<p>
+	&nbsp;</p>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e4%25b8%2589%25e7%25ab%25a0-%25e6%2595%25b0%25e7%25bb%2584%25e7%259b%25b8%25e5%2585%25b3%25e6%2593%258d%25e4%25bd%259c.html" title="快学Scala习题解答—第三章 数组相关操作 "><p> <i class="fa fa-mail-reply"></i>&nbsp;快学Scala习题解答—第三章 数组相关操作</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e4%25ba%2594%25e7%25ab%25a0-%25e7%25b1%25bb.html" title="快学Scala习题解答—第五章 类"><p>快学Scala习题解答—第五章 类&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="快学Scala习题解答—第四章 映射和元组"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

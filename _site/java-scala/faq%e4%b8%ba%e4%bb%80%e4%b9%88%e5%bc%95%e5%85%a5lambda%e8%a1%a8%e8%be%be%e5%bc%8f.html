@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="java, java8"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/java-scala/faq%25e4%25b8%25ba%25e4%25bb%2580%25e4%25b9%2588%25e5%25bc%2595%25e5%2585%25a5lambda%25e8%25a1%25a8%25e8%25be%25be%25e5%25bc%258f.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>[FAQ]为什么引入lambda表达式 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">[FAQ]为什么引入lambda表达式</h2>
+
+    <p class="post-meta">By 07月02日  2013  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> java-scala (20)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#java"><i class="fa fa-tags"></i> java (16)</a>
+ 
+<a class="post-category " href="/tag/#java"><i class="fa fa-tags"></i> java8 (3)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <p><span style="color:black"><span style="font-family:微软雅黑">    Lambda表达式</span>(<span style="font-family:微软雅黑">闭包</span>)<span style="font-family:微软雅黑">在很多现代化的编程语言中很常见。在</span>Java<span style="font-family:微软雅黑">平台上引入</span>lambda<span style="font-family:微软雅黑">表达式的一个最主要原因是方便多线程的处理集合。目前，对于</span>list<span style="font-family:微软雅黑">和</span>set<span style="font-family:微软雅黑">等集合类典型的操作方式是使用迭代器。如果需要并行的处理集合，需要编写客户端代码来处理，而不是集合本身处理。<br />
+</span></span></p>
+<p><span style="color:black"><br />
+			<span style="font-family:微软雅黑">在</span>Java8<span style="font-family:微软雅黑">中，引入闭包的目的就是为了给集合提供函数式的方法，方便处理。这样所带来的好处是</span>,<span style="font-family:微软雅黑">集合能够自己组织他们的元素，而不需要客户端代码来处理。但是，为了使得客户端代码能够使用这一改进，必须给集合添加函数式方法。当前通用的做法是使用匿名类。但是声明匿名类带来了过多的标准化代码。<br />
+</span></span></p>
+<p><span style="color:black"><br />
+			<span style="font-family:微软雅黑">举例来说，</span>forEach<span style="font-family:微软雅黑">方法接受一个</span>Consumer<span style="font-family:微软雅黑">接口的实例并为每个元素调用它的</span>accept<span style="font-family:微软雅黑">方法：<br />
+</span></span></p>
+<p style="margin-left: 27pt"><span style="color:black; font-family:Courier New; font-size:10pt"><span style="background-color:white"><strong>interface Consumer&lt;T&gt; { void accept(T t); } </strong></span><br />
+		</span></p>
+<p><span style="color:black"><br />
+			<span style="font-family:微软雅黑">假设我们要使用</span>forEach<span style="font-family:微软雅黑">调换</span>java.awt.Point<span style="font-family:微软雅黑">的集合的每个元素的</span>x<span style="font-family:微软雅黑">与</span>y<span style="font-family:微软雅黑">的坐标。使用</span>Consumer<span style="font-family:微软雅黑">的匿名内部类</span>,<span style="font-family:微软雅黑">我们需要编写类似如下的代码<br />
+</span></span></p>
+<p style="margin-left: 27pt"><span style="color:black; font-family:Courier New; font-size:10pt"><span style="background-color:white"><strong>pointList.forEach(new Consumer() { <br />    public void accept(Point p) { <br />        p.move(p.y, p.x);<br />    } <br />});</strong></span><br />
+		</span></p>
+<p><span style="color:black"><br />
+			<span style="font-family:微软雅黑">而如果使用</span>lambda<span style="font-family:微软雅黑">表达式，我们只需要这样</span>:<span style="font-family:微软雅黑"><br />
+			</span></span></p>
+<p style="margin-left: 27pt"><span style="color:black; font-family:Courier New; font-size:10pt"><span style="background-color:white"><strong>pointList.forEach(p -&gt; p.move(p.y, p.x)); </strong></span><br />
+		</span></p>
+<p><img src="assets/070213_1251_FAQlambd1.png" alt="" /></p>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/faq%25e4%25bb%2580%25e4%25b9%2588%25e6%2598%25aflambda%25e8%25a1%25a8%25e8%25be%25be%25e5%25bc%258f.html" title="[FAQ]什么是lambda表达式 "><p> <i class="fa fa-mail-reply"></i>&nbsp;[FAQ]什么是lambda表达式</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/faq%25e4%25bb%2580%25e4%25b9%2588%25e6%2598%25af%25e5%2587%25bd%25e6%2595%25b0%25e5%25bc%258f%25e6%258e%25a5%25e5%258f%25a3.html" title="[FAQ]什么是函数式接口"><p>[FAQ]什么是函数式接口&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="[FAQ]为什么引入lambda表达式"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

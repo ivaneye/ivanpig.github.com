@@ -1,0 +1,397 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="java, scala"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%258d%2581%25e4%25ba%258c%25e7%25ab%25a0-%25e9%25ab%2598%25e9%2598%25b6%25e5%2587%25bd%25e6%2595%25b0.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>快学Scala习题解答—第十二章 高阶函数 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">快学Scala习题解答—第十二章 高阶函数</h2>
+
+    <p class="post-meta">By 01月07日  2013  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> java-scala (20)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#java"><i class="fa fa-tags"></i> java (16)</a>
+ 
+<a class="post-category " href="/tag/#java"><i class="fa fa-tags"></i> scala (19)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <p>
+	&nbsp;</p>
+<h2 id="sec-13" style="margin: 5px; color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; background-color: rgb(253, 246, 227);">
+	<span class="section-number-2">13</span>&nbsp;高阶函数<br />
+</h2>
+<div class="outline-text-2" id="text-13" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+	&nbsp;
+</div>
+<div class="outline-3" id="outline-container-13-1" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-13-1" style="margin: 5px 10px;">
+		<span class="section-number-3">13.1</span>&nbsp;编写函数values(fun:(Int)=&gt;Int,low:Int,high:Int),该函数输出一个集合，对应给定区间内给定函数的输入和输出。比如，values(x=&gt;x*x,-5,5)应该产出一个对偶的集合(-5,25),(-4,16),(-3,9),&hellip;,(5,25)<br />
+	</h3>
+<div class="outline-text-3" id="text-13-1">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Test</span> <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">App</span> {
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">values</span>(<span style="color: rgb(38, 139, 210);">fun</span>: <span style="color: rgb(181, 137, 0);">(Int) =&gt; Int</span>, <span style="color: rgb(38, 139, 210);">low</span>: <span style="color: rgb(181, 137, 0);">Int</span>, <span style="color: rgb(38, 139, 210);">high</span>: <span style="color: rgb(181, 137, 0);">Int</span>) = {
+    <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">arr</span> = List[(Int,Int)]()
+    low to high foreach {
+      num =&gt;
+      arr = (num, fun(num)) :: arr
+    }
+    arr
+  }
+
+  println(values(x =&gt; x * x, -5, 5).mkString)
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-13-2" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-13-2" style="margin: 5px 10px;">
+		<span class="section-number-3">13.2</span>&nbsp;如何用reduceLeft得到数组中的最大元素?<br />
+	</h3>
+<div class="outline-text-3" id="text-13-2">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Test</span> <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">App</span> {
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">arr</span> = Array(3,2,6,8,4,6,9,3,6,7,1,2)
+  print(arr.reduceLeft((a,b)=&gt;if (a&gt;b) a <span style="color: rgb(133, 153, 0);">else</span> b))
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-13-3" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-13-3" style="margin: 5px 10px;">
+		<span class="section-number-3">13.3</span>&nbsp;用to和reduceLeft实现阶乘函数,不得使用循环或递归<br />
+	</h3>
+<div class="outline-text-3" id="text-13-3">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+println(1 to 10 reduceLeft(_ * _))
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-13-4" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-13-4" style="margin: 5px 10px;">
+		<span class="section-number-3">13.4</span>&nbsp;前一个实现需要处理一个特殊情况，即n&lt;1的情况。展示如何用foldLeft来避免这个需要。<br />
+	</h3>
+<div class="outline-text-3" id="text-13-4">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+println((1 to -10).foldLeft(1)(_ * _))
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-13-5" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-13-5" style="margin: 5px 10px;">
+		<span class="section-number-3">13.5</span>&nbsp;编写函数largest(fun:(Int)=&gt;Int,inputs:Seq[Int]),输出在给定输入序列中给定函数的最大值。举例来说，largest(x=&gt;10*x-x*x,1 to 10)应该返回25.不得使用循环或递归<br />
+	</h3>
+<div class="outline-text-3" id="text-13-5">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Test</span> <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">App</span> {
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">largest</span>(<span style="color: rgb(38, 139, 210);">fun</span>:<span style="color: rgb(181, 137, 0);">(Int)=&gt;Int</span>,<span style="color: rgb(38, 139, 210);">inputs</span>:<span style="color: rgb(181, 137, 0);">Seq[Int]</span>)={
+    <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">s</span> = inputs.reduceLeft((a,b)=&gt;if (fun(a) &gt; fun(b)) a <span style="color: rgb(133, 153, 0);">else</span> b)
+    fun(s)
+  }
+
+  println(largest(x=&gt;10*x-x*x,1 to 10))
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-13-6" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-13-6" style="margin: 5px 10px;">
+		<span class="section-number-3">13.6</span>&nbsp;修改前一个函数，返回最大的输出对应的输入。举例来说,largestAt(fun:(Int)=&gt;Int,inputs:Seq[Int])应该返回5。不得使用循环或递归<br />
+	</h3>
+<div class="outline-text-3" id="text-13-6">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Test</span> <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">App</span> {
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">largest</span>(<span style="color: rgb(38, 139, 210);">fun</span>:<span style="color: rgb(181, 137, 0);">(Int)=&gt;Int</span>,<span style="color: rgb(38, 139, 210);">inputs</span>:<span style="color: rgb(181, 137, 0);">Seq[Int]</span>)={
+    inputs.reduceLeft((a,b)=&gt;if (fun(a) &gt; fun(b)) a <span style="color: rgb(133, 153, 0);">else</span> b)
+  }
+
+  println(largest(x=&gt;10*x-x*x,1 to 10))
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-13-7" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-13-7" style="margin: 5px 10px;">
+		<span class="section-number-3">13.7</span>&nbsp;要得到一个序列的对偶很容易，比如:<br />
+	</h3>
+<div class="outline-text-3" id="text-13-7">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">pairs</span> = (1 to 10) zip (11 to 20)
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			假定你想要对这个序列做某中操作&mdash;比如，给对偶中的值求和，但是你不能直接使用:
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+pairs.map(_ + _)
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			函数_ + _ 接受两个Int作为参数，而不是(Int,Int)对偶。编写函数adjustToPair,该函数接受一个类型为(Int,Int)=&gt;Int的函数作为参数，并返回一个等效的, 可以以对偶作为参数的函数。举例来说就是:adjustToPair(_ * _)((6,7))应得到42。然后用这个函数通过map计算出各个对偶的元素之和
+		</p>
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Test</span> <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">App</span> {
+
+  <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">list</span> = List[Int]()
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">adjustToPair</span>(<span style="color: rgb(38, 139, 210);">fun</span>:<span style="color: rgb(181, 137, 0);">(Int,Int)=&gt;Int</span>)(<span style="color: rgb(38, 139, 210);">tup</span>:<span style="color: rgb(181, 137, 0);">(Int, Int)</span>)={
+     list = fun(tup._1,tup._2) :: list
+     <span style="color: rgb(133, 153, 0);">this</span>
+  }
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">map</span>(<span style="color: rgb(38, 139, 210);">fun</span>:<span style="color: rgb(181, 137, 0);">(Int,Int)=&gt;Int</span>):<span style="color: rgb(181, 137, 0);">Int</span>={
+    list.reduceLeft(fun)
+  }
+
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">pairs</span> = (1 to 10) zip (11 to 20)
+  <span style="color: rgb(133, 153, 0);">for</span> ((a,b) &lt;- pairs){
+    adjustToPair(_ * _)((a,b))
+  }
+  println(map(_ + _))
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-13-8" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-13-8" style="margin: 5px 10px;">
+		<span class="section-number-3">13.8</span>&nbsp;在12.8节中，你看到了用于两组字符串数组的corresponds方法。做出一个对该方法的调用，让它帮我们判断某个字符串数组里的所有元素的长度是否和某个给定的整数数组相对应<br />
+	</h3>
+<div class="outline-text-3" id="text-13-8">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Test</span> <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">App</span> {
+
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">a</span> = Array(<span style="color: rgb(42, 161, 152);">&quot;asd&quot;</span>,<span style="color: rgb(42, 161, 152);">&quot;df&quot;</span>,<span style="color: rgb(42, 161, 152);">&quot;aadc&quot;</span>)
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">b</span> = Array(3,2,4)
+  <span style="color: rgb(133, 153, 0);">val</span> <span style="color: rgb(38, 139, 210);">c</span> = Array(3,2,1)
+
+  println(a.corresponds(b)(_.length == _))
+  println(a.corresponds(c)(_.length == _))
+}
+</pre>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-13-9" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-13-9" style="margin: 5px 10px;">
+		<span class="section-number-3">13.9</span>&nbsp;不使用柯里化实现corresponds。然后尝试从前一个练习的代码来调用。你遇到了什么问题？<br />
+	</h3>
+<div class="outline-text-3" id="text-13-9">
+<p style="margin: 5px 10px; text-indent: 40px;">
+			没有柯里化则不能使用前一个练习里的代码方式来调用
+		</p>
+</p></div>
+</div>
+<div class="outline-3" id="outline-container-13-10" style="color: rgb(101, 122, 131); font-family: MONACO, 'trebuchet ms', arial, helvetica, sans-serif; font-size: 13px; background-color: rgb(253, 246, 227);">
+<h3 id="sec-13-10" style="margin: 5px 10px;">
+		<span class="section-number-3">13.10</span>&nbsp;实现一个unless控制抽象，工作机制类似if,但条件是反过来的。第一个参数需要是换名调用的参数吗？你需要柯里化吗？<br />
+	</h3>
+<div class="outline-text-3" id="text-13-10">
+<pre class="src src-scala" style="border: 1pt solid rgb(174, 189, 204); background-color: rgb(243, 245, 247); padding: 5pt; font-family: courier, monospace; font-size: small; overflow: auto; margin: 5px 10px;">
+<span style="color: rgb(133, 153, 0);">object</span> <span style="color: rgb(38, 139, 210);">Test</span> <span style="color: rgb(133, 153, 0);">extends</span> <span style="color: rgb(181, 137, 0);">App</span> {
+
+  <span style="color: rgb(133, 153, 0);">def</span> <span style="color: rgb(38, 139, 210);">unless</span>(<span style="color: rgb(38, 139, 210);">condition</span>: <span style="color: rgb(181, 137, 0);">=&gt;</span><span style="color: rgb(38, 139, 210);">Boolean</span>)(<span style="color: rgb(38, 139, 210);">block</span>: <span style="color: rgb(181, 137, 0);">=&gt;</span><span style="color: rgb(38, 139, 210);">Unit</span>){
+    <span style="color: rgb(133, 153, 0);">if</span> (!condition){
+      block
+    }
+  }
+
+  <span style="color: rgb(133, 153, 0);">var</span> <span style="color: rgb(38, 139, 210);">x</span> = 10
+  unless(x == 0){
+    x -= 1
+    println(x)
+  }
+}
+</pre>
+<p style="margin: 5px 10px; text-indent: 40px;">
+			需要换名和柯里化
+		</p>
+</p></div>
+</div>
+<p>
+	&nbsp;</p>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/scala-tomcat/how-tomcat-worksscala%25e8%25af%25ad%25e8%25a8%2580-02-%25e4%25b8%2580%25e4%25b8%25aa%25e7%25ae%2580%25e5%258d%2595%25e7%259a%2584servlet%25e5%25ae%25b9%25e5%2599%25a8.html" title="How Tomcat Works(Scala语言) 02 一个简单的Servlet容器 "><p> <i class="fa fa-mail-reply"></i>&nbsp;How Tomcat Works(Scala语言) 02 一个简单的Servlet容器</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%25e5%25bf%25ab%25e5%25ad%25a6scala%25e4%25b9%25a0%25e9%25a2%2598%25e8%25a7%25a3%25e7%25ad%2594-%25e7%25ac%25ac%25e5%258d%2581%25e4%25b8%2589%25e7%25ab%25a0-%25e9%259b%2586%25e5%2590%2588.html" title="快学Scala习题解答—第十三章 集合"><p>快学Scala习题解答—第十三章 集合&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="快学Scala习题解答—第十二章 高阶函数"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

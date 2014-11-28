@@ -1,0 +1,564 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="clojure"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/clojure/clojure%25e4%25b8%2593%25e9%25a2%2598%25e5%25ad%2597%25e7%25ac%25a6%25e4%25b8%25b2%25e5%25a4%2584%25e7%2590%2586.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>Clojure专题:字符串处理 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">Clojure专题:字符串处理</h2>
+
+    <p class="post-meta">By 02月05日  2014  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> clojure (11)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#clojure"><i class="fa fa-tags"></i> clojure (10)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <ul>
+<li>本文翻译自<a href="http://clojure-doc.org/articles/cookbooks/strings.html">Strings</a>
+</li>
+<li>本文内容包括使用Clojure内建的函数和标准库来操作字符串,以及JDK中的相关操作.
+</li>
+<li>版权:This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets).
+</li>
+<li>源代码在<a href="https://github.com/clojuredocs/guides">Github</a>上.
+</li>
+</ul>
+<p></p>
+<div id="table-of-contents">
+<h2>目录</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 概述</a></li>
+<li><a href="#sec-2">2 预备知识</a></li>
+<li><a href="#sec-3">3 方法</a>
+<ul>
+<li><a href="#sec-3-1">3.1 基础方法</a></li>
+<li><a href="#sec-3-2">3.2 解析复杂字符串</a>
+<ul>
+<li><a href="#sec-3-2-1">3.2.1 正则表达式</a></li>
+<li><a href="#sec-3-2-2">3.2.2 上下文无关语法</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-3">3.3 构建复杂的字符串</a>
+<ul>
+<li><a href="#sec-3-3-1">3.3.1 重定向</a></li>
+<li><a href="#sec-3-3-2">3.3.2 格式化字符串</a></li>
+<li><a href="#sec-3-3-3">3.3.3 CL-Format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-4">4 贡献者</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">概述</h2>
+<div class="outline-text-2" id="text-1">
+<ul>
+<li>Clojure中的字符串就是Java字符串.你可以使用Java中的相应方法来对其进行处理.
+</li>
+<li>Java字符串是不可变的,所以能很方便的在Clojure中使用
+</li>
+<li>你不能给Java字符串添加元数据
+</li>
+<li>Clojure提供一些方便的符号
+</li>
+</ul>
+<p></p>
+<pre class="example">"foo"    java.lang.String
+#"\d"    java.util.regex.Pattern (正则表达式,匹配一个数字)
+\f       java.lang.Character (表示'f')
+</pre>
+<ul>
+<li><b>注意</b>: 人类的大脑和计算机之间还是有很大的差异的.所以Java的字符串(UTF-16编码)并不能像人们所认为的那样很好的和字符一一对应.比如说,一个Unicode的位和我们所认为的字符的一位是无法对应的(像韩国 韩语尊宝,这些词由多个字符组成.)同样的,一个Unicode位可能是由2个UTF-16字符组成.
+</li>
+</ul>
+<p></p>
+</div>
+</div>
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">预备知识</h2>
+<div class="outline-text-2" id="text-2">
+<p>一些例子用到了clojure.string,clojure.edn和clojure.pprint.我们假设你的ns宏里面已经包含了如下内容:</p>
+<p></p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #2aa198;">:require</span> [clojure.string <span style="color: #2aa198;">:as</span> str]
+          [clojure.edn <span style="color: #2aa198;">:as</span> edn]
+          [clojure.pprint <span style="color: #2aa198;">:as</span> pp]<span style="color: #8c8c8c;">)</span>
+</pre>
+<p>或者在REPL里面,你需要载入:</p>
+<p></p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">require</span> '[clojure.string <span style="color: #2aa198;">:as</span> str]<span style="color: #8c8c8c;">)</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">require</span> '[clojure.edn <span style="color: #2aa198;">:as</span> edn]<span style="color: #8c8c8c;">)</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">require</span> '[clojure.pprint <span style="color: #2aa198;">:as</span> pp]<span style="color: #8c8c8c;">)</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">方法</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1">基础方法</h3>
+<div class="outline-text-3" id="text-3-1">
+<p></p>
+<pre class="src src-clojure"><span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#38271;&#24230;&#35745;&#31639;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">count</span> <span style="color: #2aa198;">"0123"</span><span style="color: #8c8c8c;">)</span>      <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; 4</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">empty?</span> <span style="color: #2aa198;">"0123"</span><span style="color: #8c8c8c;">)</span>     <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; false</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">empty?</span> <span style="color: #2aa198;">""</span><span style="color: #8c8c8c;">)</span>         <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; true</span>
+<span style="color: #8c8c8c;">(</span>str/blank? <span style="color: #2aa198;">"    "</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; true</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#23383;&#31526;&#20018;&#36830;&#25509;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> <span style="color: #2aa198;">"foo"</span> <span style="color: #2aa198;">"bar"</span><span style="color: #8c8c8c;">)</span>            <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "foobar" </span>
+<span style="color: #8c8c8c;">(</span>str/<span style="color: #b58900;">join</span> [<span style="color: #2aa198;">"0"</span> <span style="color: #2aa198;">"1"</span> <span style="color: #2aa198;">"2"</span>]<span style="color: #8c8c8c;">)</span>     <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "012"</span>
+<span style="color: #8c8c8c;">(</span>str/<span style="color: #b58900;">join</span> <span style="color: #2aa198;">"."</span> [<span style="color: #2aa198;">"0"</span> <span style="color: #2aa198;">"1"</span> <span style="color: #2aa198;">"2"</span>]<span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "0.1.2"</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#20351;&#29992;Java&#26041;&#27861;&#26469;&#21305;&#37197;.</span>
+<span style="color: #93a1a1; font-style: italic;">;;</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#23545;&#20110;&#19979;&#38754;&#30340;&#24773;&#20917;,&#20320;&#24212;&#35813;&#26356;&#21916;&#27426;&#20351;&#29992;&#27491;&#21017;&#34920;&#36798;&#24335;.&#27604;&#22914;,&#20320;&#22312;&#36827;&#34892;&#27979;&#35797;,&#24403;&#22833;&#36133;&#26102;&#38656;&#35201;&#36820;&#22238;-1.</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#25110;&#32773;&#19968;&#20010;&#23383;&#31526;\o&#38656;&#35201;&#36716;&#25442;&#25104;&#23383;&#31526;&#20018;&#25110;&#25968;&#23383;.</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">.indexOf</span> <span style="color: #2aa198;">"foo"</span> <span style="color: #2aa198;">"oo"</span><span style="color: #8c8c8c;">)</span>         <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; 1</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">.indexOf</span> <span style="color: #2aa198;">"foo"</span> <span style="color: #2aa198;">"x"</span><span style="color: #8c8c8c;">)</span>          <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; -1</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">.lastIndexOf</span> <span style="color: #2aa198;">"foo"</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">int</span> \o<span style="color: #8c8c8c;">))</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; 2</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#23383;&#31526;&#20018;&#25130;&#21462;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">subs</span> <span style="color: #2aa198;">"0123"</span> 1<span style="color: #8c8c8c;">)</span>       <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "123"</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">subs</span> <span style="color: #2aa198;">"0123"</span> 1 3<span style="color: #8c8c8c;">)</span>     <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "12"</span>
+<span style="color: #8c8c8c;">(</span>str/trim <span style="color: #2aa198;">"  foo  "</span><span style="color: #8c8c8c;">)</span>  <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "foo"</span>
+<span style="color: #8c8c8c;">(</span>str/triml <span style="color: #2aa198;">"  foo  "</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "foo  "</span>
+<span style="color: #8c8c8c;">(</span>str/trimr <span style="color: #2aa198;">"  foo  "</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "  foo"</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#20999;&#20998;&#23383;&#31526;&#20018;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">seq</span> <span style="color: #2aa198;">"foo"</span><span style="color: #8c8c8c;">)</span>                       <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; (\f \o \o)</span>
+<span style="color: #8c8c8c;">(</span>str/split <span style="color: #2aa198;">"foo/bar/quux"</span> #<span style="color: #2aa198;">"/"</span><span style="color: #8c8c8c;">)</span>   <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; ["foo" "bar" "quux"]</span>
+<span style="color: #8c8c8c;">(</span>str/split <span style="color: #2aa198;">"foo/bar/quux"</span> #<span style="color: #2aa198;">"/"</span> 2<span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; ["foo" "bar/quux"]</span>
+<span style="color: #8c8c8c;">(</span>str/split-lines <span style="color: #2aa198;">"foo</span>
+<span style="color: #2aa198;">bar"</span><span style="color: #8c8c8c;">)</span>                             <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; ["foo" "bar"]</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#22823;&#23567;&#20889;&#36716;&#25442;</span>
+<span style="color: #8c8c8c;">(</span>str/lower-case <span style="color: #2aa198;">"fOo"</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "foo"</span>
+<span style="color: #8c8c8c;">(</span>str/upper-case <span style="color: #2aa198;">"fOo"</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "FOO"</span>
+<span style="color: #8c8c8c;">(</span>str/capitalize <span style="color: #2aa198;">"fOo"</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "Foo"</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#36716;&#25442; </span>
+<span style="color: #8c8c8c;">(</span>str/escape <span style="color: #2aa198;">"foo|bar|quux"</span> {\| <span style="color: #2aa198;">"||"</span>}<span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "foo||bar||quux"</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#33719;&#24471;&#32473;&#23450;&#32534;&#30721;&#30340;&#23383;&#33410;&#25968;&#32452;</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">(&#36755;&#20986;&#21487;&#33021;&#21644;&#19979;&#38754;&#30340;"3c3660"&#19981;&#21516;)</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">.getBytes</span> <span style="color: #2aa198;">"foo"</span> <span style="color: #2aa198;">"UTF-8"</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; #&lt;byte[] [B@3c3660&gt;</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#35299;&#26512;&#20026;keyword</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">keyword</span> <span style="color: #2aa198;">"foo"</span><span style="color: #8c8c8c;">)</span>    <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; :foo</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#35299;&#26512;&#20026;&#25968;&#23383;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">bigint</span> <span style="color: #2aa198;">"20000000000000000000000000000"</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; 20000000000000000000000000000N</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">bigdec</span> <span style="color: #2aa198;">"20000000000000000000.00000000"</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; 20000000000000000000.00000000M</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Integer/parseInt</span> <span style="color: #2aa198;">"2"</span><span style="color: #8c8c8c;">)</span>                   <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; 2</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #cb4b16;">Float/parseFloat</span> <span style="color: #2aa198;">"2"</span><span style="color: #8c8c8c;">)</span>                   <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; 2.0</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#35299;&#26512;&#20026;edn,&#23427;&#26159;Clojure&#24418;&#24335;&#30340;&#19968;&#20010;&#23376;&#38598;</span>
+<span style="color: #8c8c8c;">(</span>edn/read-string <span style="color: #2aa198;">"0xffff"</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; 65535</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#35835;&#21462;Clojure&#24418;&#24335;&#30340;&#26041;&#27861;.</span>
+<span style="color: #93a1a1; font-style: italic;">;;</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#23433;&#20840;&#35686;&#21578;:&#24403;&#20320;&#26080;&#27861;&#30830;&#20445;&#20320;&#33021;100%&#20449;&#20219;&#35201;&#22788;&#29702;&#30340;&#23383;&#31526;&#20018;&#26102;,&#35831;&#23558;*read-eval*&#32622;&#20026;false.</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#20174;Clojure1.5&#24320;&#22987;*read-eval*&#40664;&#35748;&#20026;false,&#20294;&#20026;&#20102;&#23433;&#20840;&#36215;&#35265;,</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#22312;&#22788;&#29702;&#23383;&#31526;&#20018;&#26102;&#36824;&#26159;&#20808;&#25163;&#21160;&#32622;&#19968;&#19979;false</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#22240;&#20026;&#21487;&#33021;&#26377;&#25805;&#20316;&#23558;&#20854;&#32622;&#20026;&#20102;true.</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">binding</span> [*read-eval* false]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">read-string</span> <span style="color: #2aa198;">"#\"[abc]\""</span><span style="color: #8c8c8c;">))</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; #"[abc]"</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-3-2" class="outline-3">
+<h3 id="sec-3-2">解析复杂字符串</h3>
+<div class="outline-text-3" id="text-3-2">
+</div>
+<div id="outline-container-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1">正则表达式</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>正则表达式增强了字符串匹配.你可以重复匹配,匹配其中之一,等等等等.</p>
+<ul>
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">Regex reference</a>
+</li>
+</ul>
+<p><b>Groups</b>:当我们想匹配多余一个子串时,正则表达式的组就起到了作用. 在正则表达式#"(group-1) (group-2)"中, 第0个组为整个匹配表达式.第1个组从最左边的(开始,第2个组从左起第二个(开始,依次类推.你还可以嵌套组.也可以后续通过$0,$1等来引用组.</p>
+<p></p>
+<ul>
+<li id="sec-3-2-1-1">匹配
+<p></p>
+<pre class="src src-clojure"><span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#31616;&#21333;&#21305;&#37197;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">re-find</span> #<span style="color: #2aa198;">"\d+"</span> <span style="color: #2aa198;">"foo 123 bar"</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "123"</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#21305;&#37197;&#19981;&#21040;&#26102;&#20250;&#24590;&#26679;?</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">re-find</span> #<span style="color: #2aa198;">"\d+"</span> <span style="color: #2aa198;">"foobar"</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; nil</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#23545;&#27599;&#20010;&#32452;&#36820;&#22238;&#31532;&#19968;&#20010;&#28385;&#36275;&#21305;&#37197;&#26465;&#20214;&#30340;&#20869;&#23481;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">re-matches</span> #<span style="color: #2aa198;">"(@\w+)\s([.0-9]+)%"</span>
+            <span style="color: #2aa198;">"@shanley 19.8%"</span><span style="color: #8c8c8c;">)</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt;["@shanley 19.8%" "@shanley" "19.8"]</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#36820;&#22238;&#25152;&#26377;&#21305;&#37197;&#30340;&#32452;&#30340;&#32467;&#26524;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">re-seq</span> #<span style="color: #2aa198;">"(@\w+)\s([.0-9]+)%"</span>
+        <span style="color: #2aa198;">"@davidgraeber 12.3%,@shanley 19.8%"</span><span style="color: #8c8c8c;">)</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; (["@davidgraeber 12.3%" "@davidgraeber" "12.3"]</span>
+<span style="color: #93a1a1; font-style: italic;">;    </span><span style="color: #93a1a1; font-style: italic;">["@shanley 19.8%" "@shanley" "19.8"])</span>
+</pre>
+</li>
+</ul>
+<ul>
+<li id="sec-3-2-1-2">替换<br />
+我们使用str/replace来进行替换. 第一个参数是源字符串,下一个是匹配字符串,最后一个是替换的内容.</p>
+<p></p>
+<pre class="example">match / replacement can be:
+string / string
+char / char
+pattern / (string or function of match).
+</pre>
+<pre class="src src-clojure"><span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#22312;&#26367;&#25442;&#23383;&#31526;&#20018;&#20013;,$0,$1&#31561;&#29992;&#26469;&#24341;&#29992;&#21305;&#37197;&#23383;&#31526;&#20018;&#20013;&#30340;&#32452;.</span>
+<span style="color: #8c8c8c;">(</span>str/<span style="color: #b58900;">replace</span> <span style="color: #2aa198;">"@davidgraeber 12.3%,@shanley 19.8%"</span>
+             #<span style="color: #2aa198;">"(@\S+)\s([.0-9]+)%"</span>
+             <span style="color: #2aa198;">"$2 ($1)"</span><span style="color: #8c8c8c;">)</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "12.3 (@davidgraeber),19.8 (@shanley)"</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#20351;&#29992;&#20989;&#25968;&#26469;&#26367;&#25442;&#23383;&#31526;&#20018;,&#26356;&#28789;&#27963;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">println</span>
+  <span style="color: #8c8c8c;">(</span>str/<span style="color: #b58900;">replace</span> <span style="color: #2aa198;">"@davidgraeber 12.3%,@shanley 19.8%"</span>
+               #<span style="color: #2aa198;">"(@\w+)\s([.0-9]+)%,?"</span>
+               <span style="color: #8c8c8c;">(</span><span style="color: #859900;">fn</span> [[_ person percent]]
+                   <span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [points <span style="color: #8c8c8c;">(</span><span style="color: #859900;">-&gt;</span> percent <span style="color: #cb4b16;">Float/parseFloat</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">*</span> 100<span style="color: #8c8c8c;">)</span> <span style="color: #cb4b16;">Math/round</span><span style="color: #8c8c8c;">)</span>]
+                     <span style="color: #8c8c8c;">(</span><span style="color: #859900;">str</span> person <span style="color: #2aa198;">"'s followers grew "</span> points <span style="color: #2aa198;">" points.\n"</span><span style="color: #8c8c8c;">)))))</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">print=&gt; @davidgraeber's followers grew 1230 points.</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">print=&gt; @shanley's followers grew 1980 points.</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">print=&gt;</span>
+</pre>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2">上下文无关语法</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>和正则表达式相比上下文无关语法提供了更具表现力的匹配方式.你能使用例如嵌套来表达想法.<br />
+我们将在JSON语法上使用<a href="https://github.com/Engelberg/instaparse">Instapares</a>.(这个例子没有经过严格的测试也没什么特色.如果想应用到实际开发中,请使用<a href="https://github.com/clojure/data.json">data.json</a>)</p>
+<p></p>
+<pre class="src src-clojure"><span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#20320;&#39033;&#30446;&#20013;&#30340;project.clj&#38656;&#35201;&#21253;&#21547;&#22914;&#19979;&#20381;&#36182;(&#20320;&#21487;&#33021;&#38656;&#35201;&#37325;&#21551;JVM)</span>
+<span style="color: #93a1a1; font-style: italic;">;;   </span><span style="color: #93a1a1; font-style: italic;">:dependencies [[instaparse "1.2.4"]]</span>
+<span style="color: #93a1a1; font-style: italic;">;;</span>
+<span style="color: #93a1a1; font-style: italic;">;;  </span><span style="color: #93a1a1; font-style: italic;">&#25105;&#20204;&#20551;&#35774;&#20320;&#30340;ns&#23439;&#21253;&#21547;&#20102;&#22914;&#19979;&#20869;&#23481;:</span>
+<span style="color: #93a1a1; font-style: italic;">;;   </span><span style="color: #93a1a1; font-style: italic;">(:require [instaparse.core :as insta])</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#25110;&#20320;&#22312;REPL&#37324;&#21152;&#36733;&#20102;:</span>
+<span style="color: #93a1a1; font-style: italic;">;;   </span><span style="color: #93a1a1; font-style: italic;">(require '[instaparse.core :as insta])</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">barely-tested-json-parser</span>
+  <span style="color: #8c8c8c;">(</span>insta/parser
+   <span style="color: #2aa198;">"object     = &lt;'{'&gt; &lt;w*&gt; (members &lt;w*&gt;)* &lt;'}'&gt;</span>
+<span style="color: #2aa198;">    &lt;members&gt;  = pair (&lt;w*&gt; &lt;','&gt; &lt;w*&gt; members)*</span>
+<span style="color: #2aa198;">    &lt;pair&gt;     = string &lt;w*&gt; &lt;':'&gt; &lt;w*&gt; value</span>
+<span style="color: #2aa198;">    &lt;value&gt;    = string | number | object | array | 'true' | 'false' | 'null'</span>
+<span style="color: #2aa198;">    array      = &lt;'['&gt; elements* &lt;']'&gt;</span>
+<span style="color: #2aa198;">    &lt;elements&gt; = value &lt;w*&gt; (&lt;','&gt; &lt;w*&gt; elements)*</span>
+<span style="color: #2aa198;">    number     = int frac? exp?</span>
+<span style="color: #2aa198;">    &lt;int&gt;      = '-'? digits</span>
+<span style="color: #2aa198;">    &lt;frac&gt;     = '.' digits</span>
+<span style="color: #2aa198;">    &lt;exp&gt;      = e digits</span>
+<span style="color: #2aa198;">    &lt;e&gt;        = ('e' | 'E') (&lt;'+'&gt; | '-')?</span>
+<span style="color: #2aa198;">    &lt;digits&gt;   = #'[0-9]+'</span>
+<span style="color: #2aa198;">    (* First sketched state machine; then it was easier to figure out</span>
+<span style="color: #2aa198;">       regex syntax and all the maddening escape-backslashes. *)</span>
+<span style="color: #2aa198;">    string     = &lt;'\\"'&gt; #'([^\"\\]|\\.)*' &lt;'\\"'&gt;</span>
+<span style="color: #2aa198;">    &lt;w&gt;        = #'\s+'"</span><span style="color: #8c8c8c;">))</span>
+
+<span style="color: #8c8c8c;">(</span>barely-tested-json-parser <span style="color: #2aa198;">"{\"foo\": {\"bar\": 99.9e-9, \"quux\": [1, 2, -3]}}"</span><span style="color: #8c8c8c;">)</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; [:object</span>
+<span style="color: #93a1a1; font-style: italic;">;     </span><span style="color: #93a1a1; font-style: italic;">[:string "foo"]</span>
+<span style="color: #93a1a1; font-style: italic;">;     </span><span style="color: #93a1a1; font-style: italic;">[:object</span>
+<span style="color: #93a1a1; font-style: italic;">;       </span><span style="color: #93a1a1; font-style: italic;">[:string "bar"]</span>
+<span style="color: #93a1a1; font-style: italic;">;       </span><span style="color: #93a1a1; font-style: italic;">[:number "99" "." "9" "e" "-" "9"]</span>
+<span style="color: #93a1a1; font-style: italic;">;       </span><span style="color: #93a1a1; font-style: italic;">[:string "quux"]</span>
+<span style="color: #93a1a1; font-style: italic;">;       </span><span style="color: #93a1a1; font-style: italic;">[:array [:number "1"] [:number "2"] [:number "-" "3"]]]]</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#26368;&#21518;&#30340;&#36755;&#20986;&#26377;&#28857;&#21872;&#21990;,&#25105;&#20204;&#25913;&#36827;&#19968;&#19979;.</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">-&gt;&gt;</span> <span style="color: #8c8c8c;">(</span>barely-tested-json-parser <span style="color: #2aa198;">"{\"foo\": {\"bar\": 99.9e-9, \"quux\": [1, 2, -3]}}"</span><span style="color: #8c8c8c;">)</span>
+     <span style="color: #8c8c8c;">(</span>insta/transform {<span style="color: #2aa198;">:object</span> hash-map
+                       <span style="color: #2aa198;">:string</span> str
+                       <span style="color: #2aa198;">:array</span> vector
+                       <span style="color: #2aa198;">:number</span> <span style="color: #8c8c8c;">(</span><span style="color: #859900;">comp</span> edn/read-string str<span style="color: #8c8c8c;">)</span>}<span style="color: #8c8c8c;">))</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; {"foo" {"quux" [1 2 -3], "bar" 9.99E-8}}</span>
+
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#25152;&#26377;&#30340;&#20869;&#23481;&#37117;&#22312;&#19978;&#38754;&#20102; </span>
+<span style="color: #93a1a1; font-style: italic;">;;</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">=&#21491;&#36793;&#30340;&#35821;&#27861;&#20027;&#35201;&#29992;&#26469;&#38544;&#34255;&#22810;&#20313;&#20449;&#24687;.&#27604;&#22914;&#35828;,&#25105;&#20204;&#19981;&#20851;&#24515;&#31354;&#26684;,&#25152;&#20197;&#25105;&#20204;&#36890;&#36807;&#35774;&#32622;&lt;w*&gt;&#26469;&#38544;&#34255;</span>
+<span style="color: #93a1a1; font-style: italic;">;;</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">=&#24038;&#36793;&#30340;&#35821;&#27861;&#21482;&#26159;&#29992;&#26469;&#36991;&#20813;&#23884;&#22871;&#36755;&#20986;&#30340;.&#20363;&#22914;,"members"&#20165;&#20165;&#26159;&#19968;&#20010;&#20154;&#20026;&#35774;&#32622;&#30340;&#23454;&#20307;, </span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#25152;&#20197;&#25105;&#20204;&#38459;&#27490;&#20102;&#36825;&#20010;&#26080;&#24847;&#20041;&#30340;&#23884;&#22871;&#20851;&#31995;</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-3-3" class="outline-3">
+<h3 id="sec-3-3">构建复杂的字符串</h3>
+<div class="outline-text-3" id="text-3-3">
+</div>
+<div id="outline-container-3-3-1" class="outline-4">
+<h4 id="sec-3-3-1">重定向</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<p>with-out-str提供了一个简单的方法来构建字符串.它重定向标准输出(<b>out</b>)到StringWriter,然后返回结果字符串.这样你就可以使用print这样的函数来获得字符串(即使在嵌套函数中)</p>
+<p></p>
+<pre class="src src-clojure"><span style="color: #8c8c8c;">(</span><span style="color: #859900;">let</span> [shrimp-varieties [<span style="color: #2aa198;">"shrimp-kabobs"</span> <span style="color: #2aa198;">"shrimp creole"</span> <span style="color: #2aa198;">"shrimp gumbo"</span>]]
+  <span style="color: #8c8c8c;">(</span><span style="color: #859900;">with-out-str</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">print</span> <span style="color: #2aa198;">"We have "</span><span style="color: #8c8c8c;">)</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">doseq</span> [name <span style="color: #8c8c8c;">(</span>str/<span style="color: #b58900;">join</span> <span style="color: #2aa198;">", "</span> shrimp-varieties<span style="color: #8c8c8c;">)</span>]
+      <span style="color: #8c8c8c;">(</span><span style="color: #859900;">print</span> name<span style="color: #8c8c8c;">))</span>
+    <span style="color: #8c8c8c;">(</span><span style="color: #859900;">print</span> <span style="color: #2aa198;">"..."</span><span style="color: #8c8c8c;">)))</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "We have shrimp-kabobs, shrimp creole, shrimp gumbo..."</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-3-3-2" class="outline-4">
+<h4 id="sec-3-3-2">格式化字符串</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<p>Java里的模板能帮助你方便的构造字符串.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html">Reference</a></p>
+<p></p>
+<pre class="src src-clojure"><span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">%s&#32463;&#24120;&#20250;&#20316;&#20026;print&#30340;&#21442;&#25968;. &#32780;%&#38656;&#35201;&#20351;&#29992;%%</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">format</span> <span style="color: #2aa198;">"%s enjoyed %s%%."</span> <span style="color: #2aa198;">"Mozambique"</span> 19.8<span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "Mozambique enjoyed 19.8%."</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">1$&#21069;&#32512;&#33021;&#24341;&#29992;&#21040;&#20854;&#21518;&#30340;&#31532;&#19968;&#20010;&#21442;&#25968;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">format</span> <span style="color: #2aa198;">"%1$tY-%1$tm-%1$latex td"</span> #inst<span style="color: #2aa198;">"2000-01-02T00:00:00"</span><span style="color: #8c8c8c;">)</span> <span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "2000-01-02"</span>
+
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">&#21516;&#19978;1$, 2$&#21069;&#32512;&#21487;&#20197;&#24341;&#29992;&#20854;&#21518;&#38754;&#30340;&#21442;&#25968;</span>
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">format</span> <span style="color: #2aa198;">"New year: %2$tY. Old year: %1$tY"</span>
+        #inst<span style="color: #2aa198;">"2000-01-02T00:00:00"</span>
+        #inst<span style="color: #2aa198;">"3111-12-31T00:00:00"</span><span style="color: #8c8c8c;">)</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "New year: 3111. Old year: 2000"</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-3-3-3" class="outline-4">
+<h4 id="sec-3-3-3">CL-Format</h4>
+<div class="outline-text-4" id="text-3-3-3">
+<p>cl-format是Common Lisp中的一个臭名昭著的功能.例如,你可以从序列来构建字符串(其怪异程度就像使用英文来表示数字,使用两种类型的罗马数字).但对于打印日期和上面的对无序参数的引用方面却又比普通的格式化功能弱.</p>
+<p>
+你只需要记住cl-format就是个无人问津的不值一学的语言.但是如果你喜欢并想学习它,那么看<a href="http://www.gigamonkeys.com/book/a-few-format-recipes.html">Practical Common Lisp教程</a>.或者<a href="http://www.lispworks.com/documentation/HyperSpec/Body/22_c.htm">Common Lisp手册</a></p>
+<p></p>
+<pre class="src src-clojure"><span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">The first param prints to *out* if true. To string if false.</span>
+<span style="color: #93a1a1; font-style: italic;">;; </span><span style="color: #93a1a1; font-style: italic;">To a stream if it's a stream.</span>
+<span style="color: #8c8c8c;">(</span>pp/cl-format true <span style="color: #2aa198;">"~{~{~a had ~s percentage point~:p.~}~^~%~}"</span>
+              {<span style="color: #2aa198;">"@davidgraeber"</span> 12.3
+               <span style="color: #2aa198;">"@shanley"</span> 19.8
+               <span style="color: #2aa198;">"@tjgabbour"</span> 1}<span style="color: #8c8c8c;">)</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">print=&gt; @davidgraeber had 12.3 percentage points.</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">print=&gt; @tjgabbour had 1 percentage point.</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">print=&gt; @shanley had 19.8 percentage points.</span>
+
+<span style="color: #8c8c8c;">(</span><span style="color: #859900;">def</span> <span style="color: #268bd2;">format-string</span> <span style="color: #2aa198;">"~{~#[~;~a~;~a and ~a~:;~@{~a~#[~;, and ~:;, ~]~}~]~}"</span><span style="color: #8c8c8c;">)</span>
+<span style="color: #8c8c8c;">(</span>pp/cl-format nil format-string []<span style="color: #8c8c8c;">)</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; ""</span>
+<span style="color: #8c8c8c;">(</span>pp/cl-format nil format-string [<span style="color: #2aa198;">"@shanley"</span>]<span style="color: #8c8c8c;">)</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "@shanley"</span>
+<span style="color: #8c8c8c;">(</span>pp/cl-format nil format-string [<span style="color: #2aa198;">"@shanley"</span>, <span style="color: #2aa198;">"@davidgraeber"</span>]<span style="color: #8c8c8c;">)</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "@shanley and @davidgraeber"</span>
+<span style="color: #8c8c8c;">(</span>pp/cl-format nil format-string [<span style="color: #2aa198;">"@shanley"</span>, <span style="color: #2aa198;">"@davidgraeber"</span>, <span style="color: #2aa198;">"@sarahkendzior"</span>]<span style="color: #8c8c8c;">)</span>
+<span style="color: #93a1a1; font-style: italic;">;</span><span style="color: #93a1a1; font-style: italic;">=&gt; "@shanley, @davidgraeber, and @sarahkendzior"</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">贡献者</h2>
+<div class="outline-text-2" id="text-4">
+<p>Tj Gabbour tjg@simplevalue.de, 2013 (original author)</p>
+<p></p>
+</div>
+</div>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%25e7%25bc%2596%25e7%25a8%258b%25e8%25af%25ad%25e8%25a8%2580%25e5%258f%2591%25e5%25b1%2595%25e7%259a%2584%25e7%25bc%2596%25e5%25b9%25b4%25e5%258f%25b2.html" title="编程语言发展的编年史 "><p> <i class="fa fa-mail-reply"></i>&nbsp;编程语言发展的编年史</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/clojure/clojure%25e4%25b8%2593%25e9%25a2%2598%25e6%2596%2587%25e4%25bb%25b6%25e5%25a4%2584%25e7%2590%2586.html" title="Clojure专题:文件处理"><p>Clojure专题:文件处理&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Clojure专题:字符串处理"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="java, java8"/>
+    <meta name="author" content="liyouhai.com"> 
+    <link rel="canonical" href="http://liyouhai.com/java-scala/faq%25e4%25bb%2580%25e4%25b9%2588%25e6%2598%25aflambda%25e8%25a1%25a8%25e8%25be%25be%25e5%25bc%258f.html">
+    <link href="http://liyouhai.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>[FAQ]什么是lambda表达式 - IvanPig's Blog</title>
+    <link rel="stylesheet" href="/css/min/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="/css/JekyllPure.css">
+    <!--<![endif]-->
+
+    <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+    <![endif]-->
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <!--
+     /\_ \    __                         /\ \                __
+     \//\ \  /\_\  __  __    ___   __  __\ \ \___      __   /\_\
+       \ \ \ \/\ \/\ \/\ \  / __`\/\ \/\ \\ \  _ `\  /'__`\ \/\ \
+        \_\ \_\ \ \ \ \_\ \/\ \L\ \ \ \_\ \\ \ \ \ \/\ \L\.\_\ \ \
+        /\____\\ \_\/`____ \ \____/\ \____/ \ \_\ \_\ \__/.\_\\ \_\
+        \/____/ \/_/`/___/> \/___/  \/___/   \/_/\/_/\/__/\/_/ \/_/
+                       /\___/
+                       \/__/
+     图像可以到http://asciigen.com/  生成..记得翻墙才能正常生成.如不方便可以博客留言我帮你生成
+     -->
+</head>
+
+<body>
+
+
+
+
+
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <div class="headerpic">
+                <a href="/">
+                    <img src="/img/op.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                </a>
+            </div>
+            <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+            <h2 class="brand-tagline">IvanPig's Blog</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/Timing">时间轴</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/tag">标签库</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="pure-button" href="/1">收藏站</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/1">音乐屋</a>-->
+
+                </ul>
+            </nav>
+            <div class="search">
+                <form action="/search">
+                    <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                </form>
+            </div>
+            <div id="toc"></div>
+            <nav id="nav">
+                <ul class="nav-list">
+                    <li class="nav-link">
+                    <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                    </li>
+                    <li class="nav-link">
+                    <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                <div class="qrcodeTable"></div>
+<header class="post-header">
+    <img class="post-avatar" height="48" width="48"
+         src="">
+
+    <h2 class="post-title">[FAQ]什么是lambda表达式</h2>
+
+    <p class="post-meta">By 07月01日  2013  
+
+
+
+ 
+<a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open"></i> java-scala (20)</a>
+
+
+  
+
+
+
+		  
+			 
+<a class="post-category " href="/tag/#java"><i class="fa fa-tags"></i> java (16)</a>
+ 
+<a class="post-category " href="/tag/#java"><i class="fa fa-tags"></i> java8 (3)</a>
+
+		  
+		  
+		  
+</header>
+<div class="article pure-u-22-24">
+    <p>
+	<br />
+	<span style="color:black"><span style="font-family:微软雅黑">在一般数学计算中，</span>lambda<span style="font-family:微软雅黑">表达式就是函数：根据部分或所有输入的组合，返回相应的值。</span>lambda<span style="font-family:微软雅黑">表达式作为函数式思想被引入到了</span>Java<span style="font-family:微软雅黑">中。熟悉</span>Java<span style="font-family:微软雅黑">语法的朋友可以把</span>lambda<span style="font-family:微软雅黑">表达式看做是可以接受参数，返回类型，不可修改的，语法简洁的匿名方法。</span></span></p>
+<p>
+	&nbsp;<br />
+	&nbsp;</p>
+<p>
+	<span style="color:black; font-family:微软雅黑"><strong>语法：</strong></span></p>
+<p>
+	<span style="color:black; font-size:10pt"><span style="font-family:Courier New; background-color:white">(<em>parameters</em>) -&gt; <em>expression</em></span><br />
+	<span style="font-family:微软雅黑"><span style="background-color:white"><strong>或者</strong></span></span></span></p>
+<p>
+	<span style="color:black; font-family:Courier New; font-size:10pt"><span style="background-color:white">(<em>parameters</em>) -&gt; { <em>statements;</em> }</span></span></p>
+<p>
+	&nbsp;<br />
+	&nbsp;</p>
+<p>
+	<span style="color:black; font-family:微软雅黑; font-size:10pt"><span style="background-color:white"><strong>例子：</strong></span></span></p>
+<p>
+	<span style="color:black; font-size:10pt"><strong><span style="font-family:Courier New; background-color:white">1. (int x, int y) -&gt; x + y // </span><span style="font-family:微软雅黑; background-color:white">接受两个整数，并返回两数的和</span><br />
+	<span style="font-family:Courier New; background-color:white">2. (x, y) -&gt; x - y // </span><span style="font-family:微软雅黑; background-color:white">接受两个数，并返回差值</span><br />
+	<span style="font-family:Courier New; background-color:white">3. () -&gt; 42 // </span><span style="font-family:微软雅黑; background-color:white">不接受参数，直接返回</span><span style="font-family:Courier New; background-color:white">42<br />
+	4. (String s) -&gt; System.out.println(s) // </span></strong><span style="font-family:微软雅黑"><span style="background-color:white"><strong>接受字符串，打印标准输出，没有返回值</strong></span></span></span></p>
+<p>
+	<span style="color:black; font-size:10pt"><strong><span style="font-family:Courier New; background-color:white">5. x -&gt; 2 * x // </span><span style="font-family:微软雅黑; background-color:white">接受数字，并返回该值的</span><span style="font-family:Courier New; background-color:white">2</span><span style="font-family:微软雅黑; background-color:white">倍</span><br />
+	<span style="font-family:Courier New; background-color:white">6. c -&gt; { int s = c.size(); c.clear(); return s; } // </span></strong><span style="font-family:微软雅黑"><span style="background-color:white"><strong>接受一个集合。清空该集合，返回该集合未清空前的长度</strong></span></span></span></p>
+<p>
+	&nbsp;<br />
+	&nbsp;</p>
+<p>
+	<span style="color:black; font-family:微软雅黑; font-size:10pt"><span style="background-color:white"><strong>语法注意点：</strong></span></span></p>
+<ol>
+<li>
+		<span style="color:black; font-size:10pt"><strong><span style="font-family:微软雅黑; background-color:white">可以明确的指出参数类型（比如</span><span style="background-color:white">,1,4<span style="font-family:微软雅黑">）也可以不明确指出</span>(2,5,6).<span style="font-family:微软雅黑">在单个</span>lambda<span style="font-family:微软雅黑">表达式中，无论你明不明确指出参数类型都是没有关系的。</span></span></strong></span>
+	</li>
+<li>
+		<span style="color:black; font-size:10pt"><strong><span style="background-color:white">lambda<span style="font-family:微软雅黑">表达式的表达式体可以是个语句块</span>(<span style="font-family:微软雅黑">被大括号包围，例如</span>:6)<span style="font-family:微软雅黑">或者是个表达式</span>(<span style="font-family:微软雅黑">例如</span>:1-5)<span style="font-family:微软雅黑">。语句块式的表达式体能返回值或者不返回。使用或省略</span>return<span style="font-family:微软雅黑">关键字的规则和普通的方法体相同。</span></span></strong></span>
+	</li>
+<li>
+		<span style="color:black; font-size:10pt"><strong><span style="font-family:微软雅黑; background-color:white">如果表达式体是个表达式，那么它也可以返回值</span><span style="background-color:white">(<span style="font-family:微软雅黑">例如</span>:1,2,3,5)<span style="font-family:微软雅黑">，也可以不返回</span>(<span style="font-family:微软雅黑">例如</span>:4)</span></strong></span>
+	</li>
+<li>
+		<span style="color:black; font-size:10pt"><strong><span style="font-family:微软雅黑; background-color:white">如果表达式只有一个参数那么括号可以省略</span><span style="background-color:white">(<span style="font-family:微软雅黑">例如</span>:5,6)</span></strong></span>
+	</li>
+<li>
+		<span style="color:black; font-size:10pt"><strong><span style="font-family:微软雅黑; background-color:white">例子</span><span style="background-color:white">6<span style="font-family:微软雅黑">后的注释说此</span>lambda<span style="font-family:微软雅黑">表达式需要一个集合作为参数。而实际上，根据上下文环境的不同，此表达式不限于集合参数，只要参数包含</span>size<span style="font-family:微软雅黑">方法和</span>clear<span style="font-family:微软雅黑">方法，并且接受合适的参数且返回合适的类型即可。</span></span></strong></span>
+	</li>
+</ol>
+<p>
+	<span style="color:black; font-family:微软雅黑; font-size:10pt">&nbsp;</span><img src="assets/5f547f627dde99bf9f86e1d6716d7401.png" /><br />
+	&nbsp;</p>
+
+</div>
+
+    <div class="pure-g pagination">
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/javascala%25e6%25af%2594%25e8%25be%2583-%25e8%25ae%25be%25e8%25ae%25a1%25e6%25a8%25a1%25e5%25bc%258fsingleton.html" title="Java&Scala比较---设计模式(Singleton) "><p> <i class="fa fa-mail-reply"></i>&nbsp;Java&Scala比较---设计模式(Singleton)</p></a>
+        
+        
+        <a class="pure-u-1-2 pagination-item " href="/java-scala/faq%25e4%25b8%25ba%25e4%25bb%2580%25e4%25b9%2588%25e5%25bc%2595%25e5%2585%25a5lambda%25e8%25a1%25a8%25e8%25be%25be%25e5%25bc%258f.html" title="[FAQ]为什么引入lambda表达式"><p>[FAQ]为什么引入lambda表达式&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        
+    </div>
+    <link href="/css/code.css" rel="stylesheet">
+    <link href="/css/min/fancybox.css" rel="stylesheet">
+    <script src="/js/min/jquery.toc.min.js" ></script>
+    <script src="/js/min/jquery.qrcode.min.js" ></script>
+    <script src="/js/min/jquery.fancybox.pack.js" ></script>
+    <script src="/js/page.js" ></script>
+
+    
+    
+
+    
+    
+    <a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="[FAQ]什么是lambda表达式"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:""};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '../js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+    
+
+
+
+
+
+
+            </div>
+            </div>
+        <div class="footer">
+                <a href="/love/welcome-my-blog.html">About</a>
+                 <a href="/1">Collecting</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            <script src="/js/min/nprogress.min.js"></script>
+            <script src="/js/index.js"></script>
+        </div>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
