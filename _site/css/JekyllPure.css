@@ -19,12 +19,15 @@ a:focus {
 body{
   background-color: #ffffff;
   line-height:1.6;
+  font-family: 'Ubuntu','Monaco',"微软雅黑","Microsoft YaHei", sans-serif;
+  font-size:17px;
+  -webkit-font-smoothing:antialiased;
   //background-color: #f6f7f9;
 }
 html, button, input, select, textarea,
 .pure-g [class *= "pure-u"],
 .pure-g-r [class *= "pure-u"] {
-  font-family: 'Ubuntu',"Microsoft YaHei", sans-serif;
+  font-family: 'Ubuntu','Monaco',"微软雅黑","Microsoft YaHei", sans-serif;
 }
 h3 {
   font-weight: 100;

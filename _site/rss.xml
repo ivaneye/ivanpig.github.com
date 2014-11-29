@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2014-11-30T00:15:51+08:00</updated>
+    <updated>2014-11-30T00:35:42+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -32,9 +32,7 @@
 
 &lt;p&gt;我们不断的学习知识来认知这个世界。而我们所学习的知识实际上是对这个世界的抽象！&lt;/p&gt;
 
-&lt;h2&gt;什么是编程语言？&lt;/h2&gt;
-
-&lt;p&gt;和自然语言一样，编程语言是对现实世界的抽象。&lt;/p&gt;
+&lt;p&gt;和自然语言一样，编程语言也是对现实世界的抽象。自然语言是抽象给我们来认知，而编程语言则是抽象给计算机来认知。计算机擅长高频次简单计算&lt;/p&gt;
 
 &lt;h2&gt;从多项式开始&lt;/h2&gt;
 
@@ -977,9 +975,7 @@ public class Test{
 
 &lt;p&gt;我们不断的学习知识来认知这个世界。而我们所学习的知识实际上是对这个世界的抽象！&lt;/p&gt;
 
-&lt;h2&gt;什么是编程语言？&lt;/h2&gt;
-
-&lt;p&gt;和自然语言一样，编程语言是对现实世界的抽象。&lt;/p&gt;
+&lt;p&gt;和自然语言一样，编程语言也是对现实世界的抽象。自然语言是抽象给我们来认知，而编程语言则是抽象给计算机来认知。计算机擅长高频次简单计算&lt;/p&gt;
 
 &lt;h2&gt;从多项式开始&lt;/h2&gt;
 
