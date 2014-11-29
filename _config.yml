@@ -1,5 +1,5 @@
 #production_url是sitemap.txt生成的url,方便百度谷歌收录
-production_url: http://liyouhai.com
+production_url: http://www.ivanpig.com
 #
 # Jekyll Settings
 #
@@ -10,7 +10,7 @@ rdiscount:
 markdown_ext:  markdown,mkd,mkdn,md
 highlighter: pygments
 permalink: /:categories/:title.html
-paginate: 7
+paginate: 5
 paginate_path: "page/:num"
 exclude: [ "README.md",".idea",".iml",".name",".Node"]
 encoding: "utf-8"
