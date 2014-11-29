@@ -19,10 +19,9 @@
                 el.append('<h4><a target="_blank" href="' + val.link + '">' + val.title + '</a></h4>')
             });
             $.each(data, function (key, val) {
-                el.append('</br><hr><section  id="result"><h2><a style="color: black" target="_blank" href="' + val.link + '">' + val.title + '</a></h2><p>' + val.summary + '</p></section >');
+                el.append('</br><hr><div  id="result"><h2><a style="color: black" target="_blank" href="' + val.link + '">' + val.title + '</a></h2><p>' + val.summary + '</p></div>');
             });
-          alert(data);
-            hljs.initHighlightingOnLoad();
+            hljs.initHighlighting();
 
         });
         return this;
