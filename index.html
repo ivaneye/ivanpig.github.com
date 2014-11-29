@@ -6,52 +6,54 @@ description: ""
 {% for post in paginator.posts %}
 
 
-    <section class="post">
-        <header class="post-header">
-            <img class="post-avatar" height="48" width="48"
-                 src="{{ post.avatarimg }}">
+<section class="post">
+    <header class="post-header">
+        {% if page.avatarimg != null %}
+        <img class="post-avatar" height="48" width="48"
+             src="{{ post.avatarimg }}">
+        {% endunless %}
 
-            <h2 class="post-title"><a href="{{ site.BASE_PATH }}{{ post.url }}">{{ post.title }}</a></h2>
+        <h2 class="post-title"><a href="{{ site.BASE_PATH }}{{ post.url }}">{{ post.title }}</a></h2>
 
-            <p class="post-meta">By {{ post.date | date: "%m" }}月{{ post.date | date: "%d" }}日  {{ post.date | date: "%Y" }}  
-{% unless post.categories == empty %}
-{% assign categories_list = post.categories %}
-{% if categories_list.first[0] == null %}
-{% for category in categories_list %} 
-<a class="post-categorybut " href="/type/#{{ post.categories  }}"><i class="fa fa-folder-open"></i> {{ category | join: "/" }} ({{ site.categories[category].size }})</a>
-{% endfor %}
-{% else %}
-{% for category in categories_list %} 
-<a class="post-categorybut " href="/type/#{{ post.categories  }}"><i class="fa fa-folder-open"></i> {{ category[0] | join: "/" }} ({{ category[1].size }})</a>
-{% endfor %}
-{% endif %}
-{% endunless %}  
+        <p class="post-meta">By {{ post.date | date: "%m" }}月{{ post.date | date: "%d" }}日  {{ post.date | date: "%Y" }}
+            {% unless post.categories == empty %}
+            {% assign categories_list = post.categories %}
+            {% if categories_list.first[0] == null %}
+            {% for category in categories_list %}
+            <a class="post-categorybut " href="/type/#{{ post.categories  }}"><i class="fa fa-folder-open">{{ category | join: "/" }} ({{ site.categories[category].size }})</i></a>
+            {% endfor %}
+            {% else %}
+            {% for category in categories_list %}
+            <a class="post-categorybut " href="/type/#{{ post.categories  }}"><i class="fa fa-folder-open">{{ category[0] | join: "/" }} ({{ category[1].size }})</i></a>
+            {% endfor %}
+            {% endif %}
+            {% endunless %}
 
-{% unless post.tags == empty %}
-{% assign tags_list = post.tags %}
-		  {% if tags_list.first[0] == null %}
-			{% for tag in tags_list %} 
-<a class="post-category " href="/tag/#{{ page.tags | first }}"><i class="fa fa-tags"></i> {{ tag }} ({{ site.tags[tag].size }})</a>
-{% endfor %}
-		  {% else %}
-			{% for tag in tags_list %} 
-<a class="post-category " href="/tag/#{{ page.tags[1] }}"><i class="fa fa-tags"></i> {{ tag[0] }} ({{ tag[1].size }})</a>
+            {% unless post.tags == empty %}
+            {% assign tags_list = post.tags %}
+            {% if tags_list.first[0] == null %}
+            {% for tag in tags_list %}
+            <a class="post-category " href="/tag/#{{ page.tags | first }}"><i class="fa fa-tags">{{ tag }} ({{ site.tags[tag].size }})</i></a>
+            {% endfor %}
+            {% else %}
+            {% for tag in tags_list %}
+            <a class="post-category " href="/tag/#{{ page.tags[1] }}"><i class="fa fa-tags">{{ tag[0] }} ({{ tag[1].size }})</i></a>
+        </p>
+        {% endfor %}
+        {% endif %}
+        {% assign tags_list = nil %}
+        {% endunless %}
+
     </p>
-{% endfor %}
-		  {% endif %}
-		  {% assign tags_list = nil %}
-		{% endunless %}  
+</header>
 
-            </p>
-        </header>
-
-        <div class="post-description">
-            {{ post.content | split:'<!-- more -->'| first }}
+<div class="post-description">
+    {{ post.content | split:'<!-- more -->'| first }}
 
 
-            <a href="{{ post.url }}" class="post-categorybut">阅读全文</a>
-        </div>
-    </section>
+    <a href="{{ post.url }}" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
 {% endfor %}
 <div class="pure-g pagination">

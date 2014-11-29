@@ -4,8 +4,10 @@ layout: blog
 
 <div class="qrcodeTable"></div>
 <header class="post-header">
+    {% if page.avatarimg != null %}
     <img class="post-avatar" height="48" width="48"
          src="{{ page.avatarimg }}">
+    {% endunless %}
 
     <h2 class="post-title">{{ page.title }}</h2>
 
@@ -14,11 +16,11 @@ layout: blog
         {% assign categories_list = page.categories %}
         {% if categories_list.first[0] == null %}
         {% for category in categories_list %}
-        <a class="post-categorybut " href="/type/#{{ post.categories  }}"><i class="fa fa-folder-open"></i> {{ category | join: "/" }} ({{ site.categories[category].size }})</a>
+        <a class="post-categorybut " href="/type/#{{ post.categories  }}"><i class="fa fa-folder-open">{{ category | join: "/" }} ({{ site.categories[category].size }})</i></a>
         {% endfor %}
         {% else %}
         {% for category in categories_list %}
-        <a class="post-categorybut " href="/type/#{{ post.categories  }}"><i class="fa fa-folder-open"></i> {{ category[0] | join: "/" }} ({{ category[1].size }})</a>
+        <a class="post-categorybut " href="/type/#{{ post.categories  }}"><i class="fa fa-folder-open">{{ category[0] | join: "/" }} ({{ category[1].size }})</i></a>
         {% endfor %}
         {% endif %}
         {% endunless %}
@@ -27,11 +29,11 @@ layout: blog
         {% assign tags_list = page.tags %}
         {% if tags_list.first[0] == null %}
         {% for tag in tags_list %}
-        <a class="post-category " href="/tag/#{{ page.tags | first }}"><i class="fa fa-tags"></i> {{ tag }} ({{ site.tags[tag].size }})</a>
+        <a class="post-category " href="/tag/#{{ page.tags | first }}"><i class="fa fa-tags">{{ tag }} ({{ site.tags[tag].size }})</i></a>
         {% endfor %}
         {% else %}
         {% for tag in tags_list %}
-        <a class="post-category " href="/tag/#{{ page.tags[1] }}"><i class="fa fa-tags"></i> {{ tag[0] }} ({{ tag[1].size }})</a>
+        <a class="post-category " href="/tag/#{{ page.tags[1] }}"><i class="fa fa-tags">{{ tag[0] }} ({{ tag[1].size }})</i></a>
     </p>
     {% endfor %}
     {% endif %}
