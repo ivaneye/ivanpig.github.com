@@ -4,7 +4,7 @@
     <title>曾经不知你好</title>
     <link href="http://liyouhai.com/rss.xml" rel="self"/>
     <link href="http://liyouhai.com/"/>
-    <updated>2014-11-29T13:30:49+08:00</updated>
+    <updated>2014-11-29T13:56:57+08:00</updated>
     <id>http://liyouhai.com/</id>
     <author>
         <name>liyouhai</name>
@@ -28,8 +28,10 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(println &quot;Hello&quot;)
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(println &quot;Hello&quot;) ;测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/op.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content>
         <summary type="html">&lt;h1&gt;Sample2&lt;/h1&gt;
 
@@ -42,8 +44,10 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(println &quot;Hello&quot;)
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(println &quot;Hello&quot;) ;测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/op.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </summary>
     </entry>
     

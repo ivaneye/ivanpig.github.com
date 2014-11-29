@@ -1,10 +1,10 @@
 
-http://www.ivanpig.com/Timing/
-http://www.ivanpig.com/index.html
-http://www.ivanpig.com/rss.xml
-http://www.ivanpig.com/search/
-http://www.ivanpig.com/sitemap.txt
-http://www.ivanpig.com/tag/
-http://www.ivanpig.com/type/
+http://ivanpig.github.io/Timing/
+http://ivanpig.github.io/index.html
+http://ivanpig.github.io/rss.xml
+http://ivanpig.github.io/search/
+http://ivanpig.github.io/sitemap.txt
+http://ivanpig.github.io/tag/
+http://ivanpig.github.io/type/
 
-http://www.ivanpig.com/cat1/test.html
+http://ivanpig.github.io/cat1/test.html
