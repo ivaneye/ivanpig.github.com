@@ -21,6 +21,8 @@
             $.each(data, function (key, val) {
                 el.append('</br><hr><section  id="result"><h2><a style="color: black" target="_blank" href="' + val.link + '">' + val.title + '</a></h2><p>' + val.summary + '</p></section >');
             });
+          alert(data);
+            hljs.initHighlightingOnLoad();
 
         });
         return this;
