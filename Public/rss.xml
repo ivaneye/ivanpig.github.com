@@ -21,7 +21,7 @@ permalink: rss.xml
         <title>{{ post.title | xml_escape }}</title>
         <link href="http://liyouhai.com{{ post.url }}"/>
         <updated>{{ post.date | date_to_xmlschema }}</updated>
-        <id>http://liyouhai.com/{{ post.id }}</id>
+        <id>http://ivanpig.github.io/{{ post.id }}</id>
         <content type="html">{{ post.content | xml_escape }}</content>
         <summary type="html">{{ post.content | xml_escape }}</summary>
     </entry>
