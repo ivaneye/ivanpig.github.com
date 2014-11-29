@@ -2,19 +2,19 @@ code {
     padding: 1px 4px;
     background-color: #e8ecef;
     border-radius: 4px;
-    font-family: 'Ubuntu', sans-serif;
+//    font-family: 'Ubuntu', sans-serif;
     word-wrap: break-word;
 }
 
 pre {
-    font-family: 'Ubuntu', sans-serif;
+//    font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
     letter-spacing: 0.015em;
     line-height: 120%;
     border: 0px solid #ccc;
 }
 pre code {
-    font-family: 'Ubuntu', sans-serif;
+//    font-family: 'Ubuntu', sans-serif;
     font-size: 0.85em;
     line-height: 1.5;
     display: block;
@@ -91,63 +91,6 @@ pre .il { color: #40a070 }
 pre .err {
     border: 0px solid #f92873
 }
-.java .c { color: #aaaaaa; font-style: italic }
-.java .err { color: #FF0000; background-color: #FFAAAA }
-.java .k { color: #0000aa }
-.java .cm { color: #aaaaaa; font-style: italic }
-.java .cp { color: #4c8317 }
-.java .c1 { color: #aaaaaa; font-style: italic }
-.java .cs { color: #0000aa; font-style: italic }
-.java .gd { color: #aa0000 }
-.java .ge { font-style: italic }
-.java .gr { color: #aa0000 }
-.java .gh { color: #000080; font-weight: bold }
-.java .gi { color: #00aa00 }
-.java .go { color: #888888 }
-.java .gp { color: #555555 }
-.java .gs { font-weight: bold }
-.java .gu { color: #800080; font-weight: bold }
-.java .gt { color: #aa0000 }
-.java .kc { color: #0000aa }
-.java .kd { color: #0000aa }
-.java .kn { color: #0000aa }
-.java .kp { color: #0000aa }
-.java .kr { color: #0000aa }
-.java .kt { color: #00aaaa }
-.java .m { color: #009999 }
-.java .s { color: #aa5500 }
-.java .na { color: #1e90ff }
-.java .nb { color: #00aaaa }
-.java .nc { color: #00aa00; text-decoration: underline }
-.java .no { color: #aa0000 }
-.java .nd { color: #888888 }
-.java .ni { color: #880000; font-weight: bold }
-.java .nf { color: #00aa00 }
-.java .nn { color: #00aaaa; text-decoration: underline }
-.java .nt { color: #1e90ff; font-weight: bold }
-.java .nv { color: #aa0000 }
-.java .ow { color: #0000aa }
-.java .w { color: #bbbbbb }
-.java .mf { color: #009999 }
-.java .mh { color: #009999 }
-.java .mi { color: #009999 }
-.java .mo { color: #009999 }
-.java .sb { color: #aa5500 }
-.java .sc { color: #aa5500 }
-.java .sd { color: #aa5500 }
-.java .s2 { color: #aa5500 }
-.java .se { color: #aa5500 }
-.java .sh { color: #aa5500 }
-.java .si { color: #aa5500 }
-.java .sx { color: #aa5500 }
-.java .sr { color: #009999 }
-.java .s1 { color: #aa5500 }
-.java .ss { color: #0000aa }
-.java .bp { color: #00aaaa }
-.java .vc { color: #aa0000 }
-.java .vg { color: #aa0000 }
-.java .vi { color: #aa0000 }
-.java .il { color: #009999 }
 .label-danger {
     background-color: #d9534f;
 }
