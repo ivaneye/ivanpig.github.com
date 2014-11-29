@@ -34,9 +34,12 @@
 
 #_menu{
   display:block;
-  width:100px;
-  float:right;
-  margin-right:30px;
+/*   float:right; */
+/*   margin-right:30px; */
+}
+
+.newline{
+  display:block;
 }
 
 #toc1{
@@ -60,6 +63,10 @@
   }
 
   #_menu{
+    display:none;
+  }
+
+  .newline{
     display:none;
   }
 }

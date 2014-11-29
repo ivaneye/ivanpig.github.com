@@ -1,6 +1,6 @@
 $(function () {
 
-  $("#_tagline").html('IvanPig\'s Blog <a id="_menu" class="post-categorybut" href="javascript:return false;"> <i class="fa fa-folder-open">Menu</i> </a>');
+  $("#_tagline").after('<div id="_menu" class="nav-item"> <a class="pure-button" href="javascript:return false;"><i class="fa fa-folder-open">Menu</i></a> </div>');
 
   $("#_menu").click(function(){
     $("#toc1").toggle(600);
