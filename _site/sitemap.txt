@@ -7,4 +7,4 @@ http://ivanpig.github.io/sitemap.txt
 http://ivanpig.github.io/tag/
 http://ivanpig.github.io/type/
 
-http://ivanpig.github.io/cat1/cat2/test.html
+http://ivanpig.github.io/cat1/cat2/2014/11/28/test.html

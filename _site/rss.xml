@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2014-11-29T15:29:32+08:00</updated>
+    <updated>2014-11-29T15:52:29+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -13,15 +13,15 @@
 
     
     <entry>
-        <title>Sample2</title>
-        <link href="http://liyouhai.com/cat1/cat2/test.html"/>
+        <title>IvanTest</title>
+        <link href="http://liyouhai.com/cat1/cat2/2014/11/28/test.html"/>
         <updated>2014-11-28T00:00:00+08:00</updated>
-        <id>http://liyouhai.com//cat1/cat2/test</id>
-        <content type="html">&lt;h1&gt;Sample2&lt;/h1&gt;
+        <id>http://liyouhai.com//cat1/cat2/2014/11/28/test</id>
+        <content type="html">&lt;h1&gt;This is a test&lt;/h1&gt;
 
-&lt;p&gt;Sample2&lt;/p&gt;
+&lt;p&gt;IvanIvanTest&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Test{
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class IvanTest{
   public static void main(String[] args){
     System.out.println(&quot;aaa&quot;);
   }
@@ -33,11 +33,11 @@
 
 &lt;p&gt;&lt;img src=&quot;/img/op.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content>
-        <summary type="html">&lt;h1&gt;Sample2&lt;/h1&gt;
+        <summary type="html">&lt;h1&gt;This is a test&lt;/h1&gt;
 
-&lt;p&gt;Sample2&lt;/p&gt;
+&lt;p&gt;IvanIvanTest&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Test{
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class IvanTest{
   public static void main(String[] args){
     System.out.println(&quot;aaa&quot;);
   }
