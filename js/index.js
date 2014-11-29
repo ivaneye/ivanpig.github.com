@@ -49,16 +49,4 @@ $(function(){
   $('.topfade').click(function(){
     $('html,body').animate({scrollTop: '0px'}, 800);});
 
-//   $("#query").keydown(function(e){
-//     if(e.keyCode == 13){
-//       var v = $(this).val();
-//       if(v == "")return false;
-//       $.ajax({
-//         dataType: 'jsonp',
-//         url: "http://www.tapirgo.com/api/1/search.json?token=547969cf34932d8eec000002&query="+v,
-//         success: function(data){
-//            alert(data.summary);
-//         }});
-//     }
-//   });
 });
