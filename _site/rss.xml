@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2014-11-29T15:11:13+08:00</updated>
+    <updated>2014-11-29T15:29:32+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -14,9 +14,9 @@
     
     <entry>
         <title>Sample2</title>
-        <link href="http://liyouhai.com/cat1/test.html"/>
+        <link href="http://liyouhai.com/cat1/cat2/test.html"/>
         <updated>2014-11-28T00:00:00+08:00</updated>
-        <id>http://liyouhai.com//cat1/test</id>
+        <id>http://liyouhai.com//cat1/cat2/test</id>
         <content type="html">&lt;h1&gt;Sample2&lt;/h1&gt;
 
 &lt;p&gt;Sample2&lt;/p&gt;
