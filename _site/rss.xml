@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-    <title>曾经不知你好</title>
-    <link href="http://liyouhai.com/rss.xml" rel="self"/>
-    <link href="http://liyouhai.com/"/>
-    <updated>2014-11-29T14:32:30+08:00</updated>
-    <id>http://liyouhai.com/</id>
+    <title>IvanPig's Blog</title>
+    <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
+    <link href="http://ivanpig.github.io/"/>
+    <updated>2014-11-29T15:11:13+08:00</updated>
+    <id>http://ivanpig.github.io/</id>
     <author>
-        <name>liyouhai</name>
-        <email>liyouhai@vip.qq.com</email>
+        <name>Ivan</name>
+        <email>ivan.pig@foxmail.com</email>
     </author>
 
     
