@@ -85,8 +85,12 @@
 #toc .top-active a,#toc1 .top-active a{
   color: #258fb8 !important;
 }
-#toc .top-h3,#toc1 .top-h3  {
-  padding-left: 4px;
+#toc .top-h2,#toc1 .top-h2 {
+    padding-left: 15px;
+}
+
+#toc .top-h3,#toc1 .top-h3 {
+    padding-left: 30px;
 }
 .grcode{
   float: right;
