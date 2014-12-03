@@ -127,11 +127,10 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h1>课后练习</h1>
 <ul>
 <li>查看API,熟练掌握File类的方法</li>
-<li>IO</li>
 </ul>
 </section>
-<section id="基本概念" class="slide level2">
-<h1>基本概念</h1>
+<section id="io基本概念" class="slide level2">
+<h1>IO基本概念</h1>
 <ul>
 <li>在Java中对IO类库一般使用流这个抽象概念,它表示任何有能力产出数据的数 据源对象或有能力接收数据的接收端对象.</li>
 <li>流屏蔽了实际的IO设备处理数据的细节,是对IO设备的抽象</li>
@@ -159,70 +158,41 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li>字符流和字节流可以通过:InputStreamReader和OutputStreamWriter来关联</li>
 </ul>
 </section>
-<section id="io流的实现" class="slide level2">
-<h1>IO流的实现</h1>
-<ul>
-<li>有如下类</li>
-</ul>
-<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">interface</span> InputStream{
-    <span class="kw">public</span> <span class="kw">abstract</span> String <span class="fu">read</span>();
-}
-
-<span class="kw">public</span> <span class="kw">class</span> MyInputStream <span class="kw">extends</span> InputStream{
-    <span class="kw">public</span> String <span class="fu">read</span>(){
-        <span class="kw">return</span> <span class="st">&quot;读取一个字节&quot;</span>;
-    }
-}</code></pre>
-<ul>
-<li>在不修改该类的情况下,需要新增一个能一次性读取一个字符的方法!(一个字符等于 几个字节?)你如何处理?</li>
-<li>我还需要一个能一次性读一行的方法!怎么办?</li>
-<li>我想同时拥有读取一个字符和一行内容的方法呢?</li>
-</ul>
-</section>
-<section id="实现" class="slide level2">
-<h1>实现</h1>
-<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">class</span> MyInputStream2 <span class="kw">extends</span> InputStream {
-
-    <span class="kw">private</span> InputStream inputStream;
-
-    <span class="kw">public</span> <span class="fu">MyInputStream2</span>(InputStream inputStream){
-        <span class="kw">this</span>.<span class="fu">inputStream</span> = inputStream;
-    }
-
-    <span class="fu">@Override</span>
-    <span class="kw">public</span> String <span class="fu">read</span>() {
-        <span class="kw">return</span> <span class="kw">this</span>.<span class="fu">inputStream</span>.<span class="fu">read</span>();
-    }
-
-    <span class="kw">public</span> String <span class="fu">readChar</span>() {
-        <span class="kw">return</span> inputStream.<span class="fu">read</span>()+inputStream.<span class="fu">read</span>();
-    }
-}</code></pre>
-</section>
-<section id="调用" class="slide level2">
-<h1>调用</h1>
-<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">class</span> Test {
-    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span>(String[] args) {
-        InputStream stream = <span class="kw">new</span> <span class="fu">MyInputStream</span>();
-        System.<span class="fu">out</span>.<span class="fu">println</span>(stream.<span class="fu">read</span>());
-        MyInputStream2 mis2 = <span class="kw">new</span> <span class="fu">MyInputStream2</span>(stream);
-        System.<span class="fu">out</span>.<span class="fu">println</span>(mis2.<span class="fu">read</span>());
-        System.<span class="fu">out</span>.<span class="fu">println</span>(mis2.<span class="fu">readChar</span>());
-    }
-}</code></pre>
-</section>
 <section id="装饰模式" class="slide level2">
 <h1>装饰模式</h1>
 <ul>
 <li>装饰模式是在不必改变原类文件和使用继承的情况下，动态地扩展一个对象的功能。它是通过创建一个包装对象，也就是装饰来包裹真实的对象。</li>
 </ul>
 </section>
+<section id="一个例子" class="slide level2">
+<h1>一个例子</h1>
+<ul>
+<li>假设你有一家咖啡店，普通咖啡10元，加糖再加1元，加奶再加1元</li>
+<li>请问你如何设计这个类结构？</li>
+</ul>
+</section>
 <section id="课堂练习-1" class="slide level2">
 <h1>课堂练习</h1>
 <ul>
-<li>请实现读取一行的方法(假设依次打印四次)</li>
-<li>是否有代码重复?如何重构?</li>
-<li>并修改调用代码,创建一个既包含读取一个字符的方法又包含读取一行的方法</li>
+<li>请自行实现如上代码</li>
+</ul>
+</section>
+<section id="io流的实现" class="slide level2">
+<h1>IO流的实现</h1>
+<pre class="sourceCode java"><code class="sourceCode java">
+<span class="kw">public</span> <span class="kw">class</span> BufferedInputStream <span class="kw">extends</span> FilterInputStream
+...
+
+<span class="kw">public</span> <span class="kw">class</span> FilterInputStream <span class="kw">extends</span> InputStream
+...
+
+<span class="kw">public</span> <span class="kw">class</span> FileInputStream <span class="kw">extends</span> InputStream
+...
+
+BufferedInputStream bi = <span class="kw">new</span> BufferedInputStream(<span class="kw">new</span> FileInputStream(filename));</code></pre>
+<ul>
+<li>BufferedInputStream继承了FilterInputStream，FilterInputStream和FileInputStream一样都继承自InputStream.可以看出InputStream是公共父类。</li>
+<li>FilterInputStream是装饰类的公共父类，看看FilterInputStream的源代码就知道了，他只是做了简单的方法委托。BufferedInputStream继承了FilterInputStream，并添加了缓存的方法（其实就是用一个字节数组保存字节，一次性读出）。</li>
 </ul>
 </section>
 <section id="fileinputstream" class="slide level2">
