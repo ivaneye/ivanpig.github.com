@@ -8,4 +8,4 @@ http://ivanpig.github.io/tag/
 http://ivanpig.github.io/type/
 
 http://ivanpig.github.io/train/javabasic.html
-http://ivanpig.github.io/cat1/cat2/test.html
+http://ivanpig.github.io/lighttable/test.html

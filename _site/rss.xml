@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2014-12-01T09:02:19+08:00</updated>
+    <updated>2014-12-03T15:15:30+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -1902,41 +1902,31 @@ public class Test{
     </entry>
     
     <entry>
-        <title>Ivan</title>
-        <link href="http://ivanpig.github.io/cat1/cat2/test.html"/>
+        <title>LightTable Theme</title>
+        <link href="http://ivanpig.github.io/lighttable/test.html"/>
         <updated>2014-11-28T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//cat1/cat2/test</id>
-        <content type="html">&lt;h1&gt;This is a test&lt;/h1&gt;
+        <id>http://ivanpig.github.io//lighttable/test</id>
+        <content type="html">&lt;h1&gt;LightTable Theme&lt;/h1&gt;
 
-&lt;p&gt;Ivan测试页面&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自用LightTable代码高亮配色,修改自solarized!&lt;/li&gt;
+&lt;li&gt;从LightTable插件管理搜索pigtheme下载即可!&lt;/li&gt;
+&lt;li&gt;主题修改为pigtheme生效&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Test{
-  public static void main(String[] args){
-    System.out.println(&quot;aaa&quot;);
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(println &quot;Hello&quot;) ;测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/op.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/lighttable/shot.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </content>
-        <summary type="html">&lt;h1&gt;This is a test&lt;/h1&gt;
+        <summary type="html">&lt;h1&gt;LightTable Theme&lt;/h1&gt;
 
-&lt;p&gt;Ivan测试页面&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自用LightTable代码高亮配色,修改自solarized!&lt;/li&gt;
+&lt;li&gt;从LightTable插件管理搜索pigtheme下载即可!&lt;/li&gt;
+&lt;li&gt;主题修改为pigtheme生效&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Test{
-  public static void main(String[] args){
-    System.out.println(&quot;aaa&quot;);
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(println &quot;Hello&quot;) ;测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/op.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/lighttable/shot.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </summary>
     </entry>
     
