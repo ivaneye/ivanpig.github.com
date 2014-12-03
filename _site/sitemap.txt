@@ -7,5 +7,4 @@ http://ivanpig.github.io/sitemap.txt
 http://ivanpig.github.io/tag/
 http://ivanpig.github.io/type/
 
-http://ivanpig.github.io/train/javabasic.html
-http://ivanpig.github.io/lighttable/test.html
+http://ivanpig.github.io/lighttable/pigtheme.html
