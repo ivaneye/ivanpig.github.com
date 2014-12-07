@@ -123,7 +123,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">theme (1)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (1)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (2)</i></a>
             
             
         
@@ -147,6 +147,100 @@
 
 
     <a href="/lighttable/pigtheme.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/luminus/your_first_application.html">Luminus手册-第一个应用</a></h2>
+
+        <p class="post-meta">By 09月14日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (2)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (1)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Guestbook应用</h1>
+
+<p>此文使用Luminus构建一个简单的guestbook应用。guestbook可以保存信息，展示信息。此应用将涉及到简单的HTML模板，数据库访问和项目结构.</p>
+
+<h1>安装Leiningen</h1>
+
+<p>首先你需要安装Leiningen才能使用Luminus。安装Leiningen非常的简单:</p>
+
+<ul>
+<li>下载脚本</li>
+<li>将其设置为可执行权限(chmod +x lein)</li>
+<li>将脚本放到你的PATH下面</li>
+<li>运行lein self-install ，然后等待安装结束</li>
+</ul>
+
+
+<pre><code class="sh">wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
+chmod +x lein
+mv lein ~/bin
+lein self-install
+</code></pre>
+
+<h1>创建一个新应用</h1>
+
+<p>安装完Leiningen后，你就可以在命令行中输入如下的命令</p>
+
+<pre><code class="sh">lein new luminus guestbook +h2
+cd guestbook
+</code></pre>
+
+<p>上面的命令将会创建一个使用了H2嵌入式数据库的模板项目。现在我们就可以运行这个项目了.</p>
+
+<pre><code class="sh">lein ring server
+guestbook started successfully...
+2013-03-01 19:05:30.389:INFO:oejs.Server:jetty-7.6.1.v20120215
+Started server on port 3000
+2013-03-01 19:05:30.459:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:3000
+</code></pre>
+
+<p>浏览器会自动打开，你将能看到运行的应用。如果你不想浏览器自动打开，你可以用下面的命令来启动项目.</p>
+
+<pre><code class="sh">lein ring server-headless
+</code></pre>
+
+<p>你也可以自定义端口号，命令如下:</p>
+
+<pre><code class="sh">lein ring server-headless 8000
+</code></pre>
+
+
+
+
+    <a href="/luminus/your_first_application.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -184,6 +278,10 @@
             </div>
 
         </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
 
     </body>
 
