@@ -10,7 +10,7 @@ rdiscount:
 markdown_ext:  markdown,mkd,mkdn,md
 highlighter: pygments
 permalink: /:categories/:title.html
-paginate: 5
+paginate: 7
 paginate_path: "page/:num"
 exclude: [ "README.md",".idea",".iml",".name",".Node"]
 encoding: "utf-8"
