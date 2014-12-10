@@ -11,7 +11,7 @@
 
 ![](/home/ivan/my/teach/javaee/file/server.jpg)
 
-## HTTP请求
+## HTTP请求报文
 
 ```
 GET /1.html HTTP/1.1
@@ -23,9 +23,15 @@ User-Agent: Mozilla/4.0 (compatible; MSIE 4.01; Windows 98)
 Content-Length: 33
 Content-Type: application/x-www-form-urlencoded
 Accept-Encoding: gzip, deflate
+
+...
 ```
 
-## 如何处理HTTP请求
+- 起始行
+- 请求首部 header
+- 请求体 body
+
+## 如何处理HTTP请求报文
 
 - 解析http请求
 - 根据请求获取内容
