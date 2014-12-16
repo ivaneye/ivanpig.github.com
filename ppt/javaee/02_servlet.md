@@ -20,19 +20,19 @@
 
 ## Servlet简介
 
-Java Servlet 是运行在 Web 服务器或应用服务器上的程序，它是作为来自 Web 浏览器或其他 HTTP 客户端的请求和 HTTP 服务器上的数据库或应用程序之间的中间层。
+Java Servlet是运行在Web服务器或应用服务器上的程序它是作为来自Web浏览器或其他HTTP客户端的请求和HTTP服务器上的数据库或应用程序之间的中间层。
 
-使用 Servlet，您可以收集来自网页表单的用户输入，呈现来自数据库或者其他源的记录，还可以动态创建网页。
+使用Servlet,你可以收集来自网页表单的用户输入，呈现来自数据库或者其他源的记录，还可以动态创建网页。
 
 ## 优势
 
-Java Servlet 通常情况下与使用 CGI（Common Gateway Interface，公共网关接口）实现的程序可以达到异曲同工的效果。但是相比于 CGI，Servlet 有以下几点优势：
+Java Servlet通常情况下与使用 CGI（Common Gateway Interface，公共网关接口）实现的程序可以达到异曲同工的效果。但是相比于CGI，Servlet有以下几点优势：
 
 - 性能明显更好。
-- Servlet 在 Web 服务器的地址空间内执行。这样它就没有必要再创建一个单独的进程来处理每个客户端请求。
-- Servlet 是独立于平台的，因为它们是用 Java 编写的。
-- 服务器上的 Java 安全管理器执行了一系列限制，以保护服务器计算机上的资源。因此，Servlet 是可信的。
-- Java 类库的全部功能对 Servlet 来说都是可用的。它可以通过 sockets 和 RMI 机制与 applets、数据库或其他软件进行交互。
+- Servlet基于线程运行
+- Servlet是独立于平台的，因为它们是用Java编写的。
+- 服务器上的Java安全管理器执行了一系列限制，以保护服务器计算机上的资源。因此，Servlet是可信的。
+- Java类库的全部功能对Servlet来说都是可用的。
 
 ## 第一个Servlet程序
 
@@ -67,7 +67,6 @@ public class HelloServlet extends HttpServlet{
   <servlet>
     <servlet-name>helloServlet</servlet-name>
     <servlet-class>com.test.HelloServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
   </servlet>
 
   <servlet-mapping>
@@ -90,20 +89,20 @@ public class HelloServlet extends HttpServlet{
 
 ## Servlet生命周期
 
-- Servlet 通过调用 init () 方法进行初始化。
-- Servlet 调用 service() 方法来处理客户端的请求。
-- Servlet 通过调用 destroy() 方法终止（结束）。
-- 最后，Servlet 是由 JVM 的垃圾回收器进行垃圾回收的。
+- Servlet通过调用init()方法进行初始化。
+- Servlet调用service()方法来处理客户端的请求。
+- Servlet通过调用destroy()方法终止（结束）。
+- 最后，Servlet是由JVM的垃圾回收器进行垃圾回收的。
 
-## init() 方法
+## init()方法
 
-init 方法被设计成只调用一次。它在第一次创建 Servlet 时被调用，在后续每次用户请求时不再调用。因此，它是用于一次性初始化.
+init方法被设计成只调用一次。它在第一次创建Servlet时被调用，在后续每次用户请求时不再调用。因此，它是用于一次性初始化.
 
-Servlet 创建于用户第一次调用对应于该 Servlet 的 URL 时，但是您也可以指定 Servlet 在服务器第一次启动时被加载。
+Servlet创建于用户第一次调用对应于该Servlet的URL时，但是也可以指定Servlet在服务器第一次启动时被加载。
 
-当用户调用一个 Servlet 时，就会创建一个 Servlet 实例，每一个用户请求都会产生一个新的线程，适当的时候移交给 doGet 或 doPost 方法。init() 方法简单地创建或加载一些数据，这些数据将被用于 Servlet 的整个生命周期。
+当用户调用一个Servlet时，就会创建一个Servlet实例，每一个用户请求都会产生一个新的线程，适当的时候移交给doGet或doPost方法。init()方法简单地创建或加载一些数据，这些数据将被用于Servlet的整个生命周期。
 
-## init 方法的定义
+## init方法的定义
 
 ```java
 public void init() throws ServletException {
@@ -111,11 +110,11 @@ public void init() throws ServletException {
 }
 ```
 
-## service() 方法
+## service()方法
 
-service() 方法是执行实际任务的主要方法。Servlet 容器（即 Web 服务器）调用 service() 方法来处理来自客户端（浏览器）的请求，并把格式化的响应写回给客户端。
+service()方法是执行实际任务的主要方法。Servlet容器（即 Web 服务器）调用service()方法来处理来自客户端（浏览器）的请求，并把格式化的响应写回给客户端。
 
-每次服务器接收到一个 Servlet 请求时，服务器会产生一个新的线程并调用服务。service() 方法检查 HTTP 请求类型（GET、POST、PUT、DELETE 等），并在适当的时候调用 doGet、doPost、doPut，doDelete 等方法。
+每次服务器接收到一个Servlet请求时，服务器会产生一个新的线程并调用服务。service()方法检查HTTP请求类型（GET、POST、PUT、DELETE等），并在适当的时候调用doGet、doPost、doPut，doDelete等方法。
 
 ## service方法的
 
@@ -125,15 +124,17 @@ public void service(ServletRequest request,
       throws ServletException, IOException{
 }
 ```
+
 ## 不需要对service做处理
 
-service() 方法由容器调用，service 方法在适当的时候调用 doGet、doPost、doPut、doDelete 等方法。所以，您不用对 service() 方法做任何动作，您只需要根据来自客户端的请求类型来重载 doGet() 或 doPost() 即可。
+service()方法由容器调用，service方法在适当的时候调用doGet、doPost、doPut、doDelete等方法。所以，你不用对service()方法做任何动作，你只需要根据来自客户端的请求类型来重载doGet()或doPost()即可。
 
 doGet() 和 doPost() 方法是每次服务请求中最常用的方法。下面是这两种方法的特征。
 
 ## doGet() 方法
 
-GET 请求来自于一个 URL 的正常请求，或者来自于一个未指定 METHOD 的 HTML 表单，它由 doGet() 方法处理。
+GET请求来自于一个URL的正常请求，或者来自于一个未指定METHOD的HTML表单，它由doGet()方法处理。
+
 ```Java
 public void doGet(HttpServletRequest request,
                   HttpServletResponse response)
@@ -142,9 +143,9 @@ public void doGet(HttpServletRequest request,
 }
 ```
 
-## doPost() 方法
+## doPost()方法
 
-POST 请求来自于一个特别指定了 METHOD 为 POST 的 HTML 表单，它由 doPost() 方法处理。
+POST请求来自于一个特别指定了METHOD为POST的HTML表单，它由doPost()方法处理。
 
 ```java
 public void doPost(HttpServletRequest request,
@@ -154,11 +155,11 @@ public void doPost(HttpServletRequest request,
 }
 ```
 
-## destroy() 方法
+## destroy()方法
 
-destroy() 方法只会被调用一次，在 Servlet 生命周期结束时被调用。destroy() 方法可以让您的 Servlet 关闭数据库连接、停止后台线程、把 Cookie 列表或点击计数器写入到磁盘，并执行其他类似的清理活动。
+destroy()方法只会被调用一次，在Servlet生命周期结束时被调用。destroy()方法可以让你的Servlet关闭数据库连接、停止后台线程、把Cookie列表或点击计数器写入到磁盘，并执行其他类似的清理活动。
 
-在调用 destroy() 方法之后，servlet 对象被标记为垃圾回收。destroy 方法定义如下所示：
+在调用destroy()方法之后，servlet对象被标记为垃圾回收。destroy方法定义如下所示：
 
 ```Java
   public void destroy() {
@@ -294,7 +295,7 @@ public class NewServlet extends HttpServlet{
 
 ## 如何获取表单数据
 
-- getParameter()：调用 request.getParameter() 方法来获取表单参数的值。
+- getParameter()：调用 request.getParameter()方法来获取表单参数的值。
 - getParameterValues()：如果参数出现一次以上，则调用该方法，并返回多个值，例如复选框。
 - getParameterNames()：如果想要得到当前请求中的所有参数的完整列表，则调用该方法。
 
@@ -365,9 +366,9 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
 ## 重定向与请求转发
 
 ```java
-request.getRequestDispatcher("new.jsp").forward(request, response);//转发到new.jsp
+request.getRequestDispatcher("/new").forward(request, response);//转发到new
 
-response.sendRedirect("new.jsp");//重定向到new.jsp
+response.sendRedirect("/new");//重定向到new
 ```
 
 ## 请求转发
@@ -407,7 +408,7 @@ public class NewServlet extends HttpServlet{
     ...
 
      if(!isAdmin()){
-       out.println("没有权限!");
+       System.out.println("没有权限!");
        return;
      }
 
@@ -422,7 +423,7 @@ public class NewServlet extends HttpServlet{
     ...
 
      if(!isAdmin()){
-       out.println("没有权限!");
+       System.out.println("没有权限!");
        return;
      }
 
@@ -474,7 +475,7 @@ public class NewServlet extends HttpServlet{
      PrintWriter out = response.getWriter();
 
      if(isAdmin()){
-       out.println("没有权限!");
+       System.out.println("没有权限!");
        return;
      }
 
@@ -567,8 +568,8 @@ response.addCookie(cookie);                    // 输出到客户端
 Cookie cookies = request.getCookies();
 for (int i = 0; i < cookies.length; i++){
   cookie = cookies[i];
-  out.print("名称：" + cookie.getName( ) + "，");
-  out.print("值：" + cookie.getValue( )+" <br/>");
+  System.out.print("名称：" + cookie.getName( ) + "，");
+  System.out.print("值：" + cookie.getValue( )+" <br/>");
 }
 ```
 
@@ -579,6 +580,10 @@ for (int i = 0; i < cookies.length; i++){
 HttpSession session = request.getSession(true);
 session.setAttribute(key, value);
 ```
+
+## 课堂作业
+
+- 编写代码，实现基于Cookie的用户登录
 
 ## listener
 
@@ -631,5 +636,6 @@ session.setAttribute(key, value);
 
 ## 作业
 
+- 实现基于Session的用户登录，比较与Cookie的优缺点
 - 完善博客功能
 

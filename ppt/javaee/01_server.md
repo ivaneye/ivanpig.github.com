@@ -237,24 +237,6 @@ bean.service( request,response);
 </note>
 ```
 
-## 课堂练习
-
-- 根据如上代码,修改相应的schema,以适应如下xml
-
-```xml
-<root>
-  <mapping>
-    <url>/test</url>
-    <bean>com.focustech.BeanName</bean>
-  </mapping>
-
-  <mapping>
-    <url>/test2</url>
-    <bean>com.focustech.BeanName</bean>
-  </mapping>
-</root>
-```
-
 ## 解析XML
 
 - DOM:采用建立树形结构的方式访问XML文档
@@ -291,6 +273,23 @@ while(xmlReader.hasNext()){
 ## 思考
 
 - 是否可以使用xml来配置url与bean的映射关系?
+
+## 示例
+
+```xml
+<root>
+  <mapping>
+    <url>/test</url>
+    <bean>com.focustech.BeanName</bean>
+  </mapping>
+
+  <mapping>
+    <url>/test2</url>
+    <bean>com.focustech.BeanName</bean>
+  </mapping>
+</root>
+```
+
 
 ## 不需要重新发明轮子
 
