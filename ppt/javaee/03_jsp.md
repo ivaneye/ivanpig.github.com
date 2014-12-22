@@ -10,11 +10,8 @@
 ## JSP
 
 - JSP（全称Java Server Pages）是由Sun Microsystems公司倡导和许多公司参与共同创建的一种使软件开发者可以响应客户端请求，而动态生成HTML、XML或其他格式文档的Web网页的技术标准。
-
 - JSP技术是以Java语言作为脚本语言的，JSP网页为整个服务器端的Java库单元提供了一个接口来服务于HTTP的应用程序。
-
 - JSP文件后缀名为(*.jsp)。
-
 - JSP开发的WEB应用可以跨平台使用，既可以运行在Linux上也能运行在Windows上。
 
 ## 第一个JSP程序
@@ -64,6 +61,7 @@
 
 ```jsp
   <%
+     int i = 0;
      out.println("Hello World！");
   %>
 ```
@@ -89,6 +87,10 @@
 ```JSP
 <%-- 这里可以填写 JSP 注释 --%>
 ```
+
+## 思考
+
+- JSP注释与Java注释以及HTML注释比较
 
 ## JSP语法-条件判断与循环
 
