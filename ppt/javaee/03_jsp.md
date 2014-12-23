@@ -22,7 +22,7 @@
            <title>第一个JSP程序</title>
     </head>
     <body>
-           <%
+             <%
                   out.println("Hello World！");
            %>
     </body>
@@ -43,19 +43,19 @@
 
 - 编译阶段：
 
-    servlet容器编译servlet源文件，生成servlet类
+    servlet容器编译servlet源文件，生成servlet类  jspName_jsp.java
 
 - 初始化阶段：
 
-    加载与JSP对应的servlet类，创建其实例，并调用它的初始化方法
+    加载与JSP对应的servlet类，创建其实例，并调用它的初始化方法 jspInit()
 
 - 执行阶段：
 
-    调用与JSP对应的servlet实例的服务方法
+    调用与JSP对应的servlet实例的服务方法 _jspService()
 
 - 销毁阶段：
 
-    调用与JSP对应的servlet实例的销毁方法，然后销毁servlet实例
+    调用与JSP对应的servlet实例的销毁方法，然后销毁servlet实例   jspDestroy()
 
 ## JSP语法-脚本程序
 
@@ -75,6 +75,61 @@
 ## 课堂练习
 
 - 请编写JSP程序,比较Jsp脚本程序,与JSP声明的区别
+- 请尝试编写一个程序，每刷新一次页面，计数器加1
+
+## *_jsp.java
+
+- 以tomcat为例,其生成的*_jsp.java编译后的类文件在tomcat\work\Catalina\localhost\project_name\org\apache\jsp
+- 如果使用eclipse，则位置在类似下面的路径下workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\work\Catalina\localhost\iim_proj\org\apache\jsp
+- 对于class文件可以到http://jd.benow.ca/下载JD-GUI来反编译为java文件
+
+## 从源码来看jsp脚本与声明的区别
+
+## 初始化配置
+
+- servlet
+
+```xml
+  <servlet>
+    <servlet-name>helloServlet</servlet-name>
+    <servlet-class>com.test.HelloServlet</servlet-class>
+    <init-param>
+      <param-name>data</param-name>
+      <param-value>123</param-value>
+    </init-param>
+  </servlet>
+
+```
+
+```java
+public void init() throws ServletException {
+  //getServletConfig().getInitParameter("data");
+}
+```
+
+## jsp初始化配置
+
+
+```xml
+  <servlet>
+    <servlet-name>helloServlet</servlet-name>
+    <jsp-file>/new.jsp</jsp-file>
+    <init-param>
+      <param-name>data</param-name>
+      <param-value>123</param-value>
+    </init-param>
+  </servlet>
+
+```
+
+```jsp
+<%!
+  public void jspInit() {
+    //getServletConfig().getInitParameter("data");
+  }
+%>
+```
+
 
 ## JSP语法-JSP表达式
 
@@ -294,7 +349,7 @@ uri属性确定标签库的位置，prefix属性指定标签库的前缀。
 ```jsp
 <jsp:useBean id="myName" ... >
 ...
-   <jsp:setProperty name="myName" property="someProperty" .../>
+  <jsp:setProperty name="myName" property="someProperty" .../>
 </jsp:useBean>
 ```
 - 此时，jsp:setProperty只有在新建Bean实例时才会执行，如果是使用现有实例则不执行jsp:setProperty。
@@ -410,6 +465,25 @@ session对象是 javax.servlet.http.HttpSession 类的实例。和Java Servlets�
 
 - PageContext类定义了一些字段，包括PAGE_SCOPE，REQUEST_SCOPE，SESSION_SCOPE， APPLICATION_SCOPE。它也提供了40余种方法，有一半继承自javax.servlet.jsp.JspContext 类。
 
+## 示例
+
+```jsp
+<%
+  //页面作用域
+  pageContext.setAttribute("a",1);
+  pageContext.getAttribute("a");
+
+  //会话作用域
+  pageContext.setAttribute("a",2,PageContext.SESSION_SCOPE);
+  pageContext.getAttribute("a",PageContext.SESSION_SCOPE);
+  //等价于
+  session.getAttribute("a");
+
+  //先从最小的作用域进行查找，也就是页面作用域，找不到再往大范围查找
+  pageContext.findAttribute("a");  //结果?
+%>
+```
+
 ## page 对象
 
 - 这个对象就是页面实例的引用。它可以被看做是整个JSP页面的代表。
@@ -421,8 +495,24 @@ session对象是 javax.servlet.http.HttpSession 类的实例。和Java Servlets�
 
 exception 对象包装了从先前页面中抛出的异常信息。它通常被用来产生对出错条件的适当响应。
 
+## jsp作用范围
+
+- servlet
+    - 应用:getServletContext.setAttribute
+    - 请求:request.setAttribute
+    - 会话:request.getSession.setAttribute
+
+. . .
+
+- jsp
+    - 应用:application.setAttribute
+    - 请求:request.setAttribute
+    - 会话:session.setAttribute
+    - 页面:pageContext.setAttribute
+
 ## 作业
 
 - 使用JSP重写博客程序
+- 请自学velocity
 
 

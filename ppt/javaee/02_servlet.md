@@ -110,6 +110,28 @@ public void init() throws ServletException {
 }
 ```
 
+## 获取初始化参数
+
+```xml
+  <servlet>
+    <servlet-name>helloServlet</servlet-name>
+    <servlet-class>com.test.HelloServlet</servlet-class>
+    <init-param>
+      <param-name>data</param-name>
+      <param-value>123</param-value>
+    </init-param>
+  </servlet>
+
+```
+
+## 获取
+
+```java
+public void init() throws ServletException {
+  //getServletConfig().getInitParameter("data");
+}
+```
+
 ## service()方法
 
 service()方法是执行实际任务的主要方法。Servlet容器（即 Web 服务器）调用service()方法来处理来自客户端（浏览器）的请求，并把格式化的响应写回给客户端。
@@ -498,6 +520,28 @@ public class NewServlet extends HttpServlet{
   </filter-mapping>
 ```
 
+## 其它配置
+
+```XML
+  <filter>
+      <filter-name>AuthFilter</filter-name>
+      <filter-class>com.blog.filter.AuthFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+      <filter-name>AuthFilter</filter-name>
+      <servlet-name>*Servlet</servlet-name>
+      <dispatcher>REQUEST</dispatcher>
+  </filter-mapping>
+```
+
+## dispatcher
+
+- REQUEST:对请求生效(默认)
+- FORWARD:对请求分派forward生效
+- INCLUDE:对请求分派include生效(一般不用)
+- ERROR:对错误处理请求生效
+
 ## 访问正常吗?
 
 . . .
@@ -540,6 +584,52 @@ public class NewServlet extends HttpServlet{
 
 - EncodeFilter一定要在AuthFilter的前面
 
+## Filter顺序
+
+- 将 filter-mapping 元素包含与请求匹配的 url-pattern的筛选器按其在 web.xml 部署描述符中出现的顺序添加到链中。
+- 将 filter-mapping 元素包含与请求匹配的 servlet-name 的筛选器添加在链中与 URL 模式匹配的筛选器之后。
+- 链上先进先出的，链中最后的项目往往是最初请求的资源。
+
+
+## 示例
+
+```
+<filter-mapping>
+  <filter-name>f1</filter-name>
+  <url-pattern>/a/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+  <filter-name>f2</filter-name>
+  <servlet-name>/a/b.do</servlet-name>
+</filter-mapping>
+<filter-mapping>
+  <filter-name>f3</filter-name>
+  <url-pattern>/a/c/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+  <filter-name>f4</filter-name>
+  <servlet-name>/a/d/e.do</servlet-name>
+</filter-mapping>
+<filter-mapping>
+  <filter-name>f5</filter-name>
+  <url-pattern>/*</url-pattern>
+</filter-mapping>
+```
+- /a/s.do
+- /a/b.do
+- /a/d/e.do
+- /b.do
+- /a/c/p.do
+
+## 答案
+
+- /a/s.do      1   5
+- /a/b.do      1   5   2
+- /a/d/e.do    1   5   4
+- /b.do        5
+- /a/c/p.do    1   3   5
+
+
 ## 完善isAdmin
 
 - HTTP 是一种"无状态"协议，这意味着每次客户端检索网页时，客户端打开一个单独的连接到 Web 服务器，服务器会自动不保留之前客户端请求的任何记录。
@@ -579,11 +669,45 @@ for (int i = 0; i < cookies.length; i++){
 // 如果不存在 session 会话，则创建一个 session 对象
 HttpSession session = request.getSession(true);
 session.setAttribute(key, value);
+session.setMaxInactiveInterval(30*60);//30分钟超时
 ```
+
+## 浏览器关闭Cookie
+
+- 实际上使用Session时，还是会使用Cookie
+- 会在响应的头部新增一个Set-Cookie头保存SessionID
+- 当再次请求时，请求会新增Cookie头，内容为SessionID，发送给服务器来获得相应的会话
+- 如果浏览器关闭了Cookie，如果使用Session，则需要对url进行encode.
+- response.encodeURL("...")
 
 ## 课堂作业
 
 - 编写代码，实现基于Cookie的用户登录
+
+## servlet中的作用范围
+
+- 应用:getServletContext.setAttribute
+- 请求:request.setAttribute
+- 会话:request.getSession.setAttribute
+
+## 上下文初始化参数
+
+```xml
+<context-param>
+  <param-name>data</param-name>
+  <param-value>456</param-value>
+</context-param>
+```
+
+## 获取
+
+```java
+getServletContext().getInitParameter("data");
+```
+
+## ServletConfig与ServletContext的区别?
+
+- 从web.xml配置中是否能看出其区别?
 
 ## listener
 
