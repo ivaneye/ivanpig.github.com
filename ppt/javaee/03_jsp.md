@@ -57,6 +57,12 @@
 
     调用与JSP对应的servlet实例的销毁方法，然后销毁servlet实例   jspDestroy()
 
+## *_jsp.java
+
+- 以tomcat为例,其生成的*_jsp.java编译后的类文件在tomcat\work\Catalina\localhost\project_name\org\apache\jsp
+- 如果使用eclipse，则位置在类似下面的路径下workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\work\Catalina\localhost\iim_proj\org\apache\jsp
+- 对于class文件可以到http://jd.benow.ca/下载JD-GUI来反编译为java文件
+
 ## JSP语法-脚本程序
 
 ```jsp
@@ -76,14 +82,6 @@
 
 - 请编写JSP程序,比较Jsp脚本程序,与JSP声明的区别
 - 请尝试编写一个程序，每刷新一次页面，计数器加1
-
-## *_jsp.java
-
-- 以tomcat为例,其生成的*_jsp.java编译后的类文件在tomcat\work\Catalina\localhost\project_name\org\apache\jsp
-- 如果使用eclipse，则位置在类似下面的路径下workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\work\Catalina\localhost\iim_proj\org\apache\jsp
-- 对于class文件可以到http://jd.benow.ca/下载JD-GUI来反编译为java文件
-
-## 从源码来看jsp脚本与声明的区别
 
 ## 初始化配置
 
@@ -230,6 +228,10 @@ public void init() throws ServletException {
 - 没有传入request,response参数,即可直接使用
 - import方式变化
 
+## 课堂练习
+
+- 使用jsp编写新建文章的页面
+
 ## jsp指令
 
 JSP指令用来设置整个JSP页面相关的属性，如网页的编码方式和脚本语言。
@@ -254,9 +256,33 @@ JSP指令用来设置整个JSP页面相关的属性，如网页的编码方式�
 - isELIgnored	指定是否执行EL表达式
 - isScriptingEnabled	确定脚本元素能否被使用
 
+## 示例
+
+```
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.Date,com.test.Hello" %>
+```
+
+```java
+package com.test;
+public class Hello{
+  private String name;
+
+  getter;setter;
+
+  public void say(String name){
+    System.out.println("Hi " + name);
+  }
+}
+```
+
+## 课堂练习
+
+- 新增自定义类，并在jsp中调用
+
 ## Include指令
 
-JSP可以通过include指令来包含其他文件。被包含的文件可以是JSP文件、HTML文件或文本文件。包含的文件就好像是该JSP文件的一部分，会被同时编译执行。
+- JSP可以通过include指令来包含其他文件。被包含的文件可以是JSP文件、HTML文件或文本文件。包含的文件就好像是该JSP文件的一部分，会被同时编译执行。
 
 ```jsp
 <%@ include file="relative url" %>
@@ -272,14 +298,13 @@ JSP可以通过include指令来包含其他文件。被包含的文件可以是J
 
 ## Taglib指令
 
-JSP API允许用户自定义标签，一个自定义标签库就是自定义标签的集合。
-
-Taglib指令引入一个自定义标签集合的定义，包括库路径、自定义标签。
+- JSP API允许用户自定义标签，一个自定义标签库就是自定义标签的集合。
+- Taglib指令引入一个自定义标签集合的定义，包括库路径、自定义标签。
 
 ```Jsp
 <%@ taglib uri="uri" prefix="prefixOfTag" %>
 ```
-uri属性确定标签库的位置，prefix属性指定标签库的前缀。
+- uri属性确定标签库的位置，prefix属性指定标签库的前缀。
 
 
 ## JSP动作元素
@@ -316,6 +341,8 @@ uri属性确定标签库的位置，prefix属性指定标签库的前缀。
 
 -  jsp:include动作是在主页面被请求时，将次级页面的输出包含进来。
 
+## 思考
+
 - 请问include指令生成了几个class?jsp:include动作呢?
 
 ## <jsp:useBean>动作元素
@@ -344,15 +371,12 @@ uri属性确定标签库的位置，prefix属性指定标签库的前缀。
 <jsp:setProperty name="myName" property="someProperty" .../>
 ```
 
-- 此时，不管jsp:useBean是找到了一个现有的Bean，还是新创建了一个Bean实例，jsp:setProperty都会执行。
-
 ```jsp
 <jsp:useBean id="myName" ... >
 ...
   <jsp:setProperty name="myName" property="someProperty" .../>
 </jsp:useBean>
 ```
-- 此时，jsp:setProperty只有在新建Bean实例时才会执行，如果是使用现有实例则不执行jsp:setProperty。
 
 ## setProperty属性列表
 
@@ -372,7 +396,6 @@ uri属性确定标签库的位置，prefix属性指定标签库的前缀。
 ...
 <jsp:getProperty name="myName" property="someProperty" .../>
 ```
-
 
 ## getProperty属性
 
@@ -509,6 +532,369 @@ exception 对象包装了从先前页面中抛出的异常信息。它通常被�
     - 请求:request.setAttribute
     - 会话:session.setAttribute
     - 页面:pageContext.setAttribute
+
+## EL表达式
+
+- EL表达式是为了简化Jsp中的Java代码
+
+## 语法
+
+```
+${name}
+```
+
+- 从某一范围内获取名字叫name的变量的值
+- 依序从Page、Request、Session、Application范围查找
+- 等价于pageContext.findAttribute("name")
+
+## [ ]与.运算符
+
+- EL 提供“.“和“[ ]“两种运算符来存取数据。
+- 当要存取的属性名称中包含一些特殊字符，如 . 或 - 等并非字母或数字的符号，就一定要使用“[ ]“。例如：
+- ${ user. My-Name}应当改为${user["My-Name"]}
+- 如果要动态取值时，就可以用“[ ]“来做，而“.“无法做到动态取值。例如：
+- ${sessionScope.user[data]}中data是一个变量
+
+## EL表达式作用范围
+
+- pageContext   pageScope
+- request requestScope
+- session sessionScope
+- application applicationScope
+
+## 思考
+
+- 如果想从页面范围内获取name值，EL表达式如何写?
+
+. . .
+
+```
+${pageScope.name}
+```
+
+## EL隐式对象一
+
+- pageContext
+	JSP 页的上下文。它可以用于访问 JSP 隐式对象，如请求、响应、会话、输出、servletContext 等。例如，${pageContext.response} 为页面的响应对象赋值。
+
+- param
+	将请求参数名称映射到单个字符串参数值（通过调用 ServletRequest.getParameter (String name) 获得）。getParameter (String) 方法返回带有特定名称的参数。表达式 ${param . name}相当于 request.getParameter (name)。
+
+- paramValues
+	将请求参数名称映射到一个数值数组（通过调用 ServletRequest.getParameter (String name) 获得）。它与 param 隐式对象非常类似，但它检索一个字符串数组而不是单个值。表达式 ${paramvalues. name} 相当于 request.getParamterValues(name)。
+
+- header
+	将请求头名称映射到单个字符串头值（通过调用 ServletRequest.getHeader(String name) 获得）。表达式 ${header. name} 相当于 request.getHeader(name)。
+
+## EL隐式对象二
+
+- headerValues
+	将请求头名称映射到一个数值数组（通过调用 ServletRequest.getHeaders(String) 获得）。它与头隐式对象非常类似。表达式 ${headerValues. name} 相当于 request.getHeaderValues(name)。
+
+- cookie
+	将 cookie 名称映射到单个 cookie 对象。向服务器发出的客户端请求可以获得一个或多个 cookie。表达式 ${cookie. name .value} 返回带有特定名称的第一个 cookie 值。如果请求包含多个同名的 cookie，则应该使用 ${headerValues. name} 表达式。
+
+- initParam
+	将上下文初始化参数名称映射到单个值（通过调用 ServletContext.getInitparameter(String name) 获得）。
+
+## EL隐式对象三
+
+- pageScope
+	将页面范围的变量名称映射到其值。例如，EL 表达式可以使用 ${pageScope.objectName} 访问一个 JSP 中页面范围的对象，还可以使用 ${pageScope .objectName. attributeName} 访问对象的属性。
+
+- requestScope
+	将请求范围的变量名称映射到其值。该对象允许访问请求对象的属性。例如，EL 表达式可以使用 ${requestScope. objectName} 访问一个 JSP 请求范围的对象，还可以使用 ${requestScope. objectName. attributeName} 访问对象的属性。
+
+- sessionScope
+	将会话范围的变量名称映射到其值。该对象允许访问会话对象的属性。例如：
+${sessionScope. name}
+
+- applicationScope
+  将应用程序范围的变量名称映射到其值。该隐式对象允许访问应用程序范围的对象。
+
+## JSTL
+
+- JSP标准标签库（JSTL）是一个JSP标签集合，它封装了JSP应用的通用核心功能。
+- JSTL支持通用的、结构化的任务，比如迭代，条件判断，XML文档操作，国际化标签，SQL标签。 除了这些，它还提供了一个框架来使用集成JSTL的自定义标签。
+- 根据JSTL标签所提供的功能，可以将其分为5个类别。
+    - 核心标签
+    - 格式化标签
+    - SQL 标签
+    - XML 标签
+    - JSTL 函数
+
+## JSTL 库安装
+
+- 从Apache的标准标签库中下载的二进包(jakarta-taglibs-standard-current.zip)。下载地址：http://archive.apache.org/dist/jakarta/taglibs/standard/binaries/
+- 下载jakarta-taglibs-standard-1.1.1.zip 包并解压，将jakarta-taglibs-standard-1.1.1/lib/下的两个jar文件：standard.jar和jstl.jar文件拷贝到/WEB-INF/lib/下。
+- 使用任何库，你必须在每个JSP文件中的头部包含<taglib>标签。
+- 核心标签是最常用的JSTL标签。引用核心标签库的语法如下：
+
+```
+<%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %>
+```
+
+## 核心标签
+
+```
+    <c:out> 	用于在JSP中显示数据，就像<%= ... >
+    <c:set> 	用于保存数据
+    <c:remove> 	用于删除数据
+    <c:catch> 	用来处理产生错误的异常状况，并且将错误信息储存起来
+    <c:if> 	与我们在一般程序中用的if一样
+    <c:choose> 	本身只当做<c:when>和<c:otherwise>的父标签
+    <c:when> 	<c:choose>的子标签，用来判断条件是否成立
+    <c:otherwise> 	<c:choose>的子标签，接在<c:when>标签后，当<c:when>标签判断为false时被执行
+    <c:import> 	检索一个绝对或相对 URL，然后将其内容暴露给页面
+    <c:forEach> 	基础迭代标签，接受多种集合类型
+    <c:forTokens> 	根据指定的分隔符来分隔内容并迭代输出
+    <c:param> 	用来给包含或重定向的页面传递参数
+    <c:redirect> 	重定向至一个新的URL.
+    <c:url> 	使用可选的查询参数来创造一个URL
+```
+
+## if
+
+```
+<c:if test="${var.index % 2 == 0}">
+ ssss
+</c:if>
+```
+
+- <c:if>并没有提供else子句，使用的时候可能有些不便，此时我们可以通过<c:choose>
+
+## choose
+
+```
+<c:choose>
+<c:when test="${var.index % 2 == 0}">
+1
+</c:when>
+<c:otherwise>
+2
+</c:otherwise>
+</c:choose>
+```
+
+## forEach
+
+```
+<c:forEach items=“collection” var=“name” varStatus=“status” begin=“int“ end=”int” step=“int” >
+           //循环体
+</c:forEach>
+```
+
+- items:是集合，用EL表达式；
+- var:变量名，存放items
+- varStatus: 显示循环状态的变量
+- index:从0开始;
+- count:元素位置,从1开始;
+- first:如果是第一个元素则显示true;
+- last:如果是最后一个元素则显示true;
+- begin:循环的初始值(整型)；
+- end: 循环结束 ;
+- step:步长,循环间隔的数值；
+
+## 标签实际上...
+
+- 标签实际上是继承了SimpleTagSupport的类
+
+## 创建"Hello"标签
+
+- 我们来创建一个自定义标签叫作<ex:Hello>，标签格式为：
+
+```
+<ex:Hello />
+```
+
+## HelloTag类
+
+```
+package com.test;
+
+import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.*;
+import java.io.*;
+
+public class HelloTag extends SimpleTagSupport {
+
+  public void doTag() throws JspException, IOException {
+    JspWriter out = getJspContext().getOut();
+    out.println("Hello Custom Tag!");
+  }
+}
+```
+
+- 以下代码重写了doTag()方法，方法中使用了getJspContext()方法来获取当前的JspContext对象，并将"Hello Custom Tag!"传递给JspWriter对象。
+
+## custom.tld
+
+- WEB-INF\custom.tld。
+
+```xml
+<taglib>
+  <tlib-version>1.0</tlib-version>
+  <jsp-version>2.0</jsp-version>
+  <short-name>Example TLD</short-name>
+  <tag>
+    <name>Hello</name>
+    <tag-class>com.tutorialspoint.HelloTag</tag-class>
+    <body-content>empty</body-content>
+  </tag>
+</taglib>
+```
+
+## 使用
+
+```
+<%@ taglib prefix="ex" uri="WEB-INF/custom.tld"%>
+<html>
+  <head>
+    <title>A sample custom tag</title>
+  </head>
+  <body>
+    <ex:Hello/>
+  </body>
+</html>
+```
+
+- 输出结果为：Hello Custom Tag!
+
+## 访问标签体
+
+- 你可以像标准标签库一样在标签中包含消息内容
+
+```
+<ex:Hello>
+   This is message body
+</ex:Hello>
+```
+
+## 处理类
+
+package com.test;
+
+import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.*;
+import java.io.*;
+
+public class HelloTag extends SimpleTagSupport {
+
+   StringWriter sw = new StringWriter();
+   public void doTag()
+      throws JspException, IOException
+    {
+       getJspBody().invoke(sw);
+       getJspContext().getOut().println(sw.toString());
+    }
+
+}
+
+## 修改TLD文件
+
+```xml
+<taglib>
+  <tlib-version>1.0</tlib-version>
+  <jsp-version>2.0</jsp-version>
+  <short-name>Example TLD with Body</short-name>
+  <tag>
+    <name>Hello</name>
+    <tag-class>com.tutorialspoint.HelloTag</tag-class>
+    <body-content>scriptless</body-content>
+  </tag>
+</taglib>
+```
+
+## 使用
+
+```xml
+<%@ taglib prefix="ex" uri="WEB-INF/custom.tld"%>
+<html>
+  <head>
+    <title>A sample custom tag</title>
+  </head>
+  <body>
+    <ex:Hello>
+        This is message body
+    </ex:Hello>
+  </body>
+</html>
+```
+
+- 输出结果如下所示：This is message body
+
+## 标签属性
+
+- 你可以在自定义标准中设置各种属性，要接收属性值,自定义标签类必须实现setter方法
+
+```
+package com.test;
+
+import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.*;
+import java.io.*;
+
+public class HelloTag extends SimpleTagSupport {
+
+   private String message;
+
+   public void setMessage(String msg) {
+      this.message = msg;
+   }
+
+   StringWriter sw = new StringWriter();
+
+   public void doTag()
+      throws JspException, IOException
+    {
+       if (message != null) {
+          /* 从属性中使用消息 */
+          JspWriter out = getJspContext().getOut();
+          out.println( message );
+       }
+       else {
+          /* 从内容体中使用消息 */
+          getJspBody().invoke(sw);
+          getJspContext().getOut().println(sw.toString());
+       }
+   }
+}
+```
+
+## tld文件
+
+```
+<taglib>
+  <tlib-version>1.0</tlib-version>
+  <jsp-version>2.0</jsp-version>
+  <short-name>Example TLD with Body</short-name>
+  <tag>
+    <name>Hello</name>
+    <tag-class>com.tutorialspoint.HelloTag</tag-class>
+    <body-content>scriptless</body-content>
+    <attribute>
+       <name>message</name>
+    </attribute>
+  </tag>
+</taglib>
+```
+
+## 使用
+
+```
+<%@ taglib prefix="ex" uri="WEB-INF/custom.tld"%>
+<html>
+  <head>
+    <title>A sample custom tag</title>
+  </head>
+  <body>
+    <ex:Hello message="This is custom tag" />
+  </body>
+</html>
+```
+
+- 以上实例数据输出结果为：This is custom tag
 
 ## 作业
 
