@@ -213,6 +213,7 @@ sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 ## 如何应用启动时获取呢?
 
 - load-on-startup
+- listener
 
 ## InitServlet
 
