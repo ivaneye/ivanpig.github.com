@@ -123,7 +123,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">theme (1)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (2)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (6)</i></a>
             
             
         
@@ -160,6 +160,648 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/luminus/defining_routes.html">Luminus手册-路由定义</a></h2>
+
+        <p class="post-meta">By 09月18日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (5)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (6)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (5)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Defining routes</h1>
+
+<p>Luminus使用Compojure来定义应用的路由.路由由HTTP请求方法和接受它的URI，
+参数和以及相应的处理程序组成。Compojure定义了所有标准HTTP请求的路由，
+比如ANY,DELETE,GET,HEAD,OPTIONS,PATCH,POST和PUT。</p>
+
+<p>例如：如果我们想定义一个应用，它指向/，/返回"Hello World!"字符串。我们
+可以这样写:</p>
+
+<pre><code class="{.clojure}">(defroutes app-routes
+  (GET "/" [] "Hello World!"))
+</code></pre>
+
+<p>如果你想构建一个路由来响应POST请求，我们可以这样写：</p>
+
+<pre><code class="{.clojure}">(POST "/hello" [id] (str "Welcome " id))
+</code></pre>
+
+<p>有些路由需要访问请求的map，我们只需要在路由上定义第二个参数就可以了。</p>
+
+<pre><code class="{.clojure}">(GET "/foo" request (interpose ", " (keys request)))
+</code></pre>
+
+<p>上面的路由读出请求map中所有的key并展示出来。结果如下:</p>
+
+<pre><code class="{.example}">:ssl-client-cert, :remote-addr, :scheme, :query-params, :session, :form-params,
+:multipart-params, :request-method, :query-string, :route-params, :content-type,
+:cookies, :uri, :server-name, :params, :headers, :content-length, :server-port,
+:character-encoding, :body, :flash
+</code></pre>
+
+<p>Compojure还提供了一些有用的函数来处理请求map和表单参数。例如，在
+guestbook应用的例子中，我们看到了如下的路由定义:</p>
+
+<pre><code class="{.clojure}">(POST "/"  [name message] (save-message name message))
+</code></pre>
+
+<p>这个路由从参数中获取到name和message的值，并将其绑定到相同名字的变量上。
+我们能像使用其他定义的变量那样来使用他们。我们也可以直接在路由中使用Clojure的解构。</p>
+
+<pre><code class="{.clojure}">(GET "/:foo" { {foo "foo"} :params}
+  (str "Foo = " foo))
+</code></pre>
+
+<p>实际上，Compojure还提供了解构部分参数，并将其他参数构建为一个map的功能。</p>
+
+<pre><code class="{.clojure}">[x y &amp; z]
+x -&gt; "foo"
+y -&gt; "bar"
+z -&gt; {:v "baz", :w "qux"}
+</code></pre>
+
+<p>上面的代码中,参数x和y被绑定到了变量上，而v和w还在叫z的map中。
+最后，如果我们需要获取完整的请求，我们可以这样做：</p>
+
+<pre><code class="{.clojure}">(GET "/" [x y :as r] (str x y r))
+</code></pre>
+
+<p>这里我们将表单参数绑定到了x和y上，而完整的请求则绑定到了变量r上。</p>
+
+<h1>Organizing application routes</h1>
+
+<p>对路由管理的最佳实践就是对其统一管理。Compojure提供了defroutes宏来方便
+我们作这样的处理。</p>
+
+<pre><code class="{.clojure}">(defroutes auth-routes
+  (POST "/login" [id pass] (login id pass))
+  (POST "/logout" [] (logout)))
+
+(defroutes app-routes
+  (GET "/" [] (home))
+  (route/resources "/")
+  (route/not-found "Not Found"))
+</code></pre>
+
+<p>对于路径相似的路由，可以使用context来简化管理。
+例如，你的路径都以/user/:id为根路径:</p>
+
+<pre><code class="{.clojure}">(defroutes user-routes
+      (GET "/user/:id/profile" [id] ...)
+      (GET "/user/:id/settings" [id] ...)
+      (GET "/user/:id/change-password" [id] ...))
+</code></pre>
+
+<p>你可以这样简写:</p>
+
+<pre><code class="{.clojure}">(def user-routes
+      (context "/user/:id" [id]
+        (GET "/profile" [] ...)
+        (GET "/settings" [] ...)
+        (GET "/change-password" [] ...)))
+</code></pre>
+
+<p>当你定义好了所有的路由，你可以将他们添加到
+noir.util.middleware/app-handler下的vector中，它在handler目录下。
+你应该注意到了，生成的项目中已经定义了一个叫app的变量，你只需要添加新的路由就可以了。</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler
+           ;;add your application routes here
+           [home-routes app-routes]
+           ;;add custom middleware here
+           :middleware []
+           ;;add access rules here
+           ;;each rule should be a vector
+           :access-rules []))
+</code></pre>
+
+<p>详细的文档请键Compojure官方wiki.</p>
+
+<h1>Restricting access</h1>
+
+<p>有些页面只能在特定条件下才可以访问。
+例如，你可能想定义一个只能给管理员查看的页面或者一个用户管理页面，只给
+当前用户看。
+使用lib-noir中的noir.util.route可以达到这个目的，我们可以定义访问特殊
+页面的逻辑</p>
+
+<h1>Marking Routes as Restricted</h1>
+
+<p>noir.util.route/restricted宏被用来定义访问路由的方式:</p>
+
+<pre><code class="{.clojure}">(GET "/private/:id" [id] (restricted "private!"))
+</code></pre>
+
+<p>如果我们想定义多个路由的访问权限，可以使用def-restricted-routes宏.</p>
+
+<pre><code class="{.clojure}">(def-restricted-routes private-pages
+  (GET "/profile" [] (show-profile))
+  (GET "/my-secret-page" [] (show-secret-page))
+  (GET "/another-secret-page" [] (another-secret-page)))
+</code></pre>
+
+<p>上面的代码等同于</p>
+
+<pre><code class="{.clojure}">(defroutes private-pages
+  (GET "/profile" [] (restricted (show-profile)))
+  (GET "/secret-page1" [] (restricted (show-secret-page)))
+  (GET "/secret-page2" [] (restricted (another-secret-page))))
+</code></pre>
+
+<p>默认情况下，受限访问的路由会检查请求是否符合所有的条件。</p>
+
+<h1>Specifying Access Rules</h1>
+
+<p>我们来看看如何创建一个路由，它只有在session中存在:user所对应的值时，
+才能访问。 首先，我们需要引用noir.util.route和noir.session.</p>
+
+<pre><code class="{.clojure}">(ns myapp.handler
+  (:require ...
+            [noir.util.route :refer [restricted]]
+            [noir.session :as session]))
+</code></pre>
+
+<p>接着，我们将编写函数来实现上面我们所说的访问规则。函数必须接受request
+作为其参数并且返回true或者false来确认页面是否可以访问。
+下面就是该函数的实现，它检查当前session中是否存在user。如果没有则重定
+向。默认重定向到根路径。</p>
+
+<pre><code class="{.clojure}">(defn user-access [request]
+  (session/get :user))
+
+(def app
+ (middleware/app-handler
+   [app-routes]
+   :access-rules [user-access]))
+</code></pre>
+
+<p>现在，所有的受限的处理程序在session中不存在:user时都会重定向到根目录。</p>
+
+<h1>Access Rule Groups</h1>
+
+<p>当你以map的方式来提供访问规则，则可以进行进一步的处理。</p>
+
+<ul>
+<li>:uri - 符合访问规则的URI</li>
+<li>:uris - 和:uri类似，匹配多个URI</li>
+<li>:redirect - 重定向地址</li>
+<li>:on-fail - 重定向可选项，可以指定一个请求错误时的处理函数，函数必须
+以request为参数</li>
+<li>:rule - 一个规则</li>
+<li>:rules - 多个规则</li>
+</ul>
+
+
+<p>:rules可以用在下面集中情形下。</p>
+
+<pre><code class="{.clojure}">:rules [rule1 rule2]
+:rules {:any [rule1 rule2]}
+:rules {:every [rule1 rule2] :any [rule3 rule4]}
+</code></pre>
+
+<p>默认情况下，每个规则都必须通过才能访问成功，:any则表示只要符合任何一个
+规则即可访问。下面是一些例子:</p>
+
+<pre><code class="{.clojure}">(defn admin-access [req]
+ (session/get :admin))
+
+:access-rules [{:redirect "/access-denied"
+                :rule user-access}]
+
+:access-rules [{:uris ["/user/*" "/private*"]
+                :rule user-access}]
+
+:access-rules [{:uri "/admin/*" :rule admin-access}
+               {:uri "/user/*"
+                :rules {:any [user-access admin-access]}}]
+
+:access-rules [{:on-fail (fn [req] "access restricted")
+                :rule user-access}]
+</code></pre>
+
+<h1>Cross Site Request Forgery Protection</h1>
+
+<p>CSRF攻击指的是第三方通过一个验证过的用户来提交动作。当你的网站包含了一
+个恶意链接或按钮或js的时候，很容易发生。
+我们可以使用Ring-Anti-Forgery来放置csrf攻击. 首先添加[ring-anti-forgery
+"0.2.1"]依赖。接着引入相应的包。</p>
+
+<pre><code class="{.clojure}">(ns myapp.handler
+  (:require
+    ...
+    [selmer.parser :refer [add-tag!]]
+    [ring.util.anti-forgery :refer [anti-forgery-field]]
+    [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]))
+</code></pre>
+
+<p>接着，我们将添加wrap-anti-forgery中间件:</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler
+           ;;add your application routes here
+           [home-routes app-routes]
+           ;;add custom middleware here
+           :middleware [wrap-anti-forgery]
+           ;;add access rules here
+           ;;each rule should be a vector
+           :access-rules []))
+</code></pre>
+
+<p>添加完后一个随机字符串将会被赋给anti-forgery-token变量。所有的POST请求
+将会包含一个叫_~anti~-forgery-token的token.
+接着我们在init函数中添加csrf标签:</p>
+
+<pre><code class="{.clojure}">(defn init
+  ...
+  (add-tag! :csrf-token (fn [_ _] (anti-forgery-field)))
+  ...)
+</code></pre>
+
+<p>然后在模板中使用:</p>
+
+<pre><code class="{.clojure}">    &lt;form name="input" action="/login" method="POST"&gt;
+      { % csrf-token %}
+      Username: &lt;input type="text" name="user"&gt;
+      Password: &lt;input type="password" name="pass"&gt;
+    &lt;input type="submit" value="Submit"&gt;
+    &lt;/form&gt;
+</code></pre>
+
+<p>所有的POST请求如果不包含这个token，则会被拒绝。服务器返回403错误。</p>
+
+
+
+    <a href="/luminus/defining_routes.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/luminus/clojurescript.html">Luminus手册-ClojureScript</a></h2>
+
+        <p class="post-meta">By 09月17日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (5)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (6)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (5)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Summary</h1>
+
+<p>ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScript可以
+有如下有点：</p>
+
+<ul>
+<li>在客户端和服务端使用相同的语言</li>
+<li>在前后端共用相同的代码</li>
+<li>简介流畅的语言</li>
+<li>使用Leiningen管理依赖关系</li>
+<li>不可变数据</li>
+<li>功能强大的库</li>
+<li>Adding ClojureScript Support</li>
+</ul>
+
+
+<p>最简单的添加ClojureScript支持的方法就是在创建新项目的时候添加+cljs选项
+。不过在现有的项目中添加ClojureScript也同样的简单。你只需要在
+project.clj文件中添加如下内容即可。</p>
+
+<pre><code class="{.clojure}">:plugins [...
+          [lein-cljsbuild "0.3.0"]]
+
+:hooks [... leiningen.cljsbuild]
+
+:cljsbuild
+{:builds [{:source-paths ["src-cljs"]
+           :compiler {:output-to "resources/public/js/site.js"
+                      :optimizations :advanced}}]}
+</code></pre>
+
+<p>上面的代码将在项目中添加cljsbuild插件和一个钩子。
+所有的命名空间需要在项目根目录下的src-cljs目录内。注意，ClojureScript
+文件需要以.cljs结尾。如果文件以.clj结尾，它也会被编译，不过它就无法访
+问js命名空间。</p>
+
+<h1>Using Libraries</h1>
+
+<p>使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
+ClojureScript库和其他库一样都配置在project.clj文件中。</p>
+
+<h1>Running the Compiler</h1>
+
+<p>开发ClojureScript应用最简单的方法就是自动运行编译器。这样，你的任何修
+改都会立即生效。要开启自动编译，只需要输入如下命令:</p>
+
+<pre><code class="{.bash}">lein cljsbuild auto
+</code></pre>
+
+<p>也可以使用一次编译的方式。这将会将所有的js编译到一个js文件中。</p>
+
+<pre><code class="{.bash}">lein cljsbuild once
+</code></pre>
+
+<h1>Advanced Compilation and Exports</h1>
+
+<p>使用高级编译的话变量名会被编译器压缩。如果要确保函数被编译为js时函数名
+不变，那么我们需要保证他们的名字是受保护的。而这只需要添加^:export注解：</p>
+
+<pre><code class="{.clojure}">(ns main)
+
+(defn ^:export init []
+  (js/alert "hello world"))
+</code></pre>
+
+<p>现在我们可以像这样来调用:</p>
+
+<pre><code class="{.clojure}">    &lt;script&gt;
+    main.init();
+    &lt;/script&gt;
+</code></pre>
+
+<p>如果我们在代码里使用js库，那么我们必须要保护我们所调用的函数名。例如，
+如果我们想使用AlbumColors库，如果我们这样写:</p>
+
+<pre><code class="{.clojure}">(defn ^:export init []
+  (.getColors (js/AlbumColors. "/img/foo.jpg")
+    (fn [[background]]
+     (.log js/console background))))
+</code></pre>
+
+<p>当使用高级编译时AlbumColors和getColors将会被改写。为了不让编译器改写他
+们，我们需要创建一个js文件，里面包含了我们需要保护的函数，并在代码里引
+用它。</p>
+
+<pre><code class="{.javascript}">var AlbumColors = {};
+AlbumColors.getColors = function() {};
+</code></pre>
+
+<p>我们把上面的代码放到resource目录下一个叫externs.js文件里面。并在
+cljsbuild丽引用它，像这样:</p>
+
+<pre><code class="{.clojure}">{:source-paths ["src-cljs"]
+     :compiler
+     {:pretty-print false
+      :output-to "resources/public/js/site.js"
+      ;;specify the externs file to protect function names
+      :externs ["resources/externs.js"]
+      :optimizations :advanced}}
+</code></pre>
+
+
+
+
+    <a href="/luminus/clojurescript.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/luminus/html_templating.html">Luminus手册-HTML模板</a></h2>
+
+        <p class="post-meta">By 09月16日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (5)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (6)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (5)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Templating Options</h1>
+
+<p>Luminus包含了Hiccup的依赖.如果你熟悉Hiccup那么可以直接使用。
+Hiccup使用clojure数据结构来描述模板。并且,Hiccup提供了丰富的API来生成
+HTML元素。 Luminus也包含了Selmer，Selmer使用了普通的文本文件来描述模板。
+你可以使用它们中的任何一个模板，或者混合使用.抑或你可以选择任何你喜欢
+的模板框架，比如Enlive或者Stencil。</p>
+
+<h1>HTML Templating Using Selmer</h1>
+
+<p>Selmer是一个类似Django模板的框架。如果你熟悉Django或者其他类似的模板语
+言，那么你会感觉很熟悉.</p>
+
+<h2>Creating Templates</h2>
+
+<p>Selmer将展示逻辑和程序逻辑分开。实际上Selmer模板就是包含了动态元素的
+HTML文件。来看下面的例子。</p>
+
+<pre><code class="{.html}">&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;title&gt;My First Template&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h2&gt;Hello { {name}}&lt;/h2&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>模板使用了一个包含了键值对的上下文环境。上下文环境中包含了我们
+需要在运行时获得的变量的值。上面的代码中，我们从上下文环境中获取名字为
+name的变量的值。
+有两个函数可以渲染模板,render和render-file。render函数接收一个字符串来
+渲染模板。而render-file接收一个字符串作为路径来渲染模板。
+如果我们将上面的模板定义保存到index.html文件中。我们就可以这样来渲染:</p>
+
+<pre><code class="{.clojure}">(ns example.routes.home
+  (:use [selmer.parser :only [render-file]]))
+
+(defn index [request]
+  (render-file "example/views/templates/index.html"
+               {:name "John"}))
+</code></pre>
+
+<p>render-file函数将src目录作为根路径，使用相对路径来查找模板。
+上面，我们传递了一个字符串作为变量name的值。实际上，我们可以传递任何类
+型的值。比如，我们传递一个集合，在模板里我们可以使用tag来遍历这个集合。</p>
+
+<pre><code class="{.html}">    &lt;ul&gt;
+        { % for item in items %}
+        &lt;li&gt; { {item}} &lt;/li&gt;
+        { % endfor %}
+    &lt;/ul&gt;
+</code></pre>
+
+<pre><code class="{.clojure}">(render-file "/example/views/templates/items.html {:items (range 10)}")
+</code></pre>
+
+<p>如果传递的是个map，我们可以这样访问:</p>
+
+<pre><code class="{.clojure}">(render "&lt;p&gt;Hello { {user.first}} { {user.last}}&lt;/p&gt;"
+        {:user {:first "John" :last "Doe"}})
+</code></pre>
+
+<p>如果没有指定的展示方式，那么默认调用toString方法。
+默认情况下，Selmer会缓存编译后的模板。只有当文件发生变化时，才会触发
+Selmer重新编译模板。你也可以选择Selmer是开启缓存还是关闭缓存。只需要调
+用(selmer.parser/cache-on!)或(selmer.parser/cache-off!).</p>
+
+
+
+
+    <a href="/luminus/html_templating.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/luminus/application_profile.html">Luminus手册-应用配置</a></h2>
+
+        <p class="post-meta">By 09月15日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (5)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (6)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (5)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Profiles</h1>
+
+<p>使用lein new luminus myapp命令会创建一个新的luminus应用，它使用的是默认的配置。如果你想使用其他的特性，你可以修改相应的配置参数。</p>
+
+<p>下面就是各个配置：</p>
+
+<ul>
+<li>+cljs - 添加ClojureScript支持</li>
+<li>+cucumber - 提供通过clj-webdriver配置cucumber</li>
+<li>+h2 - 添加models.db并提供H2数据库依赖</li>
+<li>+postgres - 添加models.db并提供PostreSQL数据库依赖</li>
+<li>+mysql - 添加models.db并提供mysql依赖</li>
+<li>+mongodb - 添加db.core并提供MongoDB依赖</li>
+<li>+site - 创建一个包含注册和验证框架的应用。使用bootstrap和h2</li>
+<li>+dailycred -
+添加dailycred支持，当和+site参数配合使用时，它使用dailycred作为验证框架</li>
+<li>+http-kit - 添加HTTP Kit支持</li>
+</ul>
+
+
+<p>要添加配置，只需要简单的添加到你的应用的名字后面，比如:</p>
+
+<pre><code class="{.bash}">lein new luminus myapp +cljs
+</code></pre>
+
+<p>可以多个参数一起使用:</p>
+
+<pre><code class="{.bash}">lein new luminus myapp +site +postgres
+</code></pre>
+
+<p>如果两个参数会生成相同的文件，则后面参数所生成的文件会覆盖前面参数所生
+成的文件。</p>
+
+
+
+
+    <a href="/luminus/application_profile.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/luminus/your_first_application.html">Luminus手册-第一个应用</a></h2>
 
         <p class="post-meta">By 09月14日  2013
@@ -167,7 +809,7 @@
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (1)</i></a>
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (5)</i></a>
             
             
             
@@ -176,9 +818,9 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (2)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (6)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (1)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (5)</i></a>
             
             
         
