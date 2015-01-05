@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2014-12-07T19:24:10+08:00</updated>
+    <updated>2015-01-03T17:40:53+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -38,6 +38,2352 @@
 
 
 &lt;p&gt;&lt;img src=&quot;/assets/lighttable/shot.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-路由定义</title>
+        <link href="http://ivanpig.github.io/luminus/defining_routes.html"/>
+        <updated>2013-09-18T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//luminus/defining_routes</id>
+        <content type="html">&lt;h1&gt;Defining routes&lt;/h1&gt;
+
+&lt;p&gt;Luminus使用Compojure来定义应用的路由.路由由HTTP请求方法和接受它的URI，
+参数和以及相应的处理程序组成。Compojure定义了所有标准HTTP请求的路由，
+比如ANY,DELETE,GET,HEAD,OPTIONS,PATCH,POST和PUT。&lt;/p&gt;
+
+&lt;p&gt;例如：如果我们想定义一个应用，它指向/，/返回&quot;Hello World!&quot;字符串。我们
+可以这样写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defroutes app-routes
+  (GET &quot;/&quot; [] &quot;Hello World!&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你想构建一个路由来响应POST请求，我们可以这样写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(POST &quot;/hello&quot; [id] (str &quot;Welcome &quot; id))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有些路由需要访问请求的map，我们只需要在路由上定义第二个参数就可以了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/foo&quot; request (interpose &quot;, &quot; (keys request)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的路由读出请求map中所有的key并展示出来。结果如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;:ssl-client-cert, :remote-addr, :scheme, :query-params, :session, :form-params,
+:multipart-params, :request-method, :query-string, :route-params, :content-type,
+:cookies, :uri, :server-name, :params, :headers, :content-length, :server-port,
+:character-encoding, :body, :flash
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Compojure还提供了一些有用的函数来处理请求map和表单参数。例如，在
+guestbook应用的例子中，我们看到了如下的路由定义:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(POST &quot;/&quot;  [name message] (save-message name message))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个路由从参数中获取到name和message的值，并将其绑定到相同名字的变量上。
+我们能像使用其他定义的变量那样来使用他们。我们也可以直接在路由中使用Clojure的解构。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/:foo&quot; { {foo &quot;foo&quot;} :params}
+  (str &quot;Foo = &quot; foo))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际上，Compojure还提供了解构部分参数，并将其他参数构建为一个map的功能。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[x y &amp;amp; z]
+x -&amp;gt; &quot;foo&quot;
+y -&amp;gt; &quot;bar&quot;
+z -&amp;gt; {:v &quot;baz&quot;, :w &quot;qux&quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码中,参数x和y被绑定到了变量上，而v和w还在叫z的map中。
+最后，如果我们需要获取完整的请求，我们可以这样做：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/&quot; [x y :as r] (str x y r))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里我们将表单参数绑定到了x和y上，而完整的请求则绑定到了变量r上。&lt;/p&gt;
+
+&lt;h1&gt;Organizing application routes&lt;/h1&gt;
+
+&lt;p&gt;对路由管理的最佳实践就是对其统一管理。Compojure提供了defroutes宏来方便
+我们作这样的处理。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defroutes auth-routes
+  (POST &quot;/login&quot; [id pass] (login id pass))
+  (POST &quot;/logout&quot; [] (logout)))
+
+(defroutes app-routes
+  (GET &quot;/&quot; [] (home))
+  (route/resources &quot;/&quot;)
+  (route/not-found &quot;Not Found&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于路径相似的路由，可以使用context来简化管理。
+例如，你的路径都以/user/:id为根路径:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defroutes user-routes
+      (GET &quot;/user/:id/profile&quot; [id] ...)
+      (GET &quot;/user/:id/settings&quot; [id] ...)
+      (GET &quot;/user/:id/change-password&quot; [id] ...))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以这样简写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def user-routes
+      (context &quot;/user/:id&quot; [id]
+        (GET &quot;/profile&quot; [] ...)
+        (GET &quot;/settings&quot; [] ...)
+        (GET &quot;/change-password&quot; [] ...)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当你定义好了所有的路由，你可以将他们添加到
+noir.util.middleware/app-handler下的vector中，它在handler目录下。
+你应该注意到了，生成的项目中已经定义了一个叫app的变量，你只需要添加新的路由就可以了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app (middleware/app-handler
+           ;;add your application routes here
+           [home-routes app-routes]
+           ;;add custom middleware here
+           :middleware []
+           ;;add access rules here
+           ;;each rule should be a vector
+           :access-rules []))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;详细的文档请键Compojure官方wiki.&lt;/p&gt;
+
+&lt;h1&gt;Restricting access&lt;/h1&gt;
+
+&lt;p&gt;有些页面只能在特定条件下才可以访问。
+例如，你可能想定义一个只能给管理员查看的页面或者一个用户管理页面，只给
+当前用户看。
+使用lib-noir中的noir.util.route可以达到这个目的，我们可以定义访问特殊
+页面的逻辑&lt;/p&gt;
+
+&lt;h1&gt;Marking Routes as Restricted&lt;/h1&gt;
+
+&lt;p&gt;noir.util.route/restricted宏被用来定义访问路由的方式:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/private/:id&quot; [id] (restricted &quot;private!&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果我们想定义多个路由的访问权限，可以使用def-restricted-routes宏.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def-restricted-routes private-pages
+  (GET &quot;/profile&quot; [] (show-profile))
+  (GET &quot;/my-secret-page&quot; [] (show-secret-page))
+  (GET &quot;/another-secret-page&quot; [] (another-secret-page)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码等同于&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defroutes private-pages
+  (GET &quot;/profile&quot; [] (restricted (show-profile)))
+  (GET &quot;/secret-page1&quot; [] (restricted (show-secret-page)))
+  (GET &quot;/secret-page2&quot; [] (restricted (another-secret-page))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;默认情况下，受限访问的路由会检查请求是否符合所有的条件。&lt;/p&gt;
+
+&lt;h1&gt;Specifying Access Rules&lt;/h1&gt;
+
+&lt;p&gt;我们来看看如何创建一个路由，它只有在session中存在:user所对应的值时，
+才能访问。 首先，我们需要引用noir.util.route和noir.session.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns myapp.handler
+  (:require ...
+            [noir.util.route :refer [restricted]]
+            [noir.session :as session]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接着，我们将编写函数来实现上面我们所说的访问规则。函数必须接受request
+作为其参数并且返回true或者false来确认页面是否可以访问。
+下面就是该函数的实现，它检查当前session中是否存在user。如果没有则重定
+向。默认重定向到根路径。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn user-access [request]
+  (session/get :user))
+
+(def app
+ (middleware/app-handler
+   [app-routes]
+   :access-rules [user-access]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在，所有的受限的处理程序在session中不存在:user时都会重定向到根目录。&lt;/p&gt;
+
+&lt;h1&gt;Access Rule Groups&lt;/h1&gt;
+
+&lt;p&gt;当你以map的方式来提供访问规则，则可以进行进一步的处理。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;:uri - 符合访问规则的URI&lt;/li&gt;
+&lt;li&gt;:uris - 和:uri类似，匹配多个URI&lt;/li&gt;
+&lt;li&gt;:redirect - 重定向地址&lt;/li&gt;
+&lt;li&gt;:on-fail - 重定向可选项，可以指定一个请求错误时的处理函数，函数必须
+以request为参数&lt;/li&gt;
+&lt;li&gt;:rule - 一个规则&lt;/li&gt;
+&lt;li&gt;:rules - 多个规则&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;:rules可以用在下面集中情形下。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;:rules [rule1 rule2]
+:rules {:any [rule1 rule2]}
+:rules {:every [rule1 rule2] :any [rule3 rule4]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;默认情况下，每个规则都必须通过才能访问成功，:any则表示只要符合任何一个
+规则即可访问。下面是一些例子:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn admin-access [req]
+ (session/get :admin))
+
+:access-rules [{:redirect &quot;/access-denied&quot;
+                :rule user-access}]
+
+:access-rules [{:uris [&quot;/user/*&quot; &quot;/private*&quot;]
+                :rule user-access}]
+
+:access-rules [{:uri &quot;/admin/*&quot; :rule admin-access}
+               {:uri &quot;/user/*&quot;
+                :rules {:any [user-access admin-access]}}]
+
+:access-rules [{:on-fail (fn [req] &quot;access restricted&quot;)
+                :rule user-access}]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Cross Site Request Forgery Protection&lt;/h1&gt;
+
+&lt;p&gt;CSRF攻击指的是第三方通过一个验证过的用户来提交动作。当你的网站包含了一
+个恶意链接或按钮或js的时候，很容易发生。
+我们可以使用Ring-Anti-Forgery来放置csrf攻击. 首先添加[ring-anti-forgery
+&quot;0.2.1&quot;]依赖。接着引入相应的包。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns myapp.handler
+  (:require
+    ...
+    [selmer.parser :refer [add-tag!]]
+    [ring.util.anti-forgery :refer [anti-forgery-field]]
+    [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接着，我们将添加wrap-anti-forgery中间件:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app (middleware/app-handler
+           ;;add your application routes here
+           [home-routes app-routes]
+           ;;add custom middleware here
+           :middleware [wrap-anti-forgery]
+           ;;add access rules here
+           ;;each rule should be a vector
+           :access-rules []))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;添加完后一个随机字符串将会被赋给anti-forgery-token变量。所有的POST请求
+将会包含一个叫_~anti~-forgery-token的token.
+接着我们在init函数中添加csrf标签:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn init
+  ...
+  (add-tag! :csrf-token (fn [_ _] (anti-forgery-field)))
+  ...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后在模板中使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;    &amp;lt;form name=&quot;input&quot; action=&quot;/login&quot; method=&quot;POST&quot;&amp;gt;
+      { % csrf-token %}
+      Username: &amp;lt;input type=&quot;text&quot; name=&quot;user&quot;&amp;gt;
+      Password: &amp;lt;input type=&quot;password&quot; name=&quot;pass&quot;&amp;gt;
+    &amp;lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&amp;gt;
+    &amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;所有的POST请求如果不包含这个token，则会被拒绝。服务器返回403错误。&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Defining routes&lt;/h1&gt;
+
+&lt;p&gt;Luminus使用Compojure来定义应用的路由.路由由HTTP请求方法和接受它的URI，
+参数和以及相应的处理程序组成。Compojure定义了所有标准HTTP请求的路由，
+比如ANY,DELETE,GET,HEAD,OPTIONS,PATCH,POST和PUT。&lt;/p&gt;
+
+&lt;p&gt;例如：如果我们想定义一个应用，它指向/，/返回&quot;Hello World!&quot;字符串。我们
+可以这样写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defroutes app-routes
+  (GET &quot;/&quot; [] &quot;Hello World!&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你想构建一个路由来响应POST请求，我们可以这样写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(POST &quot;/hello&quot; [id] (str &quot;Welcome &quot; id))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有些路由需要访问请求的map，我们只需要在路由上定义第二个参数就可以了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/foo&quot; request (interpose &quot;, &quot; (keys request)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的路由读出请求map中所有的key并展示出来。结果如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;:ssl-client-cert, :remote-addr, :scheme, :query-params, :session, :form-params,
+:multipart-params, :request-method, :query-string, :route-params, :content-type,
+:cookies, :uri, :server-name, :params, :headers, :content-length, :server-port,
+:character-encoding, :body, :flash
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Compojure还提供了一些有用的函数来处理请求map和表单参数。例如，在
+guestbook应用的例子中，我们看到了如下的路由定义:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(POST &quot;/&quot;  [name message] (save-message name message))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个路由从参数中获取到name和message的值，并将其绑定到相同名字的变量上。
+我们能像使用其他定义的变量那样来使用他们。我们也可以直接在路由中使用Clojure的解构。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/:foo&quot; { {foo &quot;foo&quot;} :params}
+  (str &quot;Foo = &quot; foo))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际上，Compojure还提供了解构部分参数，并将其他参数构建为一个map的功能。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[x y &amp;amp; z]
+x -&amp;gt; &quot;foo&quot;
+y -&amp;gt; &quot;bar&quot;
+z -&amp;gt; {:v &quot;baz&quot;, :w &quot;qux&quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码中,参数x和y被绑定到了变量上，而v和w还在叫z的map中。
+最后，如果我们需要获取完整的请求，我们可以这样做：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/&quot; [x y :as r] (str x y r))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里我们将表单参数绑定到了x和y上，而完整的请求则绑定到了变量r上。&lt;/p&gt;
+
+&lt;h1&gt;Organizing application routes&lt;/h1&gt;
+
+&lt;p&gt;对路由管理的最佳实践就是对其统一管理。Compojure提供了defroutes宏来方便
+我们作这样的处理。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defroutes auth-routes
+  (POST &quot;/login&quot; [id pass] (login id pass))
+  (POST &quot;/logout&quot; [] (logout)))
+
+(defroutes app-routes
+  (GET &quot;/&quot; [] (home))
+  (route/resources &quot;/&quot;)
+  (route/not-found &quot;Not Found&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于路径相似的路由，可以使用context来简化管理。
+例如，你的路径都以/user/:id为根路径:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defroutes user-routes
+      (GET &quot;/user/:id/profile&quot; [id] ...)
+      (GET &quot;/user/:id/settings&quot; [id] ...)
+      (GET &quot;/user/:id/change-password&quot; [id] ...))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以这样简写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def user-routes
+      (context &quot;/user/:id&quot; [id]
+        (GET &quot;/profile&quot; [] ...)
+        (GET &quot;/settings&quot; [] ...)
+        (GET &quot;/change-password&quot; [] ...)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当你定义好了所有的路由，你可以将他们添加到
+noir.util.middleware/app-handler下的vector中，它在handler目录下。
+你应该注意到了，生成的项目中已经定义了一个叫app的变量，你只需要添加新的路由就可以了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app (middleware/app-handler
+           ;;add your application routes here
+           [home-routes app-routes]
+           ;;add custom middleware here
+           :middleware []
+           ;;add access rules here
+           ;;each rule should be a vector
+           :access-rules []))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;详细的文档请键Compojure官方wiki.&lt;/p&gt;
+
+&lt;h1&gt;Restricting access&lt;/h1&gt;
+
+&lt;p&gt;有些页面只能在特定条件下才可以访问。
+例如，你可能想定义一个只能给管理员查看的页面或者一个用户管理页面，只给
+当前用户看。
+使用lib-noir中的noir.util.route可以达到这个目的，我们可以定义访问特殊
+页面的逻辑&lt;/p&gt;
+
+&lt;h1&gt;Marking Routes as Restricted&lt;/h1&gt;
+
+&lt;p&gt;noir.util.route/restricted宏被用来定义访问路由的方式:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/private/:id&quot; [id] (restricted &quot;private!&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果我们想定义多个路由的访问权限，可以使用def-restricted-routes宏.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def-restricted-routes private-pages
+  (GET &quot;/profile&quot; [] (show-profile))
+  (GET &quot;/my-secret-page&quot; [] (show-secret-page))
+  (GET &quot;/another-secret-page&quot; [] (another-secret-page)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码等同于&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defroutes private-pages
+  (GET &quot;/profile&quot; [] (restricted (show-profile)))
+  (GET &quot;/secret-page1&quot; [] (restricted (show-secret-page)))
+  (GET &quot;/secret-page2&quot; [] (restricted (another-secret-page))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;默认情况下，受限访问的路由会检查请求是否符合所有的条件。&lt;/p&gt;
+
+&lt;h1&gt;Specifying Access Rules&lt;/h1&gt;
+
+&lt;p&gt;我们来看看如何创建一个路由，它只有在session中存在:user所对应的值时，
+才能访问。 首先，我们需要引用noir.util.route和noir.session.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns myapp.handler
+  (:require ...
+            [noir.util.route :refer [restricted]]
+            [noir.session :as session]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接着，我们将编写函数来实现上面我们所说的访问规则。函数必须接受request
+作为其参数并且返回true或者false来确认页面是否可以访问。
+下面就是该函数的实现，它检查当前session中是否存在user。如果没有则重定
+向。默认重定向到根路径。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn user-access [request]
+  (session/get :user))
+
+(def app
+ (middleware/app-handler
+   [app-routes]
+   :access-rules [user-access]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在，所有的受限的处理程序在session中不存在:user时都会重定向到根目录。&lt;/p&gt;
+
+&lt;h1&gt;Access Rule Groups&lt;/h1&gt;
+
+&lt;p&gt;当你以map的方式来提供访问规则，则可以进行进一步的处理。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;:uri - 符合访问规则的URI&lt;/li&gt;
+&lt;li&gt;:uris - 和:uri类似，匹配多个URI&lt;/li&gt;
+&lt;li&gt;:redirect - 重定向地址&lt;/li&gt;
+&lt;li&gt;:on-fail - 重定向可选项，可以指定一个请求错误时的处理函数，函数必须
+以request为参数&lt;/li&gt;
+&lt;li&gt;:rule - 一个规则&lt;/li&gt;
+&lt;li&gt;:rules - 多个规则&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;:rules可以用在下面集中情形下。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;:rules [rule1 rule2]
+:rules {:any [rule1 rule2]}
+:rules {:every [rule1 rule2] :any [rule3 rule4]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;默认情况下，每个规则都必须通过才能访问成功，:any则表示只要符合任何一个
+规则即可访问。下面是一些例子:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn admin-access [req]
+ (session/get :admin))
+
+:access-rules [{:redirect &quot;/access-denied&quot;
+                :rule user-access}]
+
+:access-rules [{:uris [&quot;/user/*&quot; &quot;/private*&quot;]
+                :rule user-access}]
+
+:access-rules [{:uri &quot;/admin/*&quot; :rule admin-access}
+               {:uri &quot;/user/*&quot;
+                :rules {:any [user-access admin-access]}}]
+
+:access-rules [{:on-fail (fn [req] &quot;access restricted&quot;)
+                :rule user-access}]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Cross Site Request Forgery Protection&lt;/h1&gt;
+
+&lt;p&gt;CSRF攻击指的是第三方通过一个验证过的用户来提交动作。当你的网站包含了一
+个恶意链接或按钮或js的时候，很容易发生。
+我们可以使用Ring-Anti-Forgery来放置csrf攻击. 首先添加[ring-anti-forgery
+&quot;0.2.1&quot;]依赖。接着引入相应的包。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns myapp.handler
+  (:require
+    ...
+    [selmer.parser :refer [add-tag!]]
+    [ring.util.anti-forgery :refer [anti-forgery-field]]
+    [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接着，我们将添加wrap-anti-forgery中间件:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app (middleware/app-handler
+           ;;add your application routes here
+           [home-routes app-routes]
+           ;;add custom middleware here
+           :middleware [wrap-anti-forgery]
+           ;;add access rules here
+           ;;each rule should be a vector
+           :access-rules []))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;添加完后一个随机字符串将会被赋给anti-forgery-token变量。所有的POST请求
+将会包含一个叫_~anti~-forgery-token的token.
+接着我们在init函数中添加csrf标签:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn init
+  ...
+  (add-tag! :csrf-token (fn [_ _] (anti-forgery-field)))
+  ...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后在模板中使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;    &amp;lt;form name=&quot;input&quot; action=&quot;/login&quot; method=&quot;POST&quot;&amp;gt;
+      { % csrf-token %}
+      Username: &amp;lt;input type=&quot;text&quot; name=&quot;user&quot;&amp;gt;
+      Password: &amp;lt;input type=&quot;password&quot; name=&quot;pass&quot;&amp;gt;
+    &amp;lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&amp;gt;
+    &amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;所有的POST请求如果不包含这个token，则会被拒绝。服务器返回403错误。&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-ClojureScript</title>
+        <link href="http://ivanpig.github.io/luminus/clojurescript.html"/>
+        <updated>2013-09-17T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//luminus/clojurescript</id>
+        <content type="html">&lt;h1&gt;Summary&lt;/h1&gt;
+
+&lt;p&gt;ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScript可以
+有如下有点：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在客户端和服务端使用相同的语言&lt;/li&gt;
+&lt;li&gt;在前后端共用相同的代码&lt;/li&gt;
+&lt;li&gt;简介流畅的语言&lt;/li&gt;
+&lt;li&gt;使用Leiningen管理依赖关系&lt;/li&gt;
+&lt;li&gt;不可变数据&lt;/li&gt;
+&lt;li&gt;功能强大的库&lt;/li&gt;
+&lt;li&gt;Adding ClojureScript Support&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;最简单的添加ClojureScript支持的方法就是在创建新项目的时候添加+cljs选项
+。不过在现有的项目中添加ClojureScript也同样的简单。你只需要在
+project.clj文件中添加如下内容即可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;:plugins [...
+          [lein-cljsbuild &quot;0.3.0&quot;]]
+
+:hooks [... leiningen.cljsbuild]
+
+:cljsbuild
+{:builds [{:source-paths [&quot;src-cljs&quot;]
+           :compiler {:output-to &quot;resources/public/js/site.js&quot;
+                      :optimizations :advanced}}]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码将在项目中添加cljsbuild插件和一个钩子。
+所有的命名空间需要在项目根目录下的src-cljs目录内。注意，ClojureScript
+文件需要以.cljs结尾。如果文件以.clj结尾，它也会被编译，不过它就无法访
+问js命名空间。&lt;/p&gt;
+
+&lt;h1&gt;Using Libraries&lt;/h1&gt;
+
+&lt;p&gt;使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
+ClojureScript库和其他库一样都配置在project.clj文件中。&lt;/p&gt;
+
+&lt;h1&gt;Running the Compiler&lt;/h1&gt;
+
+&lt;p&gt;开发ClojureScript应用最简单的方法就是自动运行编译器。这样，你的任何修
+改都会立即生效。要开启自动编译，只需要输入如下命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein cljsbuild auto
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也可以使用一次编译的方式。这将会将所有的js编译到一个js文件中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein cljsbuild once
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Advanced Compilation and Exports&lt;/h1&gt;
+
+&lt;p&gt;使用高级编译的话变量名会被编译器压缩。如果要确保函数被编译为js时函数名
+不变，那么我们需要保证他们的名字是受保护的。而这只需要添加^:export注解：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns main)
+
+(defn ^:export init []
+  (js/alert &quot;hello world&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们可以像这样来调用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;    &amp;lt;script&amp;gt;
+    main.init();
+    &amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果我们在代码里使用js库，那么我们必须要保护我们所调用的函数名。例如，
+如果我们想使用AlbumColors库，如果我们这样写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn ^:export init []
+  (.getColors (js/AlbumColors. &quot;/img/foo.jpg&quot;)
+    (fn [[background]]
+     (.log js/console background))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当使用高级编译时AlbumColors和getColors将会被改写。为了不让编译器改写他
+们，我们需要创建一个js文件，里面包含了我们需要保护的函数，并在代码里引
+用它。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.javascript}&quot;&gt;var AlbumColors = {};
+AlbumColors.getColors = function() {};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们把上面的代码放到resource目录下一个叫externs.js文件里面。并在
+cljsbuild丽引用它，像这样:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;{:source-paths [&quot;src-cljs&quot;]
+     :compiler
+     {:pretty-print false
+      :output-to &quot;resources/public/js/site.js&quot;
+      ;;specify the externs file to protect function names
+      :externs [&quot;resources/externs.js&quot;]
+      :optimizations :advanced}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Interacting with JavaScript&lt;/h1&gt;
+
+&lt;p&gt;所有的js函数和变量都是在js这个Namespace的。&lt;/p&gt;
+
+&lt;p&gt;*方法调用*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.method object params)
+
+(.log js/console &quot;hello world!&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*访问属性*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.-property object)
+
+(.-style div)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*设置属性*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(set! (.-property object))
+
+(set! (.-color (.-style div) &quot;#234567&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更多的例子请查看&lt;a href=&quot;http://himera.herokuapp.com/synonym.html&quot;&gt;Himera文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;Working With the DOM&lt;/h1&gt;
+
+&lt;p&gt;有不少的库可以访问和修改DOM元素。一般用得比较多的是&lt;a href=&quot;https://github.com/levand/domina&quot;&gt;Domina&lt;/a&gt;和&lt;a href=&quot;https://github.com/Prismatic/dommy&quot;&gt;Dommy&lt;/a&gt;。
+Domina对选择和操作DOM元素做了轻量级的封装。而Dommy是个类似hiccup的模板。&lt;/p&gt;
+
+&lt;h1&gt;Ajax&lt;/h1&gt;
+
+&lt;p&gt;Luminus使用cljs-ajax来处理Ajax请求。这个库提供的ajax-request，GET和
+POST函数能很方便的发送ajax请求。&lt;/p&gt;
+
+&lt;p&gt;*ajax-request* ajax-request是最基本的请求函数，有如下参数:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;uri - 请求URI&lt;/li&gt;
+&lt;li&gt;method - 一个表示http请求类型的字符串,比如：&quot;PUT&quot;, &quot;DELETE&quot;&lt;/li&gt;
+&lt;li&gt;format - 一个表示响应类型的关键字,比如： :json 或者 :edn,默认是 :edn&lt;/li&gt;
+&lt;li&gt;handler - 请求成功的回调函数，以响应为参数&lt;/li&gt;
+&lt;li&gt;error-handler - 请求失败的回调函数,以一个map为参数，map包含了错误信
+息，相应的key为: :status 和 :status-text&lt;/li&gt;
+&lt;li&gt;params - 一个包含参数的map，发送给服务器&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;*GET/POST helpers* GET和POST助手接收一个URL和选项，来简化请求：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;:handler - 请求成功回调函数&lt;/li&gt;
+&lt;li&gt;:error-handler - 请求失败函数&lt;/li&gt;
+&lt;li&gt;:format - 相应格式化&lt;/li&gt;
+&lt;li&gt;:params - 发送给服务器的参数&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;和ajax-request参数功能相同。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns foo
+  (:require [ajax.core :refer [GET POST]]))
+
+(defn handler [response]
+  (.log js/console (str response)))
+
+(defn error-handler [{:keys [status status-text]}]
+  (.log js/console
+    (str &quot;something bad happened: &quot; status &quot; &quot; status-text)))
+
+(GET &quot;/hello&quot;)
+
+(GET &quot;/hello&quot; {:handler handler})
+
+(POST &quot;/hello&quot;)
+
+(POST &quot;/send-message&quot;
+        {:params {:message &quot;Hello World&quot;
+                  :user    &quot;Bob&quot;}
+         :handler handler
+         :error-handler error-handler})
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Summary&lt;/h1&gt;
+
+&lt;p&gt;ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScript可以
+有如下有点：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在客户端和服务端使用相同的语言&lt;/li&gt;
+&lt;li&gt;在前后端共用相同的代码&lt;/li&gt;
+&lt;li&gt;简介流畅的语言&lt;/li&gt;
+&lt;li&gt;使用Leiningen管理依赖关系&lt;/li&gt;
+&lt;li&gt;不可变数据&lt;/li&gt;
+&lt;li&gt;功能强大的库&lt;/li&gt;
+&lt;li&gt;Adding ClojureScript Support&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;最简单的添加ClojureScript支持的方法就是在创建新项目的时候添加+cljs选项
+。不过在现有的项目中添加ClojureScript也同样的简单。你只需要在
+project.clj文件中添加如下内容即可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;:plugins [...
+          [lein-cljsbuild &quot;0.3.0&quot;]]
+
+:hooks [... leiningen.cljsbuild]
+
+:cljsbuild
+{:builds [{:source-paths [&quot;src-cljs&quot;]
+           :compiler {:output-to &quot;resources/public/js/site.js&quot;
+                      :optimizations :advanced}}]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码将在项目中添加cljsbuild插件和一个钩子。
+所有的命名空间需要在项目根目录下的src-cljs目录内。注意，ClojureScript
+文件需要以.cljs结尾。如果文件以.clj结尾，它也会被编译，不过它就无法访
+问js命名空间。&lt;/p&gt;
+
+&lt;h1&gt;Using Libraries&lt;/h1&gt;
+
+&lt;p&gt;使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
+ClojureScript库和其他库一样都配置在project.clj文件中。&lt;/p&gt;
+
+&lt;h1&gt;Running the Compiler&lt;/h1&gt;
+
+&lt;p&gt;开发ClojureScript应用最简单的方法就是自动运行编译器。这样，你的任何修
+改都会立即生效。要开启自动编译，只需要输入如下命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein cljsbuild auto
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也可以使用一次编译的方式。这将会将所有的js编译到一个js文件中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein cljsbuild once
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Advanced Compilation and Exports&lt;/h1&gt;
+
+&lt;p&gt;使用高级编译的话变量名会被编译器压缩。如果要确保函数被编译为js时函数名
+不变，那么我们需要保证他们的名字是受保护的。而这只需要添加^:export注解：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns main)
+
+(defn ^:export init []
+  (js/alert &quot;hello world&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们可以像这样来调用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;    &amp;lt;script&amp;gt;
+    main.init();
+    &amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果我们在代码里使用js库，那么我们必须要保护我们所调用的函数名。例如，
+如果我们想使用AlbumColors库，如果我们这样写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn ^:export init []
+  (.getColors (js/AlbumColors. &quot;/img/foo.jpg&quot;)
+    (fn [[background]]
+     (.log js/console background))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当使用高级编译时AlbumColors和getColors将会被改写。为了不让编译器改写他
+们，我们需要创建一个js文件，里面包含了我们需要保护的函数，并在代码里引
+用它。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.javascript}&quot;&gt;var AlbumColors = {};
+AlbumColors.getColors = function() {};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们把上面的代码放到resource目录下一个叫externs.js文件里面。并在
+cljsbuild丽引用它，像这样:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;{:source-paths [&quot;src-cljs&quot;]
+     :compiler
+     {:pretty-print false
+      :output-to &quot;resources/public/js/site.js&quot;
+      ;;specify the externs file to protect function names
+      :externs [&quot;resources/externs.js&quot;]
+      :optimizations :advanced}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Interacting with JavaScript&lt;/h1&gt;
+
+&lt;p&gt;所有的js函数和变量都是在js这个Namespace的。&lt;/p&gt;
+
+&lt;p&gt;*方法调用*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.method object params)
+
+(.log js/console &quot;hello world!&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*访问属性*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.-property object)
+
+(.-style div)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*设置属性*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(set! (.-property object))
+
+(set! (.-color (.-style div) &quot;#234567&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更多的例子请查看&lt;a href=&quot;http://himera.herokuapp.com/synonym.html&quot;&gt;Himera文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;Working With the DOM&lt;/h1&gt;
+
+&lt;p&gt;有不少的库可以访问和修改DOM元素。一般用得比较多的是&lt;a href=&quot;https://github.com/levand/domina&quot;&gt;Domina&lt;/a&gt;和&lt;a href=&quot;https://github.com/Prismatic/dommy&quot;&gt;Dommy&lt;/a&gt;。
+Domina对选择和操作DOM元素做了轻量级的封装。而Dommy是个类似hiccup的模板。&lt;/p&gt;
+
+&lt;h1&gt;Ajax&lt;/h1&gt;
+
+&lt;p&gt;Luminus使用cljs-ajax来处理Ajax请求。这个库提供的ajax-request，GET和
+POST函数能很方便的发送ajax请求。&lt;/p&gt;
+
+&lt;p&gt;*ajax-request* ajax-request是最基本的请求函数，有如下参数:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;uri - 请求URI&lt;/li&gt;
+&lt;li&gt;method - 一个表示http请求类型的字符串,比如：&quot;PUT&quot;, &quot;DELETE&quot;&lt;/li&gt;
+&lt;li&gt;format - 一个表示响应类型的关键字,比如： :json 或者 :edn,默认是 :edn&lt;/li&gt;
+&lt;li&gt;handler - 请求成功的回调函数，以响应为参数&lt;/li&gt;
+&lt;li&gt;error-handler - 请求失败的回调函数,以一个map为参数，map包含了错误信
+息，相应的key为: :status 和 :status-text&lt;/li&gt;
+&lt;li&gt;params - 一个包含参数的map，发送给服务器&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;*GET/POST helpers* GET和POST助手接收一个URL和选项，来简化请求：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;:handler - 请求成功回调函数&lt;/li&gt;
+&lt;li&gt;:error-handler - 请求失败函数&lt;/li&gt;
+&lt;li&gt;:format - 相应格式化&lt;/li&gt;
+&lt;li&gt;:params - 发送给服务器的参数&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;和ajax-request参数功能相同。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns foo
+  (:require [ajax.core :refer [GET POST]]))
+
+(defn handler [response]
+  (.log js/console (str response)))
+
+(defn error-handler [{:keys [status status-text]}]
+  (.log js/console
+    (str &quot;something bad happened: &quot; status &quot; &quot; status-text)))
+
+(GET &quot;/hello&quot;)
+
+(GET &quot;/hello&quot; {:handler handler})
+
+(POST &quot;/hello&quot;)
+
+(POST &quot;/send-message&quot;
+        {:params {:message &quot;Hello World&quot;
+                  :user    &quot;Bob&quot;}
+         :handler handler
+         :error-handler error-handler})
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-HTML模板</title>
+        <link href="http://ivanpig.github.io/luminus/html_templating.html"/>
+        <updated>2013-09-16T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//luminus/html_templating</id>
+        <content type="html">&lt;h1&gt;Templating Options&lt;/h1&gt;
+
+&lt;p&gt;Luminus包含了Hiccup的依赖.如果你熟悉Hiccup那么可以直接使用。
+Hiccup使用clojure数据结构来描述模板。并且,Hiccup提供了丰富的API来生成
+HTML元素。 Luminus也包含了Selmer，Selmer使用了普通的文本文件来描述模板。
+你可以使用它们中的任何一个模板，或者混合使用.抑或你可以选择任何你喜欢
+的模板框架，比如Enlive或者Stencil。&lt;/p&gt;
+
+&lt;h1&gt;HTML Templating Using Selmer&lt;/h1&gt;
+
+&lt;p&gt;Selmer是一个类似Django模板的框架。如果你熟悉Django或者其他类似的模板语
+言，那么你会感觉很熟悉.&lt;/p&gt;
+
+&lt;h2&gt;Creating Templates&lt;/h2&gt;
+
+&lt;p&gt;Selmer将展示逻辑和程序逻辑分开。实际上Selmer模板就是包含了动态元素的
+HTML文件。来看下面的例子。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&amp;gt;
+        &amp;lt;title&amp;gt;My First Template&amp;lt;/title&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body&amp;gt;
+        &amp;lt;h2&amp;gt;Hello { {name}}&amp;lt;/h2&amp;gt;
+    &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;模板使用了一个包含了键值对的上下文环境。上下文环境中包含了我们
+需要在运行时获得的变量的值。上面的代码中，我们从上下文环境中获取名字为
+name的变量的值。
+有两个函数可以渲染模板,render和render-file。render函数接收一个字符串来
+渲染模板。而render-file接收一个字符串作为路径来渲染模板。
+如果我们将上面的模板定义保存到index.html文件中。我们就可以这样来渲染:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns example.routes.home
+  (:use [selmer.parser :only [render-file]]))
+
+(defn index [request]
+  (render-file &quot;example/views/templates/index.html&quot;
+               {:name &quot;John&quot;}))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;render-file函数将src目录作为根路径，使用相对路径来查找模板。
+上面，我们传递了一个字符串作为变量name的值。实际上，我们可以传递任何类
+型的值。比如，我们传递一个集合，在模板里我们可以使用tag来遍历这个集合。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    &amp;lt;ul&amp;gt;
+        { % for item in items %}
+        &amp;lt;li&amp;gt; { {item}} &amp;lt;/li&amp;gt;
+        { % endfor %}
+    &amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render-file &quot;/example/views/templates/items.html {:items (range 10)}&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果传递的是个map，我们可以这样访问:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;&amp;lt;p&amp;gt;Hello { {user.first}} { {user.last}}&amp;lt;/p&amp;gt;&quot;
+        {:user {:first &quot;John&quot; :last &quot;Doe&quot;}})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果没有指定的展示方式，那么默认调用toString方法。
+默认情况下，Selmer会缓存编译后的模板。只有当文件发生变化时，才会触发
+Selmer重新编译模板。你也可以选择Selmer是开启缓存还是关闭缓存。只需要调
+用(selmer.parser/cache-on!)或(selmer.parser/cache-off!).&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h2&gt;Filters&lt;/h2&gt;
+
+&lt;p&gt;Filter允许我们在渲染变量之前对其做一些处理。比如将其值变为大写，计算一
+个hash或者是计算长度。Filter的使用方法很简单，只需要在变量名后面跟一个
+&quot;|&quot;接着是Filter即可。比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    { {name|upper}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面是内置的filter:&lt;/p&gt;
+
+&lt;p&gt;*add*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {add_me|add:2:3:4}}&quot; {:add_me 2}) =&amp;gt; 11
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*addslashes* 为了保留字符串中的转义符&quot;&quot;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|addslashes}}&quot; {:name &quot;\&quot;Russian tea is best tea\&quot;&quot;}) =&amp;gt; &quot;\&quot;Russian tea is best tea\&quot;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*block.super* 在代码块中插入上级代码块中的内容。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;        { % block foo %} { {block.super}} some content{ % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*capitalize*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|capitalize}}&quot; {:name &quot;russian tea is best tea&quot;}) =&amp;gt; &quot;Russian tea is best tea&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*center*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|center:20}}&quot; {:name &quot;bitemyapp&quot;}) =&amp;gt; &quot; bitemyapp &quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*count*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|count}}&quot; {:name &quot;Yogthos&quot;}) =&amp;gt; &quot;7&quot;
+
+(render &quot;{ {items|count}}&quot; {:items [1 2 3 4]}) =&amp;gt; &quot;4&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*date*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {creation-time|date:\&quot;yyyy-MM-dd_HH:mm:ss\&quot;}}&quot; {:created-at (java.util.Date.)}) =&amp;gt; &quot;2013-07-28_20:51:48&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*default*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|default:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name &quot;bitemyapp&quot;}) =&amp;gt; &quot;bitemyapp&quot;
+
+(render &quot;{ {name|default:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name nil}) =&amp;gt; &quot;I &amp;lt;3 ponies&quot;
+
+(render &quot;{ {name|default:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name []}) =&amp;gt; &quot;[]&quot;
+
+(render &quot;{ {name|default:&quot;I &amp;lt;3 ponies&quot;}}&quot; {}) =&amp;gt; &quot;I &amp;lt;3 ponies&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*default-if-empty*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|default-if-empty:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name &quot;bitemyapp&quot;}) =&amp;gt; &quot;bitemyapp&quot;
+
+(render &quot;{ {name|default-if-empty:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name nil}) =&amp;gt; &quot;I &amp;lt;3 ponies&quot;
+
+(render &quot;{ {name|default-if-empty:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name []}) =&amp;gt; &quot;I &amp;lt;3 ponies&quot;
+
+(render &quot;{ {name|default-if-empty:&quot;I &amp;lt;3 ponies&quot;}}&quot; {}) =&amp;gt; &quot;I &amp;lt;3 ponies&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*double-format*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {tis-a-number|double-format:2}}&quot; {:tis-a-number 10.00001}) =&amp;gt; 10.00
+
+(render &quot;{ {tis-a-number|double-format}}&quot; {:tis-a-number 10.00001}) =&amp;gt; 10.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*first*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {seq-of-some-sort|first}}&quot; {:seq-of-some-sort [:dog :cat :bird :bird :bird :is :the :word]}) =&amp;gt; :dog
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*get-digit* 从右边返回相应位数的数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {tis-a-number|get-digit:1}}&quot; {:tis-a-number 12.34567}) =&amp;gt; 7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*hash* 有效的hash方式: md5, sha, sha256, sha384, sha512&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {domain|hash:\&quot;md5\&quot;}}&quot; {:domain &quot;example.org&quot;}) =&amp;gt; &quot;1bdf72e04d6b50c82a48c7e4dd38cc69&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*join*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {sequence|join}}&quot; {:sequence [1 2 3 4]}) =&amp;gt; &quot;1234&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*json* 生成json格式，默认情况下特殊字符会被编码.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {data|json}}&quot; {:data [1 2 {:foo 27 :dan &quot;awesome&quot;}]})
+               =&amp;gt; &quot;[1,2,{&amp;amp;quot;foo&amp;amp;quot;:27,&amp;amp;quot;dan&amp;amp;quot;:&amp;amp;quot;awesome&amp;amp;quot;}]&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你不希望被编码则使用safe过滤器&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {f|json|safe}}&quot; {:f {:foo 27 :dan &quot;awesome&quot;}})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*last*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {sequence|last}}&quot; {:sequence 12.34567}) =&amp;gt; 7
+
+(render &quot;{ {sequence|last}}&quot; {:sequence [1 2 3 4]}) =&amp;gt; 4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*length*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {sequence|length}}&quot; {:sequence [1 2 3 4]}) =&amp;gt; 4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*length-is*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {sequence|length-is:4}}&quot; {:sequence [1 2 3 4]}) =&amp;gt; true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*linebreaks* 普通换行替换为html换行,结果在\&amp;lt;p&gt;标签内&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|linebreaks|safe}}&quot; {:foo &quot;\nbar\nbaz&quot;}) =&amp;gt; &quot;&amp;lt;p&amp;gt;&amp;lt;br /&amp;gt;bar&amp;lt;br /&amp;gt;baz&amp;lt;/p&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*linebreaks-br* 和linebreaks功能相同，但是没有\&amp;lt;p&gt;标签&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|linebreaks-br|safe}}&quot; {:foo &quot;\nbar\nbaz&quot;}) =&amp;gt; &quot;bar&amp;lt;br /&amp;gt;baz&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*linenumbers* 显示行号&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|linenumbers&quot; {:foo &quot;foo\n\bar\nbaz&quot;}) =&amp;gt; &quot;1. foo\n2. \bar\n3. baz&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*lower*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|lower}}&quot; {:foo &quot;FOOBaR&quot;}) =&amp;gt; &quot;foobar&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*pluralize* 返回单词的复数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {items|count}} item{ {items|pluralize}}&quot; {:items []}) =&amp;gt; &quot;0 items&quot;
+
+(render &quot;{ {items|count}} item{ {items|pluralize}}&quot; {:items [1]}) =&amp;gt; &quot;1 item&quot;
+
+(render &quot;{ {items|count}} item{ {items|pluralize}}&quot; {:items [1 2]}) =&amp;gt; &quot;2 items&quot;
+
+(render &quot;{ {fruit|count}} tomato{ {fruit|pluralize:\&quot;es\&quot;}}&quot; {:fruit []}) =&amp;gt; &quot;0 tomatoes&quot;
+
+(render &quot;{ {people|count}} lad{ {people|pluralize:\&quot;y\&quot;:\&quot;ies\&quot;}}&quot; {:people [1]}) =&amp;gt; &quot;1 lady&quot;
+
+(render &quot;{ {people|count}} lad{ {people|pluralize:\&quot;y\&quot;:\&quot;ies\&quot;}}&quot; {:people [1 2]}) =&amp;gt; &quot;2 ladies&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*rand-nth* 从集合中返回rand-nths值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|rand-nth}}&quot; {:foo [1 2 3]}) =&amp;gt; &quot;2&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*remove* 从字符串中去除特殊字符&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|remove:\&quot;aeiou\&quot;}}&quot; {:foo &quot;abcdefghijklmnop&quot;}) =&amp;gt; &quot;bcdfghjklmnp&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*remove-tags* 去除html标签&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ { value|remove-tags:b:span }}&quot; {:value &quot;&amp;lt;b&amp;gt;&amp;lt;span&amp;gt;foobar&amp;lt;/span&amp;gt;&amp;lt;/b&amp;gt;&quot;}) =&amp;gt; &quot;foobar&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*safe* 默认情况下Selmer会编码所有的内容，此过滤器时Selmer不去编码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {data}}&quot; {:data &quot;&amp;lt;foo&amp;gt;&quot;}) =&amp;gt; &quot;&amp;amp;lt;foo&amp;amp;gt;&quot;
+
+(render &quot;{ {data|safe}}&quot; {:data &quot;&amp;lt;foo&amp;gt;&quot;}) =&amp;gt; &quot;&amp;lt;foo&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*sort*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ { value|sort }}&quot; {:value [1 4 2 3 5]}) =&amp;gt; &quot;(1 2 3 4 5)&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*sort-by*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ { value|sort-by:name }}&quot; {:value [{:name &quot;John&quot;} {:name &quot;Jane&quot;}]})
+                     =&amp;gt; &quot;({:name &amp;amp;quot;Jane&amp;amp;quot;} {:name &amp;amp;quot;John&amp;amp;quot;})&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*sort-reversed* 反序排列&lt;/p&gt;
+
+&lt;p&gt;*sort-by-reversed* 和sort-by功能相同，反序&lt;/p&gt;
+
+&lt;p&gt;upper&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {shout|upper}}&quot; {:shout &quot;hello&quot;}) =&amp;gt; &quot;HELLO&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Defining Custom Filters&lt;/h2&gt;
+
+&lt;p&gt;你可以使用selmer.filters/add-filter!函数来方便的添加自定义的Filter.此
+函数以元素作为参数，并返回替换后的值.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(use 'selmer.filters)
+
+(add-filter! :embiginate #(.toUpperCase %))
+ (render &quot;{ {shout|embiginate}}&quot; {:shout &quot;hello&quot;})
+
+(add-filter! :count count)
+(render &quot;{ {foo|count}}&quot; {:foo (range 3)})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Filters可以链式使用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(add-filter! :empty? empty?)
+(render &quot;{ {foo|upper|empty?}}&quot; {:foo &quot;Hello&quot;})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Tags&lt;/h2&gt;
+
+&lt;p&gt;Selmer提供了两种类型的Tag。一种是类似extends和include这样的内联tag。这
+种tag不需要结束tag。另一种形式的tag是块tag。这种tag有开始和结束tag，以
+及代码块。比如if ... endif块。 让我们先来看看默认的tag:&lt;/p&gt;
+
+&lt;p&gt;*include* 将引用的模板内容替换其自身&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % include &quot;path/to/comments.html&quot; %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以提供默认的参数，如果tag有匹配上上的参数，则会获取它的值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;{ % include &quot;templates/inheritance/child.html&quot; with name=&quot;Jane Doe&quot; greeting=&quot;Hello!&quot; %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*block*
+定义一个块，可以使用模板继承的方式来覆盖，类似Java中的父类方法.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    { % block foo %}This text can be overridden later{ % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*cycle* 循环提供的参数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ % for i in items %}&amp;lt;li class={ % cycle \&quot;blue\&quot; \&quot;white\&quot;%}&amp;gt;{ {i}}&amp;lt;/li&amp;gt;{ % endfor %}&quot; {:items (range 5)})
+                        =&amp;gt; &quot;&amp;lt;li class=\&quot;blue\&quot;&amp;gt;0&amp;lt;/li&amp;gt;&amp;lt;li class=\&quot;white\&quot;&amp;gt;1&amp;lt;/li&amp;gt;&amp;lt;li class=\&quot;blue\&quot;&amp;gt;2&amp;lt;/li&amp;gt;
+                            &amp;lt;li class=\&quot;white\&quot;&amp;gt;3&amp;lt;/li&amp;gt;&amp;lt;li class=\&quot;blue\&quot;&amp;gt;4&amp;lt;/li&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*extends* 引用父模板。父模板中的块会被子模板中相应的块覆盖。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Note: 子模板只能包含块。任何块以外的tag或文本都被忽略&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;例如有一个叫base.html的父模板和一个叫child.html的子模板&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;&amp;lt;html&amp;gt;
+  &amp;lt;body&amp;gt;
+    { % block foo %}This text can be overridden later{ % endblock %}
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    { % extends &quot;base.html&quot; %}
+    { % block foo %}
+      &amp;lt;p&amp;gt;This text will override the text in the parent&amp;lt;/p&amp;gt;
+    { % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*if*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % if condition %}yes!{ % endif %}
+
+{ % if condition %}yes!{ % else %}no!{ % endif %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;配合filter使用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(add-filter! :empty? empty?)
+(render &quot;{ % if files|empty? %}no files{ % else %}files{ % endif %}&quot;
+  {:files []})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*ifequal* 之用当两个参数相等时才执行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % ifequal foo bar %}yes!{ % endifequal %}
+
+{ % ifequal foo bar %}yes!{ % else %}no!{ % endifequal %}
+
+{ % ifequal foo &quot;this also works&quot; %}yes!{ % endifequal %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*for* 遍历集合中的元素。同时可以使用如下参数。
+-   forloop.first
+-   forloop.last
+-   forloop.counter
+-   forloop.counter0
+-   forloop.revcounter
+-   forloop.revcounter0
+-   forloop.length&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % for x in some-list %}element: { {x}} first? { {forloop.first}} last? { {forloop.last}}{ % endfor %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以直接访问结构化的数据&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % for item in items %} &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;{ {item.name}}&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;{ {item.age}}&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt; { % endfor %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*now* 当前时间&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;(render (str &quot;{ % now \&quot;&quot; date-format &quot;\&quot;%}&quot;) {}) =&amp;gt; &quot;\&quot;01 08 2013\&quot;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*comment* 注释&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;(render &quot;foo bar { % comment %} baz test { {x}} { % endcomment %} blah&quot; {}) =&amp;gt; &quot;foo bar baz test blah&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*firstof* 取得第一个不是false的值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;(render &quot;{ % firstof var1 var2 var3 %}&quot; {:var2 &quot;x&quot; :var3 &quot;not me&quot;}) =&amp;gt; &quot;x&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*script*
+生成一个html的script标签，并以servlet-context键提供的值类作为文件的前
+置目录.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;(render &quot;{ % script \&quot;/js/site.js\&quot; %}&quot; {:servlet-context &quot;/myapp&quot;}) =&amp;gt;
+&quot;&amp;lt;script src=\&quot;/myapp/js/site.js\&quot; type=\&quot;text/javascript\&quot;&amp;gt;&amp;lt;/script&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*style*&lt;/p&gt;
+
+&lt;p&gt;生成一个html的style标签，并以servlet-context键提供的值类作为文件的前置目录.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ % style \&quot;/css/screen.css\&quot; %}&quot; {:servlet-context &quot;/myapp&quot;}) =&amp;gt;
+&quot;&amp;lt;link href=\&quot;/myapp/css/screen.css\&quot; rel=\&quot;stylesheet\&quot; type=\&quot;text/css\&quot; /&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*verbatim* 阻止内容中的parseeither解析&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ % verbatim %}{ {if dying}}Still alive.{ {/if}}{ % endverbatim %}&quot; {}) =&amp;gt; &quot;{ {if dying}}Still alive.{ {/if}}&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*with* 向上下文map中新增一个值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ % with total=business.employees|count %}{ { total }}{ % endwith %}&quot;
+         {:business {:employees (range 5)}})
+=&amp;gt; &quot;5 employees&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Defining Custom Tags&lt;/h2&gt;
+
+&lt;p&gt;除了上面已经提供的tag。你也可以自定义tag。使用add-tag!宏就可以了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(use 'selmer.parser)
+
+(add-tag! :foo
+  (fn [args context-map]
+    (str &quot;foo &quot; (first args))))
+
+(render &quot;{ % foo quux %} { % foo baz %}&quot; {})
+
+(add-tag! :bar
+  (fn [args context-map content]
+    (str content))
+  :baz :endbar)
+
+(render &quot;{ % bar %} some text { % baz %} some more text { % endbar %}&quot; {})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出，我们定义的tag提供了一个关键字作为tag的名称后面是tag体,结尾的
+tag不是必须的。
+当没有结尾的tag时,tag不包含任何内容。这种tag获取参数类进行处理。
+当有结尾tag时，每个块内的内容都会被作为开头那个tag所对应的map的键.开头
+tag对应的map包含:args和:content键，content的内容就对应到了:content.&lt;/p&gt;
+
+&lt;h2&gt;Template inheritance&lt;/h2&gt;
+
+&lt;p&gt;Selmer模板可以使用块tag来引用其他的模板。有两种方法可以引用模板，一个
+是extends一个是include.&lt;/p&gt;
+
+&lt;h3&gt;Extending Templates&lt;/h3&gt;
+
+&lt;p&gt;当我们使用extends这个tag时，当前的模板将会将引用的模板作为父模板。
+任何在base模板中的块，会被子模板中相同名字的块给覆盖.
+子模板中的内容需要在块tag中。不在块中的内容将会被忽略。
+我们来看个例子,我们创建一个叫base.html的父模板.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot; /&amp;gt;
+        &amp;lt;title&amp;gt;{ % block title %}My amazing site{ % endblock %}&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body&amp;gt;
+    &amp;lt;div id=&quot;content&quot;&amp;gt;
+        { % block content %}{ % endblock %}
+    &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后我们创建一个home.html模板来继承base.html。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % extends &quot;base.html&quot; %}
+
+    { % block content %}
+        { % for entry in entries %}
+            &amp;lt;h2&amp;gt;{ { entry.title }}&amp;lt;/h2&amp;gt;
+            &amp;lt;p&amp;gt;{ { entry.body }}&amp;lt;/p&amp;gt;
+        { % endfor %}
+    { % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当渲染home.html时entries的内容将会被打印出来。而在home.html中，我们没
+有定义title块，在渲染时会获取base.html中的title块的定义。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;注意，你可以多层级的继承模板。引擎会渲染最后的那个块.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;Including Templates&lt;/h3&gt;
+
+&lt;p&gt;include这个tag允许你包含一个模板。
+我们还是来看一个例子，我们有一个base.html这个模板，它包含了一个叫做
+register.html的模板和一个home.html的模板：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot; /&amp;gt;
+        &amp;lt;title&amp;gt;{ % block title %}My amazing site{ % endblock %}&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body&amp;gt;
+    &amp;lt;div id=&quot;content&quot;&amp;gt;
+        { % if user %}
+        { % include &quot;templates_path/home.html&quot; %}
+        { % else %}
+        { % include &quot;templates_path/register.html&quot; %}
+        { % endif %}
+    &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们能定义register.html&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    { % block register %}
+      &amp;lt;form action=&quot;/register&quot; method=&quot;POST&quot;&amp;gt;
+          &amp;lt;label for=&quot;id&quot;&amp;gt;user id&amp;lt;/label&amp;gt;
+          &amp;lt;input id=&quot;id&quot; name=&quot;id&quot; type=&quot;text&quot;&amp;gt;&amp;lt;/input&amp;gt;
+          &amp;lt;input pass=&quot;pass&quot; name=&quot;pass&quot; type=&quot;text&quot;&amp;gt;&amp;lt;/input&amp;gt;
+          &amp;lt;input type=&quot;submit&quot; value=&quot;register&quot;&amp;gt;
+      &amp;lt;/form&amp;gt;
+    { % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;和home.html:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    { % block home %}
+    &amp;lt;h1&amp;gt;Hello { {user}}&amp;lt;/h1&amp;gt;
+    { % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当渲染base.html时，将会引入register.html和home.html。
+更多信息请见&lt;a href=&quot;https://github.com/yogthos/Selmer&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;HTML Templating Using Hiccup&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/weavejester/hiccup&quot;&gt;Hiccup&lt;/a&gt;
+是另一个Clojure的HTML模板引擎。它的优势是我们可以使用纯正的
+Clojure代码来生成页面。也就是说我们不需要学习第三方的语法了。
+Hiccup主要使用Clojure的vector来渲染页面。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[:tag-name {:attribute-key &quot;attribute value&quot;} tag-body]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例如，如果我们想创建一个包含内容的div，我们可以这样写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[:div {:id &quot;hello&quot;, :class &quot;content&quot;} [:p &quot;Hello world!&quot;]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这将生成如下的html代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;        &amp;lt;div id=&quot;hello&quot; class=&quot;content&quot;&amp;gt;&amp;lt;p&amp;gt;Hello world!&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Hiccup提供了简化设置id和class的方法，简写如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[:div#hello.content [:p &quot;Hello world!&quot;]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Hiccup还提供了一些帮助类函数来创建元素，比如: forms, links, images, 等
+等.所有这些函数只是简单的返回类似上面格式的vector。也就是说，如果一个
+函数无法达到你的要求，你可以手写相应代码或者获取函数的返回值进行修改。
+每个函数可以使用一个map作为其第一个参数，来描绘属性:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(image {:align &quot;left&quot;} &quot;foo.png&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;生成html代码如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;&amp;lt;img align=\&quot;left\&quot; src=\&quot;foo.png\&quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是最佳实践还是将其保存到独立的CSS文件中。&lt;/p&gt;
+
+&lt;h2&gt;Forms and Input&lt;/h2&gt;
+
+&lt;p&gt;Hiccup还提供了form助手函数，看例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(form-to [:post &quot;/login&quot;]
+  (text-field {:placeholder &quot;screen name&quot;} &quot;id&quot;)
+  (password-field {:placeholder &quot;password&quot;} &quot;pass&quot;)
+  (submit-button &quot;login&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数第一个参数是一个vector，以HTTP请求类型为关键字，紧接着是请求
+url。其余的参数必须是HTML元素。生成的HTML代码如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;&amp;lt;form action=&quot;/login&quot; method=&quot;POST&quot;&amp;gt;
+  &amp;lt;input id=&quot;id&quot; name=&quot;id&quot; placeholder=&quot;screen name&quot; type=&quot;text&quot; /&amp;gt;
+  &amp;lt;input id=&quot;pass&quot; name=&quot;pass&quot; placeholder=&quot;password&quot; type=&quot;password&quot; /&amp;gt;
+  &amp;lt;input type=&quot;submit&quot; value=&quot;login&quot; /&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后LUminus模板在你的应用下面提供了一辅助函数。叫做md-&gt;html,这个函数能
+渲染载resources/public/目录下的markdown文件并返回一个HTML字符串。这个
+可以和Hiccup函数一起使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(:require [&amp;lt;yourapp&amp;gt;.util :as util])
+...
+(html [:div.contenr [:p (util/md-&amp;gt;html &quot;/md/paragraph.md&quot;)]])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;markdown生成由markdown-clj来处理，具体信息请见其&lt;a href=&quot;https://github.com/yogthos/markdown-clj&quot;&gt;Github&lt;/a&gt;
+页。&lt;/p&gt;
+
+&lt;h1&gt;Content caching&lt;/h1&gt;
+
+&lt;p&gt;lib-noir通过cache!宏提供了基本的内存式缓存，相应的宏在noir.util.cache
+下。如果想缓存一个页面，你是需要：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[noir.util.cache :as cache])
+
+(defn slow-loading-page []
+  (cache/cache!
+   :slow-page
+   (common/layout
+    [:div &quot;I load slowly&quot;]
+     (parse-lots-of-files))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过调用invalidate!来取消缓存,需要提供需要取消的缓存的key。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(cache/invalidate! :slow-page)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用clear!来清除当前所有的缓存&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(cache/clear!)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用set-timeout!来设置缓存时间(单位：秒)，超时后会重新加载。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(cache/set-timeout! 10)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后你可以通过set-size!来设置缓存的大小。当缓存超出了限定的大小，最先
+使用的数据将被被替换。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(cache/set-size! 10)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;注意，缓存会在操作成功后才重新加载。也就是说，比如程序去获取一个远程
+文件，但是失败了，那么缓存是不会被重新加载的。&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+        <summary type="html">&lt;h1&gt;Templating Options&lt;/h1&gt;
+
+&lt;p&gt;Luminus包含了Hiccup的依赖.如果你熟悉Hiccup那么可以直接使用。
+Hiccup使用clojure数据结构来描述模板。并且,Hiccup提供了丰富的API来生成
+HTML元素。 Luminus也包含了Selmer，Selmer使用了普通的文本文件来描述模板。
+你可以使用它们中的任何一个模板，或者混合使用.抑或你可以选择任何你喜欢
+的模板框架，比如Enlive或者Stencil。&lt;/p&gt;
+
+&lt;h1&gt;HTML Templating Using Selmer&lt;/h1&gt;
+
+&lt;p&gt;Selmer是一个类似Django模板的框架。如果你熟悉Django或者其他类似的模板语
+言，那么你会感觉很熟悉.&lt;/p&gt;
+
+&lt;h2&gt;Creating Templates&lt;/h2&gt;
+
+&lt;p&gt;Selmer将展示逻辑和程序逻辑分开。实际上Selmer模板就是包含了动态元素的
+HTML文件。来看下面的例子。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&amp;gt;
+        &amp;lt;title&amp;gt;My First Template&amp;lt;/title&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body&amp;gt;
+        &amp;lt;h2&amp;gt;Hello { {name}}&amp;lt;/h2&amp;gt;
+    &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;模板使用了一个包含了键值对的上下文环境。上下文环境中包含了我们
+需要在运行时获得的变量的值。上面的代码中，我们从上下文环境中获取名字为
+name的变量的值。
+有两个函数可以渲染模板,render和render-file。render函数接收一个字符串来
+渲染模板。而render-file接收一个字符串作为路径来渲染模板。
+如果我们将上面的模板定义保存到index.html文件中。我们就可以这样来渲染:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns example.routes.home
+  (:use [selmer.parser :only [render-file]]))
+
+(defn index [request]
+  (render-file &quot;example/views/templates/index.html&quot;
+               {:name &quot;John&quot;}))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;render-file函数将src目录作为根路径，使用相对路径来查找模板。
+上面，我们传递了一个字符串作为变量name的值。实际上，我们可以传递任何类
+型的值。比如，我们传递一个集合，在模板里我们可以使用tag来遍历这个集合。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    &amp;lt;ul&amp;gt;
+        { % for item in items %}
+        &amp;lt;li&amp;gt; { {item}} &amp;lt;/li&amp;gt;
+        { % endfor %}
+    &amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render-file &quot;/example/views/templates/items.html {:items (range 10)}&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果传递的是个map，我们可以这样访问:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;&amp;lt;p&amp;gt;Hello { {user.first}} { {user.last}}&amp;lt;/p&amp;gt;&quot;
+        {:user {:first &quot;John&quot; :last &quot;Doe&quot;}})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果没有指定的展示方式，那么默认调用toString方法。
+默认情况下，Selmer会缓存编译后的模板。只有当文件发生变化时，才会触发
+Selmer重新编译模板。你也可以选择Selmer是开启缓存还是关闭缓存。只需要调
+用(selmer.parser/cache-on!)或(selmer.parser/cache-off!).&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h2&gt;Filters&lt;/h2&gt;
+
+&lt;p&gt;Filter允许我们在渲染变量之前对其做一些处理。比如将其值变为大写，计算一
+个hash或者是计算长度。Filter的使用方法很简单，只需要在变量名后面跟一个
+&quot;|&quot;接着是Filter即可。比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    { {name|upper}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面是内置的filter:&lt;/p&gt;
+
+&lt;p&gt;*add*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {add_me|add:2:3:4}}&quot; {:add_me 2}) =&amp;gt; 11
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*addslashes* 为了保留字符串中的转义符&quot;&quot;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|addslashes}}&quot; {:name &quot;\&quot;Russian tea is best tea\&quot;&quot;}) =&amp;gt; &quot;\&quot;Russian tea is best tea\&quot;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*block.super* 在代码块中插入上级代码块中的内容。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;        { % block foo %} { {block.super}} some content{ % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*capitalize*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|capitalize}}&quot; {:name &quot;russian tea is best tea&quot;}) =&amp;gt; &quot;Russian tea is best tea&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*center*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|center:20}}&quot; {:name &quot;bitemyapp&quot;}) =&amp;gt; &quot; bitemyapp &quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*count*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|count}}&quot; {:name &quot;Yogthos&quot;}) =&amp;gt; &quot;7&quot;
+
+(render &quot;{ {items|count}}&quot; {:items [1 2 3 4]}) =&amp;gt; &quot;4&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*date*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {creation-time|date:\&quot;yyyy-MM-dd_HH:mm:ss\&quot;}}&quot; {:created-at (java.util.Date.)}) =&amp;gt; &quot;2013-07-28_20:51:48&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*default*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|default:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name &quot;bitemyapp&quot;}) =&amp;gt; &quot;bitemyapp&quot;
+
+(render &quot;{ {name|default:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name nil}) =&amp;gt; &quot;I &amp;lt;3 ponies&quot;
+
+(render &quot;{ {name|default:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name []}) =&amp;gt; &quot;[]&quot;
+
+(render &quot;{ {name|default:&quot;I &amp;lt;3 ponies&quot;}}&quot; {}) =&amp;gt; &quot;I &amp;lt;3 ponies&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*default-if-empty*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {name|default-if-empty:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name &quot;bitemyapp&quot;}) =&amp;gt; &quot;bitemyapp&quot;
+
+(render &quot;{ {name|default-if-empty:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name nil}) =&amp;gt; &quot;I &amp;lt;3 ponies&quot;
+
+(render &quot;{ {name|default-if-empty:&quot;I &amp;lt;3 ponies&quot;}}&quot; {:name []}) =&amp;gt; &quot;I &amp;lt;3 ponies&quot;
+
+(render &quot;{ {name|default-if-empty:&quot;I &amp;lt;3 ponies&quot;}}&quot; {}) =&amp;gt; &quot;I &amp;lt;3 ponies&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*double-format*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {tis-a-number|double-format:2}}&quot; {:tis-a-number 10.00001}) =&amp;gt; 10.00
+
+(render &quot;{ {tis-a-number|double-format}}&quot; {:tis-a-number 10.00001}) =&amp;gt; 10.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*first*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {seq-of-some-sort|first}}&quot; {:seq-of-some-sort [:dog :cat :bird :bird :bird :is :the :word]}) =&amp;gt; :dog
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*get-digit* 从右边返回相应位数的数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {tis-a-number|get-digit:1}}&quot; {:tis-a-number 12.34567}) =&amp;gt; 7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*hash* 有效的hash方式: md5, sha, sha256, sha384, sha512&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {domain|hash:\&quot;md5\&quot;}}&quot; {:domain &quot;example.org&quot;}) =&amp;gt; &quot;1bdf72e04d6b50c82a48c7e4dd38cc69&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*join*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {sequence|join}}&quot; {:sequence [1 2 3 4]}) =&amp;gt; &quot;1234&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*json* 生成json格式，默认情况下特殊字符会被编码.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {data|json}}&quot; {:data [1 2 {:foo 27 :dan &quot;awesome&quot;}]})
+               =&amp;gt; &quot;[1,2,{&amp;amp;quot;foo&amp;amp;quot;:27,&amp;amp;quot;dan&amp;amp;quot;:&amp;amp;quot;awesome&amp;amp;quot;}]&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你不希望被编码则使用safe过滤器&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {f|json|safe}}&quot; {:f {:foo 27 :dan &quot;awesome&quot;}})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*last*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {sequence|last}}&quot; {:sequence 12.34567}) =&amp;gt; 7
+
+(render &quot;{ {sequence|last}}&quot; {:sequence [1 2 3 4]}) =&amp;gt; 4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*length*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {sequence|length}}&quot; {:sequence [1 2 3 4]}) =&amp;gt; 4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*length-is*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {sequence|length-is:4}}&quot; {:sequence [1 2 3 4]}) =&amp;gt; true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*linebreaks* 普通换行替换为html换行,结果在\&amp;lt;p&gt;标签内&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|linebreaks|safe}}&quot; {:foo &quot;\nbar\nbaz&quot;}) =&amp;gt; &quot;&amp;lt;p&amp;gt;&amp;lt;br /&amp;gt;bar&amp;lt;br /&amp;gt;baz&amp;lt;/p&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*linebreaks-br* 和linebreaks功能相同，但是没有\&amp;lt;p&gt;标签&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|linebreaks-br|safe}}&quot; {:foo &quot;\nbar\nbaz&quot;}) =&amp;gt; &quot;bar&amp;lt;br /&amp;gt;baz&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*linenumbers* 显示行号&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|linenumbers&quot; {:foo &quot;foo\n\bar\nbaz&quot;}) =&amp;gt; &quot;1. foo\n2. \bar\n3. baz&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*lower*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|lower}}&quot; {:foo &quot;FOOBaR&quot;}) =&amp;gt; &quot;foobar&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*pluralize* 返回单词的复数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {items|count}} item{ {items|pluralize}}&quot; {:items []}) =&amp;gt; &quot;0 items&quot;
+
+(render &quot;{ {items|count}} item{ {items|pluralize}}&quot; {:items [1]}) =&amp;gt; &quot;1 item&quot;
+
+(render &quot;{ {items|count}} item{ {items|pluralize}}&quot; {:items [1 2]}) =&amp;gt; &quot;2 items&quot;
+
+(render &quot;{ {fruit|count}} tomato{ {fruit|pluralize:\&quot;es\&quot;}}&quot; {:fruit []}) =&amp;gt; &quot;0 tomatoes&quot;
+
+(render &quot;{ {people|count}} lad{ {people|pluralize:\&quot;y\&quot;:\&quot;ies\&quot;}}&quot; {:people [1]}) =&amp;gt; &quot;1 lady&quot;
+
+(render &quot;{ {people|count}} lad{ {people|pluralize:\&quot;y\&quot;:\&quot;ies\&quot;}}&quot; {:people [1 2]}) =&amp;gt; &quot;2 ladies&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*rand-nth* 从集合中返回rand-nths值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|rand-nth}}&quot; {:foo [1 2 3]}) =&amp;gt; &quot;2&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*remove* 从字符串中去除特殊字符&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {foo|remove:\&quot;aeiou\&quot;}}&quot; {:foo &quot;abcdefghijklmnop&quot;}) =&amp;gt; &quot;bcdfghjklmnp&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*remove-tags* 去除html标签&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ { value|remove-tags:b:span }}&quot; {:value &quot;&amp;lt;b&amp;gt;&amp;lt;span&amp;gt;foobar&amp;lt;/span&amp;gt;&amp;lt;/b&amp;gt;&quot;}) =&amp;gt; &quot;foobar&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*safe* 默认情况下Selmer会编码所有的内容，此过滤器时Selmer不去编码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {data}}&quot; {:data &quot;&amp;lt;foo&amp;gt;&quot;}) =&amp;gt; &quot;&amp;amp;lt;foo&amp;amp;gt;&quot;
+
+(render &quot;{ {data|safe}}&quot; {:data &quot;&amp;lt;foo&amp;gt;&quot;}) =&amp;gt; &quot;&amp;lt;foo&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*sort*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ { value|sort }}&quot; {:value [1 4 2 3 5]}) =&amp;gt; &quot;(1 2 3 4 5)&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*sort-by*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ { value|sort-by:name }}&quot; {:value [{:name &quot;John&quot;} {:name &quot;Jane&quot;}]})
+                     =&amp;gt; &quot;({:name &amp;amp;quot;Jane&amp;amp;quot;} {:name &amp;amp;quot;John&amp;amp;quot;})&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*sort-reversed* 反序排列&lt;/p&gt;
+
+&lt;p&gt;*sort-by-reversed* 和sort-by功能相同，反序&lt;/p&gt;
+
+&lt;p&gt;upper&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ {shout|upper}}&quot; {:shout &quot;hello&quot;}) =&amp;gt; &quot;HELLO&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Defining Custom Filters&lt;/h2&gt;
+
+&lt;p&gt;你可以使用selmer.filters/add-filter!函数来方便的添加自定义的Filter.此
+函数以元素作为参数，并返回替换后的值.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(use 'selmer.filters)
+
+(add-filter! :embiginate #(.toUpperCase %))
+ (render &quot;{ {shout|embiginate}}&quot; {:shout &quot;hello&quot;})
+
+(add-filter! :count count)
+(render &quot;{ {foo|count}}&quot; {:foo (range 3)})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Filters可以链式使用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(add-filter! :empty? empty?)
+(render &quot;{ {foo|upper|empty?}}&quot; {:foo &quot;Hello&quot;})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Tags&lt;/h2&gt;
+
+&lt;p&gt;Selmer提供了两种类型的Tag。一种是类似extends和include这样的内联tag。这
+种tag不需要结束tag。另一种形式的tag是块tag。这种tag有开始和结束tag，以
+及代码块。比如if ... endif块。 让我们先来看看默认的tag:&lt;/p&gt;
+
+&lt;p&gt;*include* 将引用的模板内容替换其自身&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % include &quot;path/to/comments.html&quot; %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以提供默认的参数，如果tag有匹配上上的参数，则会获取它的值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;{ % include &quot;templates/inheritance/child.html&quot; with name=&quot;Jane Doe&quot; greeting=&quot;Hello!&quot; %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*block*
+定义一个块，可以使用模板继承的方式来覆盖，类似Java中的父类方法.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    { % block foo %}This text can be overridden later{ % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*cycle* 循环提供的参数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ % for i in items %}&amp;lt;li class={ % cycle \&quot;blue\&quot; \&quot;white\&quot;%}&amp;gt;{ {i}}&amp;lt;/li&amp;gt;{ % endfor %}&quot; {:items (range 5)})
+                        =&amp;gt; &quot;&amp;lt;li class=\&quot;blue\&quot;&amp;gt;0&amp;lt;/li&amp;gt;&amp;lt;li class=\&quot;white\&quot;&amp;gt;1&amp;lt;/li&amp;gt;&amp;lt;li class=\&quot;blue\&quot;&amp;gt;2&amp;lt;/li&amp;gt;
+                            &amp;lt;li class=\&quot;white\&quot;&amp;gt;3&amp;lt;/li&amp;gt;&amp;lt;li class=\&quot;blue\&quot;&amp;gt;4&amp;lt;/li&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*extends* 引用父模板。父模板中的块会被子模板中相应的块覆盖。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Note: 子模板只能包含块。任何块以外的tag或文本都被忽略&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;例如有一个叫base.html的父模板和一个叫child.html的子模板&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;&amp;lt;html&amp;gt;
+  &amp;lt;body&amp;gt;
+    { % block foo %}This text can be overridden later{ % endblock %}
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    { % extends &quot;base.html&quot; %}
+    { % block foo %}
+      &amp;lt;p&amp;gt;This text will override the text in the parent&amp;lt;/p&amp;gt;
+    { % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*if*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % if condition %}yes!{ % endif %}
+
+{ % if condition %}yes!{ % else %}no!{ % endif %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;配合filter使用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(add-filter! :empty? empty?)
+(render &quot;{ % if files|empty? %}no files{ % else %}files{ % endif %}&quot;
+  {:files []})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*ifequal* 之用当两个参数相等时才执行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % ifequal foo bar %}yes!{ % endifequal %}
+
+{ % ifequal foo bar %}yes!{ % else %}no!{ % endifequal %}
+
+{ % ifequal foo &quot;this also works&quot; %}yes!{ % endifequal %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*for* 遍历集合中的元素。同时可以使用如下参数。
+-   forloop.first
+-   forloop.last
+-   forloop.counter
+-   forloop.counter0
+-   forloop.revcounter
+-   forloop.revcounter0
+-   forloop.length&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % for x in some-list %}element: { {x}} first? { {forloop.first}} last? { {forloop.last}}{ % endfor %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以直接访问结构化的数据&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % for item in items %} &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;{ {item.name}}&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;{ {item.age}}&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt; { % endfor %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*now* 当前时间&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;(render (str &quot;{ % now \&quot;&quot; date-format &quot;\&quot;%}&quot;) {}) =&amp;gt; &quot;\&quot;01 08 2013\&quot;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*comment* 注释&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;(render &quot;foo bar { % comment %} baz test { {x}} { % endcomment %} blah&quot; {}) =&amp;gt; &quot;foo bar baz test blah&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*firstof* 取得第一个不是false的值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;(render &quot;{ % firstof var1 var2 var3 %}&quot; {:var2 &quot;x&quot; :var3 &quot;not me&quot;}) =&amp;gt; &quot;x&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*script*
+生成一个html的script标签，并以servlet-context键提供的值类作为文件的前
+置目录.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;(render &quot;{ % script \&quot;/js/site.js\&quot; %}&quot; {:servlet-context &quot;/myapp&quot;}) =&amp;gt;
+&quot;&amp;lt;script src=\&quot;/myapp/js/site.js\&quot; type=\&quot;text/javascript\&quot;&amp;gt;&amp;lt;/script&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*style*&lt;/p&gt;
+
+&lt;p&gt;生成一个html的style标签，并以servlet-context键提供的值类作为文件的前置目录.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ % style \&quot;/css/screen.css\&quot; %}&quot; {:servlet-context &quot;/myapp&quot;}) =&amp;gt;
+&quot;&amp;lt;link href=\&quot;/myapp/css/screen.css\&quot; rel=\&quot;stylesheet\&quot; type=\&quot;text/css\&quot; /&amp;gt;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*verbatim* 阻止内容中的parseeither解析&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ % verbatim %}{ {if dying}}Still alive.{ {/if}}{ % endverbatim %}&quot; {}) =&amp;gt; &quot;{ {if dying}}Still alive.{ {/if}}&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*with* 向上下文map中新增一个值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(render &quot;{ % with total=business.employees|count %}{ { total }}{ % endwith %}&quot;
+         {:business {:employees (range 5)}})
+=&amp;gt; &quot;5 employees&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Defining Custom Tags&lt;/h2&gt;
+
+&lt;p&gt;除了上面已经提供的tag。你也可以自定义tag。使用add-tag!宏就可以了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(use 'selmer.parser)
+
+(add-tag! :foo
+  (fn [args context-map]
+    (str &quot;foo &quot; (first args))))
+
+(render &quot;{ % foo quux %} { % foo baz %}&quot; {})
+
+(add-tag! :bar
+  (fn [args context-map content]
+    (str content))
+  :baz :endbar)
+
+(render &quot;{ % bar %} some text { % baz %} some more text { % endbar %}&quot; {})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出，我们定义的tag提供了一个关键字作为tag的名称后面是tag体,结尾的
+tag不是必须的。
+当没有结尾的tag时,tag不包含任何内容。这种tag获取参数类进行处理。
+当有结尾tag时，每个块内的内容都会被作为开头那个tag所对应的map的键.开头
+tag对应的map包含:args和:content键，content的内容就对应到了:content.&lt;/p&gt;
+
+&lt;h2&gt;Template inheritance&lt;/h2&gt;
+
+&lt;p&gt;Selmer模板可以使用块tag来引用其他的模板。有两种方法可以引用模板，一个
+是extends一个是include.&lt;/p&gt;
+
+&lt;h3&gt;Extending Templates&lt;/h3&gt;
+
+&lt;p&gt;当我们使用extends这个tag时，当前的模板将会将引用的模板作为父模板。
+任何在base模板中的块，会被子模板中相同名字的块给覆盖.
+子模板中的内容需要在块tag中。不在块中的内容将会被忽略。
+我们来看个例子,我们创建一个叫base.html的父模板.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot; /&amp;gt;
+        &amp;lt;title&amp;gt;{ % block title %}My amazing site{ % endblock %}&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body&amp;gt;
+    &amp;lt;div id=&quot;content&quot;&amp;gt;
+        { % block content %}{ % endblock %}
+    &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后我们创建一个home.html模板来继承base.html。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;{ % extends &quot;base.html&quot; %}
+
+    { % block content %}
+        { % for entry in entries %}
+            &amp;lt;h2&amp;gt;{ { entry.title }}&amp;lt;/h2&amp;gt;
+            &amp;lt;p&amp;gt;{ { entry.body }}&amp;lt;/p&amp;gt;
+        { % endfor %}
+    { % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当渲染home.html时entries的内容将会被打印出来。而在home.html中，我们没
+有定义title块，在渲染时会获取base.html中的title块的定义。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;注意，你可以多层级的继承模板。引擎会渲染最后的那个块.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h3&gt;Including Templates&lt;/h3&gt;
+
+&lt;p&gt;include这个tag允许你包含一个模板。
+我们还是来看一个例子，我们有一个base.html这个模板，它包含了一个叫做
+register.html的模板和一个home.html的模板：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot; /&amp;gt;
+        &amp;lt;title&amp;gt;{ % block title %}My amazing site{ % endblock %}&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body&amp;gt;
+    &amp;lt;div id=&quot;content&quot;&amp;gt;
+        { % if user %}
+        { % include &quot;templates_path/home.html&quot; %}
+        { % else %}
+        { % include &quot;templates_path/register.html&quot; %}
+        { % endif %}
+    &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们能定义register.html&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    { % block register %}
+      &amp;lt;form action=&quot;/register&quot; method=&quot;POST&quot;&amp;gt;
+          &amp;lt;label for=&quot;id&quot;&amp;gt;user id&amp;lt;/label&amp;gt;
+          &amp;lt;input id=&quot;id&quot; name=&quot;id&quot; type=&quot;text&quot;&amp;gt;&amp;lt;/input&amp;gt;
+          &amp;lt;input pass=&quot;pass&quot; name=&quot;pass&quot; type=&quot;text&quot;&amp;gt;&amp;lt;/input&amp;gt;
+          &amp;lt;input type=&quot;submit&quot; value=&quot;register&quot;&amp;gt;
+      &amp;lt;/form&amp;gt;
+    { % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;和home.html:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    { % block home %}
+    &amp;lt;h1&amp;gt;Hello { {user}}&amp;lt;/h1&amp;gt;
+    { % endblock %}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当渲染base.html时，将会引入register.html和home.html。
+更多信息请见&lt;a href=&quot;https://github.com/yogthos/Selmer&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;HTML Templating Using Hiccup&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/weavejester/hiccup&quot;&gt;Hiccup&lt;/a&gt;
+是另一个Clojure的HTML模板引擎。它的优势是我们可以使用纯正的
+Clojure代码来生成页面。也就是说我们不需要学习第三方的语法了。
+Hiccup主要使用Clojure的vector来渲染页面。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[:tag-name {:attribute-key &quot;attribute value&quot;} tag-body]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例如，如果我们想创建一个包含内容的div，我们可以这样写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[:div {:id &quot;hello&quot;, :class &quot;content&quot;} [:p &quot;Hello world!&quot;]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这将生成如下的html代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;        &amp;lt;div id=&quot;hello&quot; class=&quot;content&quot;&amp;gt;&amp;lt;p&amp;gt;Hello world!&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Hiccup提供了简化设置id和class的方法，简写如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[:div#hello.content [:p &quot;Hello world!&quot;]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Hiccup还提供了一些帮助类函数来创建元素，比如: forms, links, images, 等
+等.所有这些函数只是简单的返回类似上面格式的vector。也就是说，如果一个
+函数无法达到你的要求，你可以手写相应代码或者获取函数的返回值进行修改。
+每个函数可以使用一个map作为其第一个参数，来描绘属性:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(image {:align &quot;left&quot;} &quot;foo.png&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;生成html代码如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;&amp;lt;img align=\&quot;left\&quot; src=\&quot;foo.png\&quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是最佳实践还是将其保存到独立的CSS文件中。&lt;/p&gt;
+
+&lt;h2&gt;Forms and Input&lt;/h2&gt;
+
+&lt;p&gt;Hiccup还提供了form助手函数，看例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(form-to [:post &quot;/login&quot;]
+  (text-field {:placeholder &quot;screen name&quot;} &quot;id&quot;)
+  (password-field {:placeholder &quot;password&quot;} &quot;pass&quot;)
+  (submit-button &quot;login&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数第一个参数是一个vector，以HTTP请求类型为关键字，紧接着是请求
+url。其余的参数必须是HTML元素。生成的HTML代码如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;&amp;lt;form action=&quot;/login&quot; method=&quot;POST&quot;&amp;gt;
+  &amp;lt;input id=&quot;id&quot; name=&quot;id&quot; placeholder=&quot;screen name&quot; type=&quot;text&quot; /&amp;gt;
+  &amp;lt;input id=&quot;pass&quot; name=&quot;pass&quot; placeholder=&quot;password&quot; type=&quot;password&quot; /&amp;gt;
+  &amp;lt;input type=&quot;submit&quot; value=&quot;login&quot; /&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后LUminus模板在你的应用下面提供了一辅助函数。叫做md-&gt;html,这个函数能
+渲染载resources/public/目录下的markdown文件并返回一个HTML字符串。这个
+可以和Hiccup函数一起使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(:require [&amp;lt;yourapp&amp;gt;.util :as util])
+...
+(html [:div.contenr [:p (util/md-&amp;gt;html &quot;/md/paragraph.md&quot;)]])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;markdown生成由markdown-clj来处理，具体信息请见其&lt;a href=&quot;https://github.com/yogthos/markdown-clj&quot;&gt;Github&lt;/a&gt;
+页。&lt;/p&gt;
+
+&lt;h1&gt;Content caching&lt;/h1&gt;
+
+&lt;p&gt;lib-noir通过cache!宏提供了基本的内存式缓存，相应的宏在noir.util.cache
+下。如果想缓存一个页面，你是需要：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[noir.util.cache :as cache])
+
+(defn slow-loading-page []
+  (cache/cache!
+   :slow-page
+   (common/layout
+    [:div &quot;I load slowly&quot;]
+     (parse-lots-of-files))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过调用invalidate!来取消缓存,需要提供需要取消的缓存的key。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(cache/invalidate! :slow-page)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用clear!来清除当前所有的缓存&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(cache/clear!)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用set-timeout!来设置缓存时间(单位：秒)，超时后会重新加载。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(cache/set-timeout! 10)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后你可以通过set-size!来设置缓存的大小。当缓存超出了限定的大小，最先
+使用的数据将被被替换。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(cache/set-size! 10)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;注意，缓存会在操作成功后才重新加载。也就是说，比如程序去获取一个远程
+文件，但是失败了，那么缓存是不会被重新加载的。&lt;/li&gt;
+&lt;/ul&gt;
+
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-应用配置</title>
+        <link href="http://ivanpig.github.io/luminus/application_profile.html"/>
+        <updated>2013-09-15T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//luminus/application_profile</id>
+        <content type="html">&lt;h1&gt;Profiles&lt;/h1&gt;
+
+&lt;p&gt;使用lein new luminus myapp命令会创建一个新的luminus应用，它使用的是默认的配置。如果你想使用其他的特性，你可以修改相应的配置参数。&lt;/p&gt;
+
+&lt;p&gt;下面就是各个配置：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;+cljs - 添加ClojureScript支持&lt;/li&gt;
+&lt;li&gt;+cucumber - 提供通过clj-webdriver配置cucumber&lt;/li&gt;
+&lt;li&gt;+h2 - 添加models.db并提供H2数据库依赖&lt;/li&gt;
+&lt;li&gt;+postgres - 添加models.db并提供PostreSQL数据库依赖&lt;/li&gt;
+&lt;li&gt;+mysql - 添加models.db并提供mysql依赖&lt;/li&gt;
+&lt;li&gt;+mongodb - 添加db.core并提供MongoDB依赖&lt;/li&gt;
+&lt;li&gt;+site - 创建一个包含注册和验证框架的应用。使用bootstrap和h2&lt;/li&gt;
+&lt;li&gt;+dailycred -
+添加dailycred支持，当和+site参数配合使用时，它使用dailycred作为验证框架&lt;/li&gt;
+&lt;li&gt;+http-kit - 添加HTTP Kit支持&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;要添加配置，只需要简单的添加到你的应用的名字后面，比如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein new luminus myapp +cljs
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以多个参数一起使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein new luminus myapp +site +postgres
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果两个参数会生成相同的文件，则后面参数所生成的文件会覆盖前面参数所生
+成的文件。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;HTTP Kit notes&lt;/h1&gt;
+
+&lt;p&gt;HTTP Kit是一个嵌入式的服务器。与Jetty不同的是，HTTP Kit并不被lein-ring
+支持。所以你需要这样来运行HTTP Kit.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein run
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了能热部署，你需要使用-dev选项，并且可以自定义端口号。默认端口号是8080
+要打包一个可运行的HTTP Kit的jar不包，使用如下的命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein uberjar
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Profiles&lt;/h1&gt;
+
+&lt;p&gt;使用lein new luminus myapp命令会创建一个新的luminus应用，它使用的是默认的配置。如果你想使用其他的特性，你可以修改相应的配置参数。&lt;/p&gt;
+
+&lt;p&gt;下面就是各个配置：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;+cljs - 添加ClojureScript支持&lt;/li&gt;
+&lt;li&gt;+cucumber - 提供通过clj-webdriver配置cucumber&lt;/li&gt;
+&lt;li&gt;+h2 - 添加models.db并提供H2数据库依赖&lt;/li&gt;
+&lt;li&gt;+postgres - 添加models.db并提供PostreSQL数据库依赖&lt;/li&gt;
+&lt;li&gt;+mysql - 添加models.db并提供mysql依赖&lt;/li&gt;
+&lt;li&gt;+mongodb - 添加db.core并提供MongoDB依赖&lt;/li&gt;
+&lt;li&gt;+site - 创建一个包含注册和验证框架的应用。使用bootstrap和h2&lt;/li&gt;
+&lt;li&gt;+dailycred -
+添加dailycred支持，当和+site参数配合使用时，它使用dailycred作为验证框架&lt;/li&gt;
+&lt;li&gt;+http-kit - 添加HTTP Kit支持&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;要添加配置，只需要简单的添加到你的应用的名字后面，比如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein new luminus myapp +cljs
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以多个参数一起使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein new luminus myapp +site +postgres
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果两个参数会生成相同的文件，则后面参数所生成的文件会覆盖前面参数所生
+成的文件。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;HTTP Kit notes&lt;/h1&gt;
+
+&lt;p&gt;HTTP Kit是一个嵌入式的服务器。与Jetty不同的是，HTTP Kit并不被lein-ring
+支持。所以你需要这样来运行HTTP Kit.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein run
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了能热部署，你需要使用-dev选项，并且可以自定义端口号。默认端口号是8080
+要打包一个可运行的HTTP Kit的jar不包，使用如下的命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein uberjar
+&lt;/code&gt;&lt;/pre&gt;
 </summary>
     </entry>
     

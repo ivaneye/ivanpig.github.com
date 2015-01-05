@@ -1,0 +1,455 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="clojure, luminus"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/luminus/defining_routes.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>Luminus手册-路由定义 - IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">Luminus手册-路由定义</h2>
+
+    <p class="post-meta">By 09月18日  2013
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">luminus (5)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">clojure (6)</i></a>
+        
+        <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">luminus (5)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <h1>Defining routes</h1>
+
+<p>Luminus使用Compojure来定义应用的路由.路由由HTTP请求方法和接受它的URI，
+参数和以及相应的处理程序组成。Compojure定义了所有标准HTTP请求的路由，
+比如ANY,DELETE,GET,HEAD,OPTIONS,PATCH,POST和PUT。</p>
+
+<p>例如：如果我们想定义一个应用，它指向/，/返回"Hello World!"字符串。我们
+可以这样写:</p>
+
+<pre><code class="{.clojure}">(defroutes app-routes
+  (GET "/" [] "Hello World!"))
+</code></pre>
+
+<p>如果你想构建一个路由来响应POST请求，我们可以这样写：</p>
+
+<pre><code class="{.clojure}">(POST "/hello" [id] (str "Welcome " id))
+</code></pre>
+
+<p>有些路由需要访问请求的map，我们只需要在路由上定义第二个参数就可以了。</p>
+
+<pre><code class="{.clojure}">(GET "/foo" request (interpose ", " (keys request)))
+</code></pre>
+
+<p>上面的路由读出请求map中所有的key并展示出来。结果如下:</p>
+
+<pre><code class="{.example}">:ssl-client-cert, :remote-addr, :scheme, :query-params, :session, :form-params,
+:multipart-params, :request-method, :query-string, :route-params, :content-type,
+:cookies, :uri, :server-name, :params, :headers, :content-length, :server-port,
+:character-encoding, :body, :flash
+</code></pre>
+
+<p>Compojure还提供了一些有用的函数来处理请求map和表单参数。例如，在
+guestbook应用的例子中，我们看到了如下的路由定义:</p>
+
+<pre><code class="{.clojure}">(POST "/"  [name message] (save-message name message))
+</code></pre>
+
+<p>这个路由从参数中获取到name和message的值，并将其绑定到相同名字的变量上。
+我们能像使用其他定义的变量那样来使用他们。我们也可以直接在路由中使用Clojure的解构。</p>
+
+<pre><code class="{.clojure}">(GET "/:foo" { {foo "foo"} :params}
+  (str "Foo = " foo))
+</code></pre>
+
+<p>实际上，Compojure还提供了解构部分参数，并将其他参数构建为一个map的功能。</p>
+
+<pre><code class="{.clojure}">[x y &amp; z]
+x -&gt; "foo"
+y -&gt; "bar"
+z -&gt; {:v "baz", :w "qux"}
+</code></pre>
+
+<p>上面的代码中,参数x和y被绑定到了变量上，而v和w还在叫z的map中。
+最后，如果我们需要获取完整的请求，我们可以这样做：</p>
+
+<pre><code class="{.clojure}">(GET "/" [x y :as r] (str x y r))
+</code></pre>
+
+<p>这里我们将表单参数绑定到了x和y上，而完整的请求则绑定到了变量r上。</p>
+
+<h1>Organizing application routes</h1>
+
+<p>对路由管理的最佳实践就是对其统一管理。Compojure提供了defroutes宏来方便
+我们作这样的处理。</p>
+
+<pre><code class="{.clojure}">(defroutes auth-routes
+  (POST "/login" [id pass] (login id pass))
+  (POST "/logout" [] (logout)))
+
+(defroutes app-routes
+  (GET "/" [] (home))
+  (route/resources "/")
+  (route/not-found "Not Found"))
+</code></pre>
+
+<p>对于路径相似的路由，可以使用context来简化管理。
+例如，你的路径都以/user/:id为根路径:</p>
+
+<pre><code class="{.clojure}">(defroutes user-routes
+      (GET "/user/:id/profile" [id] ...)
+      (GET "/user/:id/settings" [id] ...)
+      (GET "/user/:id/change-password" [id] ...))
+</code></pre>
+
+<p>你可以这样简写:</p>
+
+<pre><code class="{.clojure}">(def user-routes
+      (context "/user/:id" [id]
+        (GET "/profile" [] ...)
+        (GET "/settings" [] ...)
+        (GET "/change-password" [] ...)))
+</code></pre>
+
+<p>当你定义好了所有的路由，你可以将他们添加到
+noir.util.middleware/app-handler下的vector中，它在handler目录下。
+你应该注意到了，生成的项目中已经定义了一个叫app的变量，你只需要添加新的路由就可以了。</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler
+           ;;add your application routes here
+           [home-routes app-routes]
+           ;;add custom middleware here
+           :middleware []
+           ;;add access rules here
+           ;;each rule should be a vector
+           :access-rules []))
+</code></pre>
+
+<p>详细的文档请键Compojure官方wiki.</p>
+
+<h1>Restricting access</h1>
+
+<p>有些页面只能在特定条件下才可以访问。
+例如，你可能想定义一个只能给管理员查看的页面或者一个用户管理页面，只给
+当前用户看。
+使用lib-noir中的noir.util.route可以达到这个目的，我们可以定义访问特殊
+页面的逻辑</p>
+
+<h1>Marking Routes as Restricted</h1>
+
+<p>noir.util.route/restricted宏被用来定义访问路由的方式:</p>
+
+<pre><code class="{.clojure}">(GET "/private/:id" [id] (restricted "private!"))
+</code></pre>
+
+<p>如果我们想定义多个路由的访问权限，可以使用def-restricted-routes宏.</p>
+
+<pre><code class="{.clojure}">(def-restricted-routes private-pages
+  (GET "/profile" [] (show-profile))
+  (GET "/my-secret-page" [] (show-secret-page))
+  (GET "/another-secret-page" [] (another-secret-page)))
+</code></pre>
+
+<p>上面的代码等同于</p>
+
+<pre><code class="{.clojure}">(defroutes private-pages
+  (GET "/profile" [] (restricted (show-profile)))
+  (GET "/secret-page1" [] (restricted (show-secret-page)))
+  (GET "/secret-page2" [] (restricted (another-secret-page))))
+</code></pre>
+
+<p>默认情况下，受限访问的路由会检查请求是否符合所有的条件。</p>
+
+<h1>Specifying Access Rules</h1>
+
+<p>我们来看看如何创建一个路由，它只有在session中存在:user所对应的值时，
+才能访问。 首先，我们需要引用noir.util.route和noir.session.</p>
+
+<pre><code class="{.clojure}">(ns myapp.handler
+  (:require ...
+            [noir.util.route :refer [restricted]]
+            [noir.session :as session]))
+</code></pre>
+
+<p>接着，我们将编写函数来实现上面我们所说的访问规则。函数必须接受request
+作为其参数并且返回true或者false来确认页面是否可以访问。
+下面就是该函数的实现，它检查当前session中是否存在user。如果没有则重定
+向。默认重定向到根路径。</p>
+
+<pre><code class="{.clojure}">(defn user-access [request]
+  (session/get :user))
+
+(def app
+ (middleware/app-handler
+   [app-routes]
+   :access-rules [user-access]))
+</code></pre>
+
+<p>现在，所有的受限的处理程序在session中不存在:user时都会重定向到根目录。</p>
+
+<h1>Access Rule Groups</h1>
+
+<p>当你以map的方式来提供访问规则，则可以进行进一步的处理。</p>
+
+<ul>
+<li>:uri - 符合访问规则的URI</li>
+<li>:uris - 和:uri类似，匹配多个URI</li>
+<li>:redirect - 重定向地址</li>
+<li>:on-fail - 重定向可选项，可以指定一个请求错误时的处理函数，函数必须
+以request为参数</li>
+<li>:rule - 一个规则</li>
+<li>:rules - 多个规则</li>
+</ul>
+
+
+<p>:rules可以用在下面集中情形下。</p>
+
+<pre><code class="{.clojure}">:rules [rule1 rule2]
+:rules {:any [rule1 rule2]}
+:rules {:every [rule1 rule2] :any [rule3 rule4]}
+</code></pre>
+
+<p>默认情况下，每个规则都必须通过才能访问成功，:any则表示只要符合任何一个
+规则即可访问。下面是一些例子:</p>
+
+<pre><code class="{.clojure}">(defn admin-access [req]
+ (session/get :admin))
+
+:access-rules [{:redirect "/access-denied"
+                :rule user-access}]
+
+:access-rules [{:uris ["/user/*" "/private*"]
+                :rule user-access}]
+
+:access-rules [{:uri "/admin/*" :rule admin-access}
+               {:uri "/user/*"
+                :rules {:any [user-access admin-access]}}]
+
+:access-rules [{:on-fail (fn [req] "access restricted")
+                :rule user-access}]
+</code></pre>
+
+<h1>Cross Site Request Forgery Protection</h1>
+
+<p>CSRF攻击指的是第三方通过一个验证过的用户来提交动作。当你的网站包含了一
+个恶意链接或按钮或js的时候，很容易发生。
+我们可以使用Ring-Anti-Forgery来放置csrf攻击. 首先添加[ring-anti-forgery
+"0.2.1"]依赖。接着引入相应的包。</p>
+
+<pre><code class="{.clojure}">(ns myapp.handler
+  (:require
+    ...
+    [selmer.parser :refer [add-tag!]]
+    [ring.util.anti-forgery :refer [anti-forgery-field]]
+    [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]))
+</code></pre>
+
+<p>接着，我们将添加wrap-anti-forgery中间件:</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler
+           ;;add your application routes here
+           [home-routes app-routes]
+           ;;add custom middleware here
+           :middleware [wrap-anti-forgery]
+           ;;add access rules here
+           ;;each rule should be a vector
+           :access-rules []))
+</code></pre>
+
+<p>添加完后一个随机字符串将会被赋给anti-forgery-token变量。所有的POST请求
+将会包含一个叫_~anti~-forgery-token的token.
+接着我们在init函数中添加csrf标签:</p>
+
+<pre><code class="{.clojure}">(defn init
+  ...
+  (add-tag! :csrf-token (fn [_ _] (anti-forgery-field)))
+  ...)
+</code></pre>
+
+<p>然后在模板中使用:</p>
+
+<pre><code class="{.clojure}">    &lt;form name="input" action="/login" method="POST"&gt;
+      { % csrf-token %}
+      Username: &lt;input type="text" name="user"&gt;
+      Password: &lt;input type="password" name="pass"&gt;
+    &lt;input type="submit" value="Submit"&gt;
+    &lt;/form&gt;
+</code></pre>
+
+<p>所有的POST请求如果不包含这个token，则会被拒绝。服务器返回403错误。</p>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/luminus/clojurescript.html" title="Luminus手册-ClojureScript "><p> <i class="fa fa-mail-reply"></i>&nbsp;Luminus手册-ClojureScript</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/lighttable/pigtheme.html" title="LightTable Theme"><p>LightTable Theme&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Luminus手册-路由定义" data-thread-key="/luminus/defining_routes" data-url="/luminus/defining_routes.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>
