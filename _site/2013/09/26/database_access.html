@@ -1,0 +1,337 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="clojure, luminus"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2013/09/26/database_access.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>Luminus手册-访问数据库 - IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">Luminus手册-访问数据库</h2>
+
+    <p class="post-meta">By 09月26日  2013
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">luminus (19)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">clojure (20)</i></a>
+        
+        <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">luminus (19)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <h1>Configuring the Database</h1>
+
+<p>当你使用数据库参数来创建Luminus工程时，比如+postgress，那么Luminus会使用Korma来处理数据库操作.</p>
+
+<p>Korma是一个基于Clojure的数据库操作DSL。Korma提供了一套简单的接口，方便你来处理复杂的数据。</p>
+
+<p>给一个现有的项目添加数据库支持，非常的简单。首先，你需要在project.clj文件中添加Korma依赖。</p>
+
+<pre><code class="{.clojure}">[korma "0.4.0"]
+</code></pre>
+
+<p>另外还需要相应数据库的驱动，所以你还需要在project.clj中添加相关的数据库驱动。比如说，你要连接PostreSQL数据库，你需要添加如下的依赖.</p>
+
+<pre><code class="{.clojure}">[postgresql/postgresql "9.3-1102-jdbc41"]
+</code></pre>
+
+<p>添加完依赖后，你可以创建一个新的namespace来管理你的model,这个namespace建议叫db.core。你需要在里面引入korma.db。</p>
+
+<pre><code class="clojure">(ns myapp.db.core
+  (:use korma.core
+        [korma.db :only (defdb)]))
+</code></pre>
+
+<h2>Setting up the database connection</h2>
+
+<p>配置完依赖后，我们要做的事情就是定义数据库连接。我们只需要提供一个包含连接信息的map。</p>
+
+<pre><code class="{.clojure}">(def db-spec {:subprotocol "postgresql"
+         :subname "//localhost/my_website"
+         :user "admin"
+         :password "admin"})
+</code></pre>
+
+<p>或者也可以配置服务器提供的JNDI名称来创建连接。</p>
+
+<pre><code class="{.clojure}">(def db-spec {:name "jdbc/myDatasource"})
+</code></pre>
+
+<!-- more -->
+
+
+<p>这种方式适合当你有多个连接的时候。比如说，你有个dev/staging/production
+服务器，你可以将JNDI连接指向它所配置的数据库。应用程序将会从环境中来加
+载数据库连接信息。这意味着，你可以随意的改变你的数据库连接，而不需要修
+改你的代码。 最后，你能自己配置JDBC连接:</p>
+
+<pre><code class="{.clojure}">(def db-spec
+  {:datasource
+    (doto (new PGPoolingDataSource)
+     (.setServerName   "localhost")
+     (.setDatabaseName "my_website")
+     (.setUser         "admin")
+     (.setPassword     "admin")
+     (.setMaxConnections 10))})
+</code></pre>
+
+<h2>Creating tables</h2>
+
+<p>Korma依赖clojure.java.jdbc.这个库提供操作表的功能。</p>
+
+<p>你可以使用create-table函数来从应用中创建数据表。</p>
+
+<pre><code class="clojure">(defn create-users-table []
+  (sql/db-do-commands db-spec
+    (sql/create-table-ddl
+      :users
+      [:id "varchar(32)"]
+      [:pass "varchar(100)"])))
+</code></pre>
+
+<p>create-table-ddl函数需要包含在db-do-commands内，db-do-commands保证了数据库连接的关闭。</p>
+
+<h1>Accessing the Database</h1>
+
+<p>当使用Korma时，你需要先用defdb来包裹db-spec。</p>
+
+<pre><code class="{.clojure}">(defdb db schema/db-spec)
+</code></pre>
+
+<p>这将会使用c3p0来创建一个连接池。需要注意的是，最后创建的连接池会被设为默认的连接池。</p>
+
+<p>Korma使用entities来表示sql表。这个entities构成了你查询的核心。</p>
+
+<p>entities使用defentity宏来创建:</p>
+
+<pre><code class="{.clojure}">(defentity users)
+</code></pre>
+
+<p>我们可以这样来创建user:</p>
+
+<pre><code class="{.clojure}">(defn create-user [user]
+  (insert users
+          (values user)))
+</code></pre>
+
+<p>而如果我们想查询user，我们可以这样写:</p>
+
+<pre><code class="{.clojure}">(defn get-user [id]
+  (first (select users
+                 (where {:id id})
+                 (limit 1))))
+</code></pre>
+
+<p>详细文档可参考<a href="http://sqlkorma.com/docs">Korma官网</a></p>
+
+<h1>Yesql</h1>
+
+<p>Korma提供了操作SQL的DSL，而Yesql可以直接操作SQL.</p>
+
+<p>如果要使用Yesql你需要添加依赖：</p>
+
+<pre><code class="clojure">[yesql "0.4.0"]
+</code></pre>
+
+<p>当你在classpath下创建一个包含查询的SQL文件，比如resources/queries.sql.文件格式如下:</p>
+
+<pre><code>    -- name: find-users
+    -- Find the users with the given ID(s).
+    SELECT *
+    FROM user
+    WHERE user_id IN (:id)
+    AND age &gt; :min_age
+
+    -- name: user-count
+    -- Counts all the users.
+    SELECT count(*) AS count
+    FROM user
+</code></pre>
+
+<p>创建问上述文件后，你需要在需要的地方引入yesql.core/defqueries。</p>
+
+<pre><code class="clojure">(ns myapp.db.core
+  (:require [yesql.core :refer [defqueries]]))
+
+(defqueries "resources/queries.sql")
+</code></pre>
+
+<p>每个查询可以像函数一样通过名字来调用。</p>
+
+<pre><code class="clojure">(find-users db-spec [1001 1003 1005] 18)
+</code></pre>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/09/25/security.html" title="Luminus手册-安全 "><p> <i class="fa fa-mail-reply"></i>&nbsp;Luminus手册-安全</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/09/27/database_migrations.html" title="Luminus手册-数据迁移"><p>Luminus手册-数据迁移&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Luminus手册-访问数据库" data-thread-key="/2013/09/26/database_access" data-url="/2013/09/26/database_access.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

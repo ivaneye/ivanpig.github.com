@@ -56,6 +56,8 @@ name的变量的值。
                {:name "John"}))
 ```
 
+<!-- more -->
+
 render-file函数将src目录作为根路径，使用相对路径来查找模板。
 上面，我们传递了一个字符串作为变量name的值。实际上，我们可以传递任何类
 型的值。比如，我们传递一个集合，在模板里我们可以使用tag来遍历这个集合。
@@ -84,7 +86,6 @@ render-file函数将src目录作为根路径，使用相对路径来查找模板
 Selmer重新编译模板。你也可以选择Selmer是开启缓存还是关闭缓存。只需要调
 用(selmer.parser/cache-on!)或(selmer.parser/cache-off!).
 
-<!-- more -->
 
 Filters
 -------

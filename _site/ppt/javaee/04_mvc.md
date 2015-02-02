@@ -217,7 +217,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response)
 
 ## 贫血模型
 
-- 充血模型只是将业务代码移到了JavaBean中
+- 贫血模型只是将业务代码移到了JavaBean中
 
 ## 贫血模型的优缺点
 

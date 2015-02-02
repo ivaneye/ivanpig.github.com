@@ -27,7 +27,7 @@
     + 项目Releases
     + 项目的分发
 
-## Maven名词解释
+## Maven名词解释一
 
 - Project
     任何你想 build 的事物，Maven都会把它们当作是一个 Project。
@@ -38,6 +38,9 @@
     pom.xml 文件应该位于每个 Project 的根目录。
 - GroupId
     顾名思义，这个应该是公司名或组织名。
+
+## Maven名词解释二
+
 - ArtifactId
     构建出来的文件名，一般来说或，这个也是project名。
 - Packaging
@@ -46,6 +49,9 @@
     项目的版本，项目的唯一标识由 groupId+artifactId+packaging+versionz 组成。
 - Dependency
     为了能够 build 或运行，一个典型的java project会依赖其他的包，在Maven中，这些被依赖的包就被称为 dependency。
+
+## Maven名词解释三
+
 - Plug-in
     Maven是有插件组织的，它的每一个功能都是由插件提供的，主要的插件是由 java 来写的，但是他也支持 beanshell 和 ant 脚本编写的插件。
 - Repository
@@ -73,18 +79,27 @@
 - process-sources 	处理源码 	提供解析、修改和转换源码。常规源码和生成的源码都可以在这里处理。
 - generate-resources 	生成资源 	可以生成非源码资源。通常包括元数据文件和配置文件。
 - process-resources 	处理资源 	处理非源码资源。修改、转换和重定位资源都能在这阶段发生。
+
+## Maven生命周期
+
 - compile 	编译 	编译源码。编译过的类被放到目标目录树中。
 - process-classes 	处理类 	处理类文件转换和增强步骤。字节码交织器和常用工具常在这一阶段操作。
 - generate-test-sources 	生成测试源码 	mojo 可以生成要操作的单元测试代码。
 - process-test-sources 	处理测试源码 	在编译前对测试源码执行任何必要的处理。在这一阶段，可以修改、转换或复制源代码。
 - generate-test-resources 	生成测试资源 	允许生成与测试相关的（非源码）资源。
 - process-test-resources 	处理测试资源 	可以处理、转换和重新定位与测试相关的资源。
+
+## Maven生命周期
+
 - test-compile 	测试编译 	编译单元测试的源码。
 - process-test-classes 	对测试编译生成的文件做后期处理(需Maven2.0.5及以上)
 - test 	测试 	运行编译过的单元测试并累计结果。
 - prepare-package 	执行打包前的所有操作(需Maven2.1及以上)
 - package 	打包 	将可执行的二进制文件打包到一个分布式归档文件中，如 JAR 或 WAR。
 - pre-integration-test 	前集成测试 	准备集成测试。这种情况下的集成测试是指在一个受到一定控制的模拟的真实部署环境中测试代码。这一步能将归档文件部署到一个服务器上执行。
+
+## Maven生命周期
+
 - integration-test 	集成测试 	执行真正的集成测试。
 - post-integration-test 	后集成测试 	解除集成测试准备。这一步涉及测试环境重置或重新初始化。
 - verify 	检验 	检验可部署归档的有效性和完整性。过了这个阶段，将安装该归档。
@@ -107,7 +122,7 @@ mvn archetype:create
 
 ## 目录结构
 
-![](file/maven02.gif)
+![](/home/ivan/my/ivanpig.github.com/ppt/javaee/file/maven02.gif)
 
 
 ## 课堂练习
@@ -144,9 +159,4 @@ mvn archetype:create
 ## 课后作业
 
 - 将博客程序修改为maven项目
-
-
-
-
-
 

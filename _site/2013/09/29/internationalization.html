@@ -1,0 +1,270 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="clojure, luminus"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2013/09/29/internationalization.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>Luminus手册-国际化 - IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">Luminus手册-国际化</h2>
+
+    <p class="post-meta">By 09月29日  2013
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">luminus (19)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">clojure (20)</i></a>
+        
+        <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">luminus (19)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <h1>Internationalization</h1>
+
+<p>Luminius模板包含了<a href="https://github.com/ptaoussanis/tower">Tower</a>依赖，Tower提供了函数式的国际化和翻译。</p>
+
+<p>首先，我们需要创建一个字典map：</p>
+
+<pre><code class="clojure">(def tconfig
+  {:fallback-locale :en-US
+   :dictionary
+   {:en-US   {:page {:title "Here is a title"
+                     :content "Time to start building your site."}
+              :missing  "&lt;Missing translation: [%1$s %2$s %3$s]&gt;"}
+    :fr-FR {:page {:title "Voici un titre"
+                   :content "Il est temps de commencer votre site."}}
+    }})
+</code></pre>
+
+<p>然后添加Tower中间件来包装我们的配置:</p>
+
+<pre><code>(def app
+ (app-handler
+   [routes]
+   :middleware
+   [#(taoensso.tower.ring/wrap-tower-middleware % {:tconfig tconfig})]))
+</code></pre>
+
+<p>中间件将会通过accept-language头来确定相应的语言。中间件将会添加两个key到请求中。地一个key是:t,它的值是翻译函数。第二个key是:locale，它的值是中间件提供的语言类型。</p>
+
+<p>你可以提供一个自定义的locale-selector函数给中间件。</p>
+
+<pre><code class="clojure">(defn my-selector [req]
+  (when (= (:remote-addr req) "127.0.0.1") :en))
+
+(def app
+  (app-handler
+    [routes]
+    :middleware
+    [#(wrap-tower-middleware % {:tconfig tconfig
+                                :locale-selector my-selector})]))
+</code></pre>
+
+<!-- more -->
+
+
+<p>中间件将按照如下顺序查找，会使用第一个有效的语言来进行处理:</p>
+
+<pre><code class="clojure">(:locale request)
+(when-let [ls locale-selector] (ls request))
+(:locale session)
+(:locale params)
+(locale-from-headers headers)
+fallback-locale
+</code></pre>
+
+<p>当中间件设置完成后，我们可以通过下面的代码来实现国际化:</p>
+
+<pre><code class="clojure">(ns mysite.routes.home
+  (:use compojure.core)
+  (:require [i18ntest.layout :as layout]
+            [i18ntest.util :as util]
+            [taoensso.tower :refer [t]]))
+
+(defn home-page [{:keys [locale tconfig]}]
+  (layout/render
+    "home.html" {:title   (t locale tconfig :page/title)
+                 :content (t locale tconfig :page/content)}))
+
+(defn about-page []
+  (layout/render "about.html"))
+
+(defroutes home-routes
+  (GET "/" req (home-page req))
+  (GET "/about" [] (about-page)))
+</code></pre>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/09/28/logging.html" title="Luminus手册-日志 "><p> <i class="fa fa-mail-reply"></i>&nbsp;Luminus手册-日志</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/09/30/deployment.html" title="Luminus手册-部署"><p>Luminus手册-部署&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Luminus手册-国际化" data-thread-key="/2013/09/29/internationalization" data-url="/2013/09/29/internationalization.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

@@ -1,0 +1,651 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content=""/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/page/3/index.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/19/staticresource.html">Luminus手册-静态资源</a></h2>
+
+        <p class="post-meta">By 09月19日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Static resources</h1>
+
+<p>在noir.io下有多个访问静态资源的帮助方法。
+你可以通过调用resource-path来获取public目录的路径。</p>
+
+<h1>Handling file uploads</h1>
+
+<p>上传文件通过noir.io空间下的upload-file方法来实现，upload-file接受一个路径和文件的map。
+例如我们有一个upload.html文件:</p>
+
+<pre><code class="{.html}">    &lt;h2&gt;Upload a file&lt;/h2&gt;
+    &lt;form action="/upload" enctype="multipart/form-data" method="POST"&gt;
+        &lt;input id="file" name="file" type="file" /&gt;
+        &lt;input type="submit" value="upload" /&gt;
+    &lt;/form&gt;
+</code></pre>
+
+<p>我们可以这样来处理文件上传。</p>
+
+<pre><code class="{.clojure}">(ns myapp.upload
+  ...
+  (:require [upload-test.views.layout :as layout]
+            [noir.response :as response]
+            [noir.io :as io]))
+
+(defn upload-page []
+  (layout/render "upload.html"))
+
+(defn handle-upload [file]
+  (io/upload-file "/" file)
+  (response/redirect
+    (str "/" (:filename file))))
+
+(defroutes upload-routes
+  (GET "/upload" [] (upload-page))
+  (POST "/upload" [file] (handle-upload file)))
+</code></pre>
+
+
+
+
+    <a href="/2013/09/19/staticresource.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/18/defining_routes.html">Luminus手册-路由定义</a></h2>
+
+        <p class="post-meta">By 09月18日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Defining routes</h1>
+
+<p>Luminus使用Compojure来定义应用的路由.路由由HTTP请求方法和接受它的URI，
+参数和以及相应的处理程序组成。Compojure定义了所有标准HTTP请求的路由，
+比如ANY,DELETE,GET,HEAD,OPTIONS,PATCH,POST和PUT。</p>
+
+<p>例如：如果我们想定义一个应用，它指向/，/返回"Hello World!"字符串。我们
+可以这样写:</p>
+
+<pre><code class="{.clojure}">(defroutes app-routes
+  (GET "/" [] "Hello World!"))
+</code></pre>
+
+<p>如果你想构建一个路由来响应POST请求，我们可以这样写：</p>
+
+<pre><code class="{.clojure}">(POST "/hello" [id] (str "Welcome " id))
+</code></pre>
+
+<p>有些路由需要访问请求的map，我们只需要在路由上定义第二个参数就可以了。</p>
+
+<pre><code class="{.clojure}">(GET "/foo" request (interpose ", " (keys request)))
+</code></pre>
+
+<p>上面的路由读出请求map中所有的key并展示出来。结果如下:</p>
+
+<pre><code class="{.example}">:ssl-client-cert, :remote-addr, :scheme, :query-params, :session, :form-params,
+:multipart-params, :request-method, :query-string, :route-params, :content-type,
+:cookies, :uri, :server-name, :params, :headers, :content-length, :server-port,
+:character-encoding, :body, :flash
+</code></pre>
+
+<p>Compojure还提供了一些有用的函数来处理请求map和表单参数。例如，在
+guestbook应用的例子中，我们看到了如下的路由定义:</p>
+
+<pre><code class="{.clojure}">(POST "/"  [name message] (save-message name message))
+</code></pre>
+
+
+
+
+    <a href="/2013/09/18/defining_routes.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/17/clojurescript.html">Luminus手册-ClojureScript</a></h2>
+
+        <p class="post-meta">By 09月17日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Summary</h1>
+
+<p>ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScript可以
+有如下有点：</p>
+
+<ul>
+<li>在客户端和服务端使用相同的语言</li>
+<li>在前后端共用相同的代码</li>
+<li>简介流畅的语言</li>
+<li>使用Leiningen管理依赖关系</li>
+<li>不可变数据</li>
+<li>功能强大的库</li>
+<li>Adding ClojureScript Support</li>
+</ul>
+
+
+<p>最简单的添加ClojureScript支持的方法就是在创建新项目的时候添加+cljs选项
+。不过在现有的项目中添加ClojureScript也同样的简单。你只需要在
+project.clj文件中添加如下内容即可。</p>
+
+<pre><code class="{.clojure}">:plugins [...
+          [lein-cljsbuild "0.3.0"]]
+
+:hooks [... leiningen.cljsbuild]
+
+:cljsbuild
+{:builds [{:source-paths ["src-cljs"]
+           :compiler {:output-to "resources/public/js/site.js"
+                      :optimizations :advanced}}]}
+</code></pre>
+
+<p>上面的代码将在项目中添加cljsbuild插件和一个钩子。
+所有的命名空间需要在项目根目录下的src-cljs目录内。注意，ClojureScript
+文件需要以.cljs结尾。如果文件以.clj结尾，它也会被编译，不过它就无法访
+问js命名空间。</p>
+
+<h1>Using Libraries</h1>
+
+<p>使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
+ClojureScript库和其他库一样都配置在project.clj文件中。</p>
+
+
+
+
+    <a href="/2013/09/17/clojurescript.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/16/html_templating.html">Luminus手册-HTML模板</a></h2>
+
+        <p class="post-meta">By 09月16日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Templating Options</h1>
+
+<p>Luminus包含了Hiccup的依赖.如果你熟悉Hiccup那么可以直接使用。
+Hiccup使用clojure数据结构来描述模板。并且,Hiccup提供了丰富的API来生成
+HTML元素。 Luminus也包含了Selmer，Selmer使用了普通的文本文件来描述模板。
+你可以使用它们中的任何一个模板，或者混合使用.抑或你可以选择任何你喜欢
+的模板框架，比如Enlive或者Stencil。</p>
+
+<h1>HTML Templating Using Selmer</h1>
+
+<p>Selmer是一个类似Django模板的框架。如果你熟悉Django或者其他类似的模板语
+言，那么你会感觉很熟悉.</p>
+
+<h2>Creating Templates</h2>
+
+<p>Selmer将展示逻辑和程序逻辑分开。实际上Selmer模板就是包含了动态元素的
+HTML文件。来看下面的例子。</p>
+
+<pre><code class="{.html}">&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;title&gt;My First Template&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h2&gt;Hello { {name}}&lt;/h2&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>模板使用了一个包含了键值对的上下文环境。上下文环境中包含了我们
+需要在运行时获得的变量的值。上面的代码中，我们从上下文环境中获取名字为
+name的变量的值。
+有两个函数可以渲染模板,render和render-file。render函数接收一个字符串来
+渲染模板。而render-file接收一个字符串作为路径来渲染模板。
+如果我们将上面的模板定义保存到index.html文件中。我们就可以这样来渲染:</p>
+
+<pre><code class="{.clojure}">(ns example.routes.home
+  (:use [selmer.parser :only [render-file]]))
+
+(defn index [request]
+  (render-file "example/views/templates/index.html"
+               {:name "John"}))
+</code></pre>
+
+
+
+
+    <a href="/2013/09/16/html_templating.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/15/application_profile.html">Luminus手册-应用配置</a></h2>
+
+        <p class="post-meta">By 09月15日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Profiles</h1>
+
+<p>使用lein new luminus myapp命令会创建一个新的luminus应用，它使用的是默认的配置。如果你想使用其他的特性，你可以修改相应的配置参数。</p>
+
+<p>下面就是各个配置：</p>
+
+<ul>
+<li>+cljs - 添加ClojureScript支持</li>
+<li>+cucumber - 提供通过clj-webdriver配置cucumber</li>
+<li>+h2 - 添加models.db并提供H2数据库依赖</li>
+<li>+postgres - 添加models.db并提供PostreSQL数据库依赖</li>
+<li>+mysql - 添加models.db并提供mysql依赖</li>
+<li>+mongodb - 添加db.core并提供MongoDB依赖</li>
+<li>+site - 创建一个包含注册和验证框架的应用。使用bootstrap和h2</li>
+<li>+dailycred -
+添加dailycred支持，当和+site参数配合使用时，它使用dailycred作为验证框架</li>
+<li>+http-kit - 添加HTTP Kit支持</li>
+</ul>
+
+
+<p>要添加配置，只需要简单的添加到你的应用的名字后面，比如:</p>
+
+<pre><code class="{.bash}">lein new luminus myapp +cljs
+</code></pre>
+
+<p>可以多个参数一起使用:</p>
+
+<pre><code class="{.bash}">lein new luminus myapp +site +postgres
+</code></pre>
+
+<p>如果两个参数会生成相同的文件，则后面参数所生成的文件会覆盖前面参数所生
+成的文件。</p>
+
+
+
+
+    <a href="/2013/09/15/application_profile.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/14/your_first_application.html">Luminus手册-第一个应用</a></h2>
+
+        <p class="post-meta">By 09月14日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Guestbook应用</h1>
+
+<p>此文使用Luminus构建一个简单的guestbook应用。guestbook可以保存信息，展示信息。此应用将涉及到简单的HTML模板，数据库访问和项目结构.</p>
+
+<h1>安装Leiningen</h1>
+
+<p>首先你需要安装Leiningen才能使用Luminus。安装Leiningen非常的简单:</p>
+
+<ul>
+<li>下载脚本</li>
+<li>将其设置为可执行权限(chmod +x lein)</li>
+<li>将脚本放到你的PATH下面</li>
+<li>运行lein self-install ，然后等待安装结束</li>
+</ul>
+
+
+<pre><code class="sh">wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
+chmod +x lein
+mv lein ~/bin
+lein self-install
+</code></pre>
+
+<h1>创建一个新应用</h1>
+
+<p>安装完Leiningen后，你就可以在命令行中输入如下的命令</p>
+
+<pre><code class="sh">lein new luminus guestbook +h2
+cd guestbook
+</code></pre>
+
+<p>上面的命令将会创建一个使用了H2嵌入式数据库的模板项目。现在我们就可以运行这个项目了.</p>
+
+<pre><code class="sh">lein ring server
+guestbook started successfully...
+2013-03-01 19:05:30.389:INFO:oejs.Server:jetty-7.6.1.v20120215
+Started server on port 3000
+2013-03-01 19:05:30.459:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:3000
+</code></pre>
+
+<p>浏览器会自动打开，你将能看到运行的应用。如果你不想浏览器自动打开，你可以用下面的命令来启动项目.</p>
+
+<pre><code class="sh">lein ring server-headless
+</code></pre>
+
+<p>你也可以自定义端口号，命令如下:</p>
+
+<pre><code class="sh">lein ring server-headless 8000
+</code></pre>
+
+
+
+
+    <a href="/2013/09/14/your_first_application.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+<div class="pure-g pagination">
+    
+    
+    <a class=" pure-u-1-2 pagination-item" href="/page/2"><p>← Newer</p></a>
+    
+    
+
+
+    
+    <span class=" pure-u-1-2 pagination-item"><p>Older →</p></span>
+    
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

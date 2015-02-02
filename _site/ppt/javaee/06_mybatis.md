@@ -120,6 +120,10 @@ mvn mybatis-generator:generate
 mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 ```
 
+## 课堂练习
+
+- 请自行生成相关表
+
 ## 文件说明
 
 - Article:普通JavaBean
@@ -213,6 +217,7 @@ sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 ## 如何应用启动时获取呢?
 
 - load-on-startup
+- listener
 
 ## InitServlet
 

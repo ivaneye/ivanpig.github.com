@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-01-03T17:40:53+08:00</updated>
+    <updated>2015-02-02T11:11:23+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -14,9 +14,9 @@
     
     <entry>
         <title>LightTable Theme</title>
-        <link href="http://ivanpig.github.io/lighttable/pigtheme.html"/>
+        <link href="http://ivanpig.github.io/2014/11/28/pigtheme.html"/>
         <updated>2014-11-28T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//lighttable/pigtheme</id>
+        <id>http://ivanpig.github.io//2014/11/28/pigtheme</id>
         <content type="html">&lt;h1&gt;LightTable Theme&lt;/h1&gt;
 
 &lt;ul&gt;
@@ -42,10 +42,2020 @@
     </entry>
     
     <entry>
+        <title>Luminus手册-升级</title>
+        <link href="http://ivanpig.github.io/2013/10/02/upgrading.html"/>
+        <updated>2013-10-02T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/10/02/upgrading</id>
+        <content type="html">&lt;h1&gt;Upgrading to the Latest Version&lt;/h1&gt;
+
+&lt;p&gt;不幸的是，框架无法自动从老版本升级到新版本。主要原因是新版本的依赖可能会有接口方面的修改，导致老代码无法正常运行。&lt;/p&gt;
+
+&lt;p&gt;最好的方法是使用&lt;a href=&quot;https://github.com/xsc/lein-ancient&quot;&gt;lein-ancient&lt;/a&gt;插件来保持你的依赖包时刻为最新。这将会帮你很容易的发现哪些插件有了新的版本。&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Upgrading to the Latest Version&lt;/h1&gt;
+
+&lt;p&gt;不幸的是，框架无法自动从老版本升级到新版本。主要原因是新版本的依赖可能会有接口方面的修改，导致老代码无法正常运行。&lt;/p&gt;
+
+&lt;p&gt;最好的方法是使用&lt;a href=&quot;https://github.com/xsc/lein-ancient&quot;&gt;lein-ancient&lt;/a&gt;插件来保持你的依赖包时刻为最新。这将会帮你很容易的发现哪些插件有了新的版本。&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-实用库</title>
+        <link href="http://ivanpig.github.io/2013/10/01/useful_libraries.html"/>
+        <updated>2013-10-01T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/10/01/useful_libraries</id>
+        <content type="html">&lt;p&gt;Luminus的目标是从细粒度来方便你开发web应用。所以它默认包含了很多库包。&lt;/p&gt;
+
+&lt;p&gt;包括lib-noir提供一般工具，Selmer/Hiccup提供HTML模板,Timbre提供日志功能，
+Tower提供国际化等等其他包。&lt;/p&gt;
+
+&lt;p&gt;当然，还有很多的包能给web开发带来便利。&lt;/p&gt;
+
+&lt;p&gt;具体请见&lt;a href=&quot;http://www.luminusweb.net/docs/useful_libraries.md&quot;&gt;此处&lt;/a&gt;&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;Luminus的目标是从细粒度来方便你开发web应用。所以它默认包含了很多库包。&lt;/p&gt;
+
+&lt;p&gt;包括lib-noir提供一般工具，Selmer/Hiccup提供HTML模板,Timbre提供日志功能，
+Tower提供国际化等等其他包。&lt;/p&gt;
+
+&lt;p&gt;当然，还有很多的包能给web开发带来便利。&lt;/p&gt;
+
+&lt;p&gt;具体请见&lt;a href=&quot;http://www.luminusweb.net/docs/useful_libraries.md&quot;&gt;此处&lt;/a&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-部署</title>
+        <link href="http://ivanpig.github.io/2013/09/30/deployment.html"/>
+        <updated>2013-09-30T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/30/deployment</id>
+        <content type="html">&lt;h1&gt;Running Standalone&lt;/h1&gt;
+
+&lt;p&gt;要创建一个可独立运行的包，只需要运行如下的命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein ring uberjar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;打包完成的jar会出现在target目录下。可以通过下面的命令运行:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;java -jar myapp-0.1.0-SNAPSHOT-standalone.jar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;独立可运行的程序可以使用Jetty来运行。如果要设置端口号，你需要设置\$PORT
+环境变量:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;export PORT=8080
+java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Delpoying on Immutant&lt;/h1&gt;
+
+&lt;p&gt;如果想部署应用到Immutant，请执行如下命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein immutant deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更多信息请访问&lt;a href=&quot;http://immutant.org/tutorials/deploying/index.html&quot;&gt;官网&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;Deploying to Tomcat&lt;/h1&gt;
+
+&lt;p&gt;如果想打包应用为war包:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein ring uberwar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后只需要将打好的包拷贝到tomcat的webapps目录下即可:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;cp target/myapp-0.1.0-SNAPSHOT-standalone.war ~/tomcat/webapps/myapp.war
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Heroku Deployment&lt;/h1&gt;
+
+&lt;p&gt;首先确保你有git和Heroku，然后按照下面的步骤做就可以了。
+要测试你的应用是否通过foreman在本地运行，只需要执行下面的命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;foreman start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在你能初始化你的git仓库，并提交你的应用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;git init
+git add .
+git commit -m &quot;init&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Heroku创建你的应用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;heroku create
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你还可以创建数据库&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;heroku addons:add heroku-postgresql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;连接信息可以在你的Heroku页面看到. 部署应用.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;git push heroku master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在你的应用就被部署到了Heroku上.
+具体信息请看&lt;a href=&quot;https://devcenter.heroku.com/articles/clojure&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Running Standalone&lt;/h1&gt;
+
+&lt;p&gt;要创建一个可独立运行的包，只需要运行如下的命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein ring uberjar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;打包完成的jar会出现在target目录下。可以通过下面的命令运行:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;java -jar myapp-0.1.0-SNAPSHOT-standalone.jar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;独立可运行的程序可以使用Jetty来运行。如果要设置端口号，你需要设置\$PORT
+环境变量:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;export PORT=8080
+java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Delpoying on Immutant&lt;/h1&gt;
+
+&lt;p&gt;如果想部署应用到Immutant，请执行如下命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein immutant deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更多信息请访问&lt;a href=&quot;http://immutant.org/tutorials/deploying/index.html&quot;&gt;官网&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;Deploying to Tomcat&lt;/h1&gt;
+
+&lt;p&gt;如果想打包应用为war包:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein ring uberwar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后只需要将打好的包拷贝到tomcat的webapps目录下即可:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;cp target/myapp-0.1.0-SNAPSHOT-standalone.war ~/tomcat/webapps/myapp.war
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Heroku Deployment&lt;/h1&gt;
+
+&lt;p&gt;首先确保你有git和Heroku，然后按照下面的步骤做就可以了。
+要测试你的应用是否通过foreman在本地运行，只需要执行下面的命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;foreman start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在你能初始化你的git仓库，并提交你的应用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;git init
+git add .
+git commit -m &quot;init&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Heroku创建你的应用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;heroku create
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你还可以创建数据库&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;heroku addons:add heroku-postgresql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;连接信息可以在你的Heroku页面看到. 部署应用.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;git push heroku master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在你的应用就被部署到了Heroku上.
+具体信息请看&lt;a href=&quot;https://devcenter.heroku.com/articles/clojure&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-国际化</title>
+        <link href="http://ivanpig.github.io/2013/09/29/internationalization.html"/>
+        <updated>2013-09-29T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/29/internationalization</id>
+        <content type="html">&lt;h1&gt;Internationalization&lt;/h1&gt;
+
+&lt;p&gt;Luminius模板包含了&lt;a href=&quot;https://github.com/ptaoussanis/tower&quot;&gt;Tower&lt;/a&gt;依赖，Tower提供了函数式的国际化和翻译。&lt;/p&gt;
+
+&lt;p&gt;首先，我们需要创建一个字典map：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def tconfig
+  {:fallback-locale :en-US
+   :dictionary
+   {:en-US   {:page {:title &quot;Here is a title&quot;
+                     :content &quot;Time to start building your site.&quot;}
+              :missing  &quot;&amp;lt;Missing translation: [%1$s %2$s %3$s]&amp;gt;&quot;}
+    :fr-FR {:page {:title &quot;Voici un titre&quot;
+                   :content &quot;Il est temps de commencer votre site.&quot;}}
+    }})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后添加Tower中间件来包装我们的配置:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(def app
+ (app-handler
+   [routes]
+   :middleware
+   [#(taoensso.tower.ring/wrap-tower-middleware % {:tconfig tconfig})]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;中间件将会通过accept-language头来确定相应的语言。中间件将会添加两个key到请求中。地一个key是:t,它的值是翻译函数。第二个key是:locale，它的值是中间件提供的语言类型。&lt;/p&gt;
+
+&lt;p&gt;你可以提供一个自定义的locale-selector函数给中间件。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn my-selector [req]
+  (when (= (:remote-addr req) &quot;127.0.0.1&quot;) :en))
+
+(def app
+  (app-handler
+    [routes]
+    :middleware
+    [#(wrap-tower-middleware % {:tconfig tconfig
+                                :locale-selector my-selector})]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;中间件将按照如下顺序查找，会使用第一个有效的语言来进行处理:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(:locale request)
+(when-let [ls locale-selector] (ls request))
+(:locale session)
+(:locale params)
+(locale-from-headers headers)
+fallback-locale
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当中间件设置完成后，我们可以通过下面的代码来实现国际化:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns mysite.routes.home
+  (:use compojure.core)
+  (:require [i18ntest.layout :as layout]
+            [i18ntest.util :as util]
+            [taoensso.tower :refer [t]]))
+
+(defn home-page [{:keys [locale tconfig]}]
+  (layout/render
+    &quot;home.html&quot; {:title   (t locale tconfig :page/title)
+                 :content (t locale tconfig :page/content)}))
+
+(defn about-page []
+  (layout/render &quot;about.html&quot;))
+
+(defroutes home-routes
+  (GET &quot;/&quot; req (home-page req))
+  (GET &quot;/about&quot; [] (about-page)))
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Internationalization&lt;/h1&gt;
+
+&lt;p&gt;Luminius模板包含了&lt;a href=&quot;https://github.com/ptaoussanis/tower&quot;&gt;Tower&lt;/a&gt;依赖，Tower提供了函数式的国际化和翻译。&lt;/p&gt;
+
+&lt;p&gt;首先，我们需要创建一个字典map：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def tconfig
+  {:fallback-locale :en-US
+   :dictionary
+   {:en-US   {:page {:title &quot;Here is a title&quot;
+                     :content &quot;Time to start building your site.&quot;}
+              :missing  &quot;&amp;lt;Missing translation: [%1$s %2$s %3$s]&amp;gt;&quot;}
+    :fr-FR {:page {:title &quot;Voici un titre&quot;
+                   :content &quot;Il est temps de commencer votre site.&quot;}}
+    }})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后添加Tower中间件来包装我们的配置:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(def app
+ (app-handler
+   [routes]
+   :middleware
+   [#(taoensso.tower.ring/wrap-tower-middleware % {:tconfig tconfig})]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;中间件将会通过accept-language头来确定相应的语言。中间件将会添加两个key到请求中。地一个key是:t,它的值是翻译函数。第二个key是:locale，它的值是中间件提供的语言类型。&lt;/p&gt;
+
+&lt;p&gt;你可以提供一个自定义的locale-selector函数给中间件。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn my-selector [req]
+  (when (= (:remote-addr req) &quot;127.0.0.1&quot;) :en))
+
+(def app
+  (app-handler
+    [routes]
+    :middleware
+    [#(wrap-tower-middleware % {:tconfig tconfig
+                                :locale-selector my-selector})]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;中间件将按照如下顺序查找，会使用第一个有效的语言来进行处理:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(:locale request)
+(when-let [ls locale-selector] (ls request))
+(:locale session)
+(:locale params)
+(locale-from-headers headers)
+fallback-locale
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当中间件设置完成后，我们可以通过下面的代码来实现国际化:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns mysite.routes.home
+  (:use compojure.core)
+  (:require [i18ntest.layout :as layout]
+            [i18ntest.util :as util]
+            [taoensso.tower :refer [t]]))
+
+(defn home-page [{:keys [locale tconfig]}]
+  (layout/render
+    &quot;home.html&quot; {:title   (t locale tconfig :page/title)
+                 :content (t locale tconfig :page/content)}))
+
+(defn about-page []
+  (layout/render &quot;about.html&quot;))
+
+(defroutes home-routes
+  (GET &quot;/&quot; req (home-page req))
+  (GET &quot;/about&quot; [] (about-page)))
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-日志</title>
+        <link href="http://ivanpig.github.io/2013/09/28/logging.html"/>
+        <updated>2013-09-28T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/28/logging</id>
+        <content type="html">&lt;h1&gt;Logging&lt;/h1&gt;
+
+&lt;p&gt;Luminus模板中包括&lt;a href=&quot;https://github.com/ptaoussanis/timbre&quot;&gt;Timbre&lt;/a&gt;和&lt;a href=&quot;https://bitbucket.org/postspectacular/rotor&quot;&gt;Rotor&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;日志通过在handler/init函数中进行如下的设置进行初始化:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;  (timbre/set-config!
+    [:appenders :rotor]
+    {:min-level :info
+     :enabled? true
+     :async? false ; should be always false for rotor
+     :max-message-per-msecs nil
+     :fn rotor/append})
+
+  (timbre/set-config!
+    [:shared-appender-config :rotor]
+    {:path &quot;.log&quot; :max-size 10000 :backlog 10})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Timbre可以记录Clojure的所有日志.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns example
+ (:use [taoensso.timbre :only [trace debug info warn error fatal]]))
+
+(info &quot;Hello&quot;)
+
+=&amp;gt;2012-Dec-24 09:03:09 -0500 Helios.local INFO [timbretest] - Hello
+
+(info {:user {:id &quot;Anonymous&quot;}})
+
+=&amp;gt;2012-Dec-24 09:02:44 -0500 Helios.local INFO [timbretest] - {:user {:id &quot;Anonymous&quot;}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更多信息请见&lt;a href=&quot;https://github.com/ptaoussanis/timbre&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Logging&lt;/h1&gt;
+
+&lt;p&gt;Luminus模板中包括&lt;a href=&quot;https://github.com/ptaoussanis/timbre&quot;&gt;Timbre&lt;/a&gt;和&lt;a href=&quot;https://bitbucket.org/postspectacular/rotor&quot;&gt;Rotor&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;日志通过在handler/init函数中进行如下的设置进行初始化:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;  (timbre/set-config!
+    [:appenders :rotor]
+    {:min-level :info
+     :enabled? true
+     :async? false ; should be always false for rotor
+     :max-message-per-msecs nil
+     :fn rotor/append})
+
+  (timbre/set-config!
+    [:shared-appender-config :rotor]
+    {:path &quot;.log&quot; :max-size 10000 :backlog 10})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Timbre可以记录Clojure的所有日志.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns example
+ (:use [taoensso.timbre :only [trace debug info warn error fatal]]))
+
+(info &quot;Hello&quot;)
+
+=&amp;gt;2012-Dec-24 09:03:09 -0500 Helios.local INFO [timbretest] - Hello
+
+(info {:user {:id &quot;Anonymous&quot;}})
+
+=&amp;gt;2012-Dec-24 09:02:44 -0500 Helios.local INFO [timbretest] - {:user {:id &quot;Anonymous&quot;}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更多信息请见&lt;a href=&quot;https://github.com/ptaoussanis/timbre&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-数据迁移</title>
+        <link href="http://ivanpig.github.io/2013/09/27/database_migrations.html"/>
+        <updated>2013-09-27T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/27/database_migrations</id>
+        <content type="html">&lt;h1&gt;Migrations&lt;/h1&gt;
+
+&lt;p&gt;默认情况下Luminus使用Ragtime来进行数据迁移。当你在创建Luminus项目时添加了+mysql或+postgres选项时，Ragtime会自动被添加进来。&lt;/p&gt;
+
+&lt;h1&gt;Migrations with Ragtime&lt;/h1&gt;
+
+&lt;p&gt;Ragtime通过Leiningen插件来执行。此插件需要配置project.clj的:plugins中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;:plugins [... [ragtime/ragtime.lein &quot;0.3.4&quot;]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际的迁移动作是由ragtime.sql.files这个适配器来执行。此适配器需要配置在依赖列表中，同时配置相关数据库配置。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;:dependencies [... [ragtime/ragtime.sql.files &quot;0.3.4&quot;]]
+:ragtime {:migrations ragtime.sql.files/migrations
+          :database &quot;jdbc:mysql://localhost:3306/example_db?user=root&quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ragtime.sql.files适配器会从项目根目录下的指定目录查找sql脚本。我们只需要将脚本添加到对应目录下即可。&lt;/p&gt;
+
+&lt;p&gt;脚本按字母顺序排序。我们来创建两个脚本。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;migrations/2014-13-57-30-create-tables.up.sql
+
+CREATE TABLE users (id INT, name VARCHAR(25));
+
+migrations/2014-13-57-30-create-tables.down.sql
+
+DROP TABLE users;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过如下命令执行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lein ragtime migrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过如下命令回滚:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lein ragtime rollback
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Migrations with Lobos&lt;/h1&gt;
+
+&lt;p&gt;我们来看看如何在Luminus中集成Lobos.Lobos提供了功能强大的DSL来编
+写迁移代码以及方便的对Korma进行扩展.&lt;/p&gt;
+
+&lt;p&gt;首先，我们来创建一个Luminus项目。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein new luminus ltest +site
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后添加Lobos依赖。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[lobos &quot;1.0.0-beta1&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接着我们需要在src目录下创建一个lobos目录，并在该目录下创建两个文件
+config.clj和migrations.clj，其中包含如下内容:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns lobos.config
+  (:use lobos.connectivity)
+  (:require [ltest.models.schema :as schema]))
+
+(open-global schema/db-spec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns lobos.migrations
+  (:refer-clojure
+   :exclude [alter drop bigint boolean char double float time])
+  (:use (lobos [migration :only [defmigration]] core schema config)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们来创建我们的第一个迁移，使用lobos来管理create-users-table函数.
+你只需要将create-users-table函数从schema.clj移动到migations.clj中即可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmigration add-users-table
+  (up [] (create
+          (table :users
+                 (varchar :id 20 :primary-key)
+                 (varchar :first_name 30)
+                 (varchar :last_name 30)
+                 (varchar :email 30)
+                 (boolean :admin)
+                 (time    :last_login)
+                 (boolean :is_active)
+                 (varchar :pass 100))))
+  (down [] (drop (table :users))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果想添加其他的迁移，只需要再添加一个类似的definition即可。
+现在我们定义了迁移，下面我们来看看schema命名空间，我们来更新并使用它。
+我们将添加lobos.migration依赖:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns ltest.models.schema
+  (:use [lobos.core :only (defcommand migrate)])
+  (:require [noir.io :as io]
+            [lobos.migration :as lm]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接着定义一个command，返回给我们一个待迁移列表.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defcommand pending-migrations []
+  (lm/pending-migrations db-spec sname))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据这个信息我们可以知道数据库的状态。我们来重命名initialised?和
+actualized?函数，当待迁移列表没有数据时返回true&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn actualized?
+  &quot;checks if there are no pending migrations&quot;
+  []
+  (empty? (pending-migrations)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们还需要将create-tables函数替换为actualize函数，actualize函数将会触
+发迁移。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def actualize migrate)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际上actualize只是一个对migrate的引用，migrate是lobos.core中的函数.
+最后我们需要做的就是更新handler.clj文件，来使用我们的新函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn init
+  &quot;runs when the application starts and checks if the database
+   schema exists, calls schema/create-tables if not.&quot;
+  []
+  (if-not (schema/actualized?)
+    (schema/actualize)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在运行你的服务器，你的应用将会自动运行所有的待执行迁移。
+希望这个教程对你在Luminus中使用数据迁移有帮助。相关代码请见&lt;a href=&quot;https://github.com/edtsech/ltest&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;Popular Migrations Alternatives&lt;/h1&gt;
+
+&lt;p&gt;下面是几个比较流行的数据库迁移工具:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Drift - Drift是一个使用Clojure编写的数据库迁移工具。Drift工作方式和Rails迁移方式类似-使用一个目录来存放你所有的迁移文件。Drift将会决定去运行哪个合适的文件。&lt;/li&gt;
+&lt;li&gt;Migratus - 一个通用的迁移框架，有一个数据库迁移的实现&lt;/li&gt;
+&lt;li&gt;Ragtime - Ragtime是一个迁移结构化数据的Clojure库。它定义了一组接口来处理迁移，就像Ring定义了一组接口来处理web应用一样。&lt;/li&gt;
+&lt;li&gt;Lobos - Lobos是一个使用Clojure编写的SQL数据库操作和迁移库.目前它提供对H2,MySQL,PostgreSQL,SQLite和SQL Server的支持.&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+        <summary type="html">&lt;h1&gt;Migrations&lt;/h1&gt;
+
+&lt;p&gt;默认情况下Luminus使用Ragtime来进行数据迁移。当你在创建Luminus项目时添加了+mysql或+postgres选项时，Ragtime会自动被添加进来。&lt;/p&gt;
+
+&lt;h1&gt;Migrations with Ragtime&lt;/h1&gt;
+
+&lt;p&gt;Ragtime通过Leiningen插件来执行。此插件需要配置project.clj的:plugins中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;:plugins [... [ragtime/ragtime.lein &quot;0.3.4&quot;]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际的迁移动作是由ragtime.sql.files这个适配器来执行。此适配器需要配置在依赖列表中，同时配置相关数据库配置。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;:dependencies [... [ragtime/ragtime.sql.files &quot;0.3.4&quot;]]
+:ragtime {:migrations ragtime.sql.files/migrations
+          :database &quot;jdbc:mysql://localhost:3306/example_db?user=root&quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ragtime.sql.files适配器会从项目根目录下的指定目录查找sql脚本。我们只需要将脚本添加到对应目录下即可。&lt;/p&gt;
+
+&lt;p&gt;脚本按字母顺序排序。我们来创建两个脚本。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;migrations/2014-13-57-30-create-tables.up.sql
+
+CREATE TABLE users (id INT, name VARCHAR(25));
+
+migrations/2014-13-57-30-create-tables.down.sql
+
+DROP TABLE users;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过如下命令执行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lein ragtime migrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过如下命令回滚:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lein ragtime rollback
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Migrations with Lobos&lt;/h1&gt;
+
+&lt;p&gt;我们来看看如何在Luminus中集成Lobos.Lobos提供了功能强大的DSL来编
+写迁移代码以及方便的对Korma进行扩展.&lt;/p&gt;
+
+&lt;p&gt;首先，我们来创建一个Luminus项目。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein new luminus ltest +site
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后添加Lobos依赖。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[lobos &quot;1.0.0-beta1&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接着我们需要在src目录下创建一个lobos目录，并在该目录下创建两个文件
+config.clj和migrations.clj，其中包含如下内容:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns lobos.config
+  (:use lobos.connectivity)
+  (:require [ltest.models.schema :as schema]))
+
+(open-global schema/db-spec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns lobos.migrations
+  (:refer-clojure
+   :exclude [alter drop bigint boolean char double float time])
+  (:use (lobos [migration :only [defmigration]] core schema config)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们来创建我们的第一个迁移，使用lobos来管理create-users-table函数.
+你只需要将create-users-table函数从schema.clj移动到migations.clj中即可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmigration add-users-table
+  (up [] (create
+          (table :users
+                 (varchar :id 20 :primary-key)
+                 (varchar :first_name 30)
+                 (varchar :last_name 30)
+                 (varchar :email 30)
+                 (boolean :admin)
+                 (time    :last_login)
+                 (boolean :is_active)
+                 (varchar :pass 100))))
+  (down [] (drop (table :users))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果想添加其他的迁移，只需要再添加一个类似的definition即可。
+现在我们定义了迁移，下面我们来看看schema命名空间，我们来更新并使用它。
+我们将添加lobos.migration依赖:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns ltest.models.schema
+  (:use [lobos.core :only (defcommand migrate)])
+  (:require [noir.io :as io]
+            [lobos.migration :as lm]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接着定义一个command，返回给我们一个待迁移列表.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defcommand pending-migrations []
+  (lm/pending-migrations db-spec sname))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据这个信息我们可以知道数据库的状态。我们来重命名initialised?和
+actualized?函数，当待迁移列表没有数据时返回true&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn actualized?
+  &quot;checks if there are no pending migrations&quot;
+  []
+  (empty? (pending-migrations)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们还需要将create-tables函数替换为actualize函数，actualize函数将会触
+发迁移。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def actualize migrate)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际上actualize只是一个对migrate的引用，migrate是lobos.core中的函数.
+最后我们需要做的就是更新handler.clj文件，来使用我们的新函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn init
+  &quot;runs when the application starts and checks if the database
+   schema exists, calls schema/create-tables if not.&quot;
+  []
+  (if-not (schema/actualized?)
+    (schema/actualize)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在运行你的服务器，你的应用将会自动运行所有的待执行迁移。
+希望这个教程对你在Luminus中使用数据迁移有帮助。相关代码请见&lt;a href=&quot;https://github.com/edtsech/ltest&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;Popular Migrations Alternatives&lt;/h1&gt;
+
+&lt;p&gt;下面是几个比较流行的数据库迁移工具:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Drift - Drift是一个使用Clojure编写的数据库迁移工具。Drift工作方式和Rails迁移方式类似-使用一个目录来存放你所有的迁移文件。Drift将会决定去运行哪个合适的文件。&lt;/li&gt;
+&lt;li&gt;Migratus - 一个通用的迁移框架，有一个数据库迁移的实现&lt;/li&gt;
+&lt;li&gt;Ragtime - Ragtime是一个迁移结构化数据的Clojure库。它定义了一组接口来处理迁移，就像Ring定义了一组接口来处理web应用一样。&lt;/li&gt;
+&lt;li&gt;Lobos - Lobos是一个使用Clojure编写的SQL数据库操作和迁移库.目前它提供对H2,MySQL,PostgreSQL,SQLite和SQL Server的支持.&lt;/li&gt;
+&lt;/ul&gt;
+
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-访问数据库</title>
+        <link href="http://ivanpig.github.io/2013/09/26/database_access.html"/>
+        <updated>2013-09-26T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/26/database_access</id>
+        <content type="html">&lt;h1&gt;Configuring the Database&lt;/h1&gt;
+
+&lt;p&gt;当你使用数据库参数来创建Luminus工程时，比如+postgress，那么Luminus会使用Korma来处理数据库操作.&lt;/p&gt;
+
+&lt;p&gt;Korma是一个基于Clojure的数据库操作DSL。Korma提供了一套简单的接口，方便你来处理复杂的数据。&lt;/p&gt;
+
+&lt;p&gt;给一个现有的项目添加数据库支持，非常的简单。首先，你需要在project.clj文件中添加Korma依赖。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[korma &quot;0.4.0&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另外还需要相应数据库的驱动，所以你还需要在project.clj中添加相关的数据库驱动。比如说，你要连接PostreSQL数据库，你需要添加如下的依赖.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[postgresql/postgresql &quot;9.3-1102-jdbc41&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;添加完依赖后，你可以创建一个新的namespace来管理你的model,这个namespace建议叫db.core。你需要在里面引入korma.db。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns myapp.db.core
+  (:use korma.core
+        [korma.db :only (defdb)]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Setting up the database connection&lt;/h2&gt;
+
+&lt;p&gt;配置完依赖后，我们要做的事情就是定义数据库连接。我们只需要提供一个包含连接信息的map。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def db-spec {:subprotocol &quot;postgresql&quot;
+         :subname &quot;//localhost/my_website&quot;
+         :user &quot;admin&quot;
+         :password &quot;admin&quot;})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者也可以配置服务器提供的JNDI名称来创建连接。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def db-spec {:name &quot;jdbc/myDatasource&quot;})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;这种方式适合当你有多个连接的时候。比如说，你有个dev/staging/production
+服务器，你可以将JNDI连接指向它所配置的数据库。应用程序将会从环境中来加
+载数据库连接信息。这意味着，你可以随意的改变你的数据库连接，而不需要修
+改你的代码。 最后，你能自己配置JDBC连接:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def db-spec
+  {:datasource
+    (doto (new PGPoolingDataSource)
+     (.setServerName   &quot;localhost&quot;)
+     (.setDatabaseName &quot;my_website&quot;)
+     (.setUser         &quot;admin&quot;)
+     (.setPassword     &quot;admin&quot;)
+     (.setMaxConnections 10))})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Creating tables&lt;/h2&gt;
+
+&lt;p&gt;Korma依赖clojure.java.jdbc.这个库提供操作表的功能。&lt;/p&gt;
+
+&lt;p&gt;你可以使用create-table函数来从应用中创建数据表。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn create-users-table []
+  (sql/db-do-commands db-spec
+    (sql/create-table-ddl
+      :users
+      [:id &quot;varchar(32)&quot;]
+      [:pass &quot;varchar(100)&quot;])))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;create-table-ddl函数需要包含在db-do-commands内，db-do-commands保证了数据库连接的关闭。&lt;/p&gt;
+
+&lt;h1&gt;Accessing the Database&lt;/h1&gt;
+
+&lt;p&gt;当使用Korma时，你需要先用defdb来包裹db-spec。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defdb db schema/db-spec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这将会使用c3p0来创建一个连接池。需要注意的是，最后创建的连接池会被设为默认的连接池。&lt;/p&gt;
+
+&lt;p&gt;Korma使用entities来表示sql表。这个entities构成了你查询的核心。&lt;/p&gt;
+
+&lt;p&gt;entities使用defentity宏来创建:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defentity users)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以这样来创建user:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn create-user [user]
+  (insert users
+          (values user)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;而如果我们想查询user，我们可以这样写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn get-user [id]
+  (first (select users
+                 (where {:id id})
+                 (limit 1))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;详细文档可参考&lt;a href=&quot;http://sqlkorma.com/docs&quot;&gt;Korma官网&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;Yesql&lt;/h1&gt;
+
+&lt;p&gt;Korma提供了操作SQL的DSL，而Yesql可以直接操作SQL.&lt;/p&gt;
+
+&lt;p&gt;如果要使用Yesql你需要添加依赖：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;[yesql &quot;0.4.0&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当你在classpath下创建一个包含查询的SQL文件，比如resources/queries.sql.文件格式如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    -- name: find-users
+    -- Find the users with the given ID(s).
+    SELECT *
+    FROM user
+    WHERE user_id IN (:id)
+    AND age &amp;gt; :min_age
+
+    -- name: user-count
+    -- Counts all the users.
+    SELECT count(*) AS count
+    FROM user
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;创建问上述文件后，你需要在需要的地方引入yesql.core/defqueries。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns myapp.db.core
+  (:require [yesql.core :refer [defqueries]]))
+
+(defqueries &quot;resources/queries.sql&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;每个查询可以像函数一样通过名字来调用。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(find-users db-spec [1001 1003 1005] 18)
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Configuring the Database&lt;/h1&gt;
+
+&lt;p&gt;当你使用数据库参数来创建Luminus工程时，比如+postgress，那么Luminus会使用Korma来处理数据库操作.&lt;/p&gt;
+
+&lt;p&gt;Korma是一个基于Clojure的数据库操作DSL。Korma提供了一套简单的接口，方便你来处理复杂的数据。&lt;/p&gt;
+
+&lt;p&gt;给一个现有的项目添加数据库支持，非常的简单。首先，你需要在project.clj文件中添加Korma依赖。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[korma &quot;0.4.0&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另外还需要相应数据库的驱动，所以你还需要在project.clj中添加相关的数据库驱动。比如说，你要连接PostreSQL数据库，你需要添加如下的依赖.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;[postgresql/postgresql &quot;9.3-1102-jdbc41&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;添加完依赖后，你可以创建一个新的namespace来管理你的model,这个namespace建议叫db.core。你需要在里面引入korma.db。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns myapp.db.core
+  (:use korma.core
+        [korma.db :only (defdb)]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Setting up the database connection&lt;/h2&gt;
+
+&lt;p&gt;配置完依赖后，我们要做的事情就是定义数据库连接。我们只需要提供一个包含连接信息的map。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def db-spec {:subprotocol &quot;postgresql&quot;
+         :subname &quot;//localhost/my_website&quot;
+         :user &quot;admin&quot;
+         :password &quot;admin&quot;})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者也可以配置服务器提供的JNDI名称来创建连接。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def db-spec {:name &quot;jdbc/myDatasource&quot;})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;这种方式适合当你有多个连接的时候。比如说，你有个dev/staging/production
+服务器，你可以将JNDI连接指向它所配置的数据库。应用程序将会从环境中来加
+载数据库连接信息。这意味着，你可以随意的改变你的数据库连接，而不需要修
+改你的代码。 最后，你能自己配置JDBC连接:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def db-spec
+  {:datasource
+    (doto (new PGPoolingDataSource)
+     (.setServerName   &quot;localhost&quot;)
+     (.setDatabaseName &quot;my_website&quot;)
+     (.setUser         &quot;admin&quot;)
+     (.setPassword     &quot;admin&quot;)
+     (.setMaxConnections 10))})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Creating tables&lt;/h2&gt;
+
+&lt;p&gt;Korma依赖clojure.java.jdbc.这个库提供操作表的功能。&lt;/p&gt;
+
+&lt;p&gt;你可以使用create-table函数来从应用中创建数据表。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn create-users-table []
+  (sql/db-do-commands db-spec
+    (sql/create-table-ddl
+      :users
+      [:id &quot;varchar(32)&quot;]
+      [:pass &quot;varchar(100)&quot;])))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;create-table-ddl函数需要包含在db-do-commands内，db-do-commands保证了数据库连接的关闭。&lt;/p&gt;
+
+&lt;h1&gt;Accessing the Database&lt;/h1&gt;
+
+&lt;p&gt;当使用Korma时，你需要先用defdb来包裹db-spec。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defdb db schema/db-spec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这将会使用c3p0来创建一个连接池。需要注意的是，最后创建的连接池会被设为默认的连接池。&lt;/p&gt;
+
+&lt;p&gt;Korma使用entities来表示sql表。这个entities构成了你查询的核心。&lt;/p&gt;
+
+&lt;p&gt;entities使用defentity宏来创建:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defentity users)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以这样来创建user:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn create-user [user]
+  (insert users
+          (values user)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;而如果我们想查询user，我们可以这样写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn get-user [id]
+  (first (select users
+                 (where {:id id})
+                 (limit 1))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;详细文档可参考&lt;a href=&quot;http://sqlkorma.com/docs&quot;&gt;Korma官网&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;Yesql&lt;/h1&gt;
+
+&lt;p&gt;Korma提供了操作SQL的DSL，而Yesql可以直接操作SQL.&lt;/p&gt;
+
+&lt;p&gt;如果要使用Yesql你需要添加依赖：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;[yesql &quot;0.4.0&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当你在classpath下创建一个包含查询的SQL文件，比如resources/queries.sql.文件格式如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    -- name: find-users
+    -- Find the users with the given ID(s).
+    SELECT *
+    FROM user
+    WHERE user_id IN (:id)
+    AND age &amp;gt; :min_age
+
+    -- name: user-count
+    -- Counts all the users.
+    SELECT count(*) AS count
+    FROM user
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;创建问上述文件后，你需要在需要的地方引入yesql.core/defqueries。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns myapp.db.core
+  (:require [yesql.core :refer [defqueries]]))
+
+(defqueries &quot;resources/queries.sql&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;每个查询可以像函数一样通过名字来调用。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(find-users db-spec [1001 1003 1005] 18)
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-安全</title>
+        <link href="http://ivanpig.github.io/2013/09/25/security.html"/>
+        <updated>2013-09-25T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/25/security</id>
+        <content type="html">&lt;h1&gt;Security&lt;/h1&gt;
+
+&lt;p&gt;密码的散列和对比由noir.util.crypt提供。&lt;/p&gt;
+
+&lt;p&gt;他提供了两个函数$encrypt$,$compare$.其中第一个函数加密密码，而第二个则是对比密码。实际上加密是通过BCrypt来处理的。&lt;/p&gt;
+
+&lt;p&gt;对比代码的函数看起来像这样:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(compare raw encrypted)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;加密函数可以自定义salt，或者就不使用salt加密。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(encrypt salt raw)
+(encrypt raw)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;想了解Secutiry库的更多内容，&lt;a href=&quot;https://github.com/cemerick/friend&quot;&gt;请点击这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;LDAP Authentication&lt;/h1&gt;
+
+&lt;p&gt;下面的列子演示了如何通过clj-ldap来验证sAMAccountName&lt;/p&gt;
+
+&lt;p&gt;首先，我们先添加依赖&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;[org.clojars.pntblnk/clj-ldap &quot;0.0.9&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来，我们需要引入authentication命名空间&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns ldap-auth
+  (:require [clj-ldap.client :as client]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;我们可以像下面这样定义LDAP主机。注意host键指向一个Vector。这个Vector里可以包含多个LDAP服务。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def host
+  {:host
+    [{:address &quot;my-ldap-server.ca&quot;
+      :port 389
+      :connect-timeout (* 1000 5)
+      :timeout (* 1000 30)}]})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后我们可以编写一个函数使用上面的LDAP来验证&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn authenticate [username password &amp;amp; [attributes]]
+  (let [server (client/connect host)
+        qualified-name (str username &quot;@&quot; (-&amp;gt; host :host first :address))]
+    (if (client/bind? server qualified-name  password)
+      (first (client/search server &quot;OU=MyOrgPeople,DC=myorg,DC=ca&quot;
+                            {:filter (str &quot;sAMAccountName=&quot; username)
+                             :attributes (or attributes [])})))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;属性Vector可以用来过滤返回值，如果所有的验证都通过，则返回空Vector&lt;/p&gt;
+
+&lt;h1&gt;Cross Site Request Forgery Protection&lt;/h1&gt;
+
+&lt;p&gt;CSRF攻击是第三方通过拦截已登录的用户来操作你的网站的一个攻击。此攻击一般通过你的网站的恶意链接，表单提交或js来进行攻击。&lt;/p&gt;
+
+&lt;p&gt;Ring-Anti-Forgery使用来防止CSRF攻击的。只需要引入相关命名空间并将mk-defaults设为true即可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def app (app-handler
+           [home-routes base-routes]
+           :middleware (load-middleware)
+           ;; set this to true in order to enable CSRF protection
+           :ring-defaults (mk-defaults true)
+           :access-rules []
+           :formats [:json-kw :edn :transit-json]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当CSRF中间件开启后，一个随机产生的字符串会被绑定到anti-forgery-token上。任何POST请求需要包含__anti-forgery-token。&lt;/p&gt;
+
+&lt;p&gt;我们需要先引入anti-forgery。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(require ... [ring.util.anti-forgery :refer [anti-forgery-field]]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接着，定义一个CSRF标签到我们的初始化函数中:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn init
+  ...
+  (parser/add-tag! :csrf-token (fn [_ _] (anti-forgery-field)))
+  ...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后在表单中使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;    &amp;lt;form name=&quot;input&quot; action=&quot;/login&quot; method=&quot;POST&quot;&amp;gt;
+      { % csrf-token %}
+      Username: &amp;lt;input type=&quot;text&quot; name=&quot;user&quot;&amp;gt;
+      Password: &amp;lt;input type=&quot;password&quot; name=&quot;pass&quot;&amp;gt;
+      &amp;lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&amp;gt;
+    &amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;没有包含此token的POST请求会被拦截。服务器响应403&quot;Invalid anti-forgery token&quot;。&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Security&lt;/h1&gt;
+
+&lt;p&gt;密码的散列和对比由noir.util.crypt提供。&lt;/p&gt;
+
+&lt;p&gt;他提供了两个函数$encrypt$,$compare$.其中第一个函数加密密码，而第二个则是对比密码。实际上加密是通过BCrypt来处理的。&lt;/p&gt;
+
+&lt;p&gt;对比代码的函数看起来像这样:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(compare raw encrypted)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;加密函数可以自定义salt，或者就不使用salt加密。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(encrypt salt raw)
+(encrypt raw)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;想了解Secutiry库的更多内容，&lt;a href=&quot;https://github.com/cemerick/friend&quot;&gt;请点击这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;LDAP Authentication&lt;/h1&gt;
+
+&lt;p&gt;下面的列子演示了如何通过clj-ldap来验证sAMAccountName&lt;/p&gt;
+
+&lt;p&gt;首先，我们先添加依赖&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;[org.clojars.pntblnk/clj-ldap &quot;0.0.9&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来，我们需要引入authentication命名空间&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns ldap-auth
+  (:require [clj-ldap.client :as client]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;我们可以像下面这样定义LDAP主机。注意host键指向一个Vector。这个Vector里可以包含多个LDAP服务。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def host
+  {:host
+    [{:address &quot;my-ldap-server.ca&quot;
+      :port 389
+      :connect-timeout (* 1000 5)
+      :timeout (* 1000 30)}]})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后我们可以编写一个函数使用上面的LDAP来验证&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn authenticate [username password &amp;amp; [attributes]]
+  (let [server (client/connect host)
+        qualified-name (str username &quot;@&quot; (-&amp;gt; host :host first :address))]
+    (if (client/bind? server qualified-name  password)
+      (first (client/search server &quot;OU=MyOrgPeople,DC=myorg,DC=ca&quot;
+                            {:filter (str &quot;sAMAccountName=&quot; username)
+                             :attributes (or attributes [])})))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;属性Vector可以用来过滤返回值，如果所有的验证都通过，则返回空Vector&lt;/p&gt;
+
+&lt;h1&gt;Cross Site Request Forgery Protection&lt;/h1&gt;
+
+&lt;p&gt;CSRF攻击是第三方通过拦截已登录的用户来操作你的网站的一个攻击。此攻击一般通过你的网站的恶意链接，表单提交或js来进行攻击。&lt;/p&gt;
+
+&lt;p&gt;Ring-Anti-Forgery使用来防止CSRF攻击的。只需要引入相关命名空间并将mk-defaults设为true即可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def app (app-handler
+           [home-routes base-routes]
+           :middleware (load-middleware)
+           ;; set this to true in order to enable CSRF protection
+           :ring-defaults (mk-defaults true)
+           :access-rules []
+           :formats [:json-kw :edn :transit-json]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当CSRF中间件开启后，一个随机产生的字符串会被绑定到anti-forgery-token上。任何POST请求需要包含__anti-forgery-token。&lt;/p&gt;
+
+&lt;p&gt;我们需要先引入anti-forgery。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(require ... [ring.util.anti-forgery :refer [anti-forgery-field]]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接着，定义一个CSRF标签到我们的初始化函数中:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn init
+  ...
+  (parser/add-tag! :csrf-token (fn [_ _] (anti-forgery-field)))
+  ...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后在表单中使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;    &amp;lt;form name=&quot;input&quot; action=&quot;/login&quot; method=&quot;POST&quot;&amp;gt;
+      { % csrf-token %}
+      Username: &amp;lt;input type=&quot;text&quot; name=&quot;user&quot;&amp;gt;
+      Password: &amp;lt;input type=&quot;password&quot; name=&quot;pass&quot;&amp;gt;
+      &amp;lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&amp;gt;
+    &amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;没有包含此token的POST请求会被拦截。服务器响应403&quot;Invalid anti-forgery token&quot;。&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-输入验证</title>
+        <link href="http://ivanpig.github.io/2013/09/24/input_validation.html"/>
+        <updated>2013-09-24T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/24/input_validation</id>
+        <content type="html">&lt;h1&gt;Input Validation&lt;/h1&gt;
+
+&lt;p&gt;验证相关助手方法在noir.validation命名空间中。如果我们要使用验证，我们需要先引入这个命名空间。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns myapp.routes
+  (:require ... [noir.validation :as v]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;验证函数在当验证不通过时，将相应的错误设置到对应的字段上。验证函数接受一个条件函数和一个包含了需要验证的字段和错误信息的Vector.当验证函数验证通过时需要返回true否则返回false.&lt;/p&gt;
+
+&lt;p&gt;下面是已经存在的验证函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;has-value? args: [v] - returns true if v is truthy and not an empty string.
+has-values? args: [coll] - returns true if all members of the collection has-value? This works on maps as well.
+not-nil? args: [v] - returns true if v is not nil
+min-length? args: [v len] - returns true if v is greater than or equal to the given len
+max-length? args: [v len - returns true if v is less than or equal to the given len
+matches-regex? args: [v regex] - returns true if the string matches the given regular expression
+is-email? args: [v] - returns true if v is an email address
+valid-file? args: [m] - returns true if a valid file was supplied
+valid-number? args: [v] - returns true if the string can be parsed to a Long
+greater-than? args: [v n] - returns true if the string represents a number &amp;gt; given
+less-than? args: [v n] - returns true if the string represents a number &amp;lt; given
+equal-to? args: [v n] - returns true if the string represents a number = given
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例如：如果我们想检查id和pass字段不能为空，则可以创建如下验证规则：&lt;/p&gt;
+
+&lt;p&gt;````clojure
+(v/rule (has-value? id)
+        [:id &quot;screen name is required&quot;])&lt;/p&gt;
+
+&lt;p&gt;(v/rule (has-value? pass)
+        [:pass &quot;password is required&quot;])
+```&lt;/p&gt;
+
+&lt;p&gt;错误信息被保存在noir.validation/&lt;em&gt;errors&lt;/em&gt;这个atom中，这个atom被绑定到了request上。每个error都包含一个key和一个对应的错误Vector.验证函数可以在同一字段上多次调用来设置多个错误。&lt;/p&gt;
+
+&lt;p&gt;一旦验证规则被执行了，我们可以通过errors?这个函数来检查是否有错误。如果没有传递参数，则此函数会检查noir.validation/&lt;em&gt;error&lt;/em&gt;是否为空，如果传递了参数，次函数根据传递的值来查询是否有错误。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;;; returns true if any errors have been set
+(v/errors?)
+;; returns true if any errors have been set for the key :id
+(v/errors? :id)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;类似的，我们可以通过调用get-errors函数来获取当前的错误。当不传递参数时，返回所有的错误。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;;; returns a sequence of all errors that have been set
+(v/get-errors)
+;; returns all the errors set for the key :id
+(v/get-errors :id)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们还可以通过on-error来提供自定义的错误处理函数。这个函数需要一个字段相关联的error集合作为参数。函数结果由on-error返回。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(v/on-error :id (fn [errors] (clojure.string/join &quot;, &quot; errors)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后，错误可以通过clear-errors!函数来清除。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(v/clear-errors!)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面是一个完整的登录相关验证。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn set-errors [id pass]
+  (v/rule (has-value? id)
+        [:id &quot;screen name is required&quot;])
+
+  (v/rule (has-value? pass)
+        [:pass &quot;password is required&quot;])
+
+  (if (v/errors? :id :pass)
+    {:body {:status &quot;error&quot; :errors (get-errors)}}
+    (do
+    (session/put! :user id)
+     {:body {:status &quot;ok&quot;}})))
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Input Validation&lt;/h1&gt;
+
+&lt;p&gt;验证相关助手方法在noir.validation命名空间中。如果我们要使用验证，我们需要先引入这个命名空间。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns myapp.routes
+  (:require ... [noir.validation :as v]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;验证函数在当验证不通过时，将相应的错误设置到对应的字段上。验证函数接受一个条件函数和一个包含了需要验证的字段和错误信息的Vector.当验证函数验证通过时需要返回true否则返回false.&lt;/p&gt;
+
+&lt;p&gt;下面是已经存在的验证函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;has-value? args: [v] - returns true if v is truthy and not an empty string.
+has-values? args: [coll] - returns true if all members of the collection has-value? This works on maps as well.
+not-nil? args: [v] - returns true if v is not nil
+min-length? args: [v len] - returns true if v is greater than or equal to the given len
+max-length? args: [v len - returns true if v is less than or equal to the given len
+matches-regex? args: [v regex] - returns true if the string matches the given regular expression
+is-email? args: [v] - returns true if v is an email address
+valid-file? args: [m] - returns true if a valid file was supplied
+valid-number? args: [v] - returns true if the string can be parsed to a Long
+greater-than? args: [v n] - returns true if the string represents a number &amp;gt; given
+less-than? args: [v n] - returns true if the string represents a number &amp;lt; given
+equal-to? args: [v n] - returns true if the string represents a number = given
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例如：如果我们想检查id和pass字段不能为空，则可以创建如下验证规则：&lt;/p&gt;
+
+&lt;p&gt;````clojure
+(v/rule (has-value? id)
+        [:id &quot;screen name is required&quot;])&lt;/p&gt;
+
+&lt;p&gt;(v/rule (has-value? pass)
+        [:pass &quot;password is required&quot;])
+```&lt;/p&gt;
+
+&lt;p&gt;错误信息被保存在noir.validation/&lt;em&gt;errors&lt;/em&gt;这个atom中，这个atom被绑定到了request上。每个error都包含一个key和一个对应的错误Vector.验证函数可以在同一字段上多次调用来设置多个错误。&lt;/p&gt;
+
+&lt;p&gt;一旦验证规则被执行了，我们可以通过errors?这个函数来检查是否有错误。如果没有传递参数，则此函数会检查noir.validation/&lt;em&gt;error&lt;/em&gt;是否为空，如果传递了参数，次函数根据传递的值来查询是否有错误。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;;; returns true if any errors have been set
+(v/errors?)
+;; returns true if any errors have been set for the key :id
+(v/errors? :id)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;类似的，我们可以通过调用get-errors函数来获取当前的错误。当不传递参数时，返回所有的错误。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;;; returns a sequence of all errors that have been set
+(v/get-errors)
+;; returns all the errors set for the key :id
+(v/get-errors :id)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们还可以通过on-error来提供自定义的错误处理函数。这个函数需要一个字段相关联的error集合作为参数。函数结果由on-error返回。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(v/on-error :id (fn [errors] (clojure.string/join &quot;, &quot; errors)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后，错误可以通过clear-errors!函数来清除。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(v/clear-errors!)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面是一个完整的登录相关验证。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn set-errors [id pass]
+  (v/rule (has-value? id)
+        [:id &quot;screen name is required&quot;])
+
+  (v/rule (has-value? pass)
+        [:pass &quot;password is required&quot;])
+
+  (if (v/errors? :id :pass)
+    {:body {:status &quot;error&quot; :errors (get-errors)}}
+    (do
+    (session/put! :user id)
+     {:body {:status &quot;ok&quot;}})))
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-Session与Cookie</title>
+        <link href="http://ivanpig.github.io/2013/09/23/sessions_cookies.html"/>
+        <updated>2013-09-23T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/23/sessions_cookies</id>
+        <content type="html">&lt;h1&gt;Sessions&lt;/h1&gt;
+
+&lt;p&gt;Session管理相关功能由noir.session提供。默认提供的noir.util.middleware/app-handler函数默认将Session保存在内存里。&lt;/p&gt;
+
+&lt;p&gt;当然你可以修改它，只需要给函数传递第二个参数，告诉它将Session保存在哪里就可
+以了。 下面的例子创建了一个保存在内存里的session.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app (middleware/app-handler [home-routes app-routes]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面，我们来重新定义session的保存位置。使用:session-options来替换掉默认的值就可以了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app
+  (middleware/app-handler
+    [home-routes app-routes]
+    :session-options {:cookie-name &quot;example-app-session&quot;
+                      :store (cookie-store)}))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Accessing the session&lt;/h1&gt;
+
+&lt;p&gt;你可以在任意范围内的任何函数里访问并操作session。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[noir.session :as session])
+
+(defn set-user [id]
+  (session/put! :user id)
+  (session/get :user))
+
+(defn remove-user []
+  (session/remove! :user)
+  (session/get :user))
+
+(defn set-user-if-nil [id]
+  (session/get :user id))
+
+(defn clear-session []
+  (session/clear!))
+
+(defroutes app-routes
+  (GET &quot;/login/:id&quot; [id] (set-user id))
+  (GET &quot;/remove&quot; [] (remove-user))
+  (GET &quot;/set-if-nil/:id&quot; [id] (set-user-if-nil id))
+  (GET &quot;/logout&quot; [] (clear-session)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你还可以通过noir.session/flash-put!和noir.session/flash-get来创建flash变量.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(session/flash-put! :message &quot;User added!&quot;)
+(session/flash-get :message)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Cookies&lt;/h1&gt;
+
+&lt;p&gt;Cookie处理函数由noir.cookies提供。设置或获取Cookie和Session很类似。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[noir.cookies :as cookies])
+
+(defn set-user-cookie [id]
+  (cookies/put! :user id)
+  (cookies/get :user))
+
+(defn set-user-if-nil [id]
+  (cookies/get :user id))
+
+(cookies/put! :track
+              {:value (str (java.util.UUID/randomUUID))
+              :path &quot;/&quot;
+              :expires 1})
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Sessions&lt;/h1&gt;
+
+&lt;p&gt;Session管理相关功能由noir.session提供。默认提供的noir.util.middleware/app-handler函数默认将Session保存在内存里。&lt;/p&gt;
+
+&lt;p&gt;当然你可以修改它，只需要给函数传递第二个参数，告诉它将Session保存在哪里就可
+以了。 下面的例子创建了一个保存在内存里的session.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app (middleware/app-handler [home-routes app-routes]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面，我们来重新定义session的保存位置。使用:session-options来替换掉默认的值就可以了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app
+  (middleware/app-handler
+    [home-routes app-routes]
+    :session-options {:cookie-name &quot;example-app-session&quot;
+                      :store (cookie-store)}))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Accessing the session&lt;/h1&gt;
+
+&lt;p&gt;你可以在任意范围内的任何函数里访问并操作session。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[noir.session :as session])
+
+(defn set-user [id]
+  (session/put! :user id)
+  (session/get :user))
+
+(defn remove-user []
+  (session/remove! :user)
+  (session/get :user))
+
+(defn set-user-if-nil [id]
+  (session/get :user id))
+
+(defn clear-session []
+  (session/clear!))
+
+(defroutes app-routes
+  (GET &quot;/login/:id&quot; [id] (set-user id))
+  (GET &quot;/remove&quot; [] (remove-user))
+  (GET &quot;/set-if-nil/:id&quot; [id] (set-user-if-nil id))
+  (GET &quot;/logout&quot; [] (clear-session)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你还可以通过noir.session/flash-put!和noir.session/flash-get来创建flash变量.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(session/flash-put! :message &quot;User added!&quot;)
+(session/flash-get :message)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Cookies&lt;/h1&gt;
+
+&lt;p&gt;Cookie处理函数由noir.cookies提供。设置或获取Cookie和Session很类似。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[noir.cookies :as cookies])
+
+(defn set-user-cookie [id]
+  (cookies/put! :user id)
+  (cookies/get :user))
+
+(defn set-user-if-nil [id]
+  (cookies/get :user id))
+
+(cookies/put! :track
+              {:value (str (java.util.UUID/randomUUID))
+              :path &quot;/&quot;
+              :expires 1})
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-自定义中间件</title>
+        <link href="http://ivanpig.github.io/2013/09/22/custom_middleware.html"/>
+        <updated>2013-09-22T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/22/custom_middleware</id>
+        <content type="html">&lt;h1&gt;Adding custom middleware&lt;/h1&gt;
+
+&lt;p&gt;Luminus使用Ring来路由应用的处理程序，你也可以添加一些中间件。&lt;/p&gt;
+
+&lt;p&gt;中间件可以给处理程序添加一些额外的功能。中间件函数主要被用来扩展Ring的基本处理函数。&lt;/p&gt;
+
+&lt;p&gt;中间件其实就是个简单的函数，它接受现有的处理程序和一些可选参数作为函数参数并返回一个新的处理程序。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn wrap-nocache [handler]
+  (fn [request]
+     (let [response (handler request)]
+        (assoc-in response [:headers  &quot;Pragma&quot;] &quot;no-cache&quot;))))
+
+(def app (wrap-nocache handler))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看到，上面的函数接受一个处理函数并返回一个新的函数，这个函数接受request作为参数。返回的函数只在handler所在的范围内有效。当调用这个函数时，它将会给响应map添加Pragma:no-cache键值对。&lt;/p&gt;
+
+&lt;p&gt;你可以添加自定义的中间件，只需要使用:middleware关键字就可以了:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app (middleware/app-handler
+          all-routes
+          ;;put any custom middleware
+          ;;in the middleware vector
+          :middleware [wrap-nocache]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;具体内容可参见Ring官方文档。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Useful ring middleware&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ring-middleware-format - Ring middleware for handling different fromats such as JSON and EDN&lt;/li&gt;
+&lt;li&gt;ring-ratelimit - Rate limiting middleware&lt;/li&gt;
+&lt;li&gt;ring-etag-middleware - Calculates etags for ring responses and returns 304 responses when appropriate&lt;/li&gt;
+&lt;li&gt;ring-gzip-middleware - Gzips ring responses for user agents which can handle it&lt;/li&gt;
+&lt;li&gt;ring-upload-progress - Provide upload progress data in ring session&lt;/li&gt;
+&lt;li&gt;ring-anti-forgery - Ring middleware to prevent CSRF attacks&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+        <summary type="html">&lt;h1&gt;Adding custom middleware&lt;/h1&gt;
+
+&lt;p&gt;Luminus使用Ring来路由应用的处理程序，你也可以添加一些中间件。&lt;/p&gt;
+
+&lt;p&gt;中间件可以给处理程序添加一些额外的功能。中间件函数主要被用来扩展Ring的基本处理函数。&lt;/p&gt;
+
+&lt;p&gt;中间件其实就是个简单的函数，它接受现有的处理程序和一些可选参数作为函数参数并返回一个新的处理程序。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn wrap-nocache [handler]
+  (fn [request]
+     (let [response (handler request)]
+        (assoc-in response [:headers  &quot;Pragma&quot;] &quot;no-cache&quot;))))
+
+(def app (wrap-nocache handler))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看到，上面的函数接受一个处理函数并返回一个新的函数，这个函数接受request作为参数。返回的函数只在handler所在的范围内有效。当调用这个函数时，它将会给响应map添加Pragma:no-cache键值对。&lt;/p&gt;
+
+&lt;p&gt;你可以添加自定义的中间件，只需要使用:middleware关键字就可以了:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app (middleware/app-handler
+          all-routes
+          ;;put any custom middleware
+          ;;in the middleware vector
+          :middleware [wrap-nocache]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;具体内容可参见Ring官方文档。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Useful ring middleware&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ring-middleware-format - Ring middleware for handling different fromats such as JSON and EDN&lt;/li&gt;
+&lt;li&gt;ring-ratelimit - Rate limiting middleware&lt;/li&gt;
+&lt;li&gt;ring-etag-middleware - Calculates etags for ring responses and returns 304 responses when appropriate&lt;/li&gt;
+&lt;li&gt;ring-gzip-middleware - Gzips ring responses for user agents which can handle it&lt;/li&gt;
+&lt;li&gt;ring-upload-progress - Provide upload progress data in ring session&lt;/li&gt;
+&lt;li&gt;ring-anti-forgery - Ring middleware to prevent CSRF attacks&lt;/li&gt;
+&lt;/ul&gt;
+
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-响应</title>
+        <link href="http://ivanpig.github.io/2013/09/21/response_types.html"/>
+        <updated>2013-09-21T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/21/response_types</id>
+        <content type="html">&lt;h1&gt;Responses&lt;/h1&gt;
+
+&lt;p&gt;noir.response提供了很多辅助函数来处理响应.&lt;/p&gt;
+
+&lt;h1&gt;Setting headers&lt;/h1&gt;
+
+&lt;p&gt;可以使用set-header来设置响应头，使用一个map作为参数。这里需要注意的是,map的key必须是字符串。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(set-headers {&quot;x-csrf&quot; csrf}
+    (common/layout [:p &quot;hi there&quot;]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Setting content type&lt;/h1&gt;
+
+&lt;p&gt;你可以使用content-type函数来设置响应的类型:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/project&quot; []
+       (noir.response/content-type
+       &quot;application/pdf&quot;
+       (clojure.java.io/input-stream &quot;report.pdf&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面是有效的响应类型设置:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;XML - Wraps the response with the content type for xml and sets the body to the content.&lt;/li&gt;
+&lt;li&gt;JSON- Wraps the response in the json content type and generates JSON from the content&lt;/li&gt;
+&lt;li&gt;JSONP - Generates JSON for the given content and creates a javascript response for calling func-name with it.&lt;/li&gt;
+&lt;li&gt;edn - Wraps the response in the application/edn content-type and calls pr-str on the Clojure data stuctures passed in.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/xml&quot; [] (xml &quot;&amp;lt;foo&amp;gt;&amp;lt;/foo&amp;gt;&quot;))
+(GET &quot;/json&quot; [] (json {:response &quot;ok&quot;}))
+(GET &quot;/jsonp&quot; [] (jsonp  &quot;showUsers&quot; [{:name &quot;John&quot;} {:name &quot;Jane&quot;}]))
+(GET &quot;/edn&quot; [] (edn {:foo 1 :bar 2}))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了设置响应类型，你还需要设置noir.util.middleware/app-handler中间件。和上一节的请求一样，你只需要配置:formats键就可以了&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(app-handler routes :formats [:json])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;可用的格式化类型:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;:json - JSON with string keys in :params and :body-params&lt;/li&gt;
+&lt;li&gt;:json-kw - JSON with keywodized keys in :params and :body-params&lt;/li&gt;
+&lt;li&gt;:edn - native Clojure format.&lt;/li&gt;
+&lt;li&gt;:yaml - YAML format&lt;/li&gt;
+&lt;li&gt;:yaml-kw - YAML format with keywodized keys in :params and :body-params&lt;/li&gt;
+&lt;li&gt;:yaml-in-html - yaml in a html page&lt;/li&gt;
+&lt;li&gt;Setting custom status&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;可以使用status函数来设置一个自定义的状态&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/missing-page&quot; [] (status 404 &quot;your page could not be found&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Redirects&lt;/h1&gt;
+
+&lt;p&gt;noir.response/redirect可以进行重定向。他可以向重定向函数传递参数。他支持如下类型:
+-   :permanent
+-   :found
+-   :see-other
+-   :not-modified
+-   :proxy
+-   :temporary&lt;/p&gt;
+
+&lt;p&gt;如果不传递参数的话，那么默认为:found&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require 'noir.response)
+
+(redirect &quot;/foo&quot;)
+(redirect &quot;/bar&quot; :see-other)
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Responses&lt;/h1&gt;
+
+&lt;p&gt;noir.response提供了很多辅助函数来处理响应.&lt;/p&gt;
+
+&lt;h1&gt;Setting headers&lt;/h1&gt;
+
+&lt;p&gt;可以使用set-header来设置响应头，使用一个map作为参数。这里需要注意的是,map的key必须是字符串。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(set-headers {&quot;x-csrf&quot; csrf}
+    (common/layout [:p &quot;hi there&quot;]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Setting content type&lt;/h1&gt;
+
+&lt;p&gt;你可以使用content-type函数来设置响应的类型:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/project&quot; []
+       (noir.response/content-type
+       &quot;application/pdf&quot;
+       (clojure.java.io/input-stream &quot;report.pdf&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面是有效的响应类型设置:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;XML - Wraps the response with the content type for xml and sets the body to the content.&lt;/li&gt;
+&lt;li&gt;JSON- Wraps the response in the json content type and generates JSON from the content&lt;/li&gt;
+&lt;li&gt;JSONP - Generates JSON for the given content and creates a javascript response for calling func-name with it.&lt;/li&gt;
+&lt;li&gt;edn - Wraps the response in the application/edn content-type and calls pr-str on the Clojure data stuctures passed in.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/xml&quot; [] (xml &quot;&amp;lt;foo&amp;gt;&amp;lt;/foo&amp;gt;&quot;))
+(GET &quot;/json&quot; [] (json {:response &quot;ok&quot;}))
+(GET &quot;/jsonp&quot; [] (jsonp  &quot;showUsers&quot; [{:name &quot;John&quot;} {:name &quot;Jane&quot;}]))
+(GET &quot;/edn&quot; [] (edn {:foo 1 :bar 2}))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了设置响应类型，你还需要设置noir.util.middleware/app-handler中间件。和上一节的请求一样，你只需要配置:formats键就可以了&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(app-handler routes :formats [:json])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;可用的格式化类型:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;:json - JSON with string keys in :params and :body-params&lt;/li&gt;
+&lt;li&gt;:json-kw - JSON with keywodized keys in :params and :body-params&lt;/li&gt;
+&lt;li&gt;:edn - native Clojure format.&lt;/li&gt;
+&lt;li&gt;:yaml - YAML format&lt;/li&gt;
+&lt;li&gt;:yaml-kw - YAML format with keywodized keys in :params and :body-params&lt;/li&gt;
+&lt;li&gt;:yaml-in-html - yaml in a html page&lt;/li&gt;
+&lt;li&gt;Setting custom status&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;可以使用status函数来设置一个自定义的状态&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(GET &quot;/missing-page&quot; [] (status 404 &quot;your page could not be found&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Redirects&lt;/h1&gt;
+
+&lt;p&gt;noir.response/redirect可以进行重定向。他可以向重定向函数传递参数。他支持如下类型:
+-   :permanent
+-   :found
+-   :see-other
+-   :not-modified
+-   :proxy
+-   :temporary&lt;/p&gt;
+
+&lt;p&gt;如果不传递参数的话，那么默认为:found&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require 'noir.response)
+
+(redirect &quot;/foo&quot;)
+(redirect &quot;/bar&quot; :see-other)
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-请求</title>
+        <link href="http://ivanpig.github.io/2013/09/20/request_types.html"/>
+        <updated>2013-09-20T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/20/request_types</id>
+        <content type="html">&lt;h1&gt;Requests&lt;/h1&gt;
+
+&lt;p&gt;默认情况下，请求的参数(比如一个form的POST请求)将会被自动绑定到request的:params键上。&lt;/p&gt;
+
+&lt;p&gt;但是，如果你在请求体内传递一些特殊类型的参数，则你需要使用适合的中间件来处理他们。Luminus使用ring-middleware-format来处理这些参数。&lt;/p&gt;
+
+&lt;p&gt;中间件可以通过在noir.util.middleware/app-handler上添加:formats键来开启:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app (middleware/app-handler
+          all-routes
+          :formats [:json :edn]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样请求中的application/json和application/edn类型将会被中间件处理。相应的请求参数会在:params中。注意，这也会处理响应中的对应类型参数。具体信息请见Response Types章节。&lt;/p&gt;
+
+&lt;p&gt;下面是有效的格式化类型:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;:json - JSON with string keys in :params and :body-params
+:json-kw - JSON with keywodized keys in :params and :body-params
+:edn - native Clojure format.
+:yaml - YAML format
+:yaml-kw - YAML format with keywodized keys in :params and :body-params
+:yaml-in-html - yaml in a html page
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Requests&lt;/h1&gt;
+
+&lt;p&gt;默认情况下，请求的参数(比如一个form的POST请求)将会被自动绑定到request的:params键上。&lt;/p&gt;
+
+&lt;p&gt;但是，如果你在请求体内传递一些特殊类型的参数，则你需要使用适合的中间件来处理他们。Luminus使用ring-middleware-format来处理这些参数。&lt;/p&gt;
+
+&lt;p&gt;中间件可以通过在noir.util.middleware/app-handler上添加:formats键来开启:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def app (middleware/app-handler
+          all-routes
+          :formats [:json :edn]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样请求中的application/json和application/edn类型将会被中间件处理。相应的请求参数会在:params中。注意，这也会处理响应中的对应类型参数。具体信息请见Response Types章节。&lt;/p&gt;
+
+&lt;p&gt;下面是有效的格式化类型:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;:json - JSON with string keys in :params and :body-params
+:json-kw - JSON with keywodized keys in :params and :body-params
+:edn - native Clojure format.
+:yaml - YAML format
+:yaml-kw - YAML format with keywodized keys in :params and :body-params
+:yaml-in-html - yaml in a html page
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Luminus手册-静态资源</title>
+        <link href="http://ivanpig.github.io/2013/09/19/staticresource.html"/>
+        <updated>2013-09-19T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2013/09/19/staticresource</id>
+        <content type="html">&lt;h1&gt;Static resources&lt;/h1&gt;
+
+&lt;p&gt;在noir.io下有多个访问静态资源的帮助方法。
+你可以通过调用resource-path来获取public目录的路径。&lt;/p&gt;
+
+&lt;h1&gt;Handling file uploads&lt;/h1&gt;
+
+&lt;p&gt;上传文件通过noir.io空间下的upload-file方法来实现，upload-file接受一个路径和文件的map。
+例如我们有一个upload.html文件:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    &amp;lt;h2&amp;gt;Upload a file&amp;lt;/h2&amp;gt;
+    &amp;lt;form action=&quot;/upload&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;&amp;gt;
+        &amp;lt;input id=&quot;file&quot; name=&quot;file&quot; type=&quot;file&quot; /&amp;gt;
+        &amp;lt;input type=&quot;submit&quot; value=&quot;upload&quot; /&amp;gt;
+    &amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以这样来处理文件上传。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns myapp.upload
+  ...
+  (:require [upload-test.views.layout :as layout]
+            [noir.response :as response]
+            [noir.io :as io]))
+
+(defn upload-page []
+  (layout/render &quot;upload.html&quot;))
+
+(defn handle-upload [file]
+  (io/upload-file &quot;/&quot; file)
+  (response/redirect
+    (str &quot;/&quot; (:filename file))))
+
+(defroutes upload-routes
+  (GET &quot;/upload&quot; [] (upload-page))
+  (POST &quot;/upload&quot; [file] (handle-upload file)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Serving static resources&lt;/h1&gt;
+
+&lt;p&gt;你可以使用get-resource通过相对路径来加载public目录中的资源，例如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(get-resource &quot;/md/outline.md&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码将返回在包含public/md/outline.md下资源的clojure.java.io/resource。
+最后，我们可以使用slurp-resource来读取文件的内容:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(slurp-resource &quot;/md/outline.md&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;Static resources&lt;/h1&gt;
+
+&lt;p&gt;在noir.io下有多个访问静态资源的帮助方法。
+你可以通过调用resource-path来获取public目录的路径。&lt;/p&gt;
+
+&lt;h1&gt;Handling file uploads&lt;/h1&gt;
+
+&lt;p&gt;上传文件通过noir.io空间下的upload-file方法来实现，upload-file接受一个路径和文件的map。
+例如我们有一个upload.html文件:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.html}&quot;&gt;    &amp;lt;h2&amp;gt;Upload a file&amp;lt;/h2&amp;gt;
+    &amp;lt;form action=&quot;/upload&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;&amp;gt;
+        &amp;lt;input id=&quot;file&quot; name=&quot;file&quot; type=&quot;file&quot; /&amp;gt;
+        &amp;lt;input type=&quot;submit&quot; value=&quot;upload&quot; /&amp;gt;
+    &amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以这样来处理文件上传。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns myapp.upload
+  ...
+  (:require [upload-test.views.layout :as layout]
+            [noir.response :as response]
+            [noir.io :as io]))
+
+(defn upload-page []
+  (layout/render &quot;upload.html&quot;))
+
+(defn handle-upload [file]
+  (io/upload-file &quot;/&quot; file)
+  (response/redirect
+    (str &quot;/&quot; (:filename file))))
+
+(defroutes upload-routes
+  (GET &quot;/upload&quot; [] (upload-page))
+  (POST &quot;/upload&quot; [file] (handle-upload file)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Serving static resources&lt;/h1&gt;
+
+&lt;p&gt;你可以使用get-resource通过相对路径来加载public目录中的资源，例如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(get-resource &quot;/md/outline.md&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码将返回在包含public/md/outline.md下资源的clojure.java.io/resource。
+最后，我们可以使用slurp-resource来读取文件的内容:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(slurp-resource &quot;/md/outline.md&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
         <title>Luminus手册-路由定义</title>
-        <link href="http://ivanpig.github.io/luminus/defining_routes.html"/>
+        <link href="http://ivanpig.github.io/2013/09/18/defining_routes.html"/>
         <updated>2013-09-18T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//luminus/defining_routes</id>
+        <id>http://ivanpig.github.io//2013/09/18/defining_routes</id>
         <content type="html">&lt;h1&gt;Defining routes&lt;/h1&gt;
 
 &lt;p&gt;Luminus使用Compojure来定义应用的路由.路由由HTTP请求方法和接受它的URI，
@@ -82,6 +2092,9 @@ guestbook应用的例子中，我们看到了如下的路由定义:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(POST &quot;/&quot;  [name message] (save-message name message))
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;p&gt;这个路由从参数中获取到name和message的值，并将其绑定到相同名字的变量上。
 我们能像使用其他定义的变量那样来使用他们。我们也可以直接在路由中使用Clojure的解构。&lt;/p&gt;
@@ -343,6 +2356,9 @@ guestbook应用的例子中，我们看到了如下的路由定义:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(POST &quot;/&quot;  [name message] (save-message name message))
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;p&gt;这个路由从参数中获取到name和message的值，并将其绑定到相同名字的变量上。
 我们能像使用其他定义的变量那样来使用他们。我们也可以直接在路由中使用Clojure的解构。&lt;/p&gt;
 
@@ -570,9 +2586,9 @@ noir.util.middleware/app-handler下的vector中，它在handler目录下。
     
     <entry>
         <title>Luminus手册-ClojureScript</title>
-        <link href="http://ivanpig.github.io/luminus/clojurescript.html"/>
+        <link href="http://ivanpig.github.io/2013/09/17/clojurescript.html"/>
         <updated>2013-09-17T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//luminus/clojurescript</id>
+        <id>http://ivanpig.github.io//2013/09/17/clojurescript</id>
         <content type="html">&lt;h1&gt;Summary&lt;/h1&gt;
 
 &lt;p&gt;ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScript可以
@@ -613,6 +2629,9 @@ project.clj文件中添加如下内容即可。&lt;/p&gt;
 
 &lt;p&gt;使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
 ClojureScript库和其他库一样都配置在project.clj文件中。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h1&gt;Running the Compiler&lt;/h1&gt;
 
@@ -673,9 +2692,6 @@ cljsbuild丽引用它，像这样:&lt;/p&gt;
       :externs [&quot;resources/externs.js&quot;]
       :optimizations :advanced}}
 &lt;/code&gt;&lt;/pre&gt;
-
-&lt;!-- more --&gt;
-
 
 &lt;h1&gt;Interacting with JavaScript&lt;/h1&gt;
 
@@ -803,6 +2819,9 @@ project.clj文件中添加如下内容即可。&lt;/p&gt;
 &lt;p&gt;使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
 ClojureScript库和其他库一样都配置在project.clj文件中。&lt;/p&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h1&gt;Running the Compiler&lt;/h1&gt;
 
 &lt;p&gt;开发ClojureScript应用最简单的方法就是自动运行编译器。这样，你的任何修
@@ -862,9 +2881,6 @@ cljsbuild丽引用它，像这样:&lt;/p&gt;
       :externs [&quot;resources/externs.js&quot;]
       :optimizations :advanced}}
 &lt;/code&gt;&lt;/pre&gt;
-
-&lt;!-- more --&gt;
-
 
 &lt;h1&gt;Interacting with JavaScript&lt;/h1&gt;
 
@@ -955,9 +2971,9 @@ POST函数能很方便的发送ajax请求。&lt;/p&gt;
     
     <entry>
         <title>Luminus手册-HTML模板</title>
-        <link href="http://ivanpig.github.io/luminus/html_templating.html"/>
+        <link href="http://ivanpig.github.io/2013/09/16/html_templating.html"/>
         <updated>2013-09-16T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//luminus/html_templating</id>
+        <id>http://ivanpig.github.io//2013/09/16/html_templating</id>
         <content type="html">&lt;h1&gt;Templating Options&lt;/h1&gt;
 
 &lt;p&gt;Luminus包含了Hiccup的依赖.如果你熟悉Hiccup那么可以直接使用。
@@ -1002,6 +3018,9 @@ name的变量的值。
                {:name &quot;John&quot;}))
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;p&gt;render-file函数将src目录作为根路径，使用相对路径来查找模板。
 上面，我们传递了一个字符串作为变量name的值。实际上，我们可以传递任何类
 型的值。比如，我们传递一个集合，在模板里我们可以使用tag来遍历这个集合。&lt;/p&gt;
@@ -1026,9 +3045,6 @@ name的变量的值。
 默认情况下，Selmer会缓存编译后的模板。只有当文件发生变化时，才会触发
 Selmer重新编译模板。你也可以选择Selmer是开启缓存还是关闭缓存。只需要调
 用(selmer.parser/cache-on!)或(selmer.parser/cache-off!).&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
 
 &lt;h2&gt;Filters&lt;/h2&gt;
 
@@ -1662,6 +3678,9 @@ name的变量的值。
                {:name &quot;John&quot;}))
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;p&gt;render-file函数将src目录作为根路径，使用相对路径来查找模板。
 上面，我们传递了一个字符串作为变量name的值。实际上，我们可以传递任何类
 型的值。比如，我们传递一个集合，在模板里我们可以使用tag来遍历这个集合。&lt;/p&gt;
@@ -1686,9 +3705,6 @@ name的变量的值。
 默认情况下，Selmer会缓存编译后的模板。只有当文件发生变化时，才会触发
 Selmer重新编译模板。你也可以选择Selmer是开启缓存还是关闭缓存。只需要调
 用(selmer.parser/cache-on!)或(selmer.parser/cache-off!).&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
 
 &lt;h2&gt;Filters&lt;/h2&gt;
 
@@ -2282,9 +4298,9 @@ url。其余的参数必须是HTML元素。生成的HTML代码如下:&lt;/p&gt;
     
     <entry>
         <title>Luminus手册-应用配置</title>
-        <link href="http://ivanpig.github.io/luminus/application_profile.html"/>
+        <link href="http://ivanpig.github.io/2013/09/15/application_profile.html"/>
         <updated>2013-09-15T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//luminus/application_profile</id>
+        <id>http://ivanpig.github.io//2013/09/15/application_profile</id>
         <content type="html">&lt;h1&gt;Profiles&lt;/h1&gt;
 
 &lt;p&gt;使用lein new luminus myapp命令会创建一个新的luminus应用，它使用的是默认的配置。如果你想使用其他的特性，你可以修改相应的配置参数。&lt;/p&gt;
@@ -2389,9 +4405,9 @@ url。其余的参数必须是HTML元素。生成的HTML代码如下:&lt;/p&gt;
     
     <entry>
         <title>Luminus手册-第一个应用</title>
-        <link href="http://ivanpig.github.io/luminus/your_first_application.html"/>
+        <link href="http://ivanpig.github.io/2013/09/14/your_first_application.html"/>
         <updated>2013-09-14T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//luminus/your_first_application</id>
+        <id>http://ivanpig.github.io//2013/09/14/your_first_application</id>
         <content type="html">&lt;h1&gt;Guestbook应用&lt;/h1&gt;
 
 &lt;p&gt;此文使用Luminus构建一个简单的guestbook应用。guestbook可以保存信息，展示信息。此应用将涉及到简单的HTML模板，数据库访问和项目结构.&lt;/p&gt;

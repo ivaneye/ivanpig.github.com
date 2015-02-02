@@ -48,6 +48,8 @@ Using Libraries
 使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
 ClojureScript库和其他库一样都配置在project.clj文件中。
 
+<!-- more -->
+
 Running the Compiler
 ====================
 
@@ -116,7 +118,6 @@ cljsbuild丽引用它，像这样:
       :externs ["resources/externs.js"]
       :optimizations :advanced}}
 ```
-<!-- more -->
 
 Interacting with JavaScript
 ===========================

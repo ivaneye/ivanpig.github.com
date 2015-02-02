@@ -50,6 +50,8 @@ guestbook应用的例子中，我们看到了如下的路由定义:
 (POST "/"  [name message] (save-message name message))
 ```
 
+<!-- more -->
+
 这个路由从参数中获取到name和message的值，并将其绑定到相同名字的变量上。
 我们能像使用其他定义的变量那样来使用他们。我们也可以直接在路由中使用Clojure的解构。
 
