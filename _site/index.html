@@ -123,7 +123,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">theme (1)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             
         
@@ -160,6 +160,103 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2014/02/01/first_step.html">Clojure教程-环境搭建与Hello World</a></h2>
+
+        <p class="post-meta">By 02月01日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>环境搭建</h1>
+
+<p>Clojure是JVM上的一种语言，其语法是Lisp格式，所以称为是JVM上的Lisp方言。</p>
+
+<p>Clojure依赖于JDK。请确保你的机器上安装了JDK6+。Clojure的安装非常的简单。
+可以分为两种方式:</p>
+
+<ul>
+<li>通过Leiningen安装</li>
+<li>手动安装</li>
+</ul>
+
+
+<p>通过Leiningen是比较普遍也很方便的方式。我们先通过Leiningen来安装。</p>
+
+<h2>通过Leiningen安装</h2>
+
+<p>Leiningen和Maven比较类似，是Clojure语言的管理工具。其实它就是基于Maven
+构建的。我们先来安装Leiningen</p>
+
+<ul>
+<li>首先下载<a href="https://raw.github.com/technomancy/leiningen/stable/bin/lein">lein
+script</a></li>
+<li>将lein script放置到你的path下(linux下直接放到用户目录下即可)，保存文
+件名叫lein。</li>
+<li>将其权限设置为可执行(chmod a+x lein)</li>
+<li>打开shell，输入lein即可</li>
+</ul>
+
+
+<p>leiningen会自动下载需要的依赖。运行完成后,Clojure开发环境即安装完成。</p>
+
+<h2>手动安装</h2>
+
+<p>leiningen需要以项目为单位才能运行。比如你想运行一个hello.clj程序，如果
+你通过leiningen来运行，则hello.clj需要在lein项目内，且设置为core，才能
+运行,比较麻烦(这个问题在Maven中同样存在)。</p>
+
+<p>而通过手动安装可以解决这个问题。</p>
+
+<ul>
+<li>首先下载<a href="http://repo1.maven.org/maven2/org/clojure/clojure/1.5.1/clojure-1.5.1.zip">Clojure</a>,
+目前稳定版本是1.5.1</li>
+<li>解压到任意位置，其中最主要的文件就是clojure-1.5.1.jar</li>
+<li>在path下编写脚本clj,输入如下内容</li>
+</ul>
+
+
+<pre><code class="{.bash}">java -jar /home/ivan/soft/clojure-1.5.1/clojure-1.5.1.jar $1
+ #clojure.jar请输入你本机的路径
+</code></pre>
+
+<p>这样就可以执行单个的Clojure文件了</p>
+
+
+
+
+    <a href="/2014/02/01/first_step.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/10/02/upgrading.html">Luminus手册-升级</a></h2>
 
         <p class="post-meta">By 10月02日  2013
@@ -176,7 +273,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -226,7 +323,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -279,7 +376,7 @@ Tower提供国际化等等其他包。</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -364,7 +461,7 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -450,7 +547,7 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -500,92 +597,6 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
 
 
     <a href="/2013/09/28/logging.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/27/database_migrations.html">Luminus手册-数据迁移</a></h2>
-
-        <p class="post-meta">By 09月27日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Migrations</h1>
-
-<p>默认情况下Luminus使用Ragtime来进行数据迁移。当你在创建Luminus项目时添加了+mysql或+postgres选项时，Ragtime会自动被添加进来。</p>
-
-<h1>Migrations with Ragtime</h1>
-
-<p>Ragtime通过Leiningen插件来执行。此插件需要配置project.clj的:plugins中。</p>
-
-<pre><code class="clojure">:plugins [... [ragtime/ragtime.lein "0.3.4"]]
-</code></pre>
-
-<p>实际的迁移动作是由ragtime.sql.files这个适配器来执行。此适配器需要配置在依赖列表中，同时配置相关数据库配置。</p>
-
-<pre><code class="clojure">:dependencies [... [ragtime/ragtime.sql.files "0.3.4"]]
-:ragtime {:migrations ragtime.sql.files/migrations
-          :database "jdbc:mysql://localhost:3306/example_db?user=root"}
-</code></pre>
-
-<p>ragtime.sql.files适配器会从项目根目录下的指定目录查找sql脚本。我们只需要将脚本添加到对应目录下即可。</p>
-
-<p>脚本按字母顺序排序。我们来创建两个脚本。</p>
-
-<pre><code>migrations/2014-13-57-30-create-tables.up.sql
-
-CREATE TABLE users (id INT, name VARCHAR(25));
-
-migrations/2014-13-57-30-create-tables.down.sql
-
-DROP TABLE users;
-</code></pre>
-
-<p>通过如下命令执行：</p>
-
-<pre><code>lein ragtime migrate
-</code></pre>
-
-<p>通过如下命令回滚:</p>
-
-<pre><code>lein ragtime rollback
-</code></pre>
-
-
-
-
-    <a href="/2013/09/27/database_migrations.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

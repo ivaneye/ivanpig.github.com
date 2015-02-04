@@ -103,6 +103,92 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/09/27/database_migrations.html">Luminus手册-数据迁移</a></h2>
+
+        <p class="post-meta">By 09月27日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Migrations</h1>
+
+<p>默认情况下Luminus使用Ragtime来进行数据迁移。当你在创建Luminus项目时添加了+mysql或+postgres选项时，Ragtime会自动被添加进来。</p>
+
+<h1>Migrations with Ragtime</h1>
+
+<p>Ragtime通过Leiningen插件来执行。此插件需要配置project.clj的:plugins中。</p>
+
+<pre><code class="clojure">:plugins [... [ragtime/ragtime.lein "0.3.4"]]
+</code></pre>
+
+<p>实际的迁移动作是由ragtime.sql.files这个适配器来执行。此适配器需要配置在依赖列表中，同时配置相关数据库配置。</p>
+
+<pre><code class="clojure">:dependencies [... [ragtime/ragtime.sql.files "0.3.4"]]
+:ragtime {:migrations ragtime.sql.files/migrations
+          :database "jdbc:mysql://localhost:3306/example_db?user=root"}
+</code></pre>
+
+<p>ragtime.sql.files适配器会从项目根目录下的指定目录查找sql脚本。我们只需要将脚本添加到对应目录下即可。</p>
+
+<p>脚本按字母顺序排序。我们来创建两个脚本。</p>
+
+<pre><code>migrations/2014-13-57-30-create-tables.up.sql
+
+CREATE TABLE users (id INT, name VARCHAR(25));
+
+migrations/2014-13-57-30-create-tables.down.sql
+
+DROP TABLE users;
+</code></pre>
+
+<p>通过如下命令执行：</p>
+
+<pre><code>lein ragtime migrate
+</code></pre>
+
+<p>通过如下命令回滚:</p>
+
+<pre><code>lein ragtime rollback
+</code></pre>
+
+
+
+
+    <a href="/2013/09/27/database_migrations.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/09/26/database_access.html">Luminus手册-访问数据库</a></h2>
 
         <p class="post-meta">By 09月26日  2013
@@ -119,7 +205,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -202,7 +288,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -281,7 +367,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -366,7 +452,7 @@ equal-to? args: [v n] - returns true if the string represents a number = given
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -463,7 +549,7 @@ equal-to? args: [v n] - returns true if the string represents a number = given
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -537,7 +623,7 @@ equal-to? args: [v n] - returns true if the string represents a number = given
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -596,75 +682,6 @@ equal-to? args: [v n] - returns true if the string represents a number = given
 
 
     <a href="/2013/09/21/response_types.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/20/request_types.html">Luminus手册-请求</a></h2>
-
-        <p class="post-meta">By 09月20日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Requests</h1>
-
-<p>默认情况下，请求的参数(比如一个form的POST请求)将会被自动绑定到request的:params键上。</p>
-
-<p>但是，如果你在请求体内传递一些特殊类型的参数，则你需要使用适合的中间件来处理他们。Luminus使用ring-middleware-format来处理这些参数。</p>
-
-<p>中间件可以通过在noir.util.middleware/app-handler上添加:formats键来开启:</p>
-
-<pre><code class="{.clojure}">(def app (middleware/app-handler
-          all-routes
-          :formats [:json :edn]))
-</code></pre>
-
-<p>这样请求中的application/json和application/edn类型将会被中间件处理。相应的请求参数会在:params中。注意，这也会处理响应中的对应类型参数。具体信息请见Response Types章节。</p>
-
-<p>下面是有效的格式化类型:</p>
-
-<pre><code class="{.clojure}">:json - JSON with string keys in :params and :body-params
-:json-kw - JSON with keywodized keys in :params and :body-params
-:edn - native Clojure format.
-:yaml - YAML format
-:yaml-kw - YAML format with keywodized keys in :params and :body-params
-:yaml-in-html - yaml in a html page
-</code></pre>
-
-
-
-    <a href="/2013/09/20/request_types.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

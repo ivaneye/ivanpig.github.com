@@ -10,6 +10,7 @@ http://ivanpig.github.io/page/2/index.html
 http://ivanpig.github.io/page/3/index.html
 
 http://ivanpig.github.io/2014/11/28/pigtheme.html
+http://ivanpig.github.io/2014/02/01/first_step.html
 http://ivanpig.github.io/2013/10/02/upgrading.html
 http://ivanpig.github.io/2013/10/01/useful_libraries.html
 http://ivanpig.github.io/2013/09/30/deployment.html

@@ -103,6 +103,75 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/09/20/request_types.html">Luminus手册-请求</a></h2>
+
+        <p class="post-meta">By 09月20日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Requests</h1>
+
+<p>默认情况下，请求的参数(比如一个form的POST请求)将会被自动绑定到request的:params键上。</p>
+
+<p>但是，如果你在请求体内传递一些特殊类型的参数，则你需要使用适合的中间件来处理他们。Luminus使用ring-middleware-format来处理这些参数。</p>
+
+<p>中间件可以通过在noir.util.middleware/app-handler上添加:formats键来开启:</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler
+          all-routes
+          :formats [:json :edn]))
+</code></pre>
+
+<p>这样请求中的application/json和application/edn类型将会被中间件处理。相应的请求参数会在:params中。注意，这也会处理响应中的对应类型参数。具体信息请见Response Types章节。</p>
+
+<p>下面是有效的格式化类型:</p>
+
+<pre><code class="{.clojure}">:json - JSON with string keys in :params and :body-params
+:json-kw - JSON with keywodized keys in :params and :body-params
+:edn - native Clojure format.
+:yaml - YAML format
+:yaml-kw - YAML format with keywodized keys in :params and :body-params
+:yaml-in-html - yaml in a html page
+</code></pre>
+
+
+
+    <a href="/2013/09/20/request_types.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/09/19/staticresource.html">Luminus手册-静态资源</a></h2>
 
         <p class="post-meta">By 09月19日  2013
@@ -119,7 +188,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -202,7 +271,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -284,7 +353,7 @@ guestbook应用的例子中，我们看到了如下的路由定义:</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -370,7 +439,7 @@ ClojureScript库和其他库一样都配置在project.clj文件中。</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -459,7 +528,7 @@ name的变量的值。
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -537,7 +606,7 @@ name的变量的值。
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (20)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
