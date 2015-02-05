@@ -103,6 +103,85 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/09/28/logging.html">Luminus手册-日志</a></h2>
+
+        <p class="post-meta">By 09月28日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Logging</h1>
+
+<p>Luminus模板中包括<a href="https://github.com/ptaoussanis/timbre">Timbre</a>和<a href="https://bitbucket.org/postspectacular/rotor">Rotor</a>。</p>
+
+<p>日志通过在handler/init函数中进行如下的设置进行初始化:</p>
+
+<pre><code class="{.clojure}">  (timbre/set-config!
+    [:appenders :rotor]
+    {:min-level :info
+     :enabled? true
+     :async? false ; should be always false for rotor
+     :max-message-per-msecs nil
+     :fn rotor/append})
+
+  (timbre/set-config!
+    [:shared-appender-config :rotor]
+    {:path ".log" :max-size 10000 :backlog 10})
+</code></pre>
+
+<p>Timbre可以记录Clojure的所有日志.</p>
+
+<pre><code class="{.clojure}">(ns example
+ (:use [taoensso.timbre :only [trace debug info warn error fatal]]))
+
+(info "Hello")
+
+=&gt;2012-Dec-24 09:03:09 -0500 Helios.local INFO [timbretest] - Hello
+
+(info {:user {:id "Anonymous"}})
+
+=&gt;2012-Dec-24 09:02:44 -0500 Helios.local INFO [timbretest] - {:user {:id "Anonymous"}}
+</code></pre>
+
+<p>更多信息请见<a href="https://github.com/ptaoussanis/timbre">Github</a></p>
+
+
+
+    <a href="/2013/09/28/logging.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/09/27/database_migrations.html">Luminus手册-数据迁移</a></h2>
 
         <p class="post-meta">By 09月27日  2013
@@ -119,7 +198,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -205,7 +284,7 @@ DROP TABLE users;
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -288,7 +367,7 @@ DROP TABLE users;
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -367,7 +446,7 @@ DROP TABLE users;
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -452,7 +531,7 @@ equal-to? args: [v n] - returns true if the string represents a number = given
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -549,7 +628,7 @@ equal-to? args: [v n] - returns true if the string represents a number = given
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -594,94 +673,6 @@ equal-to? args: [v n] - returns true if the string represents a number = given
 
 
     <a href="/2013/09/22/custom_middleware.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/21/response_types.html">Luminus手册-响应</a></h2>
-
-        <p class="post-meta">By 09月21日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (21)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Responses</h1>
-
-<p>noir.response提供了很多辅助函数来处理响应.</p>
-
-<h1>Setting headers</h1>
-
-<p>可以使用set-header来设置响应头，使用一个map作为参数。这里需要注意的是,map的key必须是字符串。</p>
-
-<pre><code class="{.clojure}">(set-headers {"x-csrf" csrf}
-    (common/layout [:p "hi there"]))
-</code></pre>
-
-<h1>Setting content type</h1>
-
-<p>你可以使用content-type函数来设置响应的类型:</p>
-
-<pre><code class="{.clojure}">(GET "/project" []
-       (noir.response/content-type
-       "application/pdf"
-       (clojure.java.io/input-stream "report.pdf")))
-</code></pre>
-
-<p>下面是有效的响应类型设置:</p>
-
-<ul>
-<li>XML - Wraps the response with the content type for xml and sets the body to the content.</li>
-<li>JSON- Wraps the response in the json content type and generates JSON from the content</li>
-<li>JSONP - Generates JSON for the given content and creates a javascript response for calling func-name with it.</li>
-<li>edn - Wraps the response in the application/edn content-type and calls pr-str on the Clojure data stuctures passed in.</li>
-</ul>
-
-
-<pre><code class="{.clojure}">(GET "/xml" [] (xml "&lt;foo&gt;&lt;/foo&gt;"))
-(GET "/json" [] (json {:response "ok"}))
-(GET "/jsonp" [] (jsonp  "showUsers" [{:name "John"} {:name "Jane"}]))
-(GET "/edn" [] (edn {:foo 1 :bar 2}))
-</code></pre>
-
-<p>为了设置响应类型，你还需要设置noir.util.middleware/app-handler中间件。和上一节的请求一样，你只需要配置:formats键就可以了</p>
-
-<pre><code class="{.clojure}">(app-handler routes :formats [:json])
-</code></pre>
-
-
-
-
-    <a href="/2013/09/21/response_types.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-02-04T15:52:09+08:00</updated>
+    <updated>2015-02-05T17:20:43+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -38,6 +38,1249 @@
 
 
 &lt;p&gt;&lt;img src=&quot;/assets/lighttable/shot.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Clojure教程-基本语法</title>
+        <link href="http://ivanpig.github.io/2014/02/02/basic.html"/>
+        <updated>2014-02-02T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2014/02/02/basic</id>
+        <content type="html">&lt;h1&gt;简介&lt;/h1&gt;
+
+&lt;p&gt;学习一门语言最好的方法就是去使用它。我们就从一个小例子来学习Clojure语法.&lt;/p&gt;
+
+&lt;h1&gt;核心语法&lt;/h1&gt;
+
+&lt;p&gt;首先先来看一下Clojure的核心语法。&lt;/p&gt;
+
+&lt;p&gt;Clojure的使用的是Lisp语法,又叫S表达式。核心语法非常的简单。但是对于熟悉c系语法(c,c++,java)的朋友来说，第一次接触会非常的不习惯。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;所有代码以&quot;(&quot;开始,&quot;)&quot;结束。即所有的代码都被()包裹&lt;/li&gt;
+&lt;li&gt;&quot;(&quot;后的第一个数据被当作函数或者宏来调用&lt;/li&gt;
+&lt;li&gt;接着的数据被当作参数传递&lt;/li&gt;
+&lt;li&gt;如果想原样返回数据，在&quot;(&quot;前面添加&quot;'&quot;。此写法是(quote (...))的简写&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;以前面的hello world程序为例。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(println &quot;Hello World&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;它以&quot;(&quot;开始，后面跟的是函数println，接着空格跟的是参数&quot;HelloWorld&quot;，最后&quot;)&quot;结尾。&lt;/p&gt;
+
+&lt;p&gt;了解了如上规则，你就基本学会了Clojure的大部分语法。&lt;/p&gt;
+
+&lt;p&gt;下面比较一下Clojure,Java,Python,Ruby的一些语法.&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&quot;text-align:left;&quot;&gt; Clojure 表达式&lt;/th&gt;
+&lt;th style=&quot;text-align:left;&quot;&gt; 对应的 Java 语法   &lt;/th&gt;
+&lt;th style=&quot;text-align:left;&quot;&gt; 对应的 Python 语法 &lt;/th&gt;
+&lt;th style=&quot;text-align:left;&quot;&gt;对应的 Ruby 语法&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (not k)                        &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; !k                           &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; not k                   &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; not k or !k                                       &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (inc a)                        &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; a++、++a、a += 1、a + 1&lt;sup&gt;a&lt;/sup&gt;    &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; a += 1、a + 1           &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; a += 1                                              &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (/ (+ x y) 2)                  &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (x + y) / 2                  &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (x + y) / 2             &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (x + y) / 2                                       &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (instance? java. util.List al) &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; al instanceof java.util.List &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; isinstance(al,list)     &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; al.is_a? Array                                    &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (if (not a) (inc b) (dec b))   &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; !a ? b + 1 : b - 1           &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; b + 1 if not a else b-1 &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; !a ? b + 1 : b - 1                                &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (Math/pow 2 10)&lt;sup&gt;c&lt;/sup&gt;              &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; Math.pow(2, 10)              &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; pow(2, 10)              &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; 2 ** 10                                           &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (.someMethod someObj &quot;foo&quot; (.otherMethod otherObj 0)) &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt;someObj.someMethod(&quot;foo&quot; , otherObj.otherMethod(0)) &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt;someObj.someMethod(&quot;foo&quot; , otherObj.otherMethod(0)) &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt;someObj.someMethod(&quot;foo&quot; , otherObj.otherMethod(0)) &lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+&lt;p&gt;可以看出Clojure的语法有高度的一致性，即使你不熟悉S表达式，但是依据上面的原则，可以看懂它想表达的是一个什么意思。&lt;/p&gt;
+
+&lt;p&gt;而对于其他三门语言，如果你没有一个个的学习相应的语法，你还是比较难理解它的意思的。&lt;/p&gt;
+
+&lt;h1&gt;代码功能&lt;/h1&gt;
+
+&lt;p&gt;了解了核心语法，我们就可以来编写代码了。我们要编写的代码功能很简单，进行简繁翻译，其中过滤不需要翻译以及需要特殊翻译的文字。我们将分几步来完成:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;读取简繁字典&lt;/li&gt;
+&lt;li&gt;进行简繁翻译&lt;/li&gt;
+&lt;li&gt;读取不需要翻译的文字&lt;/li&gt;
+&lt;li&gt;过滤不翻译的文字&lt;/li&gt;
+&lt;li&gt;提供给Java调用&lt;/li&gt;
+&lt;li&gt;打包&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;读取简繁字典&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;语法点
+
+&lt;ul&gt;
+&lt;li&gt;查看Clojure API&lt;/li&gt;
+&lt;li&gt;第一个函数的编写&lt;/li&gt;
+&lt;li&gt;Namespace的引入&lt;/li&gt;
+&lt;li&gt;正则表达式&lt;/li&gt;
+&lt;li&gt;Clojure字面量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;我们先看第一个功能。我们要读取简繁字典。简繁字典其实就是简繁对照的文件，我这里叫jfmap.clj 格式如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;万 萬 与 與 丑 醜 专 專 业 業 丛 叢 东 東 丝 絲 丢 丟 两 兩 严 嚴 丧 喪 个 個 丬 爿
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里只是简单的列了一点。具体内容请见附件。有了这个文件，我们如何把内容读出来呢？熟悉Java的都知道，我们要创建文件流来读取，然后要打开流，循环读取，最后关闭流，还要抓异常。很繁琐。&lt;/p&gt;
+
+&lt;p&gt;在Clojure中如何处理呢？Clojure提供了slurp函数，可以根据提供的路径将文件内容读入。API如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;clojure.core/slurp
+([f &amp;amp; opts])
+  Opens a reader on f and reads all its contents, returning a string.
+  See clojure.java.io/reader for a complete list of supported arguments.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;OK。我们知道了要用什么函数。那么根据API和上面说的总规则，我们来写代码.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;首先是&quot;(&quot;&lt;/li&gt;
+&lt;li&gt;然后是函数名slurp&lt;/li&gt;
+&lt;li&gt;空格，参数。这里是要读取的文件路径&lt;/li&gt;
+&lt;li&gt;最后&quot;)&quot;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(slurp &quot;jfmap-path&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以在REPL里面去实验这行代码的执行结果。执行此行代码，clojure会将jfmap.clj的内容以字符串的形式全部读入。&lt;/p&gt;
+
+&lt;p&gt;接着呢？要做简繁翻译，字符串肯定不方便我们的操作。很明显map才是最适合的数据结构。那么我们如何将字符串变成map呢？&lt;/p&gt;
+
+&lt;p&gt;我们只能求助于API了，你可以在&lt;a href=&quot;http://clojure.github.io/clojure/api-index.html&quot;&gt;Clojure的Index页面&lt;/a&gt;搜索map,可以找到hash-map函数。它的API说明如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;hash-map
+function
+Usage: (hash-map)
+       (hash-map &amp;amp; keyvals)
+keyval =&amp;gt; key val
+Returns a new hash map with supplied mappings.  If any keys are
+equal, they are handled as if by repeated uses of assoc.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据提供的映射关系返回一个新的hashmap。而这里我们是一个字符串，如何提供映射关系呢？按照空格将文字切开就行了嘛！！继续找API。&lt;/p&gt;
+
+&lt;p&gt;Java里有split方法，Clojure里有没有相应的函数呢？试试再说。。有了！在clojure.string的Namespace(Namespace和Java中的包类似，但是在Clojure中叫Namespace。这里没有将其翻译为命名空间，主要是怕有误解。)中，我们找到了叫split的函数！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;split
+function
+Usage: (split s re)
+       (split s re limit)
+Splits string on a regular expression.  Optional argument limit is
+the maximum number of splits. Not lazy. Returns vector of the splits.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过正则表达式来切割字符串。看着挺像，先用再说！我们有repl嘛！直接在
+repl里面输入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(split &quot;万 萬&quot; #&quot; &quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;执行!Oops,报错了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;CompilerException java.lang.RuntimeException: Unable to resolve symbol: split in this context
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;找不到split?!如果在Java中报类似的错误，你会想到什么？没有引入包阿！&lt;/p&gt;
+
+&lt;p&gt;这里也是。在Java中会默认引入java.lang包，同理在Clojure中会引入clojure.core和java.lang包。其他包则要自己引入，这里split在clojure.string包中。所以你需要引入clojure.string包。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require 'clojure.string)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这也就是调用了require函数来进行引入！为什么clojure.string前面有个单引号呢？想想核心语法！这里暂不展开说！给大家留个思考题！！后续会专门对命名空间引入做详细介绍！&lt;/p&gt;
+
+&lt;p&gt;光引入还没用！调用代码也需要修改！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(clojure.string/split &quot;万 萬&quot; #&quot; &quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可能要吐槽了！既然引入了，为什么还要加Namespace前缀？！&lt;/p&gt;
+
+&lt;p&gt;我们可以和Java作个比较！如果这里是Java的话，那么我们在调用split的时候，实际上是需要一个类作为前缀的，比如StringUtils.split()!但是在clojure中并没有类的概念！Namespace下面只有函数，所以它使用命名空间来确保函数的唯一性引用！&lt;/p&gt;
+
+&lt;p&gt;当然了每次都要写这么长的命名空间的名字也是挺烦人的。Clojure提供了简写.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require ['clojure.stirng :as 'cstr])
+(cstr/split &quot;万 萬&quot; #&quot; &quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;:as是Keyword,是Clojure字面量的一种。它和String很类似，不过有些区别，它比String有更多的功能。
+下表是Clojure所包含的字面量。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Type   &lt;/th&gt;
+&lt;th&gt;     Example(s)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt; Boolean    &lt;/td&gt;
+&lt;td&gt; true,false&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Character  &lt;/td&gt;
+&lt;td&gt; \a&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Keyword    &lt;/td&gt;
+&lt;td&gt; :tag,:doc&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; List       &lt;/td&gt;
+&lt;td&gt; (1 2 3),(println &quot;foo&quot;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Map        &lt;/td&gt;
+&lt;td&gt; {:name &quot;Bill&quot;,:age 42}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Nil        &lt;/td&gt;
+&lt;td&gt; nil&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Number     &lt;/td&gt;
+&lt;td&gt; 1,4.2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Set        &lt;/td&gt;
+&lt;td&gt; #{:snap :crackle :pop}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; String     &lt;/td&gt;
+&lt;td&gt; &quot;hello&quot;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Symbol     &lt;/td&gt;
+&lt;td&gt; user/foo,java.lang.String&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Vector     &lt;/td&gt;
+&lt;td&gt; [1 2 3]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+&lt;p&gt;ok.终于得到了我们要的结果。&lt;/p&gt;
+
+&lt;p&gt;这里的#&quot;&quot;是正则表达式(这是你遇到的第一个特殊语法，学习方法---死记！！)，它构建了Java中的Pattern，所以正则表达式内容和Java完全相同，这里就不废话了。你只需要记住其语法就行了。&lt;/p&gt;
+
+&lt;p&gt;切开了字符串，我们来生成map吧！如何生成呢？你应该有答案了吧？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(hash-map (cstr/split &quot;万 萬&quot; #&quot; &quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;又报错了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;IllegalArgumentException No value supplied for key: [&quot;万&quot; &quot;萬&quot;]  clojure.lang.PersistentHashMap.create (PersistentHashMap.java:77)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;不合法的参数！！split得到的是个Vector([]包裹的数据结构是Vector),而hash-map要的参数类似于Java中的可变参数！如何匹配这两者呢？&lt;/p&gt;
+
+&lt;p&gt;Clojure中提供了apply函数!API如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;clojure.core/apply
+([f args] [f x args] [f x y args] [f x y z args] [f a b c d &amp;amp; args])
+  Applies fn f to the argument list formed by prepending intervening arguments to args.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此函数有点特别！它的第一个参数是函数，后面是该函数所需要的参数！知道怎么调用吗？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(apply hash-map (cstr/split &quot;万 萬&quot; #&quot; &quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;终于成功了！！我们看到了结果&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;{&quot;万&quot; &quot;萬&quot;}   ;以{}包裹的数据结构是map
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后呢！我们需要对jfmap.clj的内容进行处理！So easy!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(apply hash-map (cstr/split (slurp &quot;jfmap-path&quot;) #&quot; &quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;进行简繁翻译&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;语法点
+
+&lt;ul&gt;
+&lt;li&gt;var的定义&lt;/li&gt;
+&lt;li&gt;函数的定义&lt;/li&gt;
+&lt;li&gt;闭包的使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;上一节我们完成了对jfmap.clj的读取，并生成了hashmap。但是呢，如果我们每次要使用jfmap.clj的时候都要写&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(apply hash-map (cstr/split (slurp &quot;jfmap-path&quot;) #&quot; &quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;太麻烦了。在Java中的可以将其封装为一个方法来进行调用。Clojure也可以将其封装为函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn read-map
+  &quot;Read trans map from file&quot;
+  [path]
+  (apply hash-map (clstr/split (slurp path) #&quot; &quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;defn是个宏，宏的定义后面讨论。&lt;/p&gt;
+
+&lt;p&gt;defn是用来定义有名函数的。read-map就是函数名，和Java中的驼峰式取名不同，List系的取名方式一般是使用&quot;-&quot;。给出的原因是大写字母要按两个按键，&quot;-&quot;只需要按一个按键！！&lt;/p&gt;
+
+&lt;p&gt;紧接着函数名的是注释，类似Java中的注释，不同的是其双引号内的内容可以多行。后面的vector是参数
+列表，最后就是函数体了。&lt;/p&gt;
+
+&lt;p&gt;现在当你再读取jfmap的时候。只需要这样调用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(read-map &quot;jfmap-path&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;比刚才简单了很多。但是每次都要去读取，还是不够方便。在Java中会将其赋值给一个变量，然后去调用。Clojure当然也可以。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def jfmap (read-map &quot;jfmap-path&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后你直接操作jfmap就可以了。 现在我们就来按照jfmap来进行简繁翻译吧！&lt;/p&gt;
+
+&lt;p&gt;你可能会想，很简单吧？只需要遍历需要翻译的字符串，然后到jfmap中去找对应的翻译，然后将翻译组装成字符串就行了。so easy!但当你这么想的时候，你已经陷入到了实现的细节中了！Clojure让你能够更加的关注业务而不是实现细节！&lt;/p&gt;
+
+&lt;p&gt;这里给出的建议是：
+&lt;strong&gt;请先查找Clojure是否可通过函数组合来解决问题？如果不能再考虑自己编写函
+数！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;为什么这么说呢？因为在Clojure中大部分的问题都可以通过其提供的函数组合来解决。你需要做的就是根据需要来组合函数！这使你能更多的思考业务而非实现细节！比如这里的问题！ 我们需要一个函数：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;接受一个字符串&lt;/li&gt;
+&lt;li&gt;返回翻译完成的字符串&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;很简单，我们先编写函数的定义。这里我们叫translate。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后呢？需要翻译字符串。这里叫翻译字符串，实际上就是根据map的key找到value而已。在Clojure中找到这样的函数就可以了。你可以找到get函数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(get map k default)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很好理解吧？根据k从map中查找value，如果找不到则返回default。其实这就是核心代码了！&lt;/p&gt;
+
+&lt;p&gt;我们知道map就是我们这里的jfmap，k实际上是获取的字符串的每个字符，而default呢？这里如果我们根据k找不到的话，就直接返回k，也就是不翻译了。所以代码修改为:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(get jfmap k k)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在只需要解决k就行了！继续寻找函数！现在需要的是在Clojure中用得还比较多的一个函数---map!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;clojure.core/map
+([f coll] [f c1 c2] [f c1 c2 c3] [f c1 c2 c3 &amp;amp; colls])
+  Returns a lazy sequence consisting of the result of applying f to the
+  set of first items of each coll, followed by applying f to the set
+  of second items in each coll, until any one of the colls is
+  exhausted.  Any remaining items in other colls are ignored. Function
+  f should accept number-of-colls arguments.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看到作用了吗？将函数应用到序列的每个元素上去！并返回一个由结果组成的lazy序列！你可能会问了：这是针对序列的，对字符串有效吗？试试不就知道了？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(map class &quot;aaa&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在repl里面输入如上的代码！你看到了什么？java.lang.Character?!没错，字符串会被当作字符序列来操作！但是我们需要的是字符串啊？没关系，我们有str函数!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(map (comp class str) &quot;aaa&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;comp是个什么东东？它的作用是将多个函数组合起来，从右向左的执行！！这里就是先执行str再执行class,可以看到结果打印的是java.lang.String,正是我们需要的。&lt;/p&gt;
+
+&lt;p&gt;OK，现在我们来组合这两个函数就行了.但是问题又来了！map的第二个参数是个函数，我们怎么办呢？既然它需要函数，那我们就定义一个给它咯！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn tmp [k]
+   (get jfmap k k))
+
+(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (map tmp s)
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可能要抱怨了！取了个什么烂名字！！居然叫tmp?!呵呵，别急！我把函数定义为tmp，是因为我要将优化掉！可以看出，这个功能非常的简单，而且只会给translate使用，那么我们需要特意定义一个单独的函数吗？&lt;/p&gt;
+
+&lt;p&gt;不需要吧？我们直接将两个函数合并好了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (map (defn tmp [k] (get jfmap k k)) s))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很简单，但是呢！既然都放到函数内部了！还需要函数名吗？&lt;/p&gt;
+
+&lt;p&gt;就像Java中的匿名内部类一样，直接定义直接使用，不需要名字！&lt;/p&gt;
+
+&lt;p&gt;在Clojure中有fn这个specialform来定义匿名函数！&lt;/p&gt;
+
+&lt;p&gt;上面说defn是个宏！它的功能就类似于(还有其他功能，比如注释)：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def tmp (fn [k] (get jfmap k k)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们使用fn来简化一下代码!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (map (fn [k] (get jfmap k k)) s))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;舒服很多！还能更简单吗？当然！Clojure提供了#这个语法糖来定义匿名函数!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (map #(get jfmap k k) s))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好！问题来了！这里没有了参数列表！那get函数怎么知道k是个什么东西呢？所以，这里使用%来替换，第一个参数用%或者%1替换，第二个则是%2,依次类推！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (map #(get jfmap % %) s))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;搞定了吗？没有！translate需要返回一个字符串，而map返回的是个lazy序列！需要将序列转化为字符串！到clojure.string找找！有个join函数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (clstr/join (map #(get jfmap % %) s)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;不废话了！记得要引入Namespace哦！！&lt;/p&gt;
+
+&lt;p&gt;实际上一行代码我们就搞定了基本的翻译了！很简单吧？&lt;/p&gt;
+
+&lt;h2&gt;读取不需要翻译的文字&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;复习&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;翻译的字，是使用的map来存储的？那不需要翻译的文字该如何存储呢？这要看你如何处理了！我这里采用的是一个很简单的方式！&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;首先对文字全文翻译&lt;/li&gt;
+&lt;li&gt;然后对翻译后的文字再反翻译&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;比如说，&quot;阿里山&quot;直接翻译的话，那么就会变成&quot;阿裡山&quot;，但是&quot;里&quot;字是不需要翻译的。&lt;/p&gt;
+
+&lt;p&gt;那么我就新建一个map，保存&quot;阿裡山&quot;-&gt;&quot;阿里山&quot;，将文字再翻回来！&lt;/p&gt;
+
+&lt;p&gt;那么这里我就再需要一个类似jfmap.clj的文件就可以了。我这里叫ntmap.clj。&lt;/p&gt;
+
+&lt;p&gt;格式和jfmap.clj类似！只不过里面存储的是需要反翻译的文字!&lt;/p&gt;
+
+&lt;p&gt;如何读取和组装map?不需要我废话吧？&lt;/p&gt;
+
+&lt;h2&gt;过滤不翻译的文字&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Special Form
+
+&lt;ul&gt;
+&lt;li&gt;let&lt;/li&gt;
+&lt;li&gt;loop&lt;/li&gt;
+&lt;li&gt;if&lt;/li&gt;
+&lt;li&gt;recur&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;过滤不翻译的文字，实际上就是反翻译!如何进行呢？原来在翻译的过程中我们是一个字符一个字符的匹配的！但是这里是一个一个的字符串！这就比较难办了！&lt;/p&gt;
+
+&lt;p&gt;不管怎么说我们先定义函数!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn do-trans
+  [s tmap ntmap]
+   )
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先第一件事就是去全文翻译！然后获得结果！提供给后续函数使用！&lt;/p&gt;
+
+&lt;p&gt;Java中有局部变量！只需要将变量写在方法里就可以了！但是在Clojure中不同，它需要通过let这个Special Form来处理。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn do-trans
+  [s tmap ntmap]
+  (let [re (translate s tmap)]
+
+))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;let后面是个Vector，用来进行var绑定，这里translate翻译的结果会被绑定到re这个var上！而re的作用范围就只在let这个括号内部！&lt;/p&gt;
+
+&lt;p&gt;接着呢！就是对re进行反翻译！没啥现成的函数了！只能自己处理！代码如下！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn do-trans
+  [s tmap ntmap]
+  (let [re (translate s tmap)]
+    (loop [result re
+           k (keys ntmap)]
+      (if (seq k)
+        (recur (clstr/replace result (first k) (ntmap (first k))) (rest k))
+          result))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;loop又是个Special Form，看起来像循环！实际上它是个递归！&lt;/p&gt;
+
+&lt;p&gt;loop后面也是个参数Vector，功能和let的相同！这里将re绑定到了result，以及ntmap的key绑定到了k上！&lt;/p&gt;
+
+&lt;p&gt;然后是if判断，还是个Special Form，(seq k)判断k是否是个序列！如果是则执行recur，如果不是则返回result.其实seq并不是判断函数！&lt;/p&gt;
+
+&lt;p&gt;它是用来构建序列的！这里之所以能用来判断，基于两个原因：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在Clojure中除了nil和false是假，其他全是真&lt;/li&gt;
+&lt;li&gt;(seq nil)和(seq ())返回nil&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;然后seq就可以用来作为判断条件了！&lt;/p&gt;
+
+&lt;p&gt;recur是递归调用！这里调用的是loop，传递的参数是替换后的s和剩余的k.&lt;/p&gt;
+
+&lt;p&gt;实际功能就是，遍历ntmap中的key，如果找到了，则使用value替换掉！&lt;/p&gt;
+
+&lt;p&gt;至此，就完成了翻译的所有功能！考虑下如果使用Java需要多少行代码？？&lt;/p&gt;
+
+&lt;p&gt;测试翻译一个页面的时间为70毫秒左右，速度还是不错的！&lt;/p&gt;
+
+&lt;h2&gt;提供给Java调用&lt;/h2&gt;
+
+&lt;p&gt;Clojure提供了将函数给Java调用的功能！&lt;/p&gt;
+
+&lt;p&gt;首先，在core.clj文件中编写函数，比如下面的翻译:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn -transAll
+  &quot;翻译所有&quot;
+  [source mapPath]
+  (trans/translate source (trans/read-map mapPath) &quot;&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;函数名前面一定要有个&quot;-&quot;。 然后在命名空间里添加如下代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns jft.core
+;这里开始
+ (:gen-class
+   :name jft.core.Trans
+   :methods [#^{:static true} [transAll [String String] String]])
+;这里结束
+  (:require [clojure.string :as cstr]
+            [jft.trans :as trans])
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;应该不难理解吧？name是在Java中import的时候的名字！methods是可以调用的方法,这里注解为静态方法！&lt;/p&gt;
+
+&lt;p&gt;注意这里的transAll前面是没有&quot;-&quot;的，后面是参数和返回类型！&lt;/p&gt;
+
+&lt;h2&gt;打包&lt;/h2&gt;
+
+&lt;p&gt;需要给Java调用，那就要先封装为jar包。非常简单&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein jar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后就可以提供给Java调用了！&lt;/p&gt;
+
+&lt;h1&gt;源码&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/clojure/jft.zip&quot;&gt;jft&lt;/a&gt;&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;简介&lt;/h1&gt;
+
+&lt;p&gt;学习一门语言最好的方法就是去使用它。我们就从一个小例子来学习Clojure语法.&lt;/p&gt;
+
+&lt;h1&gt;核心语法&lt;/h1&gt;
+
+&lt;p&gt;首先先来看一下Clojure的核心语法。&lt;/p&gt;
+
+&lt;p&gt;Clojure的使用的是Lisp语法,又叫S表达式。核心语法非常的简单。但是对于熟悉c系语法(c,c++,java)的朋友来说，第一次接触会非常的不习惯。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;所有代码以&quot;(&quot;开始,&quot;)&quot;结束。即所有的代码都被()包裹&lt;/li&gt;
+&lt;li&gt;&quot;(&quot;后的第一个数据被当作函数或者宏来调用&lt;/li&gt;
+&lt;li&gt;接着的数据被当作参数传递&lt;/li&gt;
+&lt;li&gt;如果想原样返回数据，在&quot;(&quot;前面添加&quot;'&quot;。此写法是(quote (...))的简写&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;以前面的hello world程序为例。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(println &quot;Hello World&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;它以&quot;(&quot;开始，后面跟的是函数println，接着空格跟的是参数&quot;HelloWorld&quot;，最后&quot;)&quot;结尾。&lt;/p&gt;
+
+&lt;p&gt;了解了如上规则，你就基本学会了Clojure的大部分语法。&lt;/p&gt;
+
+&lt;p&gt;下面比较一下Clojure,Java,Python,Ruby的一些语法.&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&quot;text-align:left;&quot;&gt; Clojure 表达式&lt;/th&gt;
+&lt;th style=&quot;text-align:left;&quot;&gt; 对应的 Java 语法   &lt;/th&gt;
+&lt;th style=&quot;text-align:left;&quot;&gt; 对应的 Python 语法 &lt;/th&gt;
+&lt;th style=&quot;text-align:left;&quot;&gt;对应的 Ruby 语法&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (not k)                        &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; !k                           &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; not k                   &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; not k or !k                                       &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (inc a)                        &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; a++、++a、a += 1、a + 1&lt;sup&gt;a&lt;/sup&gt;    &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; a += 1、a + 1           &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; a += 1                                              &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (/ (+ x y) 2)                  &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (x + y) / 2                  &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (x + y) / 2             &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (x + y) / 2                                       &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (instance? java. util.List al) &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; al instanceof java.util.List &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; isinstance(al,list)     &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; al.is_a? Array                                    &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (if (not a) (inc b) (dec b))   &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; !a ? b + 1 : b - 1           &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; b + 1 if not a else b-1 &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; !a ? b + 1 : b - 1                                &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (Math/pow 2 10)&lt;sup&gt;c&lt;/sup&gt;              &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; Math.pow(2, 10)              &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; pow(2, 10)              &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; 2 ** 10                                           &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt; (.someMethod someObj &quot;foo&quot; (.otherMethod otherObj 0)) &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt;someObj.someMethod(&quot;foo&quot; , otherObj.otherMethod(0)) &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt;someObj.someMethod(&quot;foo&quot; , otherObj.otherMethod(0)) &lt;/td&gt;
+&lt;td style=&quot;text-align:left;&quot;&gt;someObj.someMethod(&quot;foo&quot; , otherObj.otherMethod(0)) &lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+&lt;p&gt;可以看出Clojure的语法有高度的一致性，即使你不熟悉S表达式，但是依据上面的原则，可以看懂它想表达的是一个什么意思。&lt;/p&gt;
+
+&lt;p&gt;而对于其他三门语言，如果你没有一个个的学习相应的语法，你还是比较难理解它的意思的。&lt;/p&gt;
+
+&lt;h1&gt;代码功能&lt;/h1&gt;
+
+&lt;p&gt;了解了核心语法，我们就可以来编写代码了。我们要编写的代码功能很简单，进行简繁翻译，其中过滤不需要翻译以及需要特殊翻译的文字。我们将分几步来完成:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;读取简繁字典&lt;/li&gt;
+&lt;li&gt;进行简繁翻译&lt;/li&gt;
+&lt;li&gt;读取不需要翻译的文字&lt;/li&gt;
+&lt;li&gt;过滤不翻译的文字&lt;/li&gt;
+&lt;li&gt;提供给Java调用&lt;/li&gt;
+&lt;li&gt;打包&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;读取简繁字典&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;语法点
+
+&lt;ul&gt;
+&lt;li&gt;查看Clojure API&lt;/li&gt;
+&lt;li&gt;第一个函数的编写&lt;/li&gt;
+&lt;li&gt;Namespace的引入&lt;/li&gt;
+&lt;li&gt;正则表达式&lt;/li&gt;
+&lt;li&gt;Clojure字面量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;我们先看第一个功能。我们要读取简繁字典。简繁字典其实就是简繁对照的文件，我这里叫jfmap.clj 格式如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;万 萬 与 與 丑 醜 专 專 业 業 丛 叢 东 東 丝 絲 丢 丟 两 兩 严 嚴 丧 喪 个 個 丬 爿
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里只是简单的列了一点。具体内容请见附件。有了这个文件，我们如何把内容读出来呢？熟悉Java的都知道，我们要创建文件流来读取，然后要打开流，循环读取，最后关闭流，还要抓异常。很繁琐。&lt;/p&gt;
+
+&lt;p&gt;在Clojure中如何处理呢？Clojure提供了slurp函数，可以根据提供的路径将文件内容读入。API如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;clojure.core/slurp
+([f &amp;amp; opts])
+  Opens a reader on f and reads all its contents, returning a string.
+  See clojure.java.io/reader for a complete list of supported arguments.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;OK。我们知道了要用什么函数。那么根据API和上面说的总规则，我们来写代码.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;首先是&quot;(&quot;&lt;/li&gt;
+&lt;li&gt;然后是函数名slurp&lt;/li&gt;
+&lt;li&gt;空格，参数。这里是要读取的文件路径&lt;/li&gt;
+&lt;li&gt;最后&quot;)&quot;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(slurp &quot;jfmap-path&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以在REPL里面去实验这行代码的执行结果。执行此行代码，clojure会将jfmap.clj的内容以字符串的形式全部读入。&lt;/p&gt;
+
+&lt;p&gt;接着呢？要做简繁翻译，字符串肯定不方便我们的操作。很明显map才是最适合的数据结构。那么我们如何将字符串变成map呢？&lt;/p&gt;
+
+&lt;p&gt;我们只能求助于API了，你可以在&lt;a href=&quot;http://clojure.github.io/clojure/api-index.html&quot;&gt;Clojure的Index页面&lt;/a&gt;搜索map,可以找到hash-map函数。它的API说明如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;hash-map
+function
+Usage: (hash-map)
+       (hash-map &amp;amp; keyvals)
+keyval =&amp;gt; key val
+Returns a new hash map with supplied mappings.  If any keys are
+equal, they are handled as if by repeated uses of assoc.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据提供的映射关系返回一个新的hashmap。而这里我们是一个字符串，如何提供映射关系呢？按照空格将文字切开就行了嘛！！继续找API。&lt;/p&gt;
+
+&lt;p&gt;Java里有split方法，Clojure里有没有相应的函数呢？试试再说。。有了！在clojure.string的Namespace(Namespace和Java中的包类似，但是在Clojure中叫Namespace。这里没有将其翻译为命名空间，主要是怕有误解。)中，我们找到了叫split的函数！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;split
+function
+Usage: (split s re)
+       (split s re limit)
+Splits string on a regular expression.  Optional argument limit is
+the maximum number of splits. Not lazy. Returns vector of the splits.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过正则表达式来切割字符串。看着挺像，先用再说！我们有repl嘛！直接在
+repl里面输入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(split &quot;万 萬&quot; #&quot; &quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;执行!Oops,报错了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;CompilerException java.lang.RuntimeException: Unable to resolve symbol: split in this context
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;找不到split?!如果在Java中报类似的错误，你会想到什么？没有引入包阿！&lt;/p&gt;
+
+&lt;p&gt;这里也是。在Java中会默认引入java.lang包，同理在Clojure中会引入clojure.core和java.lang包。其他包则要自己引入，这里split在clojure.string包中。所以你需要引入clojure.string包。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require 'clojure.string)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这也就是调用了require函数来进行引入！为什么clojure.string前面有个单引号呢？想想核心语法！这里暂不展开说！给大家留个思考题！！后续会专门对命名空间引入做详细介绍！&lt;/p&gt;
+
+&lt;p&gt;光引入还没用！调用代码也需要修改！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(clojure.string/split &quot;万 萬&quot; #&quot; &quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可能要吐槽了！既然引入了，为什么还要加Namespace前缀？！&lt;/p&gt;
+
+&lt;p&gt;我们可以和Java作个比较！如果这里是Java的话，那么我们在调用split的时候，实际上是需要一个类作为前缀的，比如StringUtils.split()!但是在clojure中并没有类的概念！Namespace下面只有函数，所以它使用命名空间来确保函数的唯一性引用！&lt;/p&gt;
+
+&lt;p&gt;当然了每次都要写这么长的命名空间的名字也是挺烦人的。Clojure提供了简写.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require ['clojure.stirng :as 'cstr])
+(cstr/split &quot;万 萬&quot; #&quot; &quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;:as是Keyword,是Clojure字面量的一种。它和String很类似，不过有些区别，它比String有更多的功能。
+下表是Clojure所包含的字面量。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Type   &lt;/th&gt;
+&lt;th&gt;     Example(s)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt; Boolean    &lt;/td&gt;
+&lt;td&gt; true,false&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Character  &lt;/td&gt;
+&lt;td&gt; \a&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Keyword    &lt;/td&gt;
+&lt;td&gt; :tag,:doc&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; List       &lt;/td&gt;
+&lt;td&gt; (1 2 3),(println &quot;foo&quot;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Map        &lt;/td&gt;
+&lt;td&gt; {:name &quot;Bill&quot;,:age 42}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Nil        &lt;/td&gt;
+&lt;td&gt; nil&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Number     &lt;/td&gt;
+&lt;td&gt; 1,4.2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Set        &lt;/td&gt;
+&lt;td&gt; #{:snap :crackle :pop}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; String     &lt;/td&gt;
+&lt;td&gt; &quot;hello&quot;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Symbol     &lt;/td&gt;
+&lt;td&gt; user/foo,java.lang.String&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; Vector     &lt;/td&gt;
+&lt;td&gt; [1 2 3]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+&lt;p&gt;ok.终于得到了我们要的结果。&lt;/p&gt;
+
+&lt;p&gt;这里的#&quot;&quot;是正则表达式(这是你遇到的第一个特殊语法，学习方法---死记！！)，它构建了Java中的Pattern，所以正则表达式内容和Java完全相同，这里就不废话了。你只需要记住其语法就行了。&lt;/p&gt;
+
+&lt;p&gt;切开了字符串，我们来生成map吧！如何生成呢？你应该有答案了吧？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(hash-map (cstr/split &quot;万 萬&quot; #&quot; &quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;又报错了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;IllegalArgumentException No value supplied for key: [&quot;万&quot; &quot;萬&quot;]  clojure.lang.PersistentHashMap.create (PersistentHashMap.java:77)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;不合法的参数！！split得到的是个Vector([]包裹的数据结构是Vector),而hash-map要的参数类似于Java中的可变参数！如何匹配这两者呢？&lt;/p&gt;
+
+&lt;p&gt;Clojure中提供了apply函数!API如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;clojure.core/apply
+([f args] [f x args] [f x y args] [f x y z args] [f a b c d &amp;amp; args])
+  Applies fn f to the argument list formed by prepending intervening arguments to args.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此函数有点特别！它的第一个参数是函数，后面是该函数所需要的参数！知道怎么调用吗？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(apply hash-map (cstr/split &quot;万 萬&quot; #&quot; &quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;终于成功了！！我们看到了结果&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;{&quot;万&quot; &quot;萬&quot;}   ;以{}包裹的数据结构是map
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后呢！我们需要对jfmap.clj的内容进行处理！So easy!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(apply hash-map (cstr/split (slurp &quot;jfmap-path&quot;) #&quot; &quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;进行简繁翻译&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;语法点
+
+&lt;ul&gt;
+&lt;li&gt;var的定义&lt;/li&gt;
+&lt;li&gt;函数的定义&lt;/li&gt;
+&lt;li&gt;闭包的使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;上一节我们完成了对jfmap.clj的读取，并生成了hashmap。但是呢，如果我们每次要使用jfmap.clj的时候都要写&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(apply hash-map (cstr/split (slurp &quot;jfmap-path&quot;) #&quot; &quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;太麻烦了。在Java中的可以将其封装为一个方法来进行调用。Clojure也可以将其封装为函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn read-map
+  &quot;Read trans map from file&quot;
+  [path]
+  (apply hash-map (clstr/split (slurp path) #&quot; &quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;defn是个宏，宏的定义后面讨论。&lt;/p&gt;
+
+&lt;p&gt;defn是用来定义有名函数的。read-map就是函数名，和Java中的驼峰式取名不同，List系的取名方式一般是使用&quot;-&quot;。给出的原因是大写字母要按两个按键，&quot;-&quot;只需要按一个按键！！&lt;/p&gt;
+
+&lt;p&gt;紧接着函数名的是注释，类似Java中的注释，不同的是其双引号内的内容可以多行。后面的vector是参数
+列表，最后就是函数体了。&lt;/p&gt;
+
+&lt;p&gt;现在当你再读取jfmap的时候。只需要这样调用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(read-map &quot;jfmap-path&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;比刚才简单了很多。但是每次都要去读取，还是不够方便。在Java中会将其赋值给一个变量，然后去调用。Clojure当然也可以。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def jfmap (read-map &quot;jfmap-path&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后你直接操作jfmap就可以了。 现在我们就来按照jfmap来进行简繁翻译吧！&lt;/p&gt;
+
+&lt;p&gt;你可能会想，很简单吧？只需要遍历需要翻译的字符串，然后到jfmap中去找对应的翻译，然后将翻译组装成字符串就行了。so easy!但当你这么想的时候，你已经陷入到了实现的细节中了！Clojure让你能够更加的关注业务而不是实现细节！&lt;/p&gt;
+
+&lt;p&gt;这里给出的建议是：
+&lt;strong&gt;请先查找Clojure是否可通过函数组合来解决问题？如果不能再考虑自己编写函
+数！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;为什么这么说呢？因为在Clojure中大部分的问题都可以通过其提供的函数组合来解决。你需要做的就是根据需要来组合函数！这使你能更多的思考业务而非实现细节！比如这里的问题！ 我们需要一个函数：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;接受一个字符串&lt;/li&gt;
+&lt;li&gt;返回翻译完成的字符串&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;很简单，我们先编写函数的定义。这里我们叫translate。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后呢？需要翻译字符串。这里叫翻译字符串，实际上就是根据map的key找到value而已。在Clojure中找到这样的函数就可以了。你可以找到get函数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(get map k default)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很好理解吧？根据k从map中查找value，如果找不到则返回default。其实这就是核心代码了！&lt;/p&gt;
+
+&lt;p&gt;我们知道map就是我们这里的jfmap，k实际上是获取的字符串的每个字符，而default呢？这里如果我们根据k找不到的话，就直接返回k，也就是不翻译了。所以代码修改为:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(get jfmap k k)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在只需要解决k就行了！继续寻找函数！现在需要的是在Clojure中用得还比较多的一个函数---map!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;clojure.core/map
+([f coll] [f c1 c2] [f c1 c2 c3] [f c1 c2 c3 &amp;amp; colls])
+  Returns a lazy sequence consisting of the result of applying f to the
+  set of first items of each coll, followed by applying f to the set
+  of second items in each coll, until any one of the colls is
+  exhausted.  Any remaining items in other colls are ignored. Function
+  f should accept number-of-colls arguments.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看到作用了吗？将函数应用到序列的每个元素上去！并返回一个由结果组成的lazy序列！你可能会问了：这是针对序列的，对字符串有效吗？试试不就知道了？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(map class &quot;aaa&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在repl里面输入如上的代码！你看到了什么？java.lang.Character?!没错，字符串会被当作字符序列来操作！但是我们需要的是字符串啊？没关系，我们有str函数!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(map (comp class str) &quot;aaa&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;comp是个什么东东？它的作用是将多个函数组合起来，从右向左的执行！！这里就是先执行str再执行class,可以看到结果打印的是java.lang.String,正是我们需要的。&lt;/p&gt;
+
+&lt;p&gt;OK，现在我们来组合这两个函数就行了.但是问题又来了！map的第二个参数是个函数，我们怎么办呢？既然它需要函数，那我们就定义一个给它咯！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn tmp [k]
+   (get jfmap k k))
+
+(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (map tmp s)
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可能要抱怨了！取了个什么烂名字！！居然叫tmp?!呵呵，别急！我把函数定义为tmp，是因为我要将优化掉！可以看出，这个功能非常的简单，而且只会给translate使用，那么我们需要特意定义一个单独的函数吗？&lt;/p&gt;
+
+&lt;p&gt;不需要吧？我们直接将两个函数合并好了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (map (defn tmp [k] (get jfmap k k)) s))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很简单，但是呢！既然都放到函数内部了！还需要函数名吗？&lt;/p&gt;
+
+&lt;p&gt;就像Java中的匿名内部类一样，直接定义直接使用，不需要名字！&lt;/p&gt;
+
+&lt;p&gt;在Clojure中有fn这个specialform来定义匿名函数！&lt;/p&gt;
+
+&lt;p&gt;上面说defn是个宏！它的功能就类似于(还有其他功能，比如注释)：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def tmp (fn [k] (get jfmap k k)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们使用fn来简化一下代码!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (map (fn [k] (get jfmap k k)) s))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;舒服很多！还能更简单吗？当然！Clojure提供了#这个语法糖来定义匿名函数!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (map #(get jfmap k k) s))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好！问题来了！这里没有了参数列表！那get函数怎么知道k是个什么东西呢？所以，这里使用%来替换，第一个参数用%或者%1替换，第二个则是%2,依次类推！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (map #(get jfmap % %) s))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;搞定了吗？没有！translate需要返回一个字符串，而map返回的是个lazy序列！需要将序列转化为字符串！到clojure.string找找！有个join函数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn translate
+  &quot;Trans string by map&quot;
+  [s]
+  (clstr/join (map #(get jfmap % %) s)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;不废话了！记得要引入Namespace哦！！&lt;/p&gt;
+
+&lt;p&gt;实际上一行代码我们就搞定了基本的翻译了！很简单吧？&lt;/p&gt;
+
+&lt;h2&gt;读取不需要翻译的文字&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;复习&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;翻译的字，是使用的map来存储的？那不需要翻译的文字该如何存储呢？这要看你如何处理了！我这里采用的是一个很简单的方式！&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;首先对文字全文翻译&lt;/li&gt;
+&lt;li&gt;然后对翻译后的文字再反翻译&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;比如说，&quot;阿里山&quot;直接翻译的话，那么就会变成&quot;阿裡山&quot;，但是&quot;里&quot;字是不需要翻译的。&lt;/p&gt;
+
+&lt;p&gt;那么我就新建一个map，保存&quot;阿裡山&quot;-&gt;&quot;阿里山&quot;，将文字再翻回来！&lt;/p&gt;
+
+&lt;p&gt;那么这里我就再需要一个类似jfmap.clj的文件就可以了。我这里叫ntmap.clj。&lt;/p&gt;
+
+&lt;p&gt;格式和jfmap.clj类似！只不过里面存储的是需要反翻译的文字!&lt;/p&gt;
+
+&lt;p&gt;如何读取和组装map?不需要我废话吧？&lt;/p&gt;
+
+&lt;h2&gt;过滤不翻译的文字&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Special Form
+
+&lt;ul&gt;
+&lt;li&gt;let&lt;/li&gt;
+&lt;li&gt;loop&lt;/li&gt;
+&lt;li&gt;if&lt;/li&gt;
+&lt;li&gt;recur&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;过滤不翻译的文字，实际上就是反翻译!如何进行呢？原来在翻译的过程中我们是一个字符一个字符的匹配的！但是这里是一个一个的字符串！这就比较难办了！&lt;/p&gt;
+
+&lt;p&gt;不管怎么说我们先定义函数!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn do-trans
+  [s tmap ntmap]
+   )
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先第一件事就是去全文翻译！然后获得结果！提供给后续函数使用！&lt;/p&gt;
+
+&lt;p&gt;Java中有局部变量！只需要将变量写在方法里就可以了！但是在Clojure中不同，它需要通过let这个Special Form来处理。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn do-trans
+  [s tmap ntmap]
+  (let [re (translate s tmap)]
+
+))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;let后面是个Vector，用来进行var绑定，这里translate翻译的结果会被绑定到re这个var上！而re的作用范围就只在let这个括号内部！&lt;/p&gt;
+
+&lt;p&gt;接着呢！就是对re进行反翻译！没啥现成的函数了！只能自己处理！代码如下！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn do-trans
+  [s tmap ntmap]
+  (let [re (translate s tmap)]
+    (loop [result re
+           k (keys ntmap)]
+      (if (seq k)
+        (recur (clstr/replace result (first k) (ntmap (first k))) (rest k))
+          result))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;loop又是个Special Form，看起来像循环！实际上它是个递归！&lt;/p&gt;
+
+&lt;p&gt;loop后面也是个参数Vector，功能和let的相同！这里将re绑定到了result，以及ntmap的key绑定到了k上！&lt;/p&gt;
+
+&lt;p&gt;然后是if判断，还是个Special Form，(seq k)判断k是否是个序列！如果是则执行recur，如果不是则返回result.其实seq并不是判断函数！&lt;/p&gt;
+
+&lt;p&gt;它是用来构建序列的！这里之所以能用来判断，基于两个原因：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在Clojure中除了nil和false是假，其他全是真&lt;/li&gt;
+&lt;li&gt;(seq nil)和(seq ())返回nil&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;然后seq就可以用来作为判断条件了！&lt;/p&gt;
+
+&lt;p&gt;recur是递归调用！这里调用的是loop，传递的参数是替换后的s和剩余的k.&lt;/p&gt;
+
+&lt;p&gt;实际功能就是，遍历ntmap中的key，如果找到了，则使用value替换掉！&lt;/p&gt;
+
+&lt;p&gt;至此，就完成了翻译的所有功能！考虑下如果使用Java需要多少行代码？？&lt;/p&gt;
+
+&lt;p&gt;测试翻译一个页面的时间为70毫秒左右，速度还是不错的！&lt;/p&gt;
+
+&lt;h2&gt;提供给Java调用&lt;/h2&gt;
+
+&lt;p&gt;Clojure提供了将函数给Java调用的功能！&lt;/p&gt;
+
+&lt;p&gt;首先，在core.clj文件中编写函数，比如下面的翻译:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn -transAll
+  &quot;翻译所有&quot;
+  [source mapPath]
+  (trans/translate source (trans/read-map mapPath) &quot;&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;函数名前面一定要有个&quot;-&quot;。 然后在命名空间里添加如下代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(ns jft.core
+;这里开始
+ (:gen-class
+   :name jft.core.Trans
+   :methods [#^{:static true} [transAll [String String] String]])
+;这里结束
+  (:require [clojure.string :as cstr]
+            [jft.trans :as trans])
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;应该不难理解吧？name是在Java中import的时候的名字！methods是可以调用的方法,这里注解为静态方法！&lt;/p&gt;
+
+&lt;p&gt;注意这里的transAll前面是没有&quot;-&quot;的，后面是参数和返回类型！&lt;/p&gt;
+
+&lt;h2&gt;打包&lt;/h2&gt;
+
+&lt;p&gt;需要给Java调用，那就要先封装为jar包。非常简单&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;lein jar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后就可以提供给Java调用了！&lt;/p&gt;
+
+&lt;h1&gt;源码&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/clojure/jft.zip&quot;&gt;jft&lt;/a&gt;&lt;/p&gt;
 </summary>
     </entry>
     

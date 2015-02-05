@@ -8,8 +8,10 @@ http://ivanpig.github.io/tag/
 http://ivanpig.github.io/type/
 http://ivanpig.github.io/page/2/index.html
 http://ivanpig.github.io/page/3/index.html
+http://ivanpig.github.io/page/4/index.html
 
 http://ivanpig.github.io/2014/11/28/pigtheme.html
+http://ivanpig.github.io/2014/02/02/basic.html
 http://ivanpig.github.io/2014/02/01/first_step.html
 http://ivanpig.github.io/2013/10/02/upgrading.html
 http://ivanpig.github.io/2013/10/01/useful_libraries.html
