@@ -1,0 +1,601 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="clojure"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2014/03/15/function.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>Clojure教程-函数 - IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">Clojure教程-函数</h2>
+
+    <p class="post-meta">By 03月15日  2014
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">clojure (10)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">clojure (30)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <p>本文翻译自<a href="http://clojure-doc.org/articles/language/functions.html">Functions in Clojure</a></p>
+
+<p>本文包括如下内容:</p>
+
+<ul>
+<li>如何定义函数</li>
+<li>如何执行函数</li>
+<li>多元数函数(Multi-arity Functions)</li>
+<li>不定参函数(Variadic Functions)</li>
+<li>高阶函数</li>
+<li>其它函数相关内容</li>
+</ul>
+
+
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
+
+<h1>针对Clojure版本</h1>
+
+<p>Clojure 1.5</p>
+
+<h1>简介</h1>
+
+<p>Clojure是函数式编程语言.自然的,函数是Clojure非常重要的一部分.</p>
+
+<h1>如何定义函数</h1>
+
+<p>函数定义一般使用defn宏:</p>
+
+<pre><code class="{.clojure}">(defn round
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>类型提示有时能避免编译器使用反射,从而能生成更高效的字节码.但是,基本上你没必要使用类型提示.后期优化时再考虑.</p>
+
+<p>函数可以添加注释文档,给API添加文档说明是个好习惯:</p>
+
+<pre><code class="{.clojure}">(defn round
+  "Round down a double to the given precision (number of significant digits)"
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>在Clojure中函数参数可以有类型提示,不过是可选的.</p>
+
+<pre><code class="{.clojure}">(defn round
+  [^double d ^long precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>函数还可以定义前置和后置条件来限制函数的参数和返回值.</p>
+
+<pre><code class="{.clojure}">(defn round
+  "Round down a double to the given precision (number of significant digits)"
+  [^double d ^long precision]
+  {:pre [(not-nil? d) (not-nil? precision)]}
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>在上面的例子中,我们使用了前置条件来检查两个参数是否为nil.</p>
+
+<p>not-nil?宏(或函数),没有在该例子中展示,我们假设它已经在其它地方实现了.</p>
+
+<!-- more -->
+
+
+<h1>匿名函数</h1>
+
+<p>匿名函数使用fn特殊形式来定义;</p>
+
+<pre><code class="{.clojure}">(fn [x]
+  (* 2 x))
+</code></pre>
+
+<p>匿名函数可以赋给局部变量,作为参数传递给函数或作为函数的返回值.</p>
+
+<pre><code class="{.clojure}">(let [f (fn [x]
+          (* 2 x))]
+  (map f (range 0 10)))
+</code></pre>
+
+<p>Clojure提供了语法糖来简化匿名函数的编写:</p>
+
+<pre><code class="{.clojure}">(let [f #(* 2 %)]
+  (map f (range 0 10)))
+</code></pre>
+
+<p>%表示第一个参数.如果要引用多个参数,可以使用%1,%2.以此类推:</p>
+
+<pre><code class="{.clojure}">;; 一个包含了三个参数的匿名函数,返回三个参数的和
+(let [f #(+ %1 %2 %3)]
+  (f 1 2 3))
+</code></pre>
+
+<p>语法糖简化了代码,但是降低了代码的可读性.所以使用前请斟酌.</p>
+
+<h1>如何执行函数</h1>
+
+<p>要执行函数,只需要将函数名放在list的第一个位置就行了:</p>
+
+<pre><code class="{.clojure}">(format "Hello, %s" "world")
+</code></pre>
+
+<p>对于赋给局部变量,变量或这从参数传递的函数,此法同样适用:</p>
+
+<pre><code class="{.clojure}">(let [f format]
+  (f "Hello, %s" "world"))
+</code></pre>
+
+<p>另外你也可以使用clojure.core/apply来执行函数</p>
+
+<pre><code class="{.clojure}">(apply format "Hello, %s" ["world"])
+
+(apply format "Hello, %s %s" ["Clojure" "world"])
+</code></pre>
+
+<p>clojure.core/apply一般在调用不定参函数或者需要将参数作为集合传递时才会使用</p>
+
+<h1>多元数函数</h1>
+
+<p>在Clojure中有多元数函数:</p>
+
+<pre><code class="{.clojure}">(defn tax-amount
+  ([amount]
+     (tax-amount amount 35))
+  ([amount rate]
+     (Math/round (double (* amount (/ rate 100))))))
+</code></pre>
+
+<p>在上面的例子中,只有一个参数的函数调用了有两个参数的函数.这在多参函数中很常见(相当于默认值的功能).Clojure没有提供默认值的功能,是因为JVM不支持.</p>
+
+<p>在Clojure中,元数只和参数个数有关,而和参数类型无关.这是因为Clojure是动态语言,类型信息可能在编译期是无效的.</p>
+
+<pre><code class="{.clojure}">(defn range
+  ([]
+    (range 0 Double/POSITIVE_INFINITY 1))
+  ([end]
+    (range 0 end 1))
+  ([start end]
+    (range start end 1))
+  ([start end step]
+    (comment Omitted for clarity)))
+</code></pre>
+
+<h1>解构函数参数</h1>
+
+<p>有时函数的参数是数据结构:向量,序列,map.当你想访问这些数据结构的其中一部分数据时,你可能需要编写类似下面的代码</p>
+
+<pre><code class="{.clojure}">(defn currency-of
+  [m]
+  (let [currency (get m :currency)]
+    currency))
+</code></pre>
+
+<p>对向量来说,需要编写类似这样的代码:</p>
+
+<pre><code class="{.clojure}">(defn currency-of
+  [pair]
+  (let [amount   (first  pair)
+        currency (second pair)]
+    currency))
+</code></pre>
+
+<p>但是呢,这样的样板代码可重用性并不高.所以Clojure提供了解构.</p>
+
+<h2>基于位置的解构</h2>
+
+<p>解构向量的方式如下:使用一个向量替换原来作为函数参数的数据结构,这个向量包含了占位符,而占位符会将对应位置的数据结构的值绑定过来.</p>
+
+<p>举例来说,如果一个参数是一对值,你想要获得第二个参数值,那么代码可以这样写:</p>
+
+<pre><code class="{.clojure}">(defn currency-of
+  [[amount currency]]
+  currency)
+</code></pre>
+
+<p>在上面的例子中,参数的第一个值被绑定到了amount上,第二个参数是被绑定到了currency上.看起来很棒,但是,这里我们并没有使用amount.在这种情况下,我们可以使用下划线来忽略它:</p>
+
+<pre><code class="{.clojure}">(defn currency-of
+  [[_ currency]]
+  currency)
+</code></pre>
+
+<p>解构是能够嵌套的:</p>
+
+<pre><code class="{.clojure}">(defn first-first
+  [[[i _] _]]
+  i)
+</code></pre>
+
+<p>虽然本文不会涉及到let这个form和本地变量.但是需要提一下,解构对let也生效,而且作用一模一样</p>
+
+<pre><code class="{.clojure}">(let [pair         [10 :gbp]
+      [_ currency] pair]
+  currency)
+</code></pre>
+
+<h2>解构Map</h2>
+
+<p>对Map和Record的解构方式与解构向量略有不同:</p>
+
+<pre><code class="{.clojure}">(defn currency-of
+  [{currency :currency}]
+  currency)
+</code></pre>
+
+<p>在上面的例子中,我们想把:currency这个key对应的value绑定到currency上.Key并不一定需要是关键字:</p>
+
+<pre><code class="{.clojure}">(defn currency-of
+  [{currency "currency"}]
+  currency)
+
+(defn currency-of
+  [{currency 'currency}]
+  currency)
+</code></pre>
+
+<p>我们可以一次性解构多个key:</p>
+
+<pre><code class="{.clojure}">(defn currency-of
+  [{:keys [currency amount]}]
+  currency)
+</code></pre>
+
+<p>上面的例子中,keys需要为关键字,其名字与currency和amount相同(即:currency,:amount).如果keys是字符串,则将上面的:keys改为:strs即可:</p>
+
+<pre><code class="{.clojure}">(defn currency-of
+  [{:strs [currency amount]}]
+  currency)
+</code></pre>
+
+<p>当然也可以是symbol:</p>
+
+<pre><code class="{.clojure}">(defn currency-of
+  [{:syms [currency amount]}]
+  currency)
+</code></pre>
+
+<p>当然了,使用关键字作为key在Clojure中是推荐做法.</p>
+
+<p>解构Map时,如果找不到我们需要的key的值,我们可以设置默认值:</p>
+
+<pre><code class="{.clojure}">(defn currency-of
+  [{:keys [currency amount] :or {currency :gbp}}]
+  currency)
+</code></pre>
+
+<p>此功能对于编写包含额外属性的函数大有裨益.和基于位置的解构相同,Map解构对let同样适用:</p>
+
+<pre><code class="{.clojure}">(let [money               {:currency :gbp :amount 10}
+     {currency :currency} money]
+  currency)
+</code></pre>
+
+<h1>变参函数</h1>
+
+<p>参数数量可变的函数叫做变参函数.clojure.core/str和clojure.core/format就是两个变参函数:</p>
+
+<pre><code class="{.clojure}">(str "a" "b")      ; ⇒ "ab"
+(str "a" "b" "c")  ; ⇒ "abc"
+
+(format "Hello, %s" "world")               ; ⇒ "Hello, world"
+(format "Hello, %s %s" "Clojure" "world")  ; ⇒ "Hello, Clojure world"
+</code></pre>
+
+<p>要定义变参函数,只需要在变参前面加个&amp;就可以了:</p>
+
+<pre><code class="{.clojure}">(defn log
+  [message &amp; args]
+  (comment ...))
+</code></pre>
+
+<p>在上面的例子中,只有一个参数是必须的.变参函数的调用方式和普通函数相同:</p>
+
+<pre><code class="{.clojure}">(defn log
+  [message &amp; args]
+  (println "args: " args))
+
+(log "message from " "192.0.0.76")
+</code></pre>
+
+<p>在REPL中执行:</p>
+
+<pre><code class="{.bash}">user=&gt; (log "message from " "192.0.0.76")
+args:  (192.0.0.76)
+
+user=&gt; (log "message from " "192.0.0.76" "service:xyz")
+args:  (192.0.0.76 service:xyz)
+</code></pre>
+
+<p>你可以看到,可选的参数被包装到了一个list里面.</p>
+
+<h2>具名参数(Named Parameters)</h2>
+
+<p>具名参数是通过对变参函数的解构来实现的.</p>
+
+<p>从解构变参函数的立场上来看,具名参数具有较好的可读性.下面是一个例子:</p>
+
+<pre><code class="{.clojure}">(defn job-info
+  [&amp; {:keys [name job income] :or {job "unemployed" income "$0.00"}}]
+  (if name
+    [name job income]
+    (println "No name specified")))
+</code></pre>
+
+<p>使用函数方式如下:</p>
+
+<pre><code class="{.bash}">user=&gt; (job-info :name "Robert" :job "Engineer")
+["Robert" "Engineer" "$0.00"]
+
+user=&gt; (job-info :job "Engineer")
+No name specified
+</code></pre>
+
+<p>如果不使用变参列表,那么你需要使用形如{:name "Robert" :job "Engineer"}这样的map作为参数.</p>
+
+<p>关键字的默认值依据:or后跟的map来确定.如果关键字没有传递值,且无默认值,则为nil.</p>
+
+<h1>高阶函数</h1>
+
+<p>高阶函数是将其它函数作为参数的函数.高阶函数在函数式编程中是很重要的技术,在Clojure中经常使用到.一个高阶函数的例子是将一个函数和一个集合作为参数,返回符合这个函数条件的集合.在Clojure中,这叫做clojure.core/filter:</p>
+
+<pre><code class="{.clojure}">(filter even? (range 0 10))  ;=&gt;(0 2 4 6 8)
+</code></pre>
+
+<p>上面的例子中,clojure.core/filter函数接收clojure.core/even?作为参数.
+clojure.core中有很多高阶函数.经常使用的函数请参见<a href="http://clojure-doc.org/articles/language/core_overview.html">clojure.core</a></p>
+
+<h1>私有函数</h1>
+
+<p>在Clojure中,函数可以在其命名空间中设置为私有的.</p>
+
+<p>具体细节请参考<a href="http://clojure-doc.org/articles/language/namespaces.html">这里</a></p>
+
+<h1>关键字作为函数</h1>
+
+<p>在Clojure中,关键字可以作为函数使用.他们接收map或record并从中查找信息:</p>
+
+<pre><code class="{.clojure}">(:age {:age 27 :name "Michael"})  ; ⇒ 27
+</code></pre>
+
+<p>他们经常和高阶函数结合使用:</p>
+
+<pre><code class="{.clojure}">(map :age [{:age 45 :name "Joe"} {:age 42 :name "Jill"} {:age 17 :name "Matt"}])  ; ⇒ (45 42 17)
+</code></pre>
+
+<p>也能和->宏一起使用:</p>
+
+<pre><code class="{.clojure}">(-&gt; [{:age 45 :name "Joe"} {:age 42 :name "Jill"}] first :name)  ; ⇒ "Joe"
+</code></pre>
+
+<h1>Map作为函数</h1>
+
+<p>Clojure的Map也能作为函数使用,来查找key对应的value:</p>
+
+<pre><code class="{.clojure}">({:age 42 :name "Joe"} :name)     ; ⇒ "Joe"
+({:age 42 :name "Joe"} :age)      ; ⇒ 42
+({:age 42 :name "Joe"} :unknown)  ; ⇒ nil
+</code></pre>
+
+<p>需要注意的是,虽然大部分情况下map和record可以等同对待,但是这里不行!record不能作为函数使用!</p>
+
+<h1>Set作为函数</h1>
+
+<pre><code class="{.clojure}">(#{1 2 3} 1)   ; ⇒ 1
+(#{1 2 3} 10)  ; ⇒ nil
+
+(#{:us :au :ru :uk} :uk)  ; ⇒ :uk
+(#{:us :au :ru :uk} :cn)  ; ⇒ nil
+</code></pre>
+
+<p>此功能被用来验证某值是否在set中:</p>
+
+<pre><code class="{.clojure}">(when (countries :in)
+  (comment ...))
+
+(if (countries :in)
+  (comment Implement positive case)
+  (comment Implement negative case))
+</code></pre>
+
+<p>因为在Clojure中除了false和nil,其它值都是true.</p>
+
+<h1>函数作为比较器</h1>
+
+<p>Clojure函数实现了java.util.Comparator接口,所以能作为比较器使用.</p>
+
+<h1>结束语</h1>
+
+<p>函数是Clojure的核心.他们通过defn宏来定义,可以有多个元数,不定参数并支持参数解构.</p>
+
+<p>函数参数和返回值可以有类型提示,当然这不是必须的.</p>
+
+<p>函数是一等值,它能被传递给其它函数.这是函数式编程的基石.</p>
+
+<p>有一些数据类型有函数特性.适时的使用这些特性可以是代码更简洁易读.</p>
+
+<h1>贡献</h1>
+
+<p>Michael Klishin michael@defprotocol.org, 2012 (original author)
+Translated by Ivan 2014</p>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2014/02/19/math.html" title="Clojure教程-数学计算 "><p> <i class="fa fa-mail-reply"></i>&nbsp;Clojure教程-数学计算</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2014/05/11/record_protocol.html" title="Clojure教程-Record和Protocol"><p>Clojure教程-Record和Protocol&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Clojure教程-函数" data-thread-key="/2014/03/15/function" data-url="/2014/03/15/function.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

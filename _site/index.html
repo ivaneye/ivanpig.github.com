@@ -123,7 +123,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">theme (1)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
             
             
         
@@ -160,14 +160,14 @@
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2014/02/02/basic.html">Clojure教程-基本语法</a></h2>
+        <h2 class="post-title"><a href="/2014/10/02/clojure_spels.html">Clojure进阶:使用Clojure编写文字冒险游戏</a></h2>
 
-        <p class="post-meta">By 02月02日  2014
+        <p class="post-meta">By 10月02日  2014
             
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (2)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
             
             
             
@@ -176,7 +176,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
             
             
         
@@ -186,627 +186,136 @@
 </header>
 
 <div class="post-description">
-    <h1>简介</h1>
+    <p>本文翻译自:<a href="http://www.lisperati.com/clojure-spels/casting.html">Casting SPELs in Clojure</a></p>
 
-<p>学习一门语言最好的方法就是去使用它。我们就从一个小例子来学习Clojure语法.</p>
+<p><img src="/assets/clojure/cs_01.jpg" alt="" /></p>
 
-<h1>核心语法</h1>
+<h1>准备</h1>
 
-<p>首先先来看一下Clojure的核心语法。</p>
+<p>任何学过Lisp的人都会说List和其它语言有很大的不同.它有很多不可思议的地方.本文将告诉你它有哪些独特之处!</p>
 
-<p>Clojure的使用的是Lisp语法,又叫S表达式。核心语法非常的简单。但是对于熟悉c系语法(c,c++,java)的朋友来说，第一次接触会非常的不习惯。</p>
+<p>本文适用于Clojure,它是一个运行在JVM上的Lisp方言.Clojure的API和语法和
+Common Lisp很类似,但是还是有足够多的区别,需要单独为其写个教程.</p>
+
+<p>在大部分情况下,我们会说Lisp而不是Clojure,因为大部分的概念在Lisp中是通用的.我们会指出Clojure特有的内容.</p>
+
+<p><img src="/assets/clojure/cs_02.jpg" alt="" /></p>
+
+<p>Clojure是运行在JVM之上的,所以你需要先安装JVM.如果你是MAC机,那么Java已经被安装过了.如果是Linux或者Windows系统,你需要到<a href="http://java.sun.com/javase/downloads/index.jsp">Oracle Java官网</a>下载对应版本的Java.</p>
+
+<p>而Clojure,你可以从它的<a href="http://clojure.org/">官网</a>获得最新版本.下载完成后,你只需要解压缩,打开命令行,切换到解压缩目录,输入:</p>
+
+<pre><code class="{.bash}">java -jar clojure.jar
+</code></pre>
+
+<p>如果没有问题,那么你将会看到Clojure输出提示</p>
+
+<pre><code class="{.bash}">Clojure 1.6.0
+user=&gt;
+</code></pre>
+
+<p>教程中有很多Clojure代码片段,类似下面的样子:</p>
+
+<pre><code class="{.clojure}">'(these kinds of boxes)
+</code></pre>
+
+<p>你只需要将这些代码片段拷贝到Clojure REPL中运行就可以了!当你学习完此教程,你将会有一个你自己的文字冒险游戏了!</p>
+
+
+
+
+    <a href="/2014/10/02/clojure_spels.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/10/01/dsl.html">Clojure进阶:使用Clojure构建DSL</a></h2>
+
+        <p class="post-meta">By 10月01日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>翻译自<a href="http://clojure-doc.org/articles/tutorials/growing_a_dsl_with_clojure.html">Growing a DSL with Clojure</a>.主要讲解如何使用</p>
+
+<p>Clojure来创建一个简单的DSL.包括如下知识点:</p>
 
 <ul>
-<li>所有代码以"("开始,")"结束。即所有的代码都被()包裹</li>
-<li>"("后的第一个数据被当作函数或者宏来调用</li>
-<li>接着的数据被当作参数传递</li>
-<li>如果想原样返回数据，在"("前面添加"'"。此写法是(quote (...))的简写</li>
+<li>多重方法(Multimethods)</li>
+<li>继承(Hierarchies)</li>
+<li>元编程及"代码即数据"哲学(Metaprogramming and the "Code as data" philosophy)</li>
 </ul>
 
 
-<p>以前面的hello world程序为例。</p>
+<p>Lisp及其方言(比如Clojure)可以很方便的创建DSL并能和源语言无缝的集成.</p>
 
-<pre><code class="{.clojure}">(println "Hello World")
+<p>Lisp界鼓吹的优点中，提到最多的可能就是:数据即代码，代码即数据了。在此文中我们将依此特性来定义一个DSL。</p>
+
+<p>我们将渐进式的开发这个DSL，不断的加入Clojure的特性和抽象。</p>
+
+<h1>任务</h1>
+
+<p>我们的目标是定义一个可以生成各种脚本语言的DSL.而且DSL代码看起来和普通的Clojure代码没有区别。</p>
+
+<p>例如,我们使用Clojure形式(form)来生成Bash脚本或者Windows批处理脚本:</p>
+
+<p>输入(Clojure形式):</p>
+
+<pre><code class="{.clojure}">(if (= 1 2)
+  (println "a")
+  (println "b"))
 </code></pre>
 
-<p>它以"("开始，后面跟的是函数println，接着空格跟的是参数"HelloWorld"，最后")"结尾。</p>
+<p>输出(Bash脚本):</p>
 
-<p>了解了如上规则，你就基本学会了Clojure的大部分语法。</p>
-
-<p>下面比较一下Clojure,Java,Python,Ruby的一些语法.</p>
-
-<table>
-<thead>
-<tr>
-<th style="text-align:left;"> Clojure 表达式</th>
-<th style="text-align:left;"> 对应的 Java 语法   </th>
-<th style="text-align:left;"> 对应的 Python 语法 </th>
-<th style="text-align:left;">对应的 Ruby 语法</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;"> (not k)                        </td>
-<td style="text-align:left;"> !k                           </td>
-<td style="text-align:left;"> not k                   </td>
-<td style="text-align:left;"> not k or !k                                       </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (inc a)                        </td>
-<td style="text-align:left;"> a++、++a、a += 1、a + 1<sup>a</sup>    </td>
-<td style="text-align:left;"> a += 1、a + 1           </td>
-<td style="text-align:left;"> a += 1                                              </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (/ (+ x y) 2)                  </td>
-<td style="text-align:left;"> (x + y) / 2                  </td>
-<td style="text-align:left;"> (x + y) / 2             </td>
-<td style="text-align:left;"> (x + y) / 2                                       </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (instance? java. util.List al) </td>
-<td style="text-align:left;"> al instanceof java.util.List </td>
-<td style="text-align:left;"> isinstance(al,list)     </td>
-<td style="text-align:left;"> al.is_a? Array                                    </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (if (not a) (inc b) (dec b))   </td>
-<td style="text-align:left;"> !a ? b + 1 : b - 1           </td>
-<td style="text-align:left;"> b + 1 if not a else b-1 </td>
-<td style="text-align:left;"> !a ? b + 1 : b - 1                                </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (Math/pow 2 10)<sup>c</sup>              </td>
-<td style="text-align:left;"> Math.pow(2, 10)              </td>
-<td style="text-align:left;"> pow(2, 10)              </td>
-<td style="text-align:left;"> 2 ** 10                                           </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (.someMethod someObj "foo" (.otherMethod otherObj 0)) </td>
-<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
-<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
-<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
-</tr>
-</tbody>
-</table>
-
-
-<p>可以看出Clojure的语法有高度的一致性，即使你不熟悉S表达式，但是依据上面的原则，可以看懂它想表达的是一个什么意思。</p>
-
-<p>而对于其他三门语言，如果你没有一个个的学习相应的语法，你还是比较难理解它的意思的。</p>
-
-<h1>代码功能</h1>
-
-<p>了解了核心语法，我们就可以来编写代码了。我们要编写的代码功能很简单，进行简繁翻译，其中过滤不需要翻译以及需要特殊翻译的文字。我们将分几步来完成:</p>
-
-<ul>
-<li>读取简繁字典</li>
-<li>进行简繁翻译</li>
-<li>读取不需要翻译的文字</li>
-<li>过滤不翻译的文字</li>
-<li>提供给Java调用</li>
-<li>打包</li>
-</ul>
-
-
-<h2>读取简繁字典</h2>
-
-<ul>
-<li>语法点
-
-<ul>
-<li>查看Clojure API</li>
-<li>第一个函数的编写</li>
-<li>Namespace的引入</li>
-<li>正则表达式</li>
-<li>Clojure字面量</li>
-</ul>
-</li>
-</ul>
-
-
-<p>我们先看第一个功能。我们要读取简繁字典。简繁字典其实就是简繁对照的文件，我这里叫jfmap.clj 格式如下:</p>
-
-<pre><code class="{.example}">万 萬 与 與 丑 醜 专 專 业 業 丛 叢 东 東 丝 絲 丢 丟 两 兩 严 嚴 丧 喪 个 個 丬 爿
+<pre><code class="{.bash}">if [ 1 -eq 2 ]; then
+  echo "a"
+else
+  echo "b"
+fi
 </code></pre>
 
-<p>这里只是简单的列了一点。具体内容请见附件。有了这个文件，我们如何把内容读出来呢？熟悉Java的都知道，我们要创建文件流来读取，然后要打开流，循环读取，最后关闭流，还要抓异常。很繁琐。</p>
-
-<p>在Clojure中如何处理呢？Clojure提供了slurp函数，可以根据提供的路径将文件内容读入。API如下:</p>
-
-<pre><code class="{.clojure}">clojure.core/slurp
-([f &amp; opts])
-  Opens a reader on f and reads all its contents, returning a string.
-  See clojure.java.io/reader for a complete list of supported arguments.
-</code></pre>
-
-<p>OK。我们知道了要用什么函数。那么根据API和上面说的总规则，我们来写代码.</p>
-
-<ul>
-<li>首先是"("</li>
-<li>然后是函数名slurp</li>
-<li>空格，参数。这里是要读取的文件路径</li>
-<li>最后")"</li>
-</ul>
-
-
-<pre><code class="{.clojure}">(slurp "jfmap-path")
-</code></pre>
-
-<p>你可以在REPL里面去实验这行代码的执行结果。执行此行代码，clojure会将jfmap.clj的内容以字符串的形式全部读入。</p>
-
-<p>接着呢？要做简繁翻译，字符串肯定不方便我们的操作。很明显map才是最适合的数据结构。那么我们如何将字符串变成map呢？</p>
-
-<p>我们只能求助于API了，你可以在<a href="http://clojure.github.io/clojure/api-index.html">Clojure的Index页面</a>搜索map,可以找到hash-map函数。它的API说明如下:</p>
-
-<pre><code class="{.example}">hash-map
-function
-Usage: (hash-map)
-       (hash-map &amp; keyvals)
-keyval =&gt; key val
-Returns a new hash map with supplied mappings.  If any keys are
-equal, they are handled as if by repeated uses of assoc.
-</code></pre>
-
-<p>根据提供的映射关系返回一个新的hashmap。而这里我们是一个字符串，如何提供映射关系呢？按照空格将文字切开就行了嘛！！继续找API。</p>
-
-<p>Java里有split方法，Clojure里有没有相应的函数呢？试试再说。。有了！在clojure.string的Namespace(Namespace和Java中的包类似，但是在Clojure中叫Namespace。这里没有将其翻译为命名空间，主要是怕有误解。)中，我们找到了叫split的函数！</p>
-
-<pre><code class="{.example}">split
-function
-Usage: (split s re)
-       (split s re limit)
-Splits string on a regular expression.  Optional argument limit is
-the maximum number of splits. Not lazy. Returns vector of the splits.
-</code></pre>
-
-<p>通过正则表达式来切割字符串。看着挺像，先用再说！我们有repl嘛！直接在
-repl里面输入</p>
-
-<pre><code class="{.clojure}">(split "万 萬" #" ")
-</code></pre>
-
-<p>执行!Oops,报错了！</p>
-
-<pre><code class="{.example}">CompilerException java.lang.RuntimeException: Unable to resolve symbol: split in this context
-</code></pre>
-
-<p>找不到split?!如果在Java中报类似的错误，你会想到什么？没有引入包阿！</p>
-
-<p>这里也是。在Java中会默认引入java.lang包，同理在Clojure中会引入clojure.core和java.lang包。其他包则要自己引入，这里split在clojure.string包中。所以你需要引入clojure.string包。</p>
-
-<pre><code class="{.clojure}">(require 'clojure.string)
-</code></pre>
-
-<p>这也就是调用了require函数来进行引入！为什么clojure.string前面有个单引号呢？想想核心语法！这里暂不展开说！给大家留个思考题！！后续会专门对命名空间引入做详细介绍！</p>
-
-<p>光引入还没用！调用代码也需要修改！</p>
-
-<pre><code class="{.clojure}">(clojure.string/split "万 萬" #" ")
-</code></pre>
-
-<p>你可能要吐槽了！既然引入了，为什么还要加Namespace前缀？！</p>
-
-<p>我们可以和Java作个比较！如果这里是Java的话，那么我们在调用split的时候，实际上是需要一个类作为前缀的，比如StringUtils.split()!但是在clojure中并没有类的概念！Namespace下面只有函数，所以它使用命名空间来确保函数的唯一性引用！</p>
-
-<p>当然了每次都要写这么长的命名空间的名字也是挺烦人的。Clojure提供了简写.</p>
-
-<pre><code class="{.clojure}">(require ['clojure.stirng :as 'cstr])
-(cstr/split "万 萬" #" ")
-</code></pre>
-
-<p>:as是Keyword,是Clojure字面量的一种。它和String很类似，不过有些区别，它比String有更多的功能。
-下表是Clojure所包含的字面量。</p>
-
-<table>
-<thead>
-<tr>
-<th>Type   </th>
-<th>     Example(s)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> Boolean    </td>
-<td> true,false</td>
-</tr>
-<tr>
-<td> Character  </td>
-<td> \a</td>
-</tr>
-<tr>
-<td> Keyword    </td>
-<td> :tag,:doc</td>
-</tr>
-<tr>
-<td> List       </td>
-<td> (1 2 3),(println "foo")</td>
-</tr>
-<tr>
-<td> Map        </td>
-<td> {:name "Bill",:age 42}</td>
-</tr>
-<tr>
-<td> Nil        </td>
-<td> nil</td>
-</tr>
-<tr>
-<td> Number     </td>
-<td> 1,4.2</td>
-</tr>
-<tr>
-<td> Set        </td>
-<td> #{:snap :crackle :pop}</td>
-</tr>
-<tr>
-<td> String     </td>
-<td> "hello"</td>
-</tr>
-<tr>
-<td> Symbol     </td>
-<td> user/foo,java.lang.String</td>
-</tr>
-<tr>
-<td> Vector     </td>
-<td> [1 2 3]</td>
-</tr>
-</tbody>
-</table>
-
-
-<p>ok.终于得到了我们要的结果。</p>
-
-<p>这里的#""是正则表达式(这是你遇到的第一个特殊语法，学习方法---死记！！)，它构建了Java中的Pattern，所以正则表达式内容和Java完全相同，这里就不废话了。你只需要记住其语法就行了。</p>
-
-<p>切开了字符串，我们来生成map吧！如何生成呢？你应该有答案了吧？</p>
-
-<pre><code class="{.clojure}">(hash-map (cstr/split "万 萬" #" "))
-</code></pre>
-
-<p>又报错了！</p>
-
-<pre><code class="{.example}">IllegalArgumentException No value supplied for key: ["万" "萬"]  clojure.lang.PersistentHashMap.create (PersistentHashMap.java:77)
-</code></pre>
-
-<p>不合法的参数！！split得到的是个Vector([]包裹的数据结构是Vector),而hash-map要的参数类似于Java中的可变参数！如何匹配这两者呢？</p>
-
-<p>Clojure中提供了apply函数!API如下</p>
-
-<pre><code class="{.clojure}">clojure.core/apply
-([f args] [f x args] [f x y args] [f x y z args] [f a b c d &amp; args])
-  Applies fn f to the argument list formed by prepending intervening arguments to args.
-</code></pre>
-
-<p>此函数有点特别！它的第一个参数是函数，后面是该函数所需要的参数！知道怎么调用吗？</p>
-
-<pre><code class="{.clojure}">(apply hash-map (cstr/split "万 萬" #" "))
-</code></pre>
-
-<p>终于成功了！！我们看到了结果</p>
-
-<pre><code class="{.clojure}">{"万" "萬"}   ;以{}包裹的数据结构是map
-</code></pre>
-
-<p>最后呢！我们需要对jfmap.clj的内容进行处理！So easy!</p>
-
-<pre><code class="{.clojure}">(apply hash-map (cstr/split (slurp "jfmap-path") #" "))
-</code></pre>
-
-<h2>进行简繁翻译</h2>
-
-<ul>
-<li>语法点
-
-<ul>
-<li>var的定义</li>
-<li>函数的定义</li>
-<li>闭包的使用</li>
-</ul>
-</li>
-</ul>
-
-
-<p>上一节我们完成了对jfmap.clj的读取，并生成了hashmap。但是呢，如果我们每次要使用jfmap.clj的时候都要写</p>
-
-<pre><code class="{.clojure}">(apply hash-map (cstr/split (slurp "jfmap-path") #" "))
-</code></pre>
-
-<p>太麻烦了。在Java中的可以将其封装为一个方法来进行调用。Clojure也可以将其封装为函数:</p>
-
-<pre><code class="{.clojure}">(defn read-map
-  "Read trans map from file"
-  [path]
-  (apply hash-map (clstr/split (slurp path) #" ")))
-</code></pre>
-
-<p>defn是个宏，宏的定义后面讨论。</p>
-
-<p>defn是用来定义有名函数的。read-map就是函数名，和Java中的驼峰式取名不同，List系的取名方式一般是使用"-"。给出的原因是大写字母要按两个按键，"-"只需要按一个按键！！</p>
-
-<p>紧接着函数名的是注释，类似Java中的注释，不同的是其双引号内的内容可以多行。后面的vector是参数
-列表，最后就是函数体了。</p>
-
-<p>现在当你再读取jfmap的时候。只需要这样调用:</p>
-
-<pre><code class="{.clojure}">(read-map "jfmap-path")
-</code></pre>
-
-<p>比刚才简单了很多。但是每次都要去读取，还是不够方便。在Java中会将其赋值给一个变量，然后去调用。Clojure当然也可以。</p>
-
-<pre><code class="{.clojure}">(def jfmap (read-map "jfmap-path"))
-</code></pre>
-
-<p>然后你直接操作jfmap就可以了。 现在我们就来按照jfmap来进行简繁翻译吧！</p>
-
-<p>你可能会想，很简单吧？只需要遍历需要翻译的字符串，然后到jfmap中去找对应的翻译，然后将翻译组装成字符串就行了。so easy!但当你这么想的时候，你已经陷入到了实现的细节中了！Clojure让你能够更加的关注业务而不是实现细节！</p>
-
-<p>这里给出的建议是：
-<strong>请先查找Clojure是否可通过函数组合来解决问题？如果不能再考虑自己编写函
-数！</strong></p>
-
-<p>为什么这么说呢？因为在Clojure中大部分的问题都可以通过其提供的函数组合来解决。你需要做的就是根据需要来组合函数！这使你能更多的思考业务而非实现细节！比如这里的问题！ 我们需要一个函数：</p>
-
-<ol>
-<li>接受一个字符串</li>
-<li>返回翻译完成的字符串</li>
-</ol>
-
-
-<p>很简单，我们先编写函数的定义。这里我们叫translate。</p>
-
-<pre><code class="{.clojure}">(defn translate
-  "Trans string by map"
-  [s]
+<p>输出(Windows批处理):</p>
+
+<pre><code class="{.bash}">IF 1==2 (
+  ECHO a
+) ELSE (
+  ECHO b
 )
 </code></pre>
 
-<p>然后呢？需要翻译字符串。这里叫翻译字符串，实际上就是根据map的key找到value而已。在Clojure中找到这样的函数就可以了。你可以找到get函数。</p>
 
-<pre><code class="{.clojure}">(get map k default)
-</code></pre>
 
-<p>很好理解吧？根据k从map中查找value，如果找不到则返回default。其实这就是核心代码了！</p>
 
-<p>我们知道map就是我们这里的jfmap，k实际上是获取的字符串的每个字符，而default呢？这里如果我们根据k找不到的话，就直接返回k，也就是不翻译了。所以代码修改为:</p>
-
-<pre><code class="{.clojure}">(get jfmap k k)
-</code></pre>
-
-<p>现在只需要解决k就行了！继续寻找函数！现在需要的是在Clojure中用得还比较多的一个函数---map!</p>
-
-<pre><code class="{.clojure}">clojure.core/map
-([f coll] [f c1 c2] [f c1 c2 c3] [f c1 c2 c3 &amp; colls])
-  Returns a lazy sequence consisting of the result of applying f to the
-  set of first items of each coll, followed by applying f to the set
-  of second items in each coll, until any one of the colls is
-  exhausted.  Any remaining items in other colls are ignored. Function
-  f should accept number-of-colls arguments.
-</code></pre>
-
-<p>看到作用了吗？将函数应用到序列的每个元素上去！并返回一个由结果组成的lazy序列！你可能会问了：这是针对序列的，对字符串有效吗？试试不就知道了？</p>
-
-<pre><code class="{.clojure}">(map class "aaa")
-</code></pre>
-
-<p>在repl里面输入如上的代码！你看到了什么？java.lang.Character?!没错，字符串会被当作字符序列来操作！但是我们需要的是字符串啊？没关系，我们有str函数!</p>
-
-<pre><code class="{.clojure}">(map (comp class str) "aaa")
-</code></pre>
-
-<p>comp是个什么东东？它的作用是将多个函数组合起来，从右向左的执行！！这里就是先执行str再执行class,可以看到结果打印的是java.lang.String,正是我们需要的。</p>
-
-<p>OK，现在我们来组合这两个函数就行了.但是问题又来了！map的第二个参数是个函数，我们怎么办呢？既然它需要函数，那我们就定义一个给它咯！</p>
-
-<pre><code class="{.clojure}">(defn tmp [k]
-   (get jfmap k k))
-
-(defn translate
-  "Trans string by map"
-  [s]
-  (map tmp s)
-)
-</code></pre>
-
-<p>你可能要抱怨了！取了个什么烂名字！！居然叫tmp?!呵呵，别急！我把函数定义为tmp，是因为我要将优化掉！可以看出，这个功能非常的简单，而且只会给translate使用，那么我们需要特意定义一个单独的函数吗？</p>
-
-<p>不需要吧？我们直接将两个函数合并好了！</p>
-
-<pre><code class="{.clojure}">(defn translate
-  "Trans string by map"
-  [s]
-  (map (defn tmp [k] (get jfmap k k)) s))
-</code></pre>
-
-<p>很简单，但是呢！既然都放到函数内部了！还需要函数名吗？</p>
-
-<p>就像Java中的匿名内部类一样，直接定义直接使用，不需要名字！</p>
-
-<p>在Clojure中有fn这个specialform来定义匿名函数！</p>
-
-<p>上面说defn是个宏！它的功能就类似于(还有其他功能，比如注释)：</p>
-
-<pre><code class="{.clojure}">(def tmp (fn [k] (get jfmap k k)))
-</code></pre>
-
-<p>我们使用fn来简化一下代码!</p>
-
-<pre><code class="{.clojure}">(defn translate
-  "Trans string by map"
-  [s]
-  (map (fn [k] (get jfmap k k)) s))
-</code></pre>
-
-<p>舒服很多！还能更简单吗？当然！Clojure提供了#这个语法糖来定义匿名函数!</p>
-
-<pre><code class="{.clojure}">(defn translate
-  "Trans string by map"
-  [s]
-  (map #(get jfmap k k) s))
-</code></pre>
-
-<p>好！问题来了！这里没有了参数列表！那get函数怎么知道k是个什么东西呢？所以，这里使用%来替换，第一个参数用%或者%1替换，第二个则是%2,依次类推！</p>
-
-<pre><code class="{.clojure}">(defn translate
-  "Trans string by map"
-  [s]
-  (map #(get jfmap % %) s))
-</code></pre>
-
-<p>搞定了吗？没有！translate需要返回一个字符串，而map返回的是个lazy序列！需要将序列转化为字符串！到clojure.string找找！有个join函数</p>
-
-<pre><code class="{.clojure}">(defn translate
-  "Trans string by map"
-  [s]
-  (clstr/join (map #(get jfmap % %) s)))
-</code></pre>
-
-<p>不废话了！记得要引入Namespace哦！！</p>
-
-<p>实际上一行代码我们就搞定了基本的翻译了！很简单吧？</p>
-
-<h2>读取不需要翻译的文字</h2>
-
-<ul>
-<li>复习</li>
-</ul>
-
-
-<p>翻译的字，是使用的map来存储的？那不需要翻译的文字该如何存储呢？这要看你如何处理了！我这里采用的是一个很简单的方式！</p>
-
-<ol>
-<li>首先对文字全文翻译</li>
-<li>然后对翻译后的文字再反翻译</li>
-</ol>
-
-
-<p>比如说，"阿里山"直接翻译的话，那么就会变成"阿裡山"，但是"里"字是不需要翻译的。</p>
-
-<p>那么我就新建一个map，保存"阿裡山"->"阿里山"，将文字再翻回来！</p>
-
-<p>那么这里我就再需要一个类似jfmap.clj的文件就可以了。我这里叫ntmap.clj。</p>
-
-<p>格式和jfmap.clj类似！只不过里面存储的是需要反翻译的文字!</p>
-
-<p>如何读取和组装map?不需要我废话吧？</p>
-
-<h2>过滤不翻译的文字</h2>
-
-<ul>
-<li>Special Form
-
-<ul>
-<li>let</li>
-<li>loop</li>
-<li>if</li>
-<li>recur</li>
-</ul>
-</li>
-</ul>
-
-
-<p>过滤不翻译的文字，实际上就是反翻译!如何进行呢？原来在翻译的过程中我们是一个字符一个字符的匹配的！但是这里是一个一个的字符串！这就比较难办了！</p>
-
-<p>不管怎么说我们先定义函数!</p>
-
-<pre><code class="{.clojure}">(defn do-trans
-  [s tmap ntmap]
-   )
-</code></pre>
-
-<p>首先第一件事就是去全文翻译！然后获得结果！提供给后续函数使用！</p>
-
-<p>Java中有局部变量！只需要将变量写在方法里就可以了！但是在Clojure中不同，它需要通过let这个Special Form来处理。</p>
-
-<pre><code class="{.clojure}">(defn do-trans
-  [s tmap ntmap]
-  (let [re (translate s tmap)]
-
-))
-</code></pre>
-
-<p>let后面是个Vector，用来进行var绑定，这里translate翻译的结果会被绑定到re这个var上！而re的作用范围就只在let这个括号内部！</p>
-
-<p>接着呢！就是对re进行反翻译！没啥现成的函数了！只能自己处理！代码如下！</p>
-
-<pre><code class="{.clojure}">(defn do-trans
-  [s tmap ntmap]
-  (let [re (translate s tmap)]
-    (loop [result re
-           k (keys ntmap)]
-      (if (seq k)
-        (recur (clstr/replace result (first k) (ntmap (first k))) (rest k))
-          result))))
-</code></pre>
-
-<p>loop又是个Special Form，看起来像循环！实际上它是个递归！</p>
-
-<p>loop后面也是个参数Vector，功能和let的相同！这里将re绑定到了result，以及ntmap的key绑定到了k上！</p>
-
-<p>然后是if判断，还是个Special Form，(seq k)判断k是否是个序列！如果是则执行recur，如果不是则返回result.其实seq并不是判断函数！</p>
-
-<p>它是用来构建序列的！这里之所以能用来判断，基于两个原因：</p>
-
-<ol>
-<li>在Clojure中除了nil和false是假，其他全是真</li>
-<li>(seq nil)和(seq ())返回nil</li>
-</ol>
-
-
-<p>然后seq就可以用来作为判断条件了！</p>
-
-<p>recur是递归调用！这里调用的是loop，传递的参数是替换后的s和剩余的k.</p>
-
-<p>实际功能就是，遍历ntmap中的key，如果找到了，则使用value替换掉！</p>
-
-<p>至此，就完成了翻译的所有功能！考虑下如果使用Java需要多少行代码？？</p>
-
-<p>测试翻译一个页面的时间为70毫秒左右，速度还是不错的！</p>
-
-<h2>提供给Java调用</h2>
-
-<p>Clojure提供了将函数给Java调用的功能！</p>
-
-<p>首先，在core.clj文件中编写函数，比如下面的翻译:</p>
-
-<pre><code class="{.clojure}">(defn -transAll
-  "翻译所有"
-  [source mapPath]
-  (trans/translate source (trans/read-map mapPath) ""))
-</code></pre>
-
-<p>函数名前面一定要有个"-"。 然后在命名空间里添加如下代码</p>
-
-<pre><code class="{.clojure}">(ns jft.core
-;这里开始
- (:gen-class
-   :name jft.core.Trans
-   :methods [#^{:static true} [transAll [String String] String]])
-;这里结束
-  (:require [clojure.string :as cstr]
-            [jft.trans :as trans])
-)
-</code></pre>
-
-<p>应该不难理解吧？name是在Java中import的时候的名字！methods是可以调用的方法,这里注解为静态方法！</p>
-
-<p>注意这里的transAll前面是没有"-"的，后面是参数和返回类型！</p>
-
-<h2>打包</h2>
-
-<p>需要给Java调用，那就要先封装为jar包。非常简单</p>
-
-<pre><code class="{.bash}">lein jar
-</code></pre>
-
-<p>然后就可以提供给Java调用了！</p>
-
-<h1>源码</h1>
-
-<p><a href="/assets/clojure/jft.zip">jft</a></p>
-
-
-
-    <a href="/2014/02/02/basic.html" class="post-categorybut">阅读全文</a>
+    <a href="/2014/10/01/dsl.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -820,14 +329,14 @@ repl里面输入</p>
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2014/02/01/first_step.html">Clojure教程-环境搭建与Hello World</a></h2>
+        <h2 class="post-title"><a href="/2014/08/29/namespace.html">Clojure教程-命名空间</a></h2>
 
-        <p class="post-meta">By 02月01日  2014
+        <p class="post-meta">By 08月29日  2014
             
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (2)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
             
             
             
@@ -836,7 +345,7 @@ repl里面输入</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
             
             
         
@@ -846,64 +355,236 @@ repl里面输入</p>
 </header>
 
 <div class="post-description">
-    <h1>环境搭建</h1>
+    <h1>版本</h1>
 
-<p>Clojure是JVM上的一种语言，其语法是Lisp格式，所以称为是JVM上的Lisp方言。</p>
+<p>本文翻译自<a href="http://clojure-doc.org/articles/language/namespaces.html">Clojure Namespaces and Vars</a></p>
 
-<p>Clojure依赖于JDK。请确保你的机器上安装了JDK6+。Clojure的安装非常的简单。
-可以分为两种方式:</p>
+<p>本文涵盖如下内容:</p>
 
 <ul>
-<li>通过Leiningen安装</li>
-<li>手动安装</li>
+<li>Clojure命名空间和var概述</li>
+<li>如何定义命名空间</li>
+<li>如何使用其它命名空间里的函数</li>
+<li>require,refer和use</li>
+<li>常见错误和典型错误,以及导致这些错误的原因</li>
+<li>命名空间和代码管理</li>
 </ul>
 
 
-<p>通过Leiningen是比较普遍也很方便的方式。我们先通过Leiningen来安装。</p>
+<p>版权:</p>
 
-<h2>通过Leiningen安装</h2>
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
 
-<p>Leiningen和Maven比较类似，是Clojure语言的管理工具。其实它就是基于Maven
-构建的。我们先来安装Leiningen</p>
+<p>涵盖Clojure版本:Clojure 1.5</p>
+
+<h1>概述</h1>
+
+<p>Clojure的函数通过命名空间来组织.Clojure命名空间和Java的包或者Python的模块很类似.命名空间实际上就是个map,将名字映射到了var上.在大部分情况下,这些var持有这些函数.</p>
+
+<h1>定义一个命名空间</h1>
+
+<p>一般情况下使用clojure.core/ns宏来定义命名空间.最基本的形式下,它将名字作为符号.</p>
+
+<pre><code class="clojure">(ns superlib.core)
+</code></pre>
+
+<p>命名空间可以由点号切割的好多段组成</p>
+
+<pre><code class="clojure">(ns megacorp.service.core)
+</code></pre>
+
+<p>需要注意的是,请尽量避免使用单段的命名空间,以免与其它开发人员的命名空间相冲突.如果库或者应用属于某个组织,那么建议以如下形式作为命名空间.[组织名称].[包名|应用名].[函数组名]
+例如</p>
+
+<pre><code class="clojure">(ns clojurewerkz.welle.kv)
+
+(ns megacorp.search.indexer.core)
+</code></pre>
+
+
+
+
+    <a href="/2014/08/29/namespace.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/05/11/record_protocol.html">Clojure教程-Record和Protocol</a></h2>
+
+        <p class="post-meta">By 05月11日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>本文翻译自:<a href="http://www.jayway.com/2013/02/05/learn-clojure-using-records-and-protocols/">Learn Clojure using records and protocols</a></p>
+
+<p>当我对Clojure的括号不再疑惑后,另一个让我质疑为何要学习Clojure的问题是使用REPL很爽,但是我怎么来构建大型项目?".</p>
+
+<p>实际上,由于我的面向对象编程经验,我其实要问的是"我怎么才能将函数封装到类似class的东西里面去?".</p>
+
+<p>在本文中,我将会介绍一种类似于Java的方式来构建大型的Clojure项目.</p>
+
+<p>通过这种方式,希望你在学习Clojure的时候不会有太大的差异感!</p>
+
+<p>在Java中,我们出于各种目的而使用类.例如典型的使用Spring的web应用,你会看到类似下面的结构:</p>
 
 <ul>
-<li>首先下载<a href="https://raw.github.com/technomancy/leiningen/stable/bin/lein">lein
-script</a></li>
-<li>将lein script放置到你的path下(linux下直接放到用户目录下即可)，保存文
-件名叫lein。</li>
-<li>将其权限设置为可执行(chmod a+x lein)</li>
-<li>打开shell，输入lein即可</li>
+<li>Data transfer objects(DTO)</li>
+<li>Services(REST API,controllers,DAO)</li>
+<li>Rich object</li>
 </ul>
 
 
-<p>leiningen会自动下载需要的依赖。运行完成后,Clojure开发环境即安装完成。</p>
+<p>DTO实际上就是个结构体,他没有任何的行为(即方法).为了最小化样板代码,我趋向于使用pulibc final属性去实现DTO.我认为DTO就是个模板(schema),它就像一个REST服务输出的文件.但是我发现很多客户端开发人员可不关注这个,而只关注代码形式.有时你会看到DTO被作为数据库访问的一部分.这些DTO被称为贫血模型.(译者注:猜测作者的意思是,有些开发人员不管类是DTO还是DAO,只要结构相同就随便用!)</p>
 
-<h2>手动安装</h2>
+<p>Service实际上是包含了方法和注入了辅助Service的单例对象.不同的辅助Service提供了不同的服务.除了实现了接口外,Service只是包含了方法,和占位符很类似.单例模式导致的一个问题就是,新手无法预见到多线程里共享相同的实例出现意外的结果.他们将状态保存到私有属性里,而不需要从一个对象传递到另一个对象.很方便,但是是错误的做法.</p>
 
-<p>leiningen需要以项目为单位才能运行。比如你想运行一个hello.clj程序，如果
-你通过leiningen来运行，则hello.clj需要在lein项目内，且设置为core，才能
-运行,比较麻烦(这个问题在Maven中同样存在)。</p>
+<p>Rich object是面向对象语言中的思想.即将数据及和数据相关的操作封装到一个类里面.我可没说getter和setter是相关操作!但是,rich object类在项目中用得较少.取而代之的是使用DTO作为Service的输入和输出.使用DAO来访问数据库,然后返回DTO.我没说这种方法是错误的,我好奇的是,既然对于目前的Java架构是好是坏我们都无法确认,那为什么还要强求使用Clojure去实现类似的东西呢?</p>
 
-<p>而通过手动安装可以解决这个问题。</p>
+
+
+
+    <a href="/2014/05/11/record_protocol.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/03/15/function.html">Clojure教程-函数</a></h2>
+
+        <p class="post-meta">By 03月15日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>本文翻译自<a href="http://clojure-doc.org/articles/language/functions.html">Functions in Clojure</a></p>
+
+<p>本文包括如下内容:</p>
 
 <ul>
-<li>首先下载<a href="http://repo1.maven.org/maven2/org/clojure/clojure/1.5.1/clojure-1.5.1.zip">Clojure</a>,
-目前稳定版本是1.5.1</li>
-<li>解压到任意位置，其中最主要的文件就是clojure-1.5.1.jar</li>
-<li>在path下编写脚本clj,输入如下内容</li>
+<li>如何定义函数</li>
+<li>如何执行函数</li>
+<li>多元数函数(Multi-arity Functions)</li>
+<li>不定参函数(Variadic Functions)</li>
+<li>高阶函数</li>
+<li>其它函数相关内容</li>
 </ul>
 
 
-<pre><code class="{.bash}">java -jar /home/ivan/soft/clojure-1.5.1/clojure-1.5.1.jar $1
- #clojure.jar请输入你本机的路径
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
+
+<h1>针对Clojure版本</h1>
+
+<p>Clojure 1.5</p>
+
+<h1>简介</h1>
+
+<p>Clojure是函数式编程语言.自然的,函数是Clojure非常重要的一部分.</p>
+
+<h1>如何定义函数</h1>
+
+<p>函数定义一般使用defn宏:</p>
+
+<pre><code class="{.clojure}">(defn round
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
 </code></pre>
 
-<p>这样就可以执行单个的Clojure文件了</p>
+<p>类型提示有时能避免编译器使用反射,从而能生成更高效的字节码.但是,基本上你没必要使用类型提示.后期优化时再考虑.</p>
+
+<p>函数可以添加注释文档,给API添加文档说明是个好习惯:</p>
+
+<pre><code class="{.clojure}">(defn round
+  "Round down a double to the given precision (number of significant digits)"
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>在Clojure中函数参数可以有类型提示,不过是可选的.</p>
+
+<pre><code class="{.clojure}">(defn round
+  [^double d ^long precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>函数还可以定义前置和后置条件来限制函数的参数和返回值.</p>
+
+<pre><code class="{.clojure}">(defn round
+  "Round down a double to the given precision (number of significant digits)"
+  [^double d ^long precision]
+  {:pre [(not-nil? d) (not-nil? precision)]}
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>在上面的例子中,我们使用了前置条件来检查两个参数是否为nil.</p>
+
+<p>not-nil?宏(或函数),没有在该例子中展示,我们假设它已经在其它地方实现了.</p>
 
 
 
 
-    <a href="/2014/02/01/first_step.html" class="post-categorybut">阅读全文</a>
+    <a href="/2014/03/15/function.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -917,64 +598,14 @@ script</a></li>
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/10/02/upgrading.html">Luminus手册-升级</a></h2>
+        <h2 class="post-title"><a href="/2014/02/19/math.html">Clojure教程-数学计算</a></h2>
 
-        <p class="post-meta">By 10月02日  2013
+        <p class="post-meta">By 02月19日  2014
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Upgrading to the Latest Version</h1>
-
-<p>不幸的是，框架无法自动从老版本升级到新版本。主要原因是新版本的依赖可能会有接口方面的修改，导致老代码无法正常运行。</p>
-
-<p>最好的方法是使用<a href="https://github.com/xsc/lein-ancient">lein-ancient</a>插件来保持你的依赖包时刻为最新。这将会帮你很容易的发现哪些插件有了新的版本。</p>
-
-
-
-    <a href="/2013/10/02/upgrading.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/10/01/useful_libraries.html">Luminus手册-实用库</a></h2>
-
-        <p class="post-meta">By 10月01日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
             
             
             
@@ -983,9 +614,7 @@ script</a></li>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
             
             
         
@@ -995,189 +624,67 @@ script</a></li>
 </header>
 
 <div class="post-description">
-    <p>Luminus的目标是从细粒度来方便你开发web应用。所以它默认包含了很多库包。</p>
+    <p>本文翻译自<a href="http://clojure-doc.org/articles/cookbooks/math.html">Mathematics with Clojure</a></p>
 
-<p>包括lib-noir提供一般工具，Selmer/Hiccup提供HTML模板,Timbre提供日志功能，
-Tower提供国际化等等其他包。</p>
+<p>本文包含了使用Clojure的内建函数,扩展包和部分JDK功能进行数学计算.</p>
 
-<p>当然，还有很多的包能给web开发带来便利。</p>
+<p>版权:</p>
 
-<p>具体请见<a href="http://www.luminusweb.net/docs/useful_libraries.md">此处</a></p>
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported
+License (including images &amp; stylesheets). The source is available on
+Github.</p>
 
+<h1>准备</h1>
 
+<p>这里的一些例子使用了<a href="https://github.com/clojure/math.numeric-tower">math.numeric-tower</a>和<a href="https://github.com/clojure/math.combinatorics">math.combinatorics</a>库.所以需要
+你在代码的命名空间中包含如下代码:</p>
 
-    <a href="/2013/10/01/useful_libraries.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/30/deployment.html">Luminus手册-部署</a></h2>
-
-        <p class="post-meta">By 09月30日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Running Standalone</h1>
-
-<p>要创建一个可独立运行的包，只需要运行如下的命令:</p>
-
-<pre><code class="{.bash}">lein ring uberjar
+<pre><code class="{.clojure}">(:require [clojure.math.numeric-tower :as math]
+          [clojure.math.combinatorics :as combo])
 </code></pre>
 
-<p>打包完成的jar会出现在target目录下。可以通过下面的命令运行:</p>
+<p>或者在REPL里载入:</p>
 
-<pre><code class="{.clojure}">java -jar myapp-0.1.0-SNAPSHOT-standalone.jar
+<pre><code class="{.clojure}">(require '[clojure.math.numeric-tower :as math])
+(require '[clojure.math.combinatorics :as combo])
 </code></pre>
 
-<p>独立可运行的程序可以使用Jetty来运行。如果要设置端口号，你需要设置\$PORT
-环境变量:</p>
+<h1>方法</h1>
 
-<pre><code class="{.bash}">export PORT=8080
-java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
+<h2>简单计算</h2>
+
+<pre><code class="{.clojure}">(+ 3 4)    ;=&gt; 7
+(- 3 4)    ;=&gt; -1
+(* 3 4)    ;=&gt; 12
+(/ 3 4)    ;=&gt; 3/4  (an exact ratio)
+(/ 3.0 4)  ;=&gt; 0.75
+
+(inc 5)    ;=&gt; 6
+(dec 5)    ;=&gt; 4
 </code></pre>
 
-<h1>Delpoying on Immutant</h1>
+<p>想要计算整数的除法,取余和取模,请看<a href="http://clojuredocs.org/clojure_core/clojure.core/quot">quot</a>,<a href="http://clojuredocs.org/clojure_core/clojure.core/rem">rem</a>,<a href="http://clojuredocs.org/clojure_core/clojure.core/mod">mod</a>
+想计算指数的平方根,四舍五入,上下限,绝对值和最大公约数/最小公倍数,请看<a href="http://clojure.github.com/math.numeric-tower/">math.numeric-tower</a></p>
 
-<p>如果想部署应用到Immutant，请执行如下命令:</p>
+<h2>三角函数</h2>
 
-<pre><code class="{.bash}">lein immutant deploy
+<p>使用Java平台提供的函数:</p>
+
+<pre><code class="{.clojure}">Math/PI       ;=&gt; 3.14159...
+(Math/sin x)
+(Math/cos x)
+(Math/tan x)
 </code></pre>
 
-<p>更多信息请访问<a href="http://immutant.org/tutorials/deploying/index.html">官网</a></p>
+<p>还有很多的函数,你可以查看<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html">java.lang.Math</a></p>
 
-<h1>Deploying to Tomcat</h1>
+<h2>组合数学</h2>
 
-<p>如果想打包应用为war包:</p>
-
-<pre><code class="{.bash}">lein ring uberwar
-</code></pre>
-
-<p>然后只需要将打好的包拷贝到tomcat的webapps目录下即可:</p>
-
-<pre><code class="{.bash}">cp target/myapp-0.1.0-SNAPSHOT-standalone.war ~/tomcat/webapps/myapp.war
-</code></pre>
+<p>对于组合数学相关函数(比如:combinations和permutations),请看<a href="http://clojure.github.com/math.combinatorics/">math.combinatorics</a></p>
 
 
 
-
-    <a href="/2013/09/30/deployment.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/29/internationalization.html">Luminus手册-国际化</a></h2>
-
-        <p class="post-meta">By 09月29日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Internationalization</h1>
-
-<p>Luminius模板包含了<a href="https://github.com/ptaoussanis/tower">Tower</a>依赖，Tower提供了函数式的国际化和翻译。</p>
-
-<p>首先，我们需要创建一个字典map：</p>
-
-<pre><code class="clojure">(def tconfig
-  {:fallback-locale :en-US
-   :dictionary
-   {:en-US   {:page {:title "Here is a title"
-                     :content "Time to start building your site."}
-              :missing  "&lt;Missing translation: [%1$s %2$s %3$s]&gt;"}
-    :fr-FR {:page {:title "Voici un titre"
-                   :content "Il est temps de commencer votre site."}}
-    }})
-</code></pre>
-
-<p>然后添加Tower中间件来包装我们的配置:</p>
-
-<pre><code>(def app
- (app-handler
-   [routes]
-   :middleware
-   [#(taoensso.tower.ring/wrap-tower-middleware % {:tconfig tconfig})]))
-</code></pre>
-
-<p>中间件将会通过accept-language头来确定相应的语言。中间件将会添加两个key到请求中。地一个key是:t,它的值是翻译函数。第二个key是:locale，它的值是中间件提供的语言类型。</p>
-
-<p>你可以提供一个自定义的locale-selector函数给中间件。</p>
-
-<pre><code class="clojure">(defn my-selector [req]
-  (when (= (:remote-addr req) "127.0.0.1") :en))
-
-(def app
-  (app-handler
-    [routes]
-    :middleware
-    [#(wrap-tower-middleware % {:tconfig tconfig
-                                :locale-selector my-selector})]))
-</code></pre>
-
-
-
-
-    <a href="/2013/09/29/internationalization.html" class="post-categorybut">阅读全文</a>
+    <a href="/2014/02/19/math.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

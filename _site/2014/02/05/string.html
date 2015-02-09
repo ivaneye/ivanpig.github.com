@@ -1,0 +1,503 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="clojure"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2014/02/05/string.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>Clojure教程-字符串处理 - IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">Clojure教程-字符串处理</h2>
+
+    <p class="post-meta">By 02月05日  2014
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">clojure (10)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">clojure (30)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <p>本文翻译自<a href="http://clojure-doc.org/articles/cookbooks/strings.html">Strings</a></p>
+
+<p>本文内容包括使用Clojure内建的函数和标准库来操作字符串,以及JDK中的相关操作.</p>
+
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets).</p>
+
+<p>源代码在<a href="https://github.com/clojuredocs/guides">Github</a>上.</p>
+
+<h1>概述</h1>
+
+<ul>
+<li>Clojure中的字符串就是Java字符串.你可以使用Java中的相应方法来对其进行处理.</li>
+<li>Java字符串是不可变的,所以能很方便的在Clojure中使用</li>
+<li>你不能给Java字符串添加元数据</li>
+<li>Clojure提供一些方便的符号</li>
+</ul>
+
+
+<pre><code class="{.example}">    "foo"    java.lang.String
+    #"\d"    java.util.regex.Pattern (正则表达式,匹配一个数字)
+    \f       java.lang.Character (表示'f')
+</code></pre>
+
+<ul>
+<li><strong>注意</strong>:
+人类的大脑和计算机之间还是有很大的差异的.所以Java的字符串(UTF-16编码)并不能像人们所认为的那样很好的和字符一一对应.比如说,一个Unicode的位和我们所认为的字符的一位是无法对应的(像韩国韩语尊宝,这些词由多个字符组成.)同样的,一个Unicode位可能是由2个UTF-16字符组成.</li>
+</ul>
+
+
+<h1>预备知识</h1>
+
+<p>一些例子用到了clojure.string,clojure.edn和clojure.pprint.我们假设你的ns宏里面已经包含了如下内容:</p>
+
+<pre><code class="{.clojure}">(:require [clojure.string :as str]
+          [clojure.edn :as edn]
+          [clojure.pprint :as pp])
+</code></pre>
+
+<p>或者在REPL里面,你需要载入:</p>
+
+<pre><code class="{.clojure}">(require '[clojure.string :as str])
+(require '[clojure.edn :as edn])
+(require '[clojure.pprint :as pp])
+</code></pre>
+
+<!-- more -->
+
+
+<h1>方法</h1>
+
+<h2>基础方法</h2>
+
+<pre><code class="{.clojure}">;; 长度计算
+(count "0123")      ;=&gt; 4
+(empty? "0123")     ;=&gt; false
+(empty? "")         ;=&gt; true
+(str/blank? "    ") ;=&gt; true
+
+;; 字符串连接
+(str "foo" "bar")            ;=&gt; "foobar"
+(str/join ["0" "1" "2"])     ;=&gt; "012"
+(str/join "." ["0" "1" "2"]) ;=&gt; "0.1.2"
+
+;; 使用Java方法来匹配.
+;;
+;; 对于下面的情况,你应该更喜欢使用正则表达式.比如,你在进行测试,当失败时需要返回-1.
+;; 或者一个字符\o需要转换成字符串或数字.
+(.indexOf "foo" "oo")         ;=&gt; 1
+(.indexOf "foo" "x")          ;=&gt; -1
+(.lastIndexOf "foo" (int \o)) ;=&gt; 2
+
+;; 字符串截取
+(subs "0123" 1)       ;=&gt; "123"
+(subs "0123" 1 3)     ;=&gt; "12"
+(str/trim "  foo  ")  ;=&gt; "foo"
+(str/triml "  foo  ") ;=&gt; "foo  "
+(str/trimr "  foo  ") ;=&gt; "  foo"
+
+;; 切分字符串
+(seq "foo")                       ;=&gt; (\f \o \o)
+(str/split "foo/bar/quux" #"/")   ;=&gt; ["foo" "bar" "quux"]
+(str/split "foo/bar/quux" #"/" 2) ;=&gt; ["foo" "bar/quux"]
+(str/split-lines "foo
+bar")                             ;=&gt; ["foo" "bar"]
+
+;; 大小写转换
+(str/lower-case "fOo") ;=&gt; "foo"
+(str/upper-case "fOo") ;=&gt; "FOO"
+(str/capitalize "fOo") ;=&gt; "Foo"
+
+;; 转换
+(str/escape "foo|bar|quux" {\| "||"}) ;=&gt; "foo||bar||quux"
+
+;; 获得给定编码的字节数组
+;; (输出可能和下面的"3c3660"不同)
+(.getBytes "foo" "UTF-8") ;=&gt; #&lt;byte[] [B@3c3660&gt;
+
+;; 解析为keyword
+(keyword "foo")    ;=&gt; :foo
+
+;; 解析为数字
+(bigint "20000000000000000000000000000") ;=&gt; 20000000000000000000000000000N
+(bigdec "20000000000000000000.00000000") ;=&gt; 20000000000000000000.00000000M
+(Integer/parseInt "2")                   ;=&gt; 2
+(Float/parseFloat "2")                   ;=&gt; 2.0
+
+;; 解析为edn,它是Clojure形式的一个子集
+(edn/read-string "0xffff") ;=&gt; 65535
+
+;; 读取Clojure形式的方法.
+;;
+;; 安全警告:当你无法确保你能100%信任要处理的字符串时,请将*read-eval*置为false.
+;; 从Clojure1.5开始*read-eval*默认为false,但为了安全起见,
+;; 在处理字符串时还是先手动置一下false
+;; 因为可能有操作将其置为了true.
+
+(binding [*read-eval* false]
+  (read-string "#\"[abc]\""))
+;=&gt; #"[abc]"
+</code></pre>
+
+<h2>解析复杂字符串</h2>
+
+<h3>正则表达式</h3>
+
+<p>正则表达式增强了字符串匹配.你可以重复匹配,匹配其中之一,等等等等</p>
+
+<ul>
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">Regex reference</a></li>
+</ul>
+
+
+<p><em>Groups</em>:当我们想匹配多于一个子串时,正则表达式的组就起到了作用.在正则表达式#"(group-1) (group-2)"中,第0个组为整个匹配表达式.第1个组从最左边的(开始,第2个组从左起第二个(开始,依次类推.你还可以嵌套组.也可以后续通过\$0,\$1等来引用组.</p>
+
+<h4>匹配</h4>
+
+<pre><code class="{.clojure}">;; 简单匹配
+(re-find #"\d+" "foo 123 bar") ;=&gt; "123"
+
+;; 匹配不到时会怎样?
+(re-find #"\d+" "foobar") ;=&gt; nil
+
+;; 对每个组返回第一个满足匹配条件的内容
+(re-matches #"(@\w+)\s([.0-9]+)%"
+            "@shanley 19.8%")
+;=&gt;["@shanley 19.8%" "@shanley" "19.8"]
+
+;; 返回所有匹配的组的结果
+(re-seq #"(@\w+)\s([.0-9]+)%"
+        "@davidgraeber 12.3%,@shanley 19.8%")
+;=&gt; (["@davidgraeber 12.3%" "@davidgraeber" "12.3"]
+;    ["@shanley 19.8%" "@shanley" "19.8"])
+</code></pre>
+
+<h4>替换</h4>
+
+<p>我们使用str/replace来进行替换.
+第一个参数是源字符串,下一个是匹配字符串,最后一个是替换的内容.</p>
+
+<pre><code class="{.example}">   match / replacement can be:
+   string / string
+   char / char
+   pattern / (string or function of match).
+</code></pre>
+
+<pre><code class="{.clojure}">;; 在替换字符串中,$0,$1等用来引用匹配字符串中的组.
+(str/replace "@davidgraeber 12.3%,@shanley 19.8%"
+             #"(@\S+)\s([.0-9]+)%"
+             "$2 ($1)")
+;=&gt; "12.3 (@davidgraeber),19.8 (@shanley)"
+
+;; 使用函数来替换字符串,更灵活
+(println
+  (str/replace "@davidgraeber 12.3%,@shanley 19.8%"
+               #"(@\w+)\s([.0-9]+)%,?"
+               (fn [[_ person percent]]
+                   (let [points (-&gt; percent Float/parseFloat (* 100) Math/round)]
+                     (str person "'s followers grew " points " points.\n")))))
+;print=&gt; @davidgraeber's followers grew 1230 points.
+;print=&gt; @shanley's followers grew 1980 points.
+;print=&gt;
+</code></pre>
+
+<h3>上下文无关语法</h3>
+
+<p>和正则表达式相比上下文无关语法提供了更具表现力的匹配方式.你能使用例如嵌套来表达想法.
+我们将在JSON语法上使用<a href="https://github.com/Engelberg/instaparse">Instapares</a>.(这个例子没有经过严格的测试也没什么特色.如果想应用到实际开发中,请使用<a href="https://github.com/clojure/data.json">data.json</a>)</p>
+
+<pre><code class="{.clojure}">;; 你项目中的project.clj需要包含如下依赖(你可能需要重启JVM)
+;;   :dependencies [[instaparse "1.2.4"]]
+;;
+;;  我们假设你的ns宏包含了如下内容:
+;;   (:require [instaparse.core :as insta])
+;; 或你在REPL里加载了:
+;;   (require '[instaparse.core :as insta])
+
+(def barely-tested-json-parser
+  (insta/parser
+   "object     = &lt;'{'&gt; &lt;w*&gt; (members &lt;w*&gt;)* &lt;'}'&gt;
+    &lt;members&gt;  = pair (&lt;w*&gt; &lt;','&gt; &lt;w*&gt; members)*
+    &lt;pair&gt;     = string &lt;w*&gt; &lt;':'&gt; &lt;w*&gt; value
+    &lt;value&gt;    = string | number | object | array | 'true' | 'false' | 'null'
+    array      = &lt;'['&gt; elements* &lt;']'&gt;
+    &lt;elements&gt; = value &lt;w*&gt; (&lt;','&gt; &lt;w*&gt; elements)*
+    number     = int frac? exp?
+    &lt;int&gt;      = '-'? digits
+    &lt;frac&gt;     = '.' digits
+    &lt;exp&gt;      = e digits
+    &lt;e&gt;        = ('e' | 'E') (&lt;'+'&gt; | '-')?
+    &lt;digits&gt;   = #'[0-9]+'
+    (* First sketched state machine; then it was easier to figure out
+       regex syntax and all the maddening escape-backslashes. *)
+    string     = &lt;'\\\"'&gt; #'([^\"\\\\]|\\\\.)*' &lt;'\\\"'&gt;
+    &lt;w&gt;        = #'\\s+'"))
+
+(barely-tested-json-parser "{\"foo\": {\"bar\": 99.9e-9, \"quux\": [1, 2, -3]}}")
+;=&gt; [:object
+;     [:string "foo"]
+;     [:object
+;       [:string "bar"]
+;       [:number "99" "." "9" "e" "-" "9"]
+;       [:string "quux"]
+;       [:array [:number "1"] [:number "2"] [:number "-" "3"]]]]
+
+;; 最后的输出有点啰嗦,我们改进一下.
+(-&gt;&gt; (barely-tested-json-parser "{\"foo\": {\"bar\": 99.9e-9, \"quux\": [1, 2, -3]}}")
+     (insta/transform {:object hash-map
+                       :string str
+                       :array vector
+                       :number (comp edn/read-string str)}))
+;=&gt; {"foo" {"quux" [1 2 -3], "bar" 9.99E-8}}
+
+
+;; 所有的内容都在上面了
+;;
+;; =右边的语法主要用来隐藏多余信息.比如说,我们不关心空格,所以我们通过设置&lt;w*&gt;来隐藏
+;;
+;; =左边的语法只是用来避免嵌套输出的.例如,"members"仅仅是一个人为设置的实体,
+;; 所以我们阻止了这个无意义的嵌套关系
+</code></pre>
+
+<h2>构建复杂的字符串</h2>
+
+<h3>重定向</h3>
+
+<p>with-out-str提供了一个简单的方法来构建字符串.它重定向标准输出(<strong>out</strong>)到StringWriter,然后返回结果字符串.这样你就可以使用print这样的函数来获得字符串(即使在嵌套函数中)</p>
+
+<pre><code class="{.clojure}">(let [shrimp-varieties ["shrimp-kabobs" "shrimp creole" "shrimp gumbo"]]
+  (with-out-str
+    (print "We have ")
+    (doseq [name (str/join ", " shrimp-varieties)]
+      (print name))
+    (print "...")))
+;=&gt; "We have shrimp-kabobs, shrimp creole, shrimp gumbo..."
+</code></pre>
+
+<h3>格式化字符串</h3>
+
+<p>Java里的模板能帮助你方便的构造字符串.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html">Reference</a></p>
+
+<pre><code class="{.clojure}">;; %s经常会作为print的参数. 而%需要使用%%
+(format "%s enjoyed %s%%." "Mozambique" 19.8) ;=&gt; "Mozambique enjoyed 19.8%."
+
+;; 1$前缀能引用到其后的第一个参数
+(format "%1$tY-%1$tm-%1$td" #inst"2000-01-02T00:00:00") ;=&gt; "2000-01-02"
+
+;; 同上1$, 2$前缀可以引用其后面的参数
+(format "New year: %2$tY. Old year: %1$tY"
+        #inst"2000-01-02T00:00:00"
+        #inst"3111-12-31T00:00:00")
+;=&gt; "New year: 3111. Old year: 2000"
+</code></pre>
+
+<h3>CL-Format</h3>
+
+<p>cl-format是Common
+Lisp中的一个臭名昭著的功能.例如,你可以从序列来构建字符串(其怪异程度就像使用英文来表示数字,使用两种类型的罗马数字).但对于打印日期和上面的对无序参数的引用方面却又比普通的格式化功能弱.</p>
+
+<p>你只需要记住cl-format就是个无人问津的不值一学的语言.但是如果你喜欢并想学习它,那么看<a href="http://www.gigamonkeys.com/book/a-few-format-recipes.html">Practical
+Common
+Lisp教程</a>.或者<a href="http://www.lispworks.com/documentation/HyperSpec/Body/22_c.htm">Common
+Lisp手册</a></p>
+
+<pre><code class="{.clojure}">;; The first param prints to *out* if true. To string if false.
+;; To a stream if it's a stream.
+(pp/cl-format true "~{~{~a had ~s percentage point~:p.~}~^~%~}"
+              {"@davidgraeber" 12.3
+               "@shanley" 19.8
+               "@tjgabbour" 1})
+;print=&gt; @davidgraeber had 12.3 percentage points.
+;print=&gt; @tjgabbour had 1 percentage point.
+;print=&gt; @shanley had 19.8 percentage points.
+
+(def format-string "~{~#[~;~a~;~a and ~a~:;~@{~a~#[~;, and ~:;, ~]~}~]~}")
+(pp/cl-format nil format-string [])
+;=&gt; ""
+(pp/cl-format nil format-string ["@shanley"])
+;=&gt; "@shanley"
+(pp/cl-format nil format-string ["@shanley", "@davidgraeber"])
+;=&gt; "@shanley and @davidgraeber"
+(pp/cl-format nil format-string ["@shanley", "@davidgraeber", "@sarahkendzior"])
+;=&gt; "@shanley, @davidgraeber, and @sarahkendzior"
+</code></pre>
+
+<h1>贡献者</h1>
+
+<p>Tj Gabbour tjg@simplevalue.de, 2013 (original author)</p>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2014/02/02/basic.html" title="Clojure教程-基本语法 "><p> <i class="fa fa-mail-reply"></i>&nbsp;Clojure教程-基本语法</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2014/02/08/file.html" title="Clojure教程-文件处理"><p>Clojure教程-文件处理&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Clojure教程-字符串处理" data-thread-key="/2014/02/05/string" data-url="/2014/02/05/string.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-02-05T17:20:43+08:00</updated>
+    <updated>2015-02-09T10:27:29+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -38,6 +38,4704 @@
 
 
 &lt;p&gt;&lt;img src=&quot;/assets/lighttable/shot.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Clojure进阶:使用Clojure编写文字冒险游戏</title>
+        <link href="http://ivanpig.github.io/2014/10/02/clojure_spels.html"/>
+        <updated>2014-10-02T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2014/10/02/clojure_spels</id>
+        <content type="html">&lt;p&gt;本文翻译自:&lt;a href=&quot;http://www.lisperati.com/clojure-spels/casting.html&quot;&gt;Casting SPELs in Clojure&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_01.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;准备&lt;/h1&gt;
+
+&lt;p&gt;任何学过Lisp的人都会说List和其它语言有很大的不同.它有很多不可思议的地方.本文将告诉你它有哪些独特之处!&lt;/p&gt;
+
+&lt;p&gt;本文适用于Clojure,它是一个运行在JVM上的Lisp方言.Clojure的API和语法和
+Common Lisp很类似,但是还是有足够多的区别,需要单独为其写个教程.&lt;/p&gt;
+
+&lt;p&gt;在大部分情况下,我们会说Lisp而不是Clojure,因为大部分的概念在Lisp中是通用的.我们会指出Clojure特有的内容.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_02.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Clojure是运行在JVM之上的,所以你需要先安装JVM.如果你是MAC机,那么Java已经被安装过了.如果是Linux或者Windows系统,你需要到&lt;a href=&quot;http://java.sun.com/javase/downloads/index.jsp&quot;&gt;Oracle Java官网&lt;/a&gt;下载对应版本的Java.&lt;/p&gt;
+
+&lt;p&gt;而Clojure,你可以从它的&lt;a href=&quot;http://clojure.org/&quot;&gt;官网&lt;/a&gt;获得最新版本.下载完成后,你只需要解压缩,打开命令行,切换到解压缩目录,输入:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;java -jar clojure.jar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果没有问题,那么你将会看到Clojure输出提示&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;Clojure 1.6.0
+user=&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;教程中有很多Clojure代码片段,类似下面的样子:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;'(these kinds of boxes)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你只需要将这些代码片段拷贝到Clojure REPL中运行就可以了!当你学习完此教程,你将会有一个你自己的文字冒险游戏了!&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;语法和语义&lt;/h1&gt;
+
+&lt;p&gt;每一个编程语言是由语法和语义组成的.语法是组成你的程序的骨架,你必须要遵循它们,这样编译器才能知道你的程序里什么是什么,比如说什么是函数,什么是变量,等等!&lt;/p&gt;
+
+&lt;p&gt;而语义是个比较&quot;随便&quot;的东西,例如你的程序里有哪些不同的命令,或者在程序的哪个部分能访问到哪些变量!这里Lisp比较特别的地方就是,Lisp的语法比其它任何语言都要简单.&lt;/p&gt;
+
+&lt;p&gt;首先,Lisp语法规定,所有传递给Lisp编译器的文本需要是个list,当然这个list可以无限嵌套.每个list都必须使用括号包裹.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_03.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;另外,Lisp编译器使用两种模式来读取你的代码:代码模式和数据模式.当你在数据模式下,你可以将任何东西塞到你的list中.但是在代码模式下,你的list需要是叫做form的特殊类型.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_04.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;form也是个list,不过它的第一个符号被lisp编译器特殊对待了---一般被当做函数的名字.在这种情况下,编译器会将list中的其它元素作为函数参数传递给这个函数.默认情况下,编译器运行在代码模式下,除非你特意告诉它进入数据模式.&lt;/p&gt;
+
+&lt;h1&gt;为我们的游戏世界定义数据&lt;/h1&gt;
+
+&lt;p&gt;为了进一步的学习form,让我们来创建一些form,来定义我们游戏世界里的数据.首先,我们的游戏有一些对象,玩家可以使用他们--让我们来定义吧:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def objects '(whiskey-bottle bucket frog chain))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;让我们来看看这行代码是什么意思:Lisp编译器总是使用代码模式来读取内容,所以第一个符号(这里是def),肯定是个命令.&lt;/p&gt;
+
+&lt;p&gt;在这里,它的作用就是给某个变量设值:这里变量就是objects,而值是一个包含四个对象的list.这个list是数据(我们可不想编译器去调用一个叫做whiskey-bottle的函数),所以在读取这个list时
+我们需要将其设值为数据模式.在list前面的哪个单引号就是干这个的:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_05.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;def命令就是用来设值的(如果你学过Common Lisp,你应该会知道它和CommonLisp中的setf命令等价,但是Clojure中没有setf命令)&lt;/p&gt;
+
+&lt;p&gt;现在我们在游戏里定义了一些对象,现在让我们来定义一下游戏地图.下面是我们的游戏世界:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_06.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在这个简单的游戏里,只有三个地点:一个房子,它包含起居室,阁楼和花园.让我们来定义一个新变量,叫做game-map来描述这个游戏地图:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def game-map (hash-map
+   'living-room '((you are in the living room
+                   of a wizards house - there is a wizard
+                   snoring loudly on the couch -)
+                  (west door garden)
+                  (upstairs stairway attic))
+   'garden '((you are in a beautiful garden -
+              there is a well in front of you -)
+             (east door living-room))
+   'attic '((you are in the attic of the
+             wizards house - there is a giant
+             welding torch in the corner -)
+            (downstairs stairway living-room))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个map包含了三个地点的所有重要信息:每个地点都有个独立的名字,一个简短的描述,描述了我们能在这些地点看到什么,以及如何进入此处或从此处出去.&lt;/p&gt;
+
+&lt;p&gt;请注意这个包含了丰富信息的变量是如何定义的---Lisp程序员更喜欢用小巧的代码片段而不是一大片代码,因为小代码更容易理解.&lt;/p&gt;
+
+&lt;p&gt;现在我们有了一个地图和一组对象,让我们来创建另一个变量,来描述这些对象在地图的哪些地方.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def object-locations (hash-map
+                       'whiskey-bottle 'living-room
+                       'bucket 'living-room
+                       'chain 'garden
+                       'frog 'garden))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里我们将每个对象和地点进行了关联.Clojure提供了Map这个数据结构.Map使用hash-map函数来创建,它需要一组参数类似(key1 value1 keys value2...).我们的game-map变量也是个Map---三个key分别是living-room,garden和attic.&lt;/p&gt;
+
+&lt;p&gt;我们定义了游戏世界,以及游戏世界中的对象,现在就剩下一件事了,就是描述玩家的地点!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def location 'living-room)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;搞定,现在让我们来定义游戏操作吧!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_07.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;环顾我们的游戏世界&lt;/h1&gt;
+
+&lt;p&gt;我们想要的第一个命令能够告诉我们当前地点的描述.那么我们该怎么定义这个函数呢?它要知道我们想要描述的地点以及能够从map中查找地点的描述.如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn describe-location [location game-map]
+  (first (location game-map)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;defn定义了一个函数.函数的名字叫做describe-location,它需要两个参数:地点和游戏地图.这两个变量在函数定义的括号内,所以它们是局部变量,因此对于全局的location和game-map没有关系.&lt;/p&gt;
+
+&lt;p&gt;注意到了吗?Lisp中的函数与其它语言中的函数定义相比,更像是数学中的函数:它不打印信息或者弹出消息框:它所作的就是返回结果.&lt;/p&gt;
+
+&lt;p&gt;我们假设现在我们在起居室里!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_08.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;为了能找到起居室的描述,describe-locatin函数首先需要从地图中找到起居室.(location game-map)就是进行从game-map中查找内容的,并返回起居室的描述.然后first命令来处理返回值,取得返回的list的第一个元素,这个就是起居室的描述了. 现在我们来测试一下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(describe-location 'living-room game-map)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt; user=&amp;gt; (describe-location 'living-room game-map)
+ (you are in the living-room of a wizard's house -
+ there is a wizard snoring loudly on the couch -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很完美!这就是我们要的结果!请注意我们在living-room前添加了一个单引号,因为这个符号是地点map的一个名称!但是,为什么我们没有在game-map前面添加单引号呢?这是因为我们需要编译器去查询这个符号所指向的数据(就是那个map)&lt;/p&gt;
+
+&lt;h1&gt;函数式编码风格&lt;/h1&gt;
+
+&lt;p&gt;你可能已经发现了describe-location函数有几个让人不太舒服的地方.&lt;/p&gt;
+
+&lt;p&gt;第一,为什么要传递位置和map参数,而不是直接使用已经定义的全局变量?原因是Lisp程
+序员喜欢写函数式风格的代码.函数式风格的代码,主要遵循下面三条规则:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;只读取函数传递的参数或在函数内创建的变量&lt;/li&gt;
+&lt;li&gt;不改变已经被设值的变量的值&lt;/li&gt;
+&lt;li&gt;除了返回值,不去影响函数外的任何内容&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;你也许会怀疑在这种限制下你还能写代码吗?答案是:可以!为什么很多人对这些规则感到疑惑呢?一个很重要的原因是:遵循此种风格的代码更加的引用透明(referential transparency):这意味着,对于给定的代码,你传入相同的参数,永远返回相同的结果---这能减少程序的错误,也能提高程序的生产力!&lt;/p&gt;
+
+&lt;p&gt;当然了,你也会有一些非函数式风格的代码,因为不这么做,你无法和其它用户或外部内容进行交互.教程后面会有这些函数,他们不遵循上面的规则.&lt;/p&gt;
+
+&lt;p&gt;describe-location函数的另一个问题是,它没告诉我们怎么进入一个位置或者怎么从某个位置出来.让我们来编写这样的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn describe-path [path]
+  `(there is a ~(second path) going ~(first path) from here -))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数看起来很明了:它看起来更像是数据而不是函数.我们先来尝试调用它,看它做了些什么:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(describe-path '(west door garden))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (describe-path '(west door garden))
+(user/there user/is user/a door user/going west user/from user/here clojure.core/-)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是什么?!结果看起来很乱,包含了很多的/和一些其它的文字!这是因为Clojure会将命名空间的名字添加到表达式的前面.我们这里不深究细节,只给你提供消除这些内容的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn spel-print [list] (map (fn [x] (symbol (name x))) list))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改调用方式&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(spel-print (describe-path '(west door garden)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (spel-print (describe-path '(west door garden)))
+(there is a door going west from here -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在结果很清晰了:这个函数接收一个描述路径的list然后将其解析到一个句子里面.我们回过头来看这个函数,这个函数和它产生的数据非常的像:它就是拼接第一个和第二个list的元素到语句中!它是怎么做到的?使用语法quote!&lt;/p&gt;
+
+&lt;p&gt;还记得我们使用quote来从代码模式切换到数据模式吗?语法quote的功能类似,但是还不只这样.在语法quote里,我们还能使用'\~'再次从数据模式切换回代码模式.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_09.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;语法quote是List的一个很强大的功能!它能使我们的代码看起来像它创建的数据.这在函数式编码中很常见:创建这种样子的函数,使得我们的代码更易读也更稳健:&lt;/p&gt;
+
+&lt;p&gt;只要数据不变,函数就不需要修改.想象一下,你能否在VB或C中编写类似的代码?你可能需要将文字切成小块,然后在一点点的组装-这和数据本身看起来差距很大,更别说代码的稳健性了!&lt;/p&gt;
+
+&lt;p&gt;现在我们能描述一个路径,但是一个地点可能会有多个路径,所以让我们来创建一个函数叫做describe-paths:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn describe-paths [location game-map]
+  (apply concat (map describe-path (rest (get game-map location)))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数使用了另一个在函数式编程中很常用的技术:高阶函数.apply和map这两个函数能将其它的函数作为参数.map函数将另一个函数分别作用到list中的每个对象上,这里是调用describe-path函数.apply concat是为了减少多余的括号,没有多少功能性操作!我们来试试新函数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(spel-print (describe-paths 'living-room game-map))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (spel-print (describe-paths 'living-room game-map))
+(there is a door going west from here -
+there is a stairway going upstairs from here -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;漂亮!&lt;/p&gt;
+
+&lt;p&gt;最后,我们还剩下一件事要做:描述某个地点的某个对象!我们先写个帮助函数来告诉我们在某个地方是否有某个对象!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn is-at? [obj loc obj-loc] (= (obj obj-loc) loc))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;=也是个函数,它判断对象的地点是否和当前地点相同!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_09.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们来尝试一下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(is-at? 'whiskey-bottle 'living-room object-locations)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (is-at? 'whiskey-bottle 'living-room object-locations)
+true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;返回结果是true,意味着whiskey-bottle在起居室.&lt;/p&gt;
+
+&lt;p&gt;现在让我们来使用这个函数描述地板:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn describe-floor [loc objs obj-loc]
+  (apply concat (map (fn [x]
+                       `(you see a ~x on the floor -))
+                     (filter (fn [x]
+                               (is-at? x loc obj-loc)) objs))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数包含了很多新事物:首先,它有匿名函数(fn定义的函数).第一个fn干的事,和下面的函数做的事情是一样的:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn blabla [x] `(you see a ~x on the floor.))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后将这个blabla函数传递给map函数.filter函数是过滤掉那些在当前位置没有出现的物体.我们来试一下新函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(spel-print (describe-floor 'living-room objects object-locations))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (spel-print (describe-floor 'living-room objects object-locations))
+(you see a whiskey-bottle on the floor - you see a bucket on the floor -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在,让我们来将这些函数串联起来,定义一个叫look的函数,使用全局变量(这个函数就不是函数式的了!)来描述所有的内容:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn look []
+  (spel-print (concat (describe-location location game-map)
+          (describe-paths location game-map)
+          (describe-floor location objects object-locations))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_10.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们来试一下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (look)
+(you are in the living room of a wizards house -
+there is a wizard snoring loudly on the couch -
+there is a door going west from here -
+there is a stairway going upstairs from here -
+you see a whiskey-bottle on the floor -
+you see a bucket on the floor -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很酷吧!&lt;/p&gt;
+
+&lt;h1&gt;环游我们的游戏世界&lt;/h1&gt;
+
+&lt;p&gt;好了,现在我们能看我们的世界了,让我们来写一些代码来环游我们的世界.walk-direction包含了一些方向可以使我们走到那里:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn walk-direction [direction]
+  (let [next (first (filter (fn [x] (= direction (first x)))
+                            (rest (location game-map))))]
+    (cond next (do (def location (nth next 2)) (look))
+          :else '(you cannot go that way -))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里的let用来创建局部变量next,用来描述玩家的方向.rest返回一个list,包含原list中除了第一个元素外的全部元素.如果用户输入了错误的方向,next会返回
+().&lt;/p&gt;
+
+&lt;p&gt;cond类似于if-then条件:每个cond都包含一个值,lisp检查该值是否为真,如果为真则执行其后的动作.在这里,如果下一个位置不是nil,则会定义玩家的location到新位置,然后告诉玩家该位置的描述!如果next是nil,则告诉玩家,无法到达,请重试:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(walk-direction 'west)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (walk-direction 'west)
+(you are in a beautiful garden -
+there is a well in front of you -
+there is a door going east from here -
+you see a frog on the floor -
+you see a chain on the floor -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在,我们通过创建look函数来简化描述.walk-direction也是类似的功能.但是它需要输入方向,而且还有个quote.我们能否告诉编译器west仅仅是个数据,而不是代码呢?&lt;/p&gt;
+
+&lt;h1&gt;构建SPELs&lt;/h1&gt;
+
+&lt;p&gt;现在我们开始学习Lisp中一个很强大的功能:创建SPELs!SPEL是&quot;语义增强逻辑&quot;的简称,它能够从语言级别,按照我们的需求定制,对我们的代码添加新的行为-这是Lisp最为强大的一部分.为了开启SPELs,我们需要先激活Lisp编译器的SPEL&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmacro defspel [&amp;amp; rest] `(defmacro ~@rest))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在,我们来编写我们的SPEL,叫做walk:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defspel walk [direction] `(walk-direction '~direction))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这段代码干了什么?它告诉编译器walk不是实际的名称,实际的名字叫walk-direction,并且direction前面有个quote.SPEL的主要功能就是能在我们的代码被编译器编译之前插入一些内容!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_11.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;注意到了吗?这段代码和我们之前写的describe-path很类似:在Lisp中,不只是代码和数据看起来很像,代码和特殊形式对于编译器来说也是一样的-高度的统一带来简明的设计!我们来试试新代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(walk east)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (walk east)
+(you are in the living room of a wizards house -
+there is a wizard snoring loudly on the couch -
+there is a door going west from here -
+there is a stairway going upstairs from here -
+you see a whiskey-bottle on the floor -
+you see a bucket on the floor -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;感觉好多了! 现在我们来创建一个命令来收集游戏里的物品&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn pickup-object [object]
+  (cond (is-at? object location object-locations)
+        (do
+          (def object-locations (assoc object-locations object 'body))
+          `(you are now carrying the ~object))
+        :else '(you cannot get that.)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数检查物品是否在当前地点的地上-如果在,则将它放到list里面,并返回成功提示!否则提示失败! 现在我们来创建另一个SPEL来简化这条命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defspel pickup [object] `(spel-print (pickup-object '~object)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;调用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(pickup whiskey-bottle)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (pickup whiskey-bottle)
+(you are now carrying the whiskey-bottle)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们来添加更多有用的命令-首先,一个能让我们查看我们捡到的物品的函 数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn inventory []
+  (filter (fn [x] (is-at? x 'body object-locations)) objects))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以及一个检查我们是否有某个物品的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn have? [object]
+   (some #{object} (inventory)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;创建特殊操作&lt;/h1&gt;
+
+&lt;p&gt;现在我们只剩下一件事情需要做了:添加一些特殊动作,使得玩家能够赢得游戏.第一条命令是让玩家在阁楼里给水桶焊接链条.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def chain-welded false)
+
+(defn weld [subject object]
+  (cond (and (= location 'attic)
+             (= subject 'chain)
+             (= object 'bucket)
+             (have? 'chain)
+             (have? 'bucket)
+             (not chain-welded))
+        (do (def chain-welded true)
+            '(the chain is now securely welded to the bucket -))
+        :else '(you cannot weld like that -)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先我们创建了一个新的全局变量来进行判断,我们是否进行了此操作.然后我们创建了一个weld函数,来确认此操作的条件是否完成,如果已完成则进行此操作.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_12.jpg&quot; alt=&quot;&quot; /&gt; 来试一下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(weld 'chain 'bucket)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (weld 'chain 'bucket)
+(you cannot weld like that -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Oops...我们没有水桶,也没有链条,是吧?周围也没有焊接的机器!&lt;/p&gt;
+
+&lt;p&gt;现在,让我们创建一条命令来将链条和水桶放到井里:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def bucket-filled false)
+
+(defn dunk [subject object]
+  (cond (and (= location 'garden)
+             (= subject 'bucket)
+             (= object 'well)
+             (have? 'bucket)
+             chain-welded)
+        (do (def bucket-filled true)
+            '(the bucket is now full of water))
+        :else '(you cannot dunk like that -)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意到了吗?这个命令和weld命令看起来好像!两条命令都需要检查位置,物体和对象!但是它们还是有不同,以至于我们不能将它们抽到一个函数里.太可惜了!&lt;/p&gt;
+
+&lt;p&gt;但是...这可是Lisp.我们不止能写函数,还能写SPEL!我们来创建了SPEL来处理:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defspel game-action [command subj obj place &amp;amp; args]
+  `(defspel ~command [subject# object#]
+     `(spel-print (cond (and (= location '~'~place)
+                             (= '~subject# '~'~subj)
+                             (= '~object# '~'~obj)
+                             (have? '~'~subj))
+                        ~@'~args
+                        :else '(i cannot ~'~command like that -)))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;非常复杂的SPEL!它有很多怪异的quote,语法quote,逗号以及很多怪异的符号!更重要的是他是一个构建SPEL的SPEL!!即使是很有经验的Lisp程序员,也需要费下脑细胞才能写出这么个玩样!!(这里我们不管)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_13.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这个SPEL的只是向你展示,你是否够聪明来理解这么复杂的SPEL.而且,即使这段代码很丑陋,如果它只需要写一次,并且能生成几百个命令,那么也是可以接受的!&lt;/p&gt;
+
+&lt;p&gt;让我们使用这个新的SPEL来替换我们的weld命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(game-action weld chain bucket attic
+   (cond (and (have? 'bucket) (def chain-welded true))
+              '(the chain is now securely welded to the bucket -)
+         :else '(you do not have a bucket -)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们来看看这条命令变得多容易理解:game-action这个SPEL使得我们能编写我们想要的核心代码,而不需要额外的信息.这就像我们创建了我们自己的专门创建游戏命令的编程语言.使用SPEL创建伪语言称为领域特定语言编程(DSL),它使得你的编码更加的快捷优美!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(weld chain bucket)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (weld chain bucket)
+(you do not have a chain -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;...我们还没有做好焊接前的准备工作,但是这条命令生效了!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_14.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;下面我们重写dunk命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(game-action dunk bucket well garden
+             (cond chain-welded
+                   (do (def bucket-filled true)
+                       '(the bucket is now full of water))
+                   :else '(the water level is too low to reach -)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意weld命令需要检验我们是否有物体,但是dunk不需要.我们的game-action这个SPEL使得这段代码易写易读.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_15.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最后,就是将水泼到巫师身上:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(game-action splash bucket wizard living-room
+             (cond (not bucket-filled) '(the bucket has nothing in it -)
+                   (have? 'frog) '(the wizard awakens and sees that you stole
+                                       his frog -
+                                       he is so upset he banishes you to the
+                                       netherworlds - you lose! the end -)
+                   :else '(the wizard awakens from his slumber and greets you
+                               warmly -
+                               he hands you the magic low-carb donut - you win!
+                               the end -)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_16.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;现在你已经编写完成了一个文字冒险游戏了!&lt;/p&gt;
+
+&lt;p&gt;点击&lt;a href=&quot;http://www.lisperati.com/clojure-spels/cheat.html&quot;&gt;这里&lt;/a&gt;是完整的游戏.&lt;/p&gt;
+
+&lt;p&gt;点击&lt;a href=&quot;http://www.lisperati.com/clojure-spels/code.html&quot;&gt;这里&lt;/a&gt;是代码.&lt;/p&gt;
+
+&lt;p&gt;为了使教程尽可能的简单,很多Lisp的执行细节被忽略了,所以最后,让我们来看看这些细节!&lt;/p&gt;
+
+&lt;h1&gt;附录&lt;/h1&gt;
+
+&lt;p&gt;现在,我们来聊一聊被忽略的细节!&lt;/p&gt;
+
+&lt;p&gt;首先,Clojure有一套很成熟的定义变量以及改变变量值的系统.在此教程中,我们只使用了def来设置和改变全局变量的值.而在真正的Clojure代码里,你不会这么做.取而代之,你会使用&lt;a href=&quot;http://clojure.org/refs&quot;&gt;Refs&lt;/a&gt;,&lt;a href=&quot;http://clojure.org/atoms&quot;&gt;Atoms和&lt;/a&gt;&lt;a href=&quot;http://clojure.org/agents&quot;&gt;Agents&lt;/a&gt;,它们提供了更清晰,以及线程安全的方式来管理数据.&lt;/p&gt;
+
+&lt;p&gt;另一个问题就是我们在代码中大量使用了符号(symbol)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;'(this is not how Lispers usually write text)
+&quot;Lispers write text using double quotes&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;符号在Clojure有特殊含义,主要是用来持有函数,变量或其它内容的.所以,在Lisp中将符号作为文本信息描述是很奇怪的事情!使用字符串来显示文本信息可以避免这样的尴尬!不过,使用字符串的话,在教程里就没法讲很多关于符号的内容了!&lt;/p&gt;
+
+&lt;p&gt;还有就是SPEL在Lisp里面更普遍的叫法是&quot;宏&quot;,使用defmacro来定义,但是这个名字不易于教学,所以没有提及.你可以阅读&lt;a href=&quot;http://www.lisperati.com/clojure-spels/no_macros.html&quot;&gt;此文&lt;/a&gt;,这是我为什么没有使用&quot;宏&quot;这个名字的原因.&lt;/p&gt;
+
+&lt;p&gt;最后,在编写类似game-action这样的SPEL的时候,很可能会发生命名重复的问题.当你编写了足够多的lisp的时候,你会越来越能体会到这个问题了.&lt;/p&gt;
+
+&lt;ol type=&quot;a&quot;&gt;
+&lt;li&gt;后面我该阅读哪些内容来扩充我的Lisp知识? A.
+在&lt;a href=&quot;http://www.cliki.net/Lisp%2520books&quot;&gt;cliki网站&lt;/a&gt;有很多Lisp书籍可以下载.&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;如果你对于理论上的内容很感兴趣,那么我推荐Paul Graham的 &lt;a href=&quot;http://www.paulgraham.com/onlisp.html&quot;&gt;On Lisp&lt;/a&gt;电子书,它是免费的.他网站上的一些短文也很精彩.&lt;/p&gt;
+
+&lt;p&gt;如果你对实际应用比较感兴趣,那么大多数Lisp程序员对Perter Seibel编写的&quot;Practical Common Lisp&quot;这本书推崇有加,你可以从&lt;a href=&quot;http://www.gigamonkeys.com/book/&quot;&gt;这里&lt;/a&gt;获得&lt;/p&gt;
+
+&lt;h1&gt;为什么没有使用&quot;宏&quot;这个词&lt;/h1&gt;
+
+&lt;p&gt;编写这个教程的一个意图是使用宏来解决真实的难题.而经常的,当我向没有Lisp经验的人解释宏这个概念的时候,我得到的答复往往是,&quot;哦!C++里也有宏&quot;.当发生这种事情的时候,我就很难去解释宏的概念了.的确,Lisp中的宏和C++中的宏的确有几分相似,它们都是为了能通过编译器来改进代码的编写...&lt;/p&gt;
+
+&lt;p&gt;...所以,假设一下,如果John McCarthy使用了&quot;add&quot;而不是&quot;cons&quot;这个词来将元素添加到list中:我就真的很难解释cons是如何工作的了!&lt;/p&gt;
+
+&lt;p&gt;所以,我决定在此文中使用一个新的词汇:SPEL,语义增强逻辑的简称,它更易理解
+一些:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;它解释了Lisp宏的核心功能,能改变Lisp运行环境的行为&lt;/li&gt;
+&lt;li&gt;SPEL这个术语可以被用来很高雅的解释很多语言上观念.&lt;/li&gt;
+&lt;li&gt;这个术语不会导致Lisp中的宏与其它的宏被混为一谈&lt;/li&gt;
+&lt;li&gt;SPEL这个词重复的可能性非常低.Google搜索&quot;macro 或者 macros 程序 -lisp -scheme&quot;返回大概1150000条结果.而搜索&quot;spel 或者 spels 程序 -lisp -scheme&quot;值返回28400条结果.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;所以,我希望,作为一个Lisp程序员,你能接受这个术语.当然了,像这样的新词汇会被接受的可能性非常低.&lt;/p&gt;
+
+&lt;p&gt;如果你有一个库或者是一个Lisp实现者,请先放下你手头上的工作,先在你的库里,添加下面这行代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmacro defspel [&amp;amp; rest] `(defmacro ~@rest))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;译者感想&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;本人对Lisp的宏还是有些了解的,所以个人无法接受SPEL这个新词汇&lt;/li&gt;
+&lt;li&gt;且SPEL使得代码不易阅读,就game-action这个SPEL来说,使用了两层,而使用宏只需要一层&lt;/li&gt;
+&lt;li&gt;附录中是我使用Clojure的惯用法重新改写的代码,且文字翻译成了中文.以及使用了宏而不是SPEL.各位可比较,自行选择&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;a href=&quot;/assets/clojure/game.zip&quot;&gt;源代码&lt;/a&gt;&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;本文翻译自:&lt;a href=&quot;http://www.lisperati.com/clojure-spels/casting.html&quot;&gt;Casting SPELs in Clojure&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_01.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;准备&lt;/h1&gt;
+
+&lt;p&gt;任何学过Lisp的人都会说List和其它语言有很大的不同.它有很多不可思议的地方.本文将告诉你它有哪些独特之处!&lt;/p&gt;
+
+&lt;p&gt;本文适用于Clojure,它是一个运行在JVM上的Lisp方言.Clojure的API和语法和
+Common Lisp很类似,但是还是有足够多的区别,需要单独为其写个教程.&lt;/p&gt;
+
+&lt;p&gt;在大部分情况下,我们会说Lisp而不是Clojure,因为大部分的概念在Lisp中是通用的.我们会指出Clojure特有的内容.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_02.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Clojure是运行在JVM之上的,所以你需要先安装JVM.如果你是MAC机,那么Java已经被安装过了.如果是Linux或者Windows系统,你需要到&lt;a href=&quot;http://java.sun.com/javase/downloads/index.jsp&quot;&gt;Oracle Java官网&lt;/a&gt;下载对应版本的Java.&lt;/p&gt;
+
+&lt;p&gt;而Clojure,你可以从它的&lt;a href=&quot;http://clojure.org/&quot;&gt;官网&lt;/a&gt;获得最新版本.下载完成后,你只需要解压缩,打开命令行,切换到解压缩目录,输入:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;java -jar clojure.jar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果没有问题,那么你将会看到Clojure输出提示&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;Clojure 1.6.0
+user=&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;教程中有很多Clojure代码片段,类似下面的样子:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;'(these kinds of boxes)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你只需要将这些代码片段拷贝到Clojure REPL中运行就可以了!当你学习完此教程,你将会有一个你自己的文字冒险游戏了!&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;语法和语义&lt;/h1&gt;
+
+&lt;p&gt;每一个编程语言是由语法和语义组成的.语法是组成你的程序的骨架,你必须要遵循它们,这样编译器才能知道你的程序里什么是什么,比如说什么是函数,什么是变量,等等!&lt;/p&gt;
+
+&lt;p&gt;而语义是个比较&quot;随便&quot;的东西,例如你的程序里有哪些不同的命令,或者在程序的哪个部分能访问到哪些变量!这里Lisp比较特别的地方就是,Lisp的语法比其它任何语言都要简单.&lt;/p&gt;
+
+&lt;p&gt;首先,Lisp语法规定,所有传递给Lisp编译器的文本需要是个list,当然这个list可以无限嵌套.每个list都必须使用括号包裹.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_03.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;另外,Lisp编译器使用两种模式来读取你的代码:代码模式和数据模式.当你在数据模式下,你可以将任何东西塞到你的list中.但是在代码模式下,你的list需要是叫做form的特殊类型.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_04.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;form也是个list,不过它的第一个符号被lisp编译器特殊对待了---一般被当做函数的名字.在这种情况下,编译器会将list中的其它元素作为函数参数传递给这个函数.默认情况下,编译器运行在代码模式下,除非你特意告诉它进入数据模式.&lt;/p&gt;
+
+&lt;h1&gt;为我们的游戏世界定义数据&lt;/h1&gt;
+
+&lt;p&gt;为了进一步的学习form,让我们来创建一些form,来定义我们游戏世界里的数据.首先,我们的游戏有一些对象,玩家可以使用他们--让我们来定义吧:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def objects '(whiskey-bottle bucket frog chain))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;让我们来看看这行代码是什么意思:Lisp编译器总是使用代码模式来读取内容,所以第一个符号(这里是def),肯定是个命令.&lt;/p&gt;
+
+&lt;p&gt;在这里,它的作用就是给某个变量设值:这里变量就是objects,而值是一个包含四个对象的list.这个list是数据(我们可不想编译器去调用一个叫做whiskey-bottle的函数),所以在读取这个list时
+我们需要将其设值为数据模式.在list前面的哪个单引号就是干这个的:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_05.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;def命令就是用来设值的(如果你学过Common Lisp,你应该会知道它和CommonLisp中的setf命令等价,但是Clojure中没有setf命令)&lt;/p&gt;
+
+&lt;p&gt;现在我们在游戏里定义了一些对象,现在让我们来定义一下游戏地图.下面是我们的游戏世界:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_06.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在这个简单的游戏里,只有三个地点:一个房子,它包含起居室,阁楼和花园.让我们来定义一个新变量,叫做game-map来描述这个游戏地图:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def game-map (hash-map
+   'living-room '((you are in the living room
+                   of a wizards house - there is a wizard
+                   snoring loudly on the couch -)
+                  (west door garden)
+                  (upstairs stairway attic))
+   'garden '((you are in a beautiful garden -
+              there is a well in front of you -)
+             (east door living-room))
+   'attic '((you are in the attic of the
+             wizards house - there is a giant
+             welding torch in the corner -)
+            (downstairs stairway living-room))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个map包含了三个地点的所有重要信息:每个地点都有个独立的名字,一个简短的描述,描述了我们能在这些地点看到什么,以及如何进入此处或从此处出去.&lt;/p&gt;
+
+&lt;p&gt;请注意这个包含了丰富信息的变量是如何定义的---Lisp程序员更喜欢用小巧的代码片段而不是一大片代码,因为小代码更容易理解.&lt;/p&gt;
+
+&lt;p&gt;现在我们有了一个地图和一组对象,让我们来创建另一个变量,来描述这些对象在地图的哪些地方.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def object-locations (hash-map
+                       'whiskey-bottle 'living-room
+                       'bucket 'living-room
+                       'chain 'garden
+                       'frog 'garden))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里我们将每个对象和地点进行了关联.Clojure提供了Map这个数据结构.Map使用hash-map函数来创建,它需要一组参数类似(key1 value1 keys value2...).我们的game-map变量也是个Map---三个key分别是living-room,garden和attic.&lt;/p&gt;
+
+&lt;p&gt;我们定义了游戏世界,以及游戏世界中的对象,现在就剩下一件事了,就是描述玩家的地点!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def location 'living-room)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;搞定,现在让我们来定义游戏操作吧!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_07.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;环顾我们的游戏世界&lt;/h1&gt;
+
+&lt;p&gt;我们想要的第一个命令能够告诉我们当前地点的描述.那么我们该怎么定义这个函数呢?它要知道我们想要描述的地点以及能够从map中查找地点的描述.如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn describe-location [location game-map]
+  (first (location game-map)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;defn定义了一个函数.函数的名字叫做describe-location,它需要两个参数:地点和游戏地图.这两个变量在函数定义的括号内,所以它们是局部变量,因此对于全局的location和game-map没有关系.&lt;/p&gt;
+
+&lt;p&gt;注意到了吗?Lisp中的函数与其它语言中的函数定义相比,更像是数学中的函数:它不打印信息或者弹出消息框:它所作的就是返回结果.&lt;/p&gt;
+
+&lt;p&gt;我们假设现在我们在起居室里!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_08.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;为了能找到起居室的描述,describe-locatin函数首先需要从地图中找到起居室.(location game-map)就是进行从game-map中查找内容的,并返回起居室的描述.然后first命令来处理返回值,取得返回的list的第一个元素,这个就是起居室的描述了. 现在我们来测试一下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(describe-location 'living-room game-map)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt; user=&amp;gt; (describe-location 'living-room game-map)
+ (you are in the living-room of a wizard's house -
+ there is a wizard snoring loudly on the couch -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很完美!这就是我们要的结果!请注意我们在living-room前添加了一个单引号,因为这个符号是地点map的一个名称!但是,为什么我们没有在game-map前面添加单引号呢?这是因为我们需要编译器去查询这个符号所指向的数据(就是那个map)&lt;/p&gt;
+
+&lt;h1&gt;函数式编码风格&lt;/h1&gt;
+
+&lt;p&gt;你可能已经发现了describe-location函数有几个让人不太舒服的地方.&lt;/p&gt;
+
+&lt;p&gt;第一,为什么要传递位置和map参数,而不是直接使用已经定义的全局变量?原因是Lisp程
+序员喜欢写函数式风格的代码.函数式风格的代码,主要遵循下面三条规则:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;只读取函数传递的参数或在函数内创建的变量&lt;/li&gt;
+&lt;li&gt;不改变已经被设值的变量的值&lt;/li&gt;
+&lt;li&gt;除了返回值,不去影响函数外的任何内容&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;你也许会怀疑在这种限制下你还能写代码吗?答案是:可以!为什么很多人对这些规则感到疑惑呢?一个很重要的原因是:遵循此种风格的代码更加的引用透明(referential transparency):这意味着,对于给定的代码,你传入相同的参数,永远返回相同的结果---这能减少程序的错误,也能提高程序的生产力!&lt;/p&gt;
+
+&lt;p&gt;当然了,你也会有一些非函数式风格的代码,因为不这么做,你无法和其它用户或外部内容进行交互.教程后面会有这些函数,他们不遵循上面的规则.&lt;/p&gt;
+
+&lt;p&gt;describe-location函数的另一个问题是,它没告诉我们怎么进入一个位置或者怎么从某个位置出来.让我们来编写这样的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn describe-path [path]
+  `(there is a ~(second path) going ~(first path) from here -))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数看起来很明了:它看起来更像是数据而不是函数.我们先来尝试调用它,看它做了些什么:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(describe-path '(west door garden))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (describe-path '(west door garden))
+(user/there user/is user/a door user/going west user/from user/here clojure.core/-)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是什么?!结果看起来很乱,包含了很多的/和一些其它的文字!这是因为Clojure会将命名空间的名字添加到表达式的前面.我们这里不深究细节,只给你提供消除这些内容的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn spel-print [list] (map (fn [x] (symbol (name x))) list))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改调用方式&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(spel-print (describe-path '(west door garden)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (spel-print (describe-path '(west door garden)))
+(there is a door going west from here -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在结果很清晰了:这个函数接收一个描述路径的list然后将其解析到一个句子里面.我们回过头来看这个函数,这个函数和它产生的数据非常的像:它就是拼接第一个和第二个list的元素到语句中!它是怎么做到的?使用语法quote!&lt;/p&gt;
+
+&lt;p&gt;还记得我们使用quote来从代码模式切换到数据模式吗?语法quote的功能类似,但是还不只这样.在语法quote里,我们还能使用'\~'再次从数据模式切换回代码模式.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_09.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;语法quote是List的一个很强大的功能!它能使我们的代码看起来像它创建的数据.这在函数式编码中很常见:创建这种样子的函数,使得我们的代码更易读也更稳健:&lt;/p&gt;
+
+&lt;p&gt;只要数据不变,函数就不需要修改.想象一下,你能否在VB或C中编写类似的代码?你可能需要将文字切成小块,然后在一点点的组装-这和数据本身看起来差距很大,更别说代码的稳健性了!&lt;/p&gt;
+
+&lt;p&gt;现在我们能描述一个路径,但是一个地点可能会有多个路径,所以让我们来创建一个函数叫做describe-paths:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn describe-paths [location game-map]
+  (apply concat (map describe-path (rest (get game-map location)))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数使用了另一个在函数式编程中很常用的技术:高阶函数.apply和map这两个函数能将其它的函数作为参数.map函数将另一个函数分别作用到list中的每个对象上,这里是调用describe-path函数.apply concat是为了减少多余的括号,没有多少功能性操作!我们来试试新函数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(spel-print (describe-paths 'living-room game-map))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (spel-print (describe-paths 'living-room game-map))
+(there is a door going west from here -
+there is a stairway going upstairs from here -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;漂亮!&lt;/p&gt;
+
+&lt;p&gt;最后,我们还剩下一件事要做:描述某个地点的某个对象!我们先写个帮助函数来告诉我们在某个地方是否有某个对象!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn is-at? [obj loc obj-loc] (= (obj obj-loc) loc))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;=也是个函数,它判断对象的地点是否和当前地点相同!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_09.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们来尝试一下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(is-at? 'whiskey-bottle 'living-room object-locations)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (is-at? 'whiskey-bottle 'living-room object-locations)
+true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;返回结果是true,意味着whiskey-bottle在起居室.&lt;/p&gt;
+
+&lt;p&gt;现在让我们来使用这个函数描述地板:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn describe-floor [loc objs obj-loc]
+  (apply concat (map (fn [x]
+                       `(you see a ~x on the floor -))
+                     (filter (fn [x]
+                               (is-at? x loc obj-loc)) objs))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数包含了很多新事物:首先,它有匿名函数(fn定义的函数).第一个fn干的事,和下面的函数做的事情是一样的:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn blabla [x] `(you see a ~x on the floor.))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后将这个blabla函数传递给map函数.filter函数是过滤掉那些在当前位置没有出现的物体.我们来试一下新函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(spel-print (describe-floor 'living-room objects object-locations))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (spel-print (describe-floor 'living-room objects object-locations))
+(you see a whiskey-bottle on the floor - you see a bucket on the floor -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在,让我们来将这些函数串联起来,定义一个叫look的函数,使用全局变量(这个函数就不是函数式的了!)来描述所有的内容:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn look []
+  (spel-print (concat (describe-location location game-map)
+          (describe-paths location game-map)
+          (describe-floor location objects object-locations))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_10.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们来试一下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (look)
+(you are in the living room of a wizards house -
+there is a wizard snoring loudly on the couch -
+there is a door going west from here -
+there is a stairway going upstairs from here -
+you see a whiskey-bottle on the floor -
+you see a bucket on the floor -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很酷吧!&lt;/p&gt;
+
+&lt;h1&gt;环游我们的游戏世界&lt;/h1&gt;
+
+&lt;p&gt;好了,现在我们能看我们的世界了,让我们来写一些代码来环游我们的世界.walk-direction包含了一些方向可以使我们走到那里:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn walk-direction [direction]
+  (let [next (first (filter (fn [x] (= direction (first x)))
+                            (rest (location game-map))))]
+    (cond next (do (def location (nth next 2)) (look))
+          :else '(you cannot go that way -))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里的let用来创建局部变量next,用来描述玩家的方向.rest返回一个list,包含原list中除了第一个元素外的全部元素.如果用户输入了错误的方向,next会返回
+().&lt;/p&gt;
+
+&lt;p&gt;cond类似于if-then条件:每个cond都包含一个值,lisp检查该值是否为真,如果为真则执行其后的动作.在这里,如果下一个位置不是nil,则会定义玩家的location到新位置,然后告诉玩家该位置的描述!如果next是nil,则告诉玩家,无法到达,请重试:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(walk-direction 'west)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (walk-direction 'west)
+(you are in a beautiful garden -
+there is a well in front of you -
+there is a door going east from here -
+you see a frog on the floor -
+you see a chain on the floor -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在,我们通过创建look函数来简化描述.walk-direction也是类似的功能.但是它需要输入方向,而且还有个quote.我们能否告诉编译器west仅仅是个数据,而不是代码呢?&lt;/p&gt;
+
+&lt;h1&gt;构建SPELs&lt;/h1&gt;
+
+&lt;p&gt;现在我们开始学习Lisp中一个很强大的功能:创建SPELs!SPEL是&quot;语义增强逻辑&quot;的简称,它能够从语言级别,按照我们的需求定制,对我们的代码添加新的行为-这是Lisp最为强大的一部分.为了开启SPELs,我们需要先激活Lisp编译器的SPEL&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmacro defspel [&amp;amp; rest] `(defmacro ~@rest))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在,我们来编写我们的SPEL,叫做walk:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defspel walk [direction] `(walk-direction '~direction))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这段代码干了什么?它告诉编译器walk不是实际的名称,实际的名字叫walk-direction,并且direction前面有个quote.SPEL的主要功能就是能在我们的代码被编译器编译之前插入一些内容!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_11.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;注意到了吗?这段代码和我们之前写的describe-path很类似:在Lisp中,不只是代码和数据看起来很像,代码和特殊形式对于编译器来说也是一样的-高度的统一带来简明的设计!我们来试试新代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(walk east)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (walk east)
+(you are in the living room of a wizards house -
+there is a wizard snoring loudly on the couch -
+there is a door going west from here -
+there is a stairway going upstairs from here -
+you see a whiskey-bottle on the floor -
+you see a bucket on the floor -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;感觉好多了! 现在我们来创建一个命令来收集游戏里的物品&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn pickup-object [object]
+  (cond (is-at? object location object-locations)
+        (do
+          (def object-locations (assoc object-locations object 'body))
+          `(you are now carrying the ~object))
+        :else '(you cannot get that.)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数检查物品是否在当前地点的地上-如果在,则将它放到list里面,并返回成功提示!否则提示失败! 现在我们来创建另一个SPEL来简化这条命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defspel pickup [object] `(spel-print (pickup-object '~object)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;调用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(pickup whiskey-bottle)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (pickup whiskey-bottle)
+(you are now carrying the whiskey-bottle)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们来添加更多有用的命令-首先,一个能让我们查看我们捡到的物品的函 数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn inventory []
+  (filter (fn [x] (is-at? x 'body object-locations)) objects))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以及一个检查我们是否有某个物品的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn have? [object]
+   (some #{object} (inventory)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;创建特殊操作&lt;/h1&gt;
+
+&lt;p&gt;现在我们只剩下一件事情需要做了:添加一些特殊动作,使得玩家能够赢得游戏.第一条命令是让玩家在阁楼里给水桶焊接链条.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def chain-welded false)
+
+(defn weld [subject object]
+  (cond (and (= location 'attic)
+             (= subject 'chain)
+             (= object 'bucket)
+             (have? 'chain)
+             (have? 'bucket)
+             (not chain-welded))
+        (do (def chain-welded true)
+            '(the chain is now securely welded to the bucket -))
+        :else '(you cannot weld like that -)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先我们创建了一个新的全局变量来进行判断,我们是否进行了此操作.然后我们创建了一个weld函数,来确认此操作的条件是否完成,如果已完成则进行此操作.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_12.jpg&quot; alt=&quot;&quot; /&gt; 来试一下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(weld 'chain 'bucket)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (weld 'chain 'bucket)
+(you cannot weld like that -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Oops...我们没有水桶,也没有链条,是吧?周围也没有焊接的机器!&lt;/p&gt;
+
+&lt;p&gt;现在,让我们创建一条命令来将链条和水桶放到井里:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def bucket-filled false)
+
+(defn dunk [subject object]
+  (cond (and (= location 'garden)
+             (= subject 'bucket)
+             (= object 'well)
+             (have? 'bucket)
+             chain-welded)
+        (do (def bucket-filled true)
+            '(the bucket is now full of water))
+        :else '(you cannot dunk like that -)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意到了吗?这个命令和weld命令看起来好像!两条命令都需要检查位置,物体和对象!但是它们还是有不同,以至于我们不能将它们抽到一个函数里.太可惜了!&lt;/p&gt;
+
+&lt;p&gt;但是...这可是Lisp.我们不止能写函数,还能写SPEL!我们来创建了SPEL来处理:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defspel game-action [command subj obj place &amp;amp; args]
+  `(defspel ~command [subject# object#]
+     `(spel-print (cond (and (= location '~'~place)
+                             (= '~subject# '~'~subj)
+                             (= '~object# '~'~obj)
+                             (have? '~'~subj))
+                        ~@'~args
+                        :else '(i cannot ~'~command like that -)))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;非常复杂的SPEL!它有很多怪异的quote,语法quote,逗号以及很多怪异的符号!更重要的是他是一个构建SPEL的SPEL!!即使是很有经验的Lisp程序员,也需要费下脑细胞才能写出这么个玩样!!(这里我们不管)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_13.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这个SPEL的只是向你展示,你是否够聪明来理解这么复杂的SPEL.而且,即使这段代码很丑陋,如果它只需要写一次,并且能生成几百个命令,那么也是可以接受的!&lt;/p&gt;
+
+&lt;p&gt;让我们使用这个新的SPEL来替换我们的weld命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(game-action weld chain bucket attic
+   (cond (and (have? 'bucket) (def chain-welded true))
+              '(the chain is now securely welded to the bucket -)
+         :else '(you do not have a bucket -)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们来看看这条命令变得多容易理解:game-action这个SPEL使得我们能编写我们想要的核心代码,而不需要额外的信息.这就像我们创建了我们自己的专门创建游戏命令的编程语言.使用SPEL创建伪语言称为领域特定语言编程(DSL),它使得你的编码更加的快捷优美!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(weld chain bucket)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;user=&amp;gt; (weld chain bucket)
+(you do not have a chain -)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;...我们还没有做好焊接前的准备工作,但是这条命令生效了!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_14.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;下面我们重写dunk命令:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(game-action dunk bucket well garden
+             (cond chain-welded
+                   (do (def bucket-filled true)
+                       '(the bucket is now full of water))
+                   :else '(the water level is too low to reach -)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意weld命令需要检验我们是否有物体,但是dunk不需要.我们的game-action这个SPEL使得这段代码易写易读.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_15.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最后,就是将水泼到巫师身上:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(game-action splash bucket wizard living-room
+             (cond (not bucket-filled) '(the bucket has nothing in it -)
+                   (have? 'frog) '(the wizard awakens and sees that you stole
+                                       his frog -
+                                       he is so upset he banishes you to the
+                                       netherworlds - you lose! the end -)
+                   :else '(the wizard awakens from his slumber and greets you
+                               warmly -
+                               he hands you the magic low-carb donut - you win!
+                               the end -)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_16.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;现在你已经编写完成了一个文字冒险游戏了!&lt;/p&gt;
+
+&lt;p&gt;点击&lt;a href=&quot;http://www.lisperati.com/clojure-spels/cheat.html&quot;&gt;这里&lt;/a&gt;是完整的游戏.&lt;/p&gt;
+
+&lt;p&gt;点击&lt;a href=&quot;http://www.lisperati.com/clojure-spels/code.html&quot;&gt;这里&lt;/a&gt;是代码.&lt;/p&gt;
+
+&lt;p&gt;为了使教程尽可能的简单,很多Lisp的执行细节被忽略了,所以最后,让我们来看看这些细节!&lt;/p&gt;
+
+&lt;h1&gt;附录&lt;/h1&gt;
+
+&lt;p&gt;现在,我们来聊一聊被忽略的细节!&lt;/p&gt;
+
+&lt;p&gt;首先,Clojure有一套很成熟的定义变量以及改变变量值的系统.在此教程中,我们只使用了def来设置和改变全局变量的值.而在真正的Clojure代码里,你不会这么做.取而代之,你会使用&lt;a href=&quot;http://clojure.org/refs&quot;&gt;Refs&lt;/a&gt;,&lt;a href=&quot;http://clojure.org/atoms&quot;&gt;Atoms和&lt;/a&gt;&lt;a href=&quot;http://clojure.org/agents&quot;&gt;Agents&lt;/a&gt;,它们提供了更清晰,以及线程安全的方式来管理数据.&lt;/p&gt;
+
+&lt;p&gt;另一个问题就是我们在代码中大量使用了符号(symbol)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;'(this is not how Lispers usually write text)
+&quot;Lispers write text using double quotes&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;符号在Clojure有特殊含义,主要是用来持有函数,变量或其它内容的.所以,在Lisp中将符号作为文本信息描述是很奇怪的事情!使用字符串来显示文本信息可以避免这样的尴尬!不过,使用字符串的话,在教程里就没法讲很多关于符号的内容了!&lt;/p&gt;
+
+&lt;p&gt;还有就是SPEL在Lisp里面更普遍的叫法是&quot;宏&quot;,使用defmacro来定义,但是这个名字不易于教学,所以没有提及.你可以阅读&lt;a href=&quot;http://www.lisperati.com/clojure-spels/no_macros.html&quot;&gt;此文&lt;/a&gt;,这是我为什么没有使用&quot;宏&quot;这个名字的原因.&lt;/p&gt;
+
+&lt;p&gt;最后,在编写类似game-action这样的SPEL的时候,很可能会发生命名重复的问题.当你编写了足够多的lisp的时候,你会越来越能体会到这个问题了.&lt;/p&gt;
+
+&lt;ol type=&quot;a&quot;&gt;
+&lt;li&gt;后面我该阅读哪些内容来扩充我的Lisp知识? A.
+在&lt;a href=&quot;http://www.cliki.net/Lisp%2520books&quot;&gt;cliki网站&lt;/a&gt;有很多Lisp书籍可以下载.&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;如果你对于理论上的内容很感兴趣,那么我推荐Paul Graham的 &lt;a href=&quot;http://www.paulgraham.com/onlisp.html&quot;&gt;On Lisp&lt;/a&gt;电子书,它是免费的.他网站上的一些短文也很精彩.&lt;/p&gt;
+
+&lt;p&gt;如果你对实际应用比较感兴趣,那么大多数Lisp程序员对Perter Seibel编写的&quot;Practical Common Lisp&quot;这本书推崇有加,你可以从&lt;a href=&quot;http://www.gigamonkeys.com/book/&quot;&gt;这里&lt;/a&gt;获得&lt;/p&gt;
+
+&lt;h1&gt;为什么没有使用&quot;宏&quot;这个词&lt;/h1&gt;
+
+&lt;p&gt;编写这个教程的一个意图是使用宏来解决真实的难题.而经常的,当我向没有Lisp经验的人解释宏这个概念的时候,我得到的答复往往是,&quot;哦!C++里也有宏&quot;.当发生这种事情的时候,我就很难去解释宏的概念了.的确,Lisp中的宏和C++中的宏的确有几分相似,它们都是为了能通过编译器来改进代码的编写...&lt;/p&gt;
+
+&lt;p&gt;...所以,假设一下,如果John McCarthy使用了&quot;add&quot;而不是&quot;cons&quot;这个词来将元素添加到list中:我就真的很难解释cons是如何工作的了!&lt;/p&gt;
+
+&lt;p&gt;所以,我决定在此文中使用一个新的词汇:SPEL,语义增强逻辑的简称,它更易理解
+一些:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;它解释了Lisp宏的核心功能,能改变Lisp运行环境的行为&lt;/li&gt;
+&lt;li&gt;SPEL这个术语可以被用来很高雅的解释很多语言上观念.&lt;/li&gt;
+&lt;li&gt;这个术语不会导致Lisp中的宏与其它的宏被混为一谈&lt;/li&gt;
+&lt;li&gt;SPEL这个词重复的可能性非常低.Google搜索&quot;macro 或者 macros 程序 -lisp -scheme&quot;返回大概1150000条结果.而搜索&quot;spel 或者 spels 程序 -lisp -scheme&quot;值返回28400条结果.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;所以,我希望,作为一个Lisp程序员,你能接受这个术语.当然了,像这样的新词汇会被接受的可能性非常低.&lt;/p&gt;
+
+&lt;p&gt;如果你有一个库或者是一个Lisp实现者,请先放下你手头上的工作,先在你的库里,添加下面这行代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmacro defspel [&amp;amp; rest] `(defmacro ~@rest))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;译者感想&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;本人对Lisp的宏还是有些了解的,所以个人无法接受SPEL这个新词汇&lt;/li&gt;
+&lt;li&gt;且SPEL使得代码不易阅读,就game-action这个SPEL来说,使用了两层,而使用宏只需要一层&lt;/li&gt;
+&lt;li&gt;附录中是我使用Clojure的惯用法重新改写的代码,且文字翻译成了中文.以及使用了宏而不是SPEL.各位可比较,自行选择&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;a href=&quot;/assets/clojure/game.zip&quot;&gt;源代码&lt;/a&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Clojure进阶:使用Clojure构建DSL</title>
+        <link href="http://ivanpig.github.io/2014/10/01/dsl.html"/>
+        <updated>2014-10-01T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2014/10/01/dsl</id>
+        <content type="html">&lt;p&gt;翻译自&lt;a href=&quot;http://clojure-doc.org/articles/tutorials/growing_a_dsl_with_clojure.html&quot;&gt;Growing a DSL with Clojure&lt;/a&gt;.主要讲解如何使用&lt;/p&gt;
+
+&lt;p&gt;Clojure来创建一个简单的DSL.包括如下知识点:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;多重方法(Multimethods)&lt;/li&gt;
+&lt;li&gt;继承(Hierarchies)&lt;/li&gt;
+&lt;li&gt;元编程及&quot;代码即数据&quot;哲学(Metaprogramming and the &quot;Code as data&quot; philosophy)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Lisp及其方言(比如Clojure)可以很方便的创建DSL并能和源语言无缝的集成.&lt;/p&gt;
+
+&lt;p&gt;Lisp界鼓吹的优点中，提到最多的可能就是:数据即代码，代码即数据了。在此文中我们将依此特性来定义一个DSL。&lt;/p&gt;
+
+&lt;p&gt;我们将渐进式的开发这个DSL，不断的加入Clojure的特性和抽象。&lt;/p&gt;
+
+&lt;h1&gt;任务&lt;/h1&gt;
+
+&lt;p&gt;我们的目标是定义一个可以生成各种脚本语言的DSL.而且DSL代码看起来和普通的Clojure代码没有区别。&lt;/p&gt;
+
+&lt;p&gt;例如,我们使用Clojure形式(form)来生成Bash脚本或者Windows批处理脚本:&lt;/p&gt;
+
+&lt;p&gt;输入(Clojure形式):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(if (= 1 2)
+  (println &quot;a&quot;)
+  (println &quot;b&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出(Bash脚本):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;if [ 1 -eq 2 ]; then
+  echo &quot;a&quot;
+else
+  echo &quot;b&quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出(Windows批处理):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;IF 1==2 (
+  ECHO a
+) ELSE (
+  ECHO b
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;第一步:构建我们的领域语言&lt;/h1&gt;
+
+&lt;p&gt;我们先从Bash脚本开始。&lt;/p&gt;
+
+&lt;p&gt;在开始之前，我们先看看Clojure核心类型是否有什么类型我们可以直接拿到领域语言中使用。在Clojure类型中是否有和Bash脚本类似的类型呢？那就是字符串和基本类型，我们先从这里开始。&lt;/p&gt;
+
+&lt;p&gt;我们来定义一个emit-bash-form函数，它接受一个Clojure形式并返回一个符合Bash脚本定义的字符串。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn emit-bash-form
+  &quot;Returns a String containing the equivalent Bash script
+  to its argument.&quot;
+  [a]
+  (cond
+    (= (class a) java.lang.String) a
+    (= (class a) java.lang.Long) (str a)
+    (= (class a) java.lang.Double) (str a)
+    :else (throw (Exception. &quot;Fell through&quot;))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;cond表达式根据传入参数的类型来进行相应的操作。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (emit-bash-form 1)
+&quot;1&quot;
+user=&amp;gt; (emit-bash-form &quot;a&quot;)
+&quot;a&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;那么我们为什么要选择Long而不是Integer呢？因为在Clojure中，默认数据类型是Long.&lt;/p&gt;
+
+&lt;p&gt;虽然Clojure支持Java所有的基本类型,但是默认情况下Clojure使用的是long和double.Clojure会自动将int转成long，float转成double.可以简单的测试一下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (class 7)
+java.lang.Long
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在，如果我们想添加条件判断，我们只需要在cond表达式中添加相应的分支即可。&lt;/p&gt;
+
+&lt;h1&gt;Echo和Print&lt;/h1&gt;
+
+&lt;p&gt;让我们继续添加功能。 Bash使用echo在屏幕上打印信息。如果你玩过Linux shell那么你应该对此不陌生。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;ambrose@ambrose-desktop&amp;gt; echo asdf
+asdf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;clojure.core命名空间也包含了一个和Bash的echo类似功能的函数，叫println.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (println &quot;asdf&quot;)
+asdf
+;=&amp;gt; nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果我们能直接将(println &quot;a&quot;)传递给emit-bash-form是不是很酷?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (emit-bash-form (println &quot;asdf&quot;))
+asdf
+;=&amp;gt; nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;那么首先，需要看看这是否可行.&lt;/p&gt;
+
+&lt;p&gt;我们使用Java来进行一下类比，假设我们要调用的是这样一段Java代码，它的第一个参数类似于System.out.println(&quot;asdf&quot;).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;foo(System.out.println(&quot;asdf&quot;));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(我们先忽略System.out.println(...)返回的是void)在Java中，参数会被先求值，然后再传递，也就是说，这里会先打印出asdf，然后将println的返回值给foo方法。 我们如何能阻止参数被先求值呢?&lt;/p&gt;
+
+&lt;p&gt;很遗憾，在Java中这是不可能完成的任务。即使这在Java中可以实现，那后续我们能对这段源代码做什么处理呢?&lt;/p&gt;
+
+&lt;p&gt;System.out.println(&quot;asdf&quot;)不是集合,所以我们不能遍历它；它也不是字符串，我们也不能用正则表达式来切割它。不管System.out.println(&quot;asdf&quot;)是什么类型，除了编译器，没人认识它。&lt;/p&gt;
+
+&lt;p&gt;Lisp则不会有这样的尴尬!&lt;/p&gt;
+
+&lt;h1&gt;Lisp代码即数据&lt;/h1&gt;
+
+&lt;p&gt;上节说到的Java的主要问题是没有能处理源代码的工具。Clojure是怎么解决这个问题的呢?&lt;/p&gt;
+
+&lt;p&gt;首先，为了能获得源码，Clojure提供了quote来阻止求值过程。只需要在不需要求值的形式前面添加quote即可阻止该形式被求值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; '(println &quot;a&quot;)
+;=&amp;gt; (println &quot;a&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;那么我们的返回值是什么类型呢?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (class '(println &quot;a&quot;))
+;=&amp;gt; clojure.lang.PersistentList
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以将返回值当成原始的Clojure列表(实际上它就是)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (first '(println &quot;a&quot;))
+;=&amp;gt; println
+
+user=&amp;gt; (second '(println &quot;a&quot;))
+;=&amp;gt; &quot;a&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这就是Lisp代码即数据所带来的一个好处.&lt;/p&gt;
+
+&lt;h1&gt;细窥Clojure&lt;/h1&gt;
+
+&lt;p&gt;使用了quote，我们就离DSL近了一步。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(emit-bash-form
+  '(println &quot;a&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;让我们将这个分支添加到emit-bash-form函数中。我们需要添加一个新的判断条件。 但是这个分支该用什么类型来判断呢?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (class '(println &quot;a&quot;))
+clojure.lang.PersistentList
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;所以让我们来添加一个clojure.lang.PersistentList判断分支.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn emit-bash-form [a]
+  (cond
+    (= (class a) clojure.lang.PersistentList)
+    (case (name (first a))
+      &quot;println&quot; (str &quot;echo &quot; (second a)))
+
+    (= (class a) java.lang.String) a
+    (= (class a) java.lang.Long) (str a)
+    (= (class a) java.lang.Double) (str a)
+    :else (throw (Exception. &quot;Fell through&quot;))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看看调用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (emit-bash-form '(println &quot;a&quot;))
+&quot;echo a&quot;
+user=&amp;gt; (emit-bash-form '(println &quot;hello&quot;))
+&quot;echo hello&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;使用多重方法对分支进行抽象&lt;/h1&gt;
+
+&lt;p&gt;我们有一个好的开始，现在在我们进行下一步前，先进行一下重构。&lt;/p&gt;
+
+&lt;p&gt;现在，我们要添加新的分支，那么就要在emit-bash-form函数中添加新的判断逻辑。随着添加的分支越来越多，这个函数将越来越难维护了。我们需要将这个函数切分成易于维护的片段.&lt;/p&gt;
+
+&lt;p&gt;emit-bash-form的调度是依据其参数的类型来进行的。而这可以通过Clojure的多重方法来进行抽象。我们来定义一个叫emit-bash的多重方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmulti emit-bash
+  (fn [form]
+    (class form)))
+
+(defmethod emit-bash
+  clojure.lang.PersistentList
+  [form]
+  (case (name (first form))
+    &quot;println&quot; (str &quot;echo &quot; (second form))))
+
+(defmethod emit-bash
+  java.lang.String
+  [form]
+  form)
+
+(defmethod emit-bash
+  java.lang.Long
+  [form]
+  (str form))
+
+(defmethod emit-bash
+  java.lang.Double
+  [form]
+  (str form))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;多重方法的分派和cond很类似，但是不需要去写实际的分派代码。让我们来对比一下多重方法和之前的代码。defmulti用来创建一个新的多重方法，并和分派函数来关联。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmulti emit-bash
+  (fn [form]
+    (class form)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;defmethod用来添加具体的方法到多重方法中。在这里java.lang.String是指派所依赖的值,而方法直接返回form自身.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmethod emit-bash
+  java.lang.String
+  [form]
+  form)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;添加新方法和扩展cond表达式的效果相同，差别就是:多重方法来控制指派，不需要你去写控制代码。&lt;/p&gt;
+
+&lt;p&gt;那么我们该如何使用emit-bash呢？调用多重方法和调用普通的Clojure函数一模一样:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (emit-bash '(println &quot;a&quot;))
+&quot;echo a&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;分支判断由多重方法自己去判断了。&lt;/p&gt;
+
+&lt;h1&gt;扩展我们的DSL实现Windows批处理&lt;/h1&gt;
+
+&lt;p&gt;现在我们来实现Windows批处理.我们来定义一个新的多重方法,emit-batch:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmulti emit-batch
+  (fn [form] (class form)))
+
+(defmethod emit-batch clojure.lang.PersistentList
+  [form]
+  (case (name (first form))
+    &quot;println&quot; (str &quot;ECHO &quot; (second form))
+    nil))
+
+(defmethod emit-batch java.lang.String
+  [form]
+  form)
+
+(defmethod emit-batch java.lang.Long
+  [form]
+  (str form))
+
+(defmethod emit-batch java.lang.Double
+  [form]
+  (str form))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们能使用emit-batch和emit-bash了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (emit-batch '(println &quot;a&quot;))
+&quot;ECHO a&quot;
+user=&amp;gt; (emit-bash '(println &quot;a&quot;))
+&quot;echo a&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Ad-hoc继承&lt;/h1&gt;
+
+&lt;p&gt;比较一下两个实现，有很多相似的地方。实际上，只有clojure.lang.PersistentList分支有区别。&lt;/p&gt;
+
+&lt;p&gt;我们想到了继承，Clojure可以很方便的实现继承。&lt;/p&gt;
+
+&lt;p&gt;当我说继承的时候，我可不是指依赖于类或者命名空间的那种继承，实际上继承是一个与类或命名空间无关的独立功能。&lt;/p&gt;
+
+&lt;p&gt;但是像Java这样的语言，继承是绑定到了类层级上的.&lt;/p&gt;
+
+&lt;p&gt;我们能从一个名字派生到另一个名字，或者从类派生到名字。而这个名字可以是symbol或者keyword.这样的话继承就更加的灵活和强大! 我们将使用(derive childparent)来定义父子关系。isa?来判断第一个参数是不是派生自第二个参数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (derive ::child ::parent)
+nil
+
+user=&amp;gt; (isa? ::child ::parent)
+true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们来定义Bash和Batch的继承关系&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(derive ::bash ::common)
+(derive ::batch ::common)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;测试一下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (parents ::bash)
+;=&amp;gt; #{:user/common}
+
+user=&amp;gt; (parents ::batch)
+;=&amp;gt; #{:user/common}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;多重方法中使用继承&lt;/h1&gt;
+
+&lt;p&gt;现在我们可以利用继承关系来定义一个新的多重方法emit了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmulti emit
+  (fn [form]
+    [*current-implementation* (class form)]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数返回了一个包含两个元素的vector。一个是当前的实现(::bash或者::batch)和指派类型。*current-implementation*是个动态var,你可以把他看做一个线程安全的全局变量。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def ^{:dynamic true}
+  &quot;The current script language implementation to generate&quot;
+  *current-implementation*)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在我们的继承关系中，::common是父，这就意味着它需要提供公共方法。需要记住的是，现在的指派值是个vector。所以在每个defmethod中，都需要包含一个vector，其中第一个元素是指派值.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmethod emit [::common java.lang.String]
+  [form]
+  form)
+
+(defmethod emit [::common java.lang.Long]
+  [form]
+  (str form))
+
+(defmethod emit [::common java.lang.Double]
+  [form]
+  (str form))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码很类似。只有clojure.lang.PersistentList分支需要特别处理，其vector的第一个元素需要为::bash或者::batch，而不能是::common了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmethod emit [::bash clojure.lang.PersistentList]
+  [form]
+  (case (name (first form))
+    &quot;println&quot; (str &quot;echo &quot; (second form))
+    nil))
+
+(defmethod emit [::batch clojure.lang.PersistentList]
+  [form]
+  (case (name (first form))
+    &quot;println&quot; (str &quot;ECHO &quot; (second form))
+    nil))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们来测试一下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;user=&amp;gt; (binding [*current-implementation* ::common]
+         (emit &quot;a&quot;))
+&quot;a&quot;
+
+user=&amp;gt; (binding [*current-implementation* ::batch]
+         (emit '(println &quot;a&quot;)))
+&quot;ECHO a&quot;
+
+user=&amp;gt; (binding [*current-implementation* ::bash]
+         (emit '(println &quot;a&quot;)))
+&quot;echo a&quot;
+
+user=&amp;gt; (binding [*current-implementation* ::common]
+         (emit '(println &quot;a&quot;)))
+#&amp;lt;CompilerException java.lang.IllegalArgumentException:
+No method in multimethod 'emit' for dispatch value:
+[:user/common clojure.lang.PersistentList] (REPL:31)&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为我们没有定义[::common clojure.lang.PersistentList]的实现，多重方法报错了。&lt;/p&gt;
+
+&lt;p&gt;多重方法非常强大且非常灵活，但是能力越强责任越大。我们可以将我们的多重方法放在同一个命名空间下，但是不代表我们就需要这么做。当我们的DSL越来越大的时候，我们需要将其分开到独立的命名空间下去。&lt;/p&gt;
+
+&lt;p&gt;这是个小例子，但是很好的展示了命名空间和继承的功能。&lt;/p&gt;
+
+&lt;h1&gt;饭后甜点&lt;/h1&gt;
+
+&lt;p&gt;我们使用多重方法，动态var和ad-hoc继承创建了一个漂亮的，细粒度的DSL，但是在使用的时候还是有些许的不便。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(binding [*current-implementation* ::bash]
+  (emit '(println &quot;a&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们来消除样板代码.但是它在哪呢？&lt;/p&gt;
+
+&lt;p&gt;binding表达式就是个样板代码，我们可以将binding的工作封装到with-implementation中&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(with-implementation ::bash
+  (emit '(println &quot;a&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是个改进。但是还有个改进没有这么的明显:用来延迟求值的quote。我们使用script来消除这个quote.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(with-implementation ::bash
+  (script
+    (println &quot;a&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样看起来好多了，但我们如何来实现script呢？Clojure函数会在求函数值前对所有的参数进行求值，而quote就是用来解决这个问题。而现在我们要消除这个quote。只能使用Lisp中的宏来处理。&lt;/p&gt;
+
+&lt;p&gt;宏不会去立即对参数求值，这正是我们需要的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmacro script [form]
+  `(emit '~form))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看看调用结果&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;(script (println &quot;a&quot;))
+=&amp;gt;
+(emit '(println &quot;a&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;比起欣赏宏美化语法的功能，记住宏的特性对你更有帮助。&lt;/p&gt;
+
+&lt;p&gt;对于with-implementation来说，也需要宏来解决，与script不同，它不是为了延迟求值这个功能，而是对于其中的script来说，需要先将script的内容添加到binding形式中，才能进行求值.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmacro with-implementation
+  [impl &amp;amp; body]
+  `(binding [*current-implementation* impl]
+    ~@body))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好了,这就是DSL的所有内容了,实际上就添加了语法糖.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;(with-implementation ::bash
+  (script
+    (println &quot;a&quot;)))
+=&amp;gt;
+(with-implementation ::bash
+  (emit
+    '(println &quot;a&quot;))
+=&amp;gt;
+(binding [*current-implementation* ::bash]
+  (emit
+    '(println &quot;a&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出一个定义良好的宏如何来给代码添加语法糖.我们的DSL和普通的Clojure代码看起来没啥区别.&lt;/p&gt;
+
+&lt;h1&gt;总结&lt;/h1&gt;
+
+&lt;p&gt;在这个DSL中,我们看到了Clojure的很多高级特性.&lt;/p&gt;
+
+&lt;p&gt;我们来回顾一下我们构建DSL的过程.&lt;/p&gt;
+
+&lt;p&gt;一开始,我们使用了简单的cond表达式,然后变成了两个多重方法.接着我们使用了继承和动态var来消除重复代码.最后我们使用宏来简化调用.&lt;/p&gt;
+
+&lt;p&gt;这个DSL是&lt;a href=&quot;https://github.com/pallet/stevedore&quot;&gt;Stevedore&lt;/a&gt;的一个简化版本,Stevedore是Hugo Duncan开发的开源项目.如果你对这个DSL的实现感兴趣,那么最好的方法就是去看Stevedore的源码了.&lt;/p&gt;
+
+&lt;h1&gt;Copyright&lt;/h1&gt;
+
+&lt;p&gt;Copyright Ambrose Bonnaire-Sergeant, 2013 Translated By Ivan 2014.02&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;翻译自&lt;a href=&quot;http://clojure-doc.org/articles/tutorials/growing_a_dsl_with_clojure.html&quot;&gt;Growing a DSL with Clojure&lt;/a&gt;.主要讲解如何使用&lt;/p&gt;
+
+&lt;p&gt;Clojure来创建一个简单的DSL.包括如下知识点:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;多重方法(Multimethods)&lt;/li&gt;
+&lt;li&gt;继承(Hierarchies)&lt;/li&gt;
+&lt;li&gt;元编程及&quot;代码即数据&quot;哲学(Metaprogramming and the &quot;Code as data&quot; philosophy)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Lisp及其方言(比如Clojure)可以很方便的创建DSL并能和源语言无缝的集成.&lt;/p&gt;
+
+&lt;p&gt;Lisp界鼓吹的优点中，提到最多的可能就是:数据即代码，代码即数据了。在此文中我们将依此特性来定义一个DSL。&lt;/p&gt;
+
+&lt;p&gt;我们将渐进式的开发这个DSL，不断的加入Clojure的特性和抽象。&lt;/p&gt;
+
+&lt;h1&gt;任务&lt;/h1&gt;
+
+&lt;p&gt;我们的目标是定义一个可以生成各种脚本语言的DSL.而且DSL代码看起来和普通的Clojure代码没有区别。&lt;/p&gt;
+
+&lt;p&gt;例如,我们使用Clojure形式(form)来生成Bash脚本或者Windows批处理脚本:&lt;/p&gt;
+
+&lt;p&gt;输入(Clojure形式):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(if (= 1 2)
+  (println &quot;a&quot;)
+  (println &quot;b&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出(Bash脚本):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;if [ 1 -eq 2 ]; then
+  echo &quot;a&quot;
+else
+  echo &quot;b&quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出(Windows批处理):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;IF 1==2 (
+  ECHO a
+) ELSE (
+  ECHO b
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;第一步:构建我们的领域语言&lt;/h1&gt;
+
+&lt;p&gt;我们先从Bash脚本开始。&lt;/p&gt;
+
+&lt;p&gt;在开始之前，我们先看看Clojure核心类型是否有什么类型我们可以直接拿到领域语言中使用。在Clojure类型中是否有和Bash脚本类似的类型呢？那就是字符串和基本类型，我们先从这里开始。&lt;/p&gt;
+
+&lt;p&gt;我们来定义一个emit-bash-form函数，它接受一个Clojure形式并返回一个符合Bash脚本定义的字符串。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn emit-bash-form
+  &quot;Returns a String containing the equivalent Bash script
+  to its argument.&quot;
+  [a]
+  (cond
+    (= (class a) java.lang.String) a
+    (= (class a) java.lang.Long) (str a)
+    (= (class a) java.lang.Double) (str a)
+    :else (throw (Exception. &quot;Fell through&quot;))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;cond表达式根据传入参数的类型来进行相应的操作。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (emit-bash-form 1)
+&quot;1&quot;
+user=&amp;gt; (emit-bash-form &quot;a&quot;)
+&quot;a&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;那么我们为什么要选择Long而不是Integer呢？因为在Clojure中，默认数据类型是Long.&lt;/p&gt;
+
+&lt;p&gt;虽然Clojure支持Java所有的基本类型,但是默认情况下Clojure使用的是long和double.Clojure会自动将int转成long，float转成double.可以简单的测试一下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (class 7)
+java.lang.Long
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在，如果我们想添加条件判断，我们只需要在cond表达式中添加相应的分支即可。&lt;/p&gt;
+
+&lt;h1&gt;Echo和Print&lt;/h1&gt;
+
+&lt;p&gt;让我们继续添加功能。 Bash使用echo在屏幕上打印信息。如果你玩过Linux shell那么你应该对此不陌生。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;ambrose@ambrose-desktop&amp;gt; echo asdf
+asdf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;clojure.core命名空间也包含了一个和Bash的echo类似功能的函数，叫println.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (println &quot;asdf&quot;)
+asdf
+;=&amp;gt; nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果我们能直接将(println &quot;a&quot;)传递给emit-bash-form是不是很酷?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (emit-bash-form (println &quot;asdf&quot;))
+asdf
+;=&amp;gt; nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;那么首先，需要看看这是否可行.&lt;/p&gt;
+
+&lt;p&gt;我们使用Java来进行一下类比，假设我们要调用的是这样一段Java代码，它的第一个参数类似于System.out.println(&quot;asdf&quot;).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;foo(System.out.println(&quot;asdf&quot;));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(我们先忽略System.out.println(...)返回的是void)在Java中，参数会被先求值，然后再传递，也就是说，这里会先打印出asdf，然后将println的返回值给foo方法。 我们如何能阻止参数被先求值呢?&lt;/p&gt;
+
+&lt;p&gt;很遗憾，在Java中这是不可能完成的任务。即使这在Java中可以实现，那后续我们能对这段源代码做什么处理呢?&lt;/p&gt;
+
+&lt;p&gt;System.out.println(&quot;asdf&quot;)不是集合,所以我们不能遍历它；它也不是字符串，我们也不能用正则表达式来切割它。不管System.out.println(&quot;asdf&quot;)是什么类型，除了编译器，没人认识它。&lt;/p&gt;
+
+&lt;p&gt;Lisp则不会有这样的尴尬!&lt;/p&gt;
+
+&lt;h1&gt;Lisp代码即数据&lt;/h1&gt;
+
+&lt;p&gt;上节说到的Java的主要问题是没有能处理源代码的工具。Clojure是怎么解决这个问题的呢?&lt;/p&gt;
+
+&lt;p&gt;首先，为了能获得源码，Clojure提供了quote来阻止求值过程。只需要在不需要求值的形式前面添加quote即可阻止该形式被求值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; '(println &quot;a&quot;)
+;=&amp;gt; (println &quot;a&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;那么我们的返回值是什么类型呢?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (class '(println &quot;a&quot;))
+;=&amp;gt; clojure.lang.PersistentList
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以将返回值当成原始的Clojure列表(实际上它就是)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (first '(println &quot;a&quot;))
+;=&amp;gt; println
+
+user=&amp;gt; (second '(println &quot;a&quot;))
+;=&amp;gt; &quot;a&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这就是Lisp代码即数据所带来的一个好处.&lt;/p&gt;
+
+&lt;h1&gt;细窥Clojure&lt;/h1&gt;
+
+&lt;p&gt;使用了quote，我们就离DSL近了一步。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(emit-bash-form
+  '(println &quot;a&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;让我们将这个分支添加到emit-bash-form函数中。我们需要添加一个新的判断条件。 但是这个分支该用什么类型来判断呢?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (class '(println &quot;a&quot;))
+clojure.lang.PersistentList
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;所以让我们来添加一个clojure.lang.PersistentList判断分支.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn emit-bash-form [a]
+  (cond
+    (= (class a) clojure.lang.PersistentList)
+    (case (name (first a))
+      &quot;println&quot; (str &quot;echo &quot; (second a)))
+
+    (= (class a) java.lang.String) a
+    (= (class a) java.lang.Long) (str a)
+    (= (class a) java.lang.Double) (str a)
+    :else (throw (Exception. &quot;Fell through&quot;))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看看调用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (emit-bash-form '(println &quot;a&quot;))
+&quot;echo a&quot;
+user=&amp;gt; (emit-bash-form '(println &quot;hello&quot;))
+&quot;echo hello&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;使用多重方法对分支进行抽象&lt;/h1&gt;
+
+&lt;p&gt;我们有一个好的开始，现在在我们进行下一步前，先进行一下重构。&lt;/p&gt;
+
+&lt;p&gt;现在，我们要添加新的分支，那么就要在emit-bash-form函数中添加新的判断逻辑。随着添加的分支越来越多，这个函数将越来越难维护了。我们需要将这个函数切分成易于维护的片段.&lt;/p&gt;
+
+&lt;p&gt;emit-bash-form的调度是依据其参数的类型来进行的。而这可以通过Clojure的多重方法来进行抽象。我们来定义一个叫emit-bash的多重方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmulti emit-bash
+  (fn [form]
+    (class form)))
+
+(defmethod emit-bash
+  clojure.lang.PersistentList
+  [form]
+  (case (name (first form))
+    &quot;println&quot; (str &quot;echo &quot; (second form))))
+
+(defmethod emit-bash
+  java.lang.String
+  [form]
+  form)
+
+(defmethod emit-bash
+  java.lang.Long
+  [form]
+  (str form))
+
+(defmethod emit-bash
+  java.lang.Double
+  [form]
+  (str form))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;多重方法的分派和cond很类似，但是不需要去写实际的分派代码。让我们来对比一下多重方法和之前的代码。defmulti用来创建一个新的多重方法，并和分派函数来关联。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmulti emit-bash
+  (fn [form]
+    (class form)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;defmethod用来添加具体的方法到多重方法中。在这里java.lang.String是指派所依赖的值,而方法直接返回form自身.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmethod emit-bash
+  java.lang.String
+  [form]
+  form)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;添加新方法和扩展cond表达式的效果相同，差别就是:多重方法来控制指派，不需要你去写控制代码。&lt;/p&gt;
+
+&lt;p&gt;那么我们该如何使用emit-bash呢？调用多重方法和调用普通的Clojure函数一模一样:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (emit-bash '(println &quot;a&quot;))
+&quot;echo a&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;分支判断由多重方法自己去判断了。&lt;/p&gt;
+
+&lt;h1&gt;扩展我们的DSL实现Windows批处理&lt;/h1&gt;
+
+&lt;p&gt;现在我们来实现Windows批处理.我们来定义一个新的多重方法,emit-batch:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmulti emit-batch
+  (fn [form] (class form)))
+
+(defmethod emit-batch clojure.lang.PersistentList
+  [form]
+  (case (name (first form))
+    &quot;println&quot; (str &quot;ECHO &quot; (second form))
+    nil))
+
+(defmethod emit-batch java.lang.String
+  [form]
+  form)
+
+(defmethod emit-batch java.lang.Long
+  [form]
+  (str form))
+
+(defmethod emit-batch java.lang.Double
+  [form]
+  (str form))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们能使用emit-batch和emit-bash了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (emit-batch '(println &quot;a&quot;))
+&quot;ECHO a&quot;
+user=&amp;gt; (emit-bash '(println &quot;a&quot;))
+&quot;echo a&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Ad-hoc继承&lt;/h1&gt;
+
+&lt;p&gt;比较一下两个实现，有很多相似的地方。实际上，只有clojure.lang.PersistentList分支有区别。&lt;/p&gt;
+
+&lt;p&gt;我们想到了继承，Clojure可以很方便的实现继承。&lt;/p&gt;
+
+&lt;p&gt;当我说继承的时候，我可不是指依赖于类或者命名空间的那种继承，实际上继承是一个与类或命名空间无关的独立功能。&lt;/p&gt;
+
+&lt;p&gt;但是像Java这样的语言，继承是绑定到了类层级上的.&lt;/p&gt;
+
+&lt;p&gt;我们能从一个名字派生到另一个名字，或者从类派生到名字。而这个名字可以是symbol或者keyword.这样的话继承就更加的灵活和强大! 我们将使用(derive childparent)来定义父子关系。isa?来判断第一个参数是不是派生自第二个参数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (derive ::child ::parent)
+nil
+
+user=&amp;gt; (isa? ::child ::parent)
+true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们来定义Bash和Batch的继承关系&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(derive ::bash ::common)
+(derive ::batch ::common)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;测试一下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (parents ::bash)
+;=&amp;gt; #{:user/common}
+
+user=&amp;gt; (parents ::batch)
+;=&amp;gt; #{:user/common}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;多重方法中使用继承&lt;/h1&gt;
+
+&lt;p&gt;现在我们可以利用继承关系来定义一个新的多重方法emit了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmulti emit
+  (fn [form]
+    [*current-implementation* (class form)]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个函数返回了一个包含两个元素的vector。一个是当前的实现(::bash或者::batch)和指派类型。*current-implementation*是个动态var,你可以把他看做一个线程安全的全局变量。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def ^{:dynamic true}
+  &quot;The current script language implementation to generate&quot;
+  *current-implementation*)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在我们的继承关系中，::common是父，这就意味着它需要提供公共方法。需要记住的是，现在的指派值是个vector。所以在每个defmethod中，都需要包含一个vector，其中第一个元素是指派值.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmethod emit [::common java.lang.String]
+  [form]
+  form)
+
+(defmethod emit [::common java.lang.Long]
+  [form]
+  (str form))
+
+(defmethod emit [::common java.lang.Double]
+  [form]
+  (str form))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码很类似。只有clojure.lang.PersistentList分支需要特别处理，其vector的第一个元素需要为::bash或者::batch，而不能是::common了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmethod emit [::bash clojure.lang.PersistentList]
+  [form]
+  (case (name (first form))
+    &quot;println&quot; (str &quot;echo &quot; (second form))
+    nil))
+
+(defmethod emit [::batch clojure.lang.PersistentList]
+  [form]
+  (case (name (first form))
+    &quot;println&quot; (str &quot;ECHO &quot; (second form))
+    nil))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们来测试一下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;user=&amp;gt; (binding [*current-implementation* ::common]
+         (emit &quot;a&quot;))
+&quot;a&quot;
+
+user=&amp;gt; (binding [*current-implementation* ::batch]
+         (emit '(println &quot;a&quot;)))
+&quot;ECHO a&quot;
+
+user=&amp;gt; (binding [*current-implementation* ::bash]
+         (emit '(println &quot;a&quot;)))
+&quot;echo a&quot;
+
+user=&amp;gt; (binding [*current-implementation* ::common]
+         (emit '(println &quot;a&quot;)))
+#&amp;lt;CompilerException java.lang.IllegalArgumentException:
+No method in multimethod 'emit' for dispatch value:
+[:user/common clojure.lang.PersistentList] (REPL:31)&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为我们没有定义[::common clojure.lang.PersistentList]的实现，多重方法报错了。&lt;/p&gt;
+
+&lt;p&gt;多重方法非常强大且非常灵活，但是能力越强责任越大。我们可以将我们的多重方法放在同一个命名空间下，但是不代表我们就需要这么做。当我们的DSL越来越大的时候，我们需要将其分开到独立的命名空间下去。&lt;/p&gt;
+
+&lt;p&gt;这是个小例子，但是很好的展示了命名空间和继承的功能。&lt;/p&gt;
+
+&lt;h1&gt;饭后甜点&lt;/h1&gt;
+
+&lt;p&gt;我们使用多重方法，动态var和ad-hoc继承创建了一个漂亮的，细粒度的DSL，但是在使用的时候还是有些许的不便。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(binding [*current-implementation* ::bash]
+  (emit '(println &quot;a&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们来消除样板代码.但是它在哪呢？&lt;/p&gt;
+
+&lt;p&gt;binding表达式就是个样板代码，我们可以将binding的工作封装到with-implementation中&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(with-implementation ::bash
+  (emit '(println &quot;a&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是个改进。但是还有个改进没有这么的明显:用来延迟求值的quote。我们使用script来消除这个quote.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(with-implementation ::bash
+  (script
+    (println &quot;a&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样看起来好多了，但我们如何来实现script呢？Clojure函数会在求函数值前对所有的参数进行求值，而quote就是用来解决这个问题。而现在我们要消除这个quote。只能使用Lisp中的宏来处理。&lt;/p&gt;
+
+&lt;p&gt;宏不会去立即对参数求值，这正是我们需要的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmacro script [form]
+  `(emit '~form))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看看调用结果&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;(script (println &quot;a&quot;))
+=&amp;gt;
+(emit '(println &quot;a&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;比起欣赏宏美化语法的功能，记住宏的特性对你更有帮助。&lt;/p&gt;
+
+&lt;p&gt;对于with-implementation来说，也需要宏来解决，与script不同，它不是为了延迟求值这个功能，而是对于其中的script来说，需要先将script的内容添加到binding形式中，才能进行求值.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defmacro with-implementation
+  [impl &amp;amp; body]
+  `(binding [*current-implementation* impl]
+    ~@body))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好了,这就是DSL的所有内容了,实际上就添加了语法糖.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;(with-implementation ::bash
+  (script
+    (println &quot;a&quot;)))
+=&amp;gt;
+(with-implementation ::bash
+  (emit
+    '(println &quot;a&quot;))
+=&amp;gt;
+(binding [*current-implementation* ::bash]
+  (emit
+    '(println &quot;a&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出一个定义良好的宏如何来给代码添加语法糖.我们的DSL和普通的Clojure代码看起来没啥区别.&lt;/p&gt;
+
+&lt;h1&gt;总结&lt;/h1&gt;
+
+&lt;p&gt;在这个DSL中,我们看到了Clojure的很多高级特性.&lt;/p&gt;
+
+&lt;p&gt;我们来回顾一下我们构建DSL的过程.&lt;/p&gt;
+
+&lt;p&gt;一开始,我们使用了简单的cond表达式,然后变成了两个多重方法.接着我们使用了继承和动态var来消除重复代码.最后我们使用宏来简化调用.&lt;/p&gt;
+
+&lt;p&gt;这个DSL是&lt;a href=&quot;https://github.com/pallet/stevedore&quot;&gt;Stevedore&lt;/a&gt;的一个简化版本,Stevedore是Hugo Duncan开发的开源项目.如果你对这个DSL的实现感兴趣,那么最好的方法就是去看Stevedore的源码了.&lt;/p&gt;
+
+&lt;h1&gt;Copyright&lt;/h1&gt;
+
+&lt;p&gt;Copyright Ambrose Bonnaire-Sergeant, 2013 Translated By Ivan 2014.02&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Clojure教程-命名空间</title>
+        <link href="http://ivanpig.github.io/2014/08/29/namespace.html"/>
+        <updated>2014-08-29T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2014/08/29/namespace</id>
+        <content type="html">&lt;h1&gt;版本&lt;/h1&gt;
+
+&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/language/namespaces.html&quot;&gt;Clojure Namespaces and Vars&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文涵盖如下内容:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Clojure命名空间和var概述&lt;/li&gt;
+&lt;li&gt;如何定义命名空间&lt;/li&gt;
+&lt;li&gt;如何使用其它命名空间里的函数&lt;/li&gt;
+&lt;li&gt;require,refer和use&lt;/li&gt;
+&lt;li&gt;常见错误和典型错误,以及导致这些错误的原因&lt;/li&gt;
+&lt;li&gt;命名空间和代码管理&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;版权:&lt;/p&gt;
+
+&lt;p&gt;This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp;amp; stylesheets). The source is available on Github.&lt;/p&gt;
+
+&lt;p&gt;涵盖Clojure版本:Clojure 1.5&lt;/p&gt;
+
+&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;Clojure的函数通过命名空间来组织.Clojure命名空间和Java的包或者Python的模块很类似.命名空间实际上就是个map,将名字映射到了var上.在大部分情况下,这些var持有这些函数.&lt;/p&gt;
+
+&lt;h1&gt;定义一个命名空间&lt;/h1&gt;
+
+&lt;p&gt;一般情况下使用clojure.core/ns宏来定义命名空间.最基本的形式下,它将名字作为符号.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns superlib.core)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;命名空间可以由点号切割的好多段组成&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.service.core)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;需要注意的是,请尽量避免使用单段的命名空间,以免与其它开发人员的命名空间相冲突.如果库或者应用属于某个组织,那么建议以如下形式作为命名空间.[组织名称].[包名|应用名].[函数组名]
+例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns clojurewerkz.welle.kv)
+
+(ns megacorp.search.indexer.core)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;另外,ns宏可以包含如下形式:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(:require ...)&lt;/li&gt;
+&lt;li&gt;(:import ...)&lt;/li&gt;
+&lt;li&gt;(:use ...)&lt;/li&gt;
+&lt;li&gt;(:refer-clojure ...)&lt;/li&gt;
+&lt;li&gt;(:gen-class ...)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;这些其实就是clojure.core/import,clojure.core/require等等这些的简写形式而已&lt;/p&gt;
+
+&lt;h2&gt;:require&lt;/h2&gt;
+
+&lt;p&gt;:require形式可以使你的代码能访问其它命名空间的Clojure代码.例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:require clojure.set))
+
+;; Now it is possible to do:
+;; (clojure.set/difference #{1 2 3} #{3 4 5})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此代码将保证clojure.set命名空间被加载,编译并且可以通过clojure.set名来调用.当然可以给加载的命名空间取个别名:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:require [clojure.set :as cs]))
+
+;; Now it is possible to do:
+;; (cs/difference #{1 2 3} #{3 4 5})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一次导入两个命名空间的例子;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:require [clojure.set  :as cs]
+            [clojure.walk :as walk]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;:refer选项&lt;/h3&gt;
+
+&lt;p&gt;如果想在当前命名空间里通过简写名称来引用clojure.set空间里的函数,可以通过refer来实现:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:require [clojure.set :refer [difference intersection]]))
+
+;; Now it is possible to do:
+;; (difference #{1 2 3} #{3 4 5})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;:require形式中的:refer特性为Clojure1.4新增特性.&lt;/p&gt;
+
+&lt;p&gt;可能有时需要引入某个命名空间下所有的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:require [clojure.set :refer :all]))
+
+;; Now it is possible to do:
+;; (difference #{1 2 3} #{3 4 5})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;:import&lt;/h2&gt;
+
+&lt;p&gt;:import的作用是在当前命名空间引入Java类:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:import java.util.concurrent.Executors))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;执行上面的代码后,java.util.concurrent.Executors类将会被引入,请可以直接通过名字Executors来使用.可以同时引入多个类.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:import java.util.concurrent.Executors
+           java.util.concurrent.TimeUnit
+           java.util.Date))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果引入的多个类在同一个包下面,就像上面那样,可以使用如下的简介方式:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:import [java.util.concurrent Executors TimeUnit]
+           java.util.Date))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;虽然导入的list被叫做list,实际上可以使用任意的Clojure的集合(一般使用vector)&lt;/p&gt;
+
+&lt;h2&gt;当前命名空间&lt;/h2&gt;
+
+&lt;p&gt;Clojure将通过*ns*来持有当前的命名空间.使用def形式定义的var被添加到了当前命名空间中.&lt;/p&gt;
+
+&lt;h2&gt;:refer-clojure&lt;/h2&gt;
+
+&lt;p&gt;我们在使用像clojure.core/get这样的函数和clojure.core/defn这样的宏的时候我们不需要使用它的全限定名.这是因为Clojure默认将clojure.core下的内容全部加载进了当前命名空间里了.所以如果你定义了一个函数名和clojure.core里的重复了(比如find),你将会得到一个警告.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;WARNING: find already refers to: #'clojure.core/find in namespace:    megacorp.profitd.scheduling, being replaced by: #'megacorp.profitd.scheduling/find
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个警告的意思是在megacorp.profitd.scheduling这个命名空间里,已经有一个clojure.core/find了,但是现在它被你定义的函数覆盖了.请记住,Clojure是很动态的语言,命名空间就是map而已.&lt;/p&gt;
+
+&lt;p&gt;解决这个问题的办法有:你可以重命名你的函数或者不引入clojure.core里的这个函数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:refer-clojure :exclude [find]))
+
+(defn find
+  &quot;Finds a needle in the haystack.&quot;
+  [^String haystack]
+  (comment ...))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在这里,如果你想使用clojure.core/find的话,你需要通过全限定名来使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:refer-clojure :exclude [find]))
+
+(defn find
+  &quot;Finds a needle in the haystack.&quot;
+  [^String haystack]
+  (clojure.core/find haystack :needle))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;:use&lt;/h2&gt;
+
+&lt;p&gt;Clojure在1.4之前,:require是不支持:refer的,只能使用:use&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling-test
+  (:use clojure.test))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,clojure.test里的所有内容都被引入到了当前命名空间中.但是一般不会这样使用,建议是只引入需要的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling-test
+  (:use clojure.test :only [deftest testing is]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1.4以前的做法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling-test
+  (:require clojure.test :refer [deftest testing is]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;而现在鼓励的做法是使用:require,通过:refer来进行限制.&lt;/p&gt;
+
+&lt;h2&gt;文档与元数据&lt;/h2&gt;
+
+&lt;p&gt;命名空间可以包含说明文档.你可以在ns宏里添加:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns superlib.core
+  &quot;Core functionality of Superlib.
+
+   Other parts of Superlib depend on functions and macros in this namespace.&quot;
+  (:require [clojure.set :refer [union difference]]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者元数据&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns ^{:doc &quot;Core functionality of Superlib.
+            Other parts of Superlib depend on functions and macros in this namespace.&quot;
+      :author &quot;Joe Smith&quot;}
+   superlib.core
+  (:require [clojure.set :refer [union difference]]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;元数据可以包含任意的键,例如:author,很多工具可以使用(像Codox,Cadastre或者lein-clojuredocs)&lt;/p&gt;
+
+&lt;h1&gt;如何在REPL里使用其它命名空间的函数&lt;/h1&gt;
+
+&lt;p&gt;ns宏是你经常需要使用的,它引入其它命名空间的函数.但是它在REPL里不太方便.这里可以直接使用require:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;;; Will be available as clojure.set, e.g. clojure.set/difference.
+(require 'clojure.set)
+
+;; Will be available as io, e.g. io/resource.
+(require '[clojure.java.io :as io])
+It takes a quoted libspec. The libspec is either a namespace name or a collection (typically a vector) of [name :as alias] or [name :refer [fns]]:
+
+(require '[clojure.set :refer [difference]])
+
+(difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;:as和:refer可以一起使用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(require '[clojure.set :as cs :refer [difference]])
+
+(difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
+(cs/union #{1 2 3} #{3 4 5 6})    ; ⇒ #{1 2 3 4 5 6}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;clojure.core/use可以做和clojure.core/require一样的事情,但是不推荐使用了.&lt;/p&gt;
+
+&lt;h1&gt;命名空间和编译&lt;/h1&gt;
+
+&lt;p&gt;Clojure是一个需要编译的语言:代码在被加载的时候进行编译.&lt;/p&gt;
+
+&lt;p&gt;命名空间可以包含var或者去继承协议,添加多重方法实现或载入其它库.所以为了完成编译,你需要引入需要的命名空间.&lt;/p&gt;
+
+&lt;h1&gt;私有Vars&lt;/h1&gt;
+
+&lt;p&gt;Vars(包括defn宏定义的函数)可以设为私有的.有两种方法可以来做这件事情:使用元数据或者defn-宏&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.superlib)
+
+;;
+;; Implementation
+;;
+
+(def ^{:private true}
+  source-name &quot;supersource&quot;)
+
+(defn- data-stream
+  [source]
+  (comment ...))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;常量Vars&lt;/h1&gt;
+
+&lt;p&gt;Vars可以设为常量,通过:const元数据来设置.这将会促使Clojure编译器将其编译为常量:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.epicgame)
+
+;;
+;; Implementation
+;;
+
+(def ^{:const true}
+  default-score 100)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;如何通过名称来查找和执行函数&lt;/h1&gt;
+
+&lt;p&gt;可以通过clojure.core/resolve在制定的命名空间里通过名字查找函数.名字需要使用引号修饰.返回值可以直接当做函数使用,比如,当做参数传递给高阶函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(resolve 'clojure.set 'difference)  ; ⇒ #'clojure.set/difference
+
+(let [f (resolve 'clojure.set 'difference)]
+   (f #{1 2 3} #{3 4 5 6}))  ; ⇒ #{1 2}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;编译异常&lt;/h1&gt;
+
+&lt;p&gt;本节讨论一些常见的编译错误.&lt;/p&gt;
+
+&lt;h2&gt;ClassNotFoundException&lt;/h2&gt;
+
+&lt;p&gt;这个异常的意思是JVM无法加载类.可能是因为拼写错误,或者在classpath上没有这个类.可能是你的项目没有很好的处理依赖关系.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;user=&amp;gt; (import java.uyil.concurrent.TimeUnit)
+ClassNotFoundException java.uyil.concurrent.TimeUnit  java.net.URLClassLoader$1.run (URLClassLoader.java:366)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,java.uyil.concurrent.TimeUnit拼写错误,应该是java.util.concurrent.TimeUnit&lt;/p&gt;
+
+&lt;h2&gt;CompilerException java.lang.RuntimeException: No such var&lt;/h2&gt;
+
+&lt;p&gt;这个错误的意思是,使用了一个不存在的var.这可能是拼写错误,或者不正确的宏展开等类似问题.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;user=&amp;gt; (clojure.java.io/resouce &quot;thought_leaders_quotes.csv&quot;)
+CompilerException java.lang.RuntimeException: No such var: clojure.java.io/resouce, compiling:(NO_SOURCE_PATH:1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,clojure.java.io/resouce应该写成clojure.java.io/resource.NO_SOURCE_PATH的意思是编译是在repl里触发的,而不是一个Clojure源文件.&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;版本&lt;/h1&gt;
+
+&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/language/namespaces.html&quot;&gt;Clojure Namespaces and Vars&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文涵盖如下内容:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Clojure命名空间和var概述&lt;/li&gt;
+&lt;li&gt;如何定义命名空间&lt;/li&gt;
+&lt;li&gt;如何使用其它命名空间里的函数&lt;/li&gt;
+&lt;li&gt;require,refer和use&lt;/li&gt;
+&lt;li&gt;常见错误和典型错误,以及导致这些错误的原因&lt;/li&gt;
+&lt;li&gt;命名空间和代码管理&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;版权:&lt;/p&gt;
+
+&lt;p&gt;This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp;amp; stylesheets). The source is available on Github.&lt;/p&gt;
+
+&lt;p&gt;涵盖Clojure版本:Clojure 1.5&lt;/p&gt;
+
+&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;Clojure的函数通过命名空间来组织.Clojure命名空间和Java的包或者Python的模块很类似.命名空间实际上就是个map,将名字映射到了var上.在大部分情况下,这些var持有这些函数.&lt;/p&gt;
+
+&lt;h1&gt;定义一个命名空间&lt;/h1&gt;
+
+&lt;p&gt;一般情况下使用clojure.core/ns宏来定义命名空间.最基本的形式下,它将名字作为符号.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns superlib.core)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;命名空间可以由点号切割的好多段组成&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.service.core)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;需要注意的是,请尽量避免使用单段的命名空间,以免与其它开发人员的命名空间相冲突.如果库或者应用属于某个组织,那么建议以如下形式作为命名空间.[组织名称].[包名|应用名].[函数组名]
+例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns clojurewerkz.welle.kv)
+
+(ns megacorp.search.indexer.core)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;另外,ns宏可以包含如下形式:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(:require ...)&lt;/li&gt;
+&lt;li&gt;(:import ...)&lt;/li&gt;
+&lt;li&gt;(:use ...)&lt;/li&gt;
+&lt;li&gt;(:refer-clojure ...)&lt;/li&gt;
+&lt;li&gt;(:gen-class ...)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;这些其实就是clojure.core/import,clojure.core/require等等这些的简写形式而已&lt;/p&gt;
+
+&lt;h2&gt;:require&lt;/h2&gt;
+
+&lt;p&gt;:require形式可以使你的代码能访问其它命名空间的Clojure代码.例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:require clojure.set))
+
+;; Now it is possible to do:
+;; (clojure.set/difference #{1 2 3} #{3 4 5})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此代码将保证clojure.set命名空间被加载,编译并且可以通过clojure.set名来调用.当然可以给加载的命名空间取个别名:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:require [clojure.set :as cs]))
+
+;; Now it is possible to do:
+;; (cs/difference #{1 2 3} #{3 4 5})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一次导入两个命名空间的例子;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:require [clojure.set  :as cs]
+            [clojure.walk :as walk]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;:refer选项&lt;/h3&gt;
+
+&lt;p&gt;如果想在当前命名空间里通过简写名称来引用clojure.set空间里的函数,可以通过refer来实现:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:require [clojure.set :refer [difference intersection]]))
+
+;; Now it is possible to do:
+;; (difference #{1 2 3} #{3 4 5})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;:require形式中的:refer特性为Clojure1.4新增特性.&lt;/p&gt;
+
+&lt;p&gt;可能有时需要引入某个命名空间下所有的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:require [clojure.set :refer :all]))
+
+;; Now it is possible to do:
+;; (difference #{1 2 3} #{3 4 5})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;:import&lt;/h2&gt;
+
+&lt;p&gt;:import的作用是在当前命名空间引入Java类:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:import java.util.concurrent.Executors))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;执行上面的代码后,java.util.concurrent.Executors类将会被引入,请可以直接通过名字Executors来使用.可以同时引入多个类.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:import java.util.concurrent.Executors
+           java.util.concurrent.TimeUnit
+           java.util.Date))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果引入的多个类在同一个包下面,就像上面那样,可以使用如下的简介方式:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:import [java.util.concurrent Executors TimeUnit]
+           java.util.Date))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;虽然导入的list被叫做list,实际上可以使用任意的Clojure的集合(一般使用vector)&lt;/p&gt;
+
+&lt;h2&gt;当前命名空间&lt;/h2&gt;
+
+&lt;p&gt;Clojure将通过*ns*来持有当前的命名空间.使用def形式定义的var被添加到了当前命名空间中.&lt;/p&gt;
+
+&lt;h2&gt;:refer-clojure&lt;/h2&gt;
+
+&lt;p&gt;我们在使用像clojure.core/get这样的函数和clojure.core/defn这样的宏的时候我们不需要使用它的全限定名.这是因为Clojure默认将clojure.core下的内容全部加载进了当前命名空间里了.所以如果你定义了一个函数名和clojure.core里的重复了(比如find),你将会得到一个警告.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;sh&quot;&gt;WARNING: find already refers to: #'clojure.core/find in namespace:    megacorp.profitd.scheduling, being replaced by: #'megacorp.profitd.scheduling/find
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个警告的意思是在megacorp.profitd.scheduling这个命名空间里,已经有一个clojure.core/find了,但是现在它被你定义的函数覆盖了.请记住,Clojure是很动态的语言,命名空间就是map而已.&lt;/p&gt;
+
+&lt;p&gt;解决这个问题的办法有:你可以重命名你的函数或者不引入clojure.core里的这个函数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:refer-clojure :exclude [find]))
+
+(defn find
+  &quot;Finds a needle in the haystack.&quot;
+  [^String haystack]
+  (comment ...))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在这里,如果你想使用clojure.core/find的话,你需要通过全限定名来使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling
+  (:refer-clojure :exclude [find]))
+
+(defn find
+  &quot;Finds a needle in the haystack.&quot;
+  [^String haystack]
+  (clojure.core/find haystack :needle))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;:use&lt;/h2&gt;
+
+&lt;p&gt;Clojure在1.4之前,:require是不支持:refer的,只能使用:use&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling-test
+  (:use clojure.test))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,clojure.test里的所有内容都被引入到了当前命名空间中.但是一般不会这样使用,建议是只引入需要的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling-test
+  (:use clojure.test :only [deftest testing is]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1.4以前的做法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.profitd.scheduling-test
+  (:require clojure.test :refer [deftest testing is]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;而现在鼓励的做法是使用:require,通过:refer来进行限制.&lt;/p&gt;
+
+&lt;h2&gt;文档与元数据&lt;/h2&gt;
+
+&lt;p&gt;命名空间可以包含说明文档.你可以在ns宏里添加:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns superlib.core
+  &quot;Core functionality of Superlib.
+
+   Other parts of Superlib depend on functions and macros in this namespace.&quot;
+  (:require [clojure.set :refer [union difference]]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者元数据&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns ^{:doc &quot;Core functionality of Superlib.
+            Other parts of Superlib depend on functions and macros in this namespace.&quot;
+      :author &quot;Joe Smith&quot;}
+   superlib.core
+  (:require [clojure.set :refer [union difference]]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;元数据可以包含任意的键,例如:author,很多工具可以使用(像Codox,Cadastre或者lein-clojuredocs)&lt;/p&gt;
+
+&lt;h1&gt;如何在REPL里使用其它命名空间的函数&lt;/h1&gt;
+
+&lt;p&gt;ns宏是你经常需要使用的,它引入其它命名空间的函数.但是它在REPL里不太方便.这里可以直接使用require:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;;; Will be available as clojure.set, e.g. clojure.set/difference.
+(require 'clojure.set)
+
+;; Will be available as io, e.g. io/resource.
+(require '[clojure.java.io :as io])
+It takes a quoted libspec. The libspec is either a namespace name or a collection (typically a vector) of [name :as alias] or [name :refer [fns]]:
+
+(require '[clojure.set :refer [difference]])
+
+(difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;:as和:refer可以一起使用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(require '[clojure.set :as cs :refer [difference]])
+
+(difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
+(cs/union #{1 2 3} #{3 4 5 6})    ; ⇒ #{1 2 3 4 5 6}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;clojure.core/use可以做和clojure.core/require一样的事情,但是不推荐使用了.&lt;/p&gt;
+
+&lt;h1&gt;命名空间和编译&lt;/h1&gt;
+
+&lt;p&gt;Clojure是一个需要编译的语言:代码在被加载的时候进行编译.&lt;/p&gt;
+
+&lt;p&gt;命名空间可以包含var或者去继承协议,添加多重方法实现或载入其它库.所以为了完成编译,你需要引入需要的命名空间.&lt;/p&gt;
+
+&lt;h1&gt;私有Vars&lt;/h1&gt;
+
+&lt;p&gt;Vars(包括defn宏定义的函数)可以设为私有的.有两种方法可以来做这件事情:使用元数据或者defn-宏&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.superlib)
+
+;;
+;; Implementation
+;;
+
+(def ^{:private true}
+  source-name &quot;supersource&quot;)
+
+(defn- data-stream
+  [source]
+  (comment ...))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;常量Vars&lt;/h1&gt;
+
+&lt;p&gt;Vars可以设为常量,通过:const元数据来设置.这将会促使Clojure编译器将其编译为常量:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns megacorp.epicgame)
+
+;;
+;; Implementation
+;;
+
+(def ^{:const true}
+  default-score 100)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;如何通过名称来查找和执行函数&lt;/h1&gt;
+
+&lt;p&gt;可以通过clojure.core/resolve在制定的命名空间里通过名字查找函数.名字需要使用引号修饰.返回值可以直接当做函数使用,比如,当做参数传递给高阶函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(resolve 'clojure.set 'difference)  ; ⇒ #'clojure.set/difference
+
+(let [f (resolve 'clojure.set 'difference)]
+   (f #{1 2 3} #{3 4 5 6}))  ; ⇒ #{1 2}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;编译异常&lt;/h1&gt;
+
+&lt;p&gt;本节讨论一些常见的编译错误.&lt;/p&gt;
+
+&lt;h2&gt;ClassNotFoundException&lt;/h2&gt;
+
+&lt;p&gt;这个异常的意思是JVM无法加载类.可能是因为拼写错误,或者在classpath上没有这个类.可能是你的项目没有很好的处理依赖关系.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;user=&amp;gt; (import java.uyil.concurrent.TimeUnit)
+ClassNotFoundException java.uyil.concurrent.TimeUnit  java.net.URLClassLoader$1.run (URLClassLoader.java:366)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,java.uyil.concurrent.TimeUnit拼写错误,应该是java.util.concurrent.TimeUnit&lt;/p&gt;
+
+&lt;h2&gt;CompilerException java.lang.RuntimeException: No such var&lt;/h2&gt;
+
+&lt;p&gt;这个错误的意思是,使用了一个不存在的var.这可能是拼写错误,或者不正确的宏展开等类似问题.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;user=&amp;gt; (clojure.java.io/resouce &quot;thought_leaders_quotes.csv&quot;)
+CompilerException java.lang.RuntimeException: No such var: clojure.java.io/resouce, compiling:(NO_SOURCE_PATH:1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,clojure.java.io/resouce应该写成clojure.java.io/resource.NO_SOURCE_PATH的意思是编译是在repl里触发的,而不是一个Clojure源文件.&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Clojure教程-Record和Protocol</title>
+        <link href="http://ivanpig.github.io/2014/05/11/record_protocol.html"/>
+        <updated>2014-05-11T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2014/05/11/record_protocol</id>
+        <content type="html">&lt;p&gt;本文翻译自:&lt;a href=&quot;http://www.jayway.com/2013/02/05/learn-clojure-using-records-and-protocols/&quot;&gt;Learn Clojure using records and protocols&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;当我对Clojure的括号不再疑惑后,另一个让我质疑为何要学习Clojure的问题是使用REPL很爽,但是我怎么来构建大型项目?&quot;.&lt;/p&gt;
+
+&lt;p&gt;实际上,由于我的面向对象编程经验,我其实要问的是&quot;我怎么才能将函数封装到类似class的东西里面去?&quot;.&lt;/p&gt;
+
+&lt;p&gt;在本文中,我将会介绍一种类似于Java的方式来构建大型的Clojure项目.&lt;/p&gt;
+
+&lt;p&gt;通过这种方式,希望你在学习Clojure的时候不会有太大的差异感!&lt;/p&gt;
+
+&lt;p&gt;在Java中,我们出于各种目的而使用类.例如典型的使用Spring的web应用,你会看到类似下面的结构:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Data transfer objects(DTO)&lt;/li&gt;
+&lt;li&gt;Services(REST API,controllers,DAO)&lt;/li&gt;
+&lt;li&gt;Rich object&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;DTO实际上就是个结构体,他没有任何的行为(即方法).为了最小化样板代码,我趋向于使用pulibc final属性去实现DTO.我认为DTO就是个模板(schema),它就像一个REST服务输出的文件.但是我发现很多客户端开发人员可不关注这个,而只关注代码形式.有时你会看到DTO被作为数据库访问的一部分.这些DTO被称为贫血模型.(译者注:猜测作者的意思是,有些开发人员不管类是DTO还是DAO,只要结构相同就随便用!)&lt;/p&gt;
+
+&lt;p&gt;Service实际上是包含了方法和注入了辅助Service的单例对象.不同的辅助Service提供了不同的服务.除了实现了接口外,Service只是包含了方法,和占位符很类似.单例模式导致的一个问题就是,新手无法预见到多线程里共享相同的实例出现意外的结果.他们将状态保存到私有属性里,而不需要从一个对象传递到另一个对象.很方便,但是是错误的做法.&lt;/p&gt;
+
+&lt;p&gt;Rich object是面向对象语言中的思想.即将数据及和数据相关的操作封装到一个类里面.我可没说getter和setter是相关操作!但是,rich object类在项目中用得较少.取而代之的是使用DTO作为Service的输入和输出.使用DAO来访问数据库,然后返回DTO.我没说这种方法是错误的,我好奇的是,既然对于目前的Java架构是好是坏我们都无法确认,那为什么还要强求使用Clojure去实现类似的东西呢?&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;先不管这么多,我们先看怎么在Clojure中做类似的事情?我直接给出如何做!&lt;/p&gt;
+
+&lt;p&gt;首先,DTO就是数据,而Clojure擅长数据处理,例如map,list和set.但是如果你想要类似结构体的东西,Clojure里提供了record.如果你了解Scala你会发现这玩样和case class很像.定义record的方式如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defrecord Person [firstName lastName])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这实际上创建了一个叫Person的Java类,它包含两个不可变的属性以及实现了hashCode和equals方法.record的行为模式和map很像,所以大部分适用于map的方法都适用与record!需要注意的是,虽然Clojure是动态类型,但是你可以使用类型提示来标示特定类型:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defrecord Person [^String firstName ^String lastName])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好,那现在我们来看看如何定义Service!让我们将问题分解为组织相关函数,定义接口及依赖注入!&lt;/p&gt;
+
+&lt;p&gt;和Java不同,Clojure提供了多种组织相关函数的方法.使用哪种方式完全取决于你想做什么.&lt;/p&gt;
+
+&lt;p&gt;首先,在Clojure中,函数不需要定义到一个类里面.取而代之的是,他们通过命名空间类管理,命名空间类似于Java中的包.如果你没有任何特别的要求,那么建议使用命名空间来管理函数.&lt;/p&gt;
+
+&lt;p&gt;如果你想定义类似class的东西,你需要先定义接口!那你需要使用protocol!你可以把它当做和Java中的接口类似的东西.实际上,除了使用protocol你也可以直接使用Java的接口,因为Clojure可以直接访问Java代码!创建protocol的方式如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defprotocol Greet
+    (sayHello [this])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这和下面的代码功能相同:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public interface Greet{
+    Object sayHello();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有两点需要注意:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;你需要将this包含在参数列表中!在面向对象语言中默认都包含了this,在类内部调用时默认包含了this.而在外部调用方法时,是使用对象名称.方法名,比如person.sayHello().而Clojure是函数式的,方法在前,调用方式如下(sayHello person)&lt;/li&gt;
+&lt;li&gt;方法返回的是Object.这是因为Clojure是函数式的,我们努力使其没有副作用.返回值为void的方法,实际上大部分是为了其副作用的!&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;实现protocol可以使用如下代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defrecord Person [firstName lastName]
+    Greet
+    (sayHello [this] (print &quot;Hello,my name is &quot; firstName)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后就是依赖注入了!结论是:依赖注入对与Clojure来说不是必要的!可以看看下面两篇文章!&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://tech.puredanger.com/2010/03/01/dependency-injection-clojure/&quot;&gt;Dependency injection in
+Clojure&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13085370/what-is-the-clojure-equivalent-to-google-guice&quot;&gt;What is the Clojure equivalent to Google
+Guice?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;总结&lt;/h1&gt;
+
+&lt;p&gt;从Java过渡到Scala相对来说比较简单,因为你可以在Scala中编写类Java的代码,然后再慢慢过渡到函数式代码编写上.但是对于Clojure来说,没有这个过渡过程,所以比较难于适应!但是通过使用record和protocol可以使你能在Clojure中做类似Java的事情,从而简化你的过渡难度!&lt;/p&gt;
+
+&lt;h1&gt;个人感受&lt;/h1&gt;
+
+&lt;p&gt;不知道是英文不行,还是作者行文有问题!感觉作者的文字不够流畅!按照原文直译,总感觉不通顺!故做了删减调整!&lt;/p&gt;
+
+&lt;p&gt;对于依赖注入提供的两篇文章,评论比文章好得多!特别是第二篇的第一个评论!其实本文就简单介绍了Clojure的record和protocol入门而已!&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;本文翻译自:&lt;a href=&quot;http://www.jayway.com/2013/02/05/learn-clojure-using-records-and-protocols/&quot;&gt;Learn Clojure using records and protocols&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;当我对Clojure的括号不再疑惑后,另一个让我质疑为何要学习Clojure的问题是使用REPL很爽,但是我怎么来构建大型项目?&quot;.&lt;/p&gt;
+
+&lt;p&gt;实际上,由于我的面向对象编程经验,我其实要问的是&quot;我怎么才能将函数封装到类似class的东西里面去?&quot;.&lt;/p&gt;
+
+&lt;p&gt;在本文中,我将会介绍一种类似于Java的方式来构建大型的Clojure项目.&lt;/p&gt;
+
+&lt;p&gt;通过这种方式,希望你在学习Clojure的时候不会有太大的差异感!&lt;/p&gt;
+
+&lt;p&gt;在Java中,我们出于各种目的而使用类.例如典型的使用Spring的web应用,你会看到类似下面的结构:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Data transfer objects(DTO)&lt;/li&gt;
+&lt;li&gt;Services(REST API,controllers,DAO)&lt;/li&gt;
+&lt;li&gt;Rich object&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;DTO实际上就是个结构体,他没有任何的行为(即方法).为了最小化样板代码,我趋向于使用pulibc final属性去实现DTO.我认为DTO就是个模板(schema),它就像一个REST服务输出的文件.但是我发现很多客户端开发人员可不关注这个,而只关注代码形式.有时你会看到DTO被作为数据库访问的一部分.这些DTO被称为贫血模型.(译者注:猜测作者的意思是,有些开发人员不管类是DTO还是DAO,只要结构相同就随便用!)&lt;/p&gt;
+
+&lt;p&gt;Service实际上是包含了方法和注入了辅助Service的单例对象.不同的辅助Service提供了不同的服务.除了实现了接口外,Service只是包含了方法,和占位符很类似.单例模式导致的一个问题就是,新手无法预见到多线程里共享相同的实例出现意外的结果.他们将状态保存到私有属性里,而不需要从一个对象传递到另一个对象.很方便,但是是错误的做法.&lt;/p&gt;
+
+&lt;p&gt;Rich object是面向对象语言中的思想.即将数据及和数据相关的操作封装到一个类里面.我可没说getter和setter是相关操作!但是,rich object类在项目中用得较少.取而代之的是使用DTO作为Service的输入和输出.使用DAO来访问数据库,然后返回DTO.我没说这种方法是错误的,我好奇的是,既然对于目前的Java架构是好是坏我们都无法确认,那为什么还要强求使用Clojure去实现类似的东西呢?&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;先不管这么多,我们先看怎么在Clojure中做类似的事情?我直接给出如何做!&lt;/p&gt;
+
+&lt;p&gt;首先,DTO就是数据,而Clojure擅长数据处理,例如map,list和set.但是如果你想要类似结构体的东西,Clojure里提供了record.如果你了解Scala你会发现这玩样和case class很像.定义record的方式如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defrecord Person [firstName lastName])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这实际上创建了一个叫Person的Java类,它包含两个不可变的属性以及实现了hashCode和equals方法.record的行为模式和map很像,所以大部分适用于map的方法都适用与record!需要注意的是,虽然Clojure是动态类型,但是你可以使用类型提示来标示特定类型:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defrecord Person [^String firstName ^String lastName])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好,那现在我们来看看如何定义Service!让我们将问题分解为组织相关函数,定义接口及依赖注入!&lt;/p&gt;
+
+&lt;p&gt;和Java不同,Clojure提供了多种组织相关函数的方法.使用哪种方式完全取决于你想做什么.&lt;/p&gt;
+
+&lt;p&gt;首先,在Clojure中,函数不需要定义到一个类里面.取而代之的是,他们通过命名空间类管理,命名空间类似于Java中的包.如果你没有任何特别的要求,那么建议使用命名空间来管理函数.&lt;/p&gt;
+
+&lt;p&gt;如果你想定义类似class的东西,你需要先定义接口!那你需要使用protocol!你可以把它当做和Java中的接口类似的东西.实际上,除了使用protocol你也可以直接使用Java的接口,因为Clojure可以直接访问Java代码!创建protocol的方式如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defprotocol Greet
+    (sayHello [this])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这和下面的代码功能相同:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public interface Greet{
+    Object sayHello();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有两点需要注意:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;你需要将this包含在参数列表中!在面向对象语言中默认都包含了this,在类内部调用时默认包含了this.而在外部调用方法时,是使用对象名称.方法名,比如person.sayHello().而Clojure是函数式的,方法在前,调用方式如下(sayHello person)&lt;/li&gt;
+&lt;li&gt;方法返回的是Object.这是因为Clojure是函数式的,我们努力使其没有副作用.返回值为void的方法,实际上大部分是为了其副作用的!&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;实现protocol可以使用如下代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defrecord Person [firstName lastName]
+    Greet
+    (sayHello [this] (print &quot;Hello,my name is &quot; firstName)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后就是依赖注入了!结论是:依赖注入对与Clojure来说不是必要的!可以看看下面两篇文章!&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://tech.puredanger.com/2010/03/01/dependency-injection-clojure/&quot;&gt;Dependency injection in
+Clojure&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13085370/what-is-the-clojure-equivalent-to-google-guice&quot;&gt;What is the Clojure equivalent to Google
+Guice?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;总结&lt;/h1&gt;
+
+&lt;p&gt;从Java过渡到Scala相对来说比较简单,因为你可以在Scala中编写类Java的代码,然后再慢慢过渡到函数式代码编写上.但是对于Clojure来说,没有这个过渡过程,所以比较难于适应!但是通过使用record和protocol可以使你能在Clojure中做类似Java的事情,从而简化你的过渡难度!&lt;/p&gt;
+
+&lt;h1&gt;个人感受&lt;/h1&gt;
+
+&lt;p&gt;不知道是英文不行,还是作者行文有问题!感觉作者的文字不够流畅!按照原文直译,总感觉不通顺!故做了删减调整!&lt;/p&gt;
+
+&lt;p&gt;对于依赖注入提供的两篇文章,评论比文章好得多!特别是第二篇的第一个评论!其实本文就简单介绍了Clojure的record和protocol入门而已!&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Clojure教程-函数</title>
+        <link href="http://ivanpig.github.io/2014/03/15/function.html"/>
+        <updated>2014-03-15T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2014/03/15/function</id>
+        <content type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/language/functions.html&quot;&gt;Functions in Clojure&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文包括如下内容:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如何定义函数&lt;/li&gt;
+&lt;li&gt;如何执行函数&lt;/li&gt;
+&lt;li&gt;多元数函数(Multi-arity Functions)&lt;/li&gt;
+&lt;li&gt;不定参函数(Variadic Functions)&lt;/li&gt;
+&lt;li&gt;高阶函数&lt;/li&gt;
+&lt;li&gt;其它函数相关内容&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;版权:&lt;/p&gt;
+
+&lt;p&gt;This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp;amp; stylesheets). The source is available on Github.&lt;/p&gt;
+
+&lt;h1&gt;针对Clojure版本&lt;/h1&gt;
+
+&lt;p&gt;Clojure 1.5&lt;/p&gt;
+
+&lt;h1&gt;简介&lt;/h1&gt;
+
+&lt;p&gt;Clojure是函数式编程语言.自然的,函数是Clojure非常重要的一部分.&lt;/p&gt;
+
+&lt;h1&gt;如何定义函数&lt;/h1&gt;
+
+&lt;p&gt;函数定义一般使用defn宏:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn round
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;类型提示有时能避免编译器使用反射,从而能生成更高效的字节码.但是,基本上你没必要使用类型提示.后期优化时再考虑.&lt;/p&gt;
+
+&lt;p&gt;函数可以添加注释文档,给API添加文档说明是个好习惯:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn round
+  &quot;Round down a double to the given precision (number of significant digits)&quot;
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Clojure中函数参数可以有类型提示,不过是可选的.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn round
+  [^double d ^long precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;函数还可以定义前置和后置条件来限制函数的参数和返回值.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn round
+  &quot;Round down a double to the given precision (number of significant digits)&quot;
+  [^double d ^long precision]
+  {:pre [(not-nil? d) (not-nil? precision)]}
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,我们使用了前置条件来检查两个参数是否为nil.&lt;/p&gt;
+
+&lt;p&gt;not-nil?宏(或函数),没有在该例子中展示,我们假设它已经在其它地方实现了.&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;匿名函数&lt;/h1&gt;
+
+&lt;p&gt;匿名函数使用fn特殊形式来定义;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(fn [x]
+  (* 2 x))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;匿名函数可以赋给局部变量,作为参数传递给函数或作为函数的返回值.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [f (fn [x]
+          (* 2 x))]
+  (map f (range 0 10)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Clojure提供了语法糖来简化匿名函数的编写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [f #(* 2 %)]
+  (map f (range 0 10)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;%表示第一个参数.如果要引用多个参数,可以使用%1,%2.以此类推:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; 一个包含了三个参数的匿名函数,返回三个参数的和
+(let [f #(+ %1 %2 %3)]
+  (f 1 2 3))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;语法糖简化了代码,但是降低了代码的可读性.所以使用前请斟酌.&lt;/p&gt;
+
+&lt;h1&gt;如何执行函数&lt;/h1&gt;
+
+&lt;p&gt;要执行函数,只需要将函数名放在list的第一个位置就行了:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(format &quot;Hello, %s&quot; &quot;world&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于赋给局部变量,变量或这从参数传递的函数,此法同样适用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [f format]
+  (f &quot;Hello, %s&quot; &quot;world&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另外你也可以使用clojure.core/apply来执行函数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(apply format &quot;Hello, %s&quot; [&quot;world&quot;])
+
+(apply format &quot;Hello, %s %s&quot; [&quot;Clojure&quot; &quot;world&quot;])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;clojure.core/apply一般在调用不定参函数或者需要将参数作为集合传递时才会使用&lt;/p&gt;
+
+&lt;h1&gt;多元数函数&lt;/h1&gt;
+
+&lt;p&gt;在Clojure中有多元数函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn tax-amount
+  ([amount]
+     (tax-amount amount 35))
+  ([amount rate]
+     (Math/round (double (* amount (/ rate 100))))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,只有一个参数的函数调用了有两个参数的函数.这在多参函数中很常见(相当于默认值的功能).Clojure没有提供默认值的功能,是因为JVM不支持.&lt;/p&gt;
+
+&lt;p&gt;在Clojure中,元数只和参数个数有关,而和参数类型无关.这是因为Clojure是动态语言,类型信息可能在编译期是无效的.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn range
+  ([]
+    (range 0 Double/POSITIVE_INFINITY 1))
+  ([end]
+    (range 0 end 1))
+  ([start end]
+    (range start end 1))
+  ([start end step]
+    (comment Omitted for clarity)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;解构函数参数&lt;/h1&gt;
+
+&lt;p&gt;有时函数的参数是数据结构:向量,序列,map.当你想访问这些数据结构的其中一部分数据时,你可能需要编写类似下面的代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [m]
+  (let [currency (get m :currency)]
+    currency))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对向量来说,需要编写类似这样的代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [pair]
+  (let [amount   (first  pair)
+        currency (second pair)]
+    currency))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是呢,这样的样板代码可重用性并不高.所以Clojure提供了解构.&lt;/p&gt;
+
+&lt;h2&gt;基于位置的解构&lt;/h2&gt;
+
+&lt;p&gt;解构向量的方式如下:使用一个向量替换原来作为函数参数的数据结构,这个向量包含了占位符,而占位符会将对应位置的数据结构的值绑定过来.&lt;/p&gt;
+
+&lt;p&gt;举例来说,如果一个参数是一对值,你想要获得第二个参数值,那么代码可以这样写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [[amount currency]]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,参数的第一个值被绑定到了amount上,第二个参数是被绑定到了currency上.看起来很棒,但是,这里我们并没有使用amount.在这种情况下,我们可以使用下划线来忽略它:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [[_ currency]]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;解构是能够嵌套的:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn first-first
+  [[[i _] _]]
+  i)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;虽然本文不会涉及到let这个form和本地变量.但是需要提一下,解构对let也生效,而且作用一模一样&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [pair         [10 :gbp]
+      [_ currency] pair]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;解构Map&lt;/h2&gt;
+
+&lt;p&gt;对Map和Record的解构方式与解构向量略有不同:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{currency :currency}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,我们想把:currency这个key对应的value绑定到currency上.Key并不一定需要是关键字:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{currency &quot;currency&quot;}]
+  currency)
+
+(defn currency-of
+  [{currency 'currency}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以一次性解构多个key:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{:keys [currency amount]}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的例子中,keys需要为关键字,其名字与currency和amount相同(即:currency,:amount).如果keys是字符串,则将上面的:keys改为:strs即可:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{:strs [currency amount]}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然也可以是symbol:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{:syms [currency amount]}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然了,使用关键字作为key在Clojure中是推荐做法.&lt;/p&gt;
+
+&lt;p&gt;解构Map时,如果找不到我们需要的key的值,我们可以设置默认值:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{:keys [currency amount] :or {currency :gbp}}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此功能对于编写包含额外属性的函数大有裨益.和基于位置的解构相同,Map解构对let同样适用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [money               {:currency :gbp :amount 10}
+     {currency :currency} money]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;变参函数&lt;/h1&gt;
+
+&lt;p&gt;参数数量可变的函数叫做变参函数.clojure.core/str和clojure.core/format就是两个变参函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(str &quot;a&quot; &quot;b&quot;)      ; ⇒ &quot;ab&quot;
+(str &quot;a&quot; &quot;b&quot; &quot;c&quot;)  ; ⇒ &quot;abc&quot;
+
+(format &quot;Hello, %s&quot; &quot;world&quot;)               ; ⇒ &quot;Hello, world&quot;
+(format &quot;Hello, %s %s&quot; &quot;Clojure&quot; &quot;world&quot;)  ; ⇒ &quot;Hello, Clojure world&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;要定义变参函数,只需要在变参前面加个&amp;amp;就可以了:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn log
+  [message &amp;amp; args]
+  (comment ...))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,只有一个参数是必须的.变参函数的调用方式和普通函数相同:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn log
+  [message &amp;amp; args]
+  (println &quot;args: &quot; args))
+
+(log &quot;message from &quot; &quot;192.0.0.76&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在REPL中执行:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (log &quot;message from &quot; &quot;192.0.0.76&quot;)
+args:  (192.0.0.76)
+
+user=&amp;gt; (log &quot;message from &quot; &quot;192.0.0.76&quot; &quot;service:xyz&quot;)
+args:  (192.0.0.76 service:xyz)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以看到,可选的参数被包装到了一个list里面.&lt;/p&gt;
+
+&lt;h2&gt;具名参数(Named Parameters)&lt;/h2&gt;
+
+&lt;p&gt;具名参数是通过对变参函数的解构来实现的.&lt;/p&gt;
+
+&lt;p&gt;从解构变参函数的立场上来看,具名参数具有较好的可读性.下面是一个例子:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn job-info
+  [&amp;amp; {:keys [name job income] :or {job &quot;unemployed&quot; income &quot;$0.00&quot;}}]
+  (if name
+    [name job income]
+    (println &quot;No name specified&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用函数方式如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (job-info :name &quot;Robert&quot; :job &quot;Engineer&quot;)
+[&quot;Robert&quot; &quot;Engineer&quot; &quot;$0.00&quot;]
+
+user=&amp;gt; (job-info :job &quot;Engineer&quot;)
+No name specified
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果不使用变参列表,那么你需要使用形如{:name &quot;Robert&quot; :job &quot;Engineer&quot;}这样的map作为参数.&lt;/p&gt;
+
+&lt;p&gt;关键字的默认值依据:or后跟的map来确定.如果关键字没有传递值,且无默认值,则为nil.&lt;/p&gt;
+
+&lt;h1&gt;高阶函数&lt;/h1&gt;
+
+&lt;p&gt;高阶函数是将其它函数作为参数的函数.高阶函数在函数式编程中是很重要的技术,在Clojure中经常使用到.一个高阶函数的例子是将一个函数和一个集合作为参数,返回符合这个函数条件的集合.在Clojure中,这叫做clojure.core/filter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(filter even? (range 0 10))  ;=&amp;gt;(0 2 4 6 8)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的例子中,clojure.core/filter函数接收clojure.core/even?作为参数.
+clojure.core中有很多高阶函数.经常使用的函数请参见&lt;a href=&quot;http://clojure-doc.org/articles/language/core_overview.html&quot;&gt;clojure.core&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;私有函数&lt;/h1&gt;
+
+&lt;p&gt;在Clojure中,函数可以在其命名空间中设置为私有的.&lt;/p&gt;
+
+&lt;p&gt;具体细节请参考&lt;a href=&quot;http://clojure-doc.org/articles/language/namespaces.html&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;关键字作为函数&lt;/h1&gt;
+
+&lt;p&gt;在Clojure中,关键字可以作为函数使用.他们接收map或record并从中查找信息:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(:age {:age 27 :name &quot;Michael&quot;})  ; ⇒ 27
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;他们经常和高阶函数结合使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(map :age [{:age 45 :name &quot;Joe&quot;} {:age 42 :name &quot;Jill&quot;} {:age 17 :name &quot;Matt&quot;}])  ; ⇒ (45 42 17)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也能和-&gt;宏一起使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(-&amp;gt; [{:age 45 :name &quot;Joe&quot;} {:age 42 :name &quot;Jill&quot;}] first :name)  ; ⇒ &quot;Joe&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Map作为函数&lt;/h1&gt;
+
+&lt;p&gt;Clojure的Map也能作为函数使用,来查找key对应的value:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;({:age 42 :name &quot;Joe&quot;} :name)     ; ⇒ &quot;Joe&quot;
+({:age 42 :name &quot;Joe&quot;} :age)      ; ⇒ 42
+({:age 42 :name &quot;Joe&quot;} :unknown)  ; ⇒ nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;需要注意的是,虽然大部分情况下map和record可以等同对待,但是这里不行!record不能作为函数使用!&lt;/p&gt;
+
+&lt;h1&gt;Set作为函数&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(#{1 2 3} 1)   ; ⇒ 1
+(#{1 2 3} 10)  ; ⇒ nil
+
+(#{:us :au :ru :uk} :uk)  ; ⇒ :uk
+(#{:us :au :ru :uk} :cn)  ; ⇒ nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此功能被用来验证某值是否在set中:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(when (countries :in)
+  (comment ...))
+
+(if (countries :in)
+  (comment Implement positive case)
+  (comment Implement negative case))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为在Clojure中除了false和nil,其它值都是true.&lt;/p&gt;
+
+&lt;h1&gt;函数作为比较器&lt;/h1&gt;
+
+&lt;p&gt;Clojure函数实现了java.util.Comparator接口,所以能作为比较器使用.&lt;/p&gt;
+
+&lt;h1&gt;结束语&lt;/h1&gt;
+
+&lt;p&gt;函数是Clojure的核心.他们通过defn宏来定义,可以有多个元数,不定参数并支持参数解构.&lt;/p&gt;
+
+&lt;p&gt;函数参数和返回值可以有类型提示,当然这不是必须的.&lt;/p&gt;
+
+&lt;p&gt;函数是一等值,它能被传递给其它函数.这是函数式编程的基石.&lt;/p&gt;
+
+&lt;p&gt;有一些数据类型有函数特性.适时的使用这些特性可以是代码更简洁易读.&lt;/p&gt;
+
+&lt;h1&gt;贡献&lt;/h1&gt;
+
+&lt;p&gt;Michael Klishin michael@defprotocol.org, 2012 (original author)
+Translated by Ivan 2014&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/language/functions.html&quot;&gt;Functions in Clojure&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文包括如下内容:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如何定义函数&lt;/li&gt;
+&lt;li&gt;如何执行函数&lt;/li&gt;
+&lt;li&gt;多元数函数(Multi-arity Functions)&lt;/li&gt;
+&lt;li&gt;不定参函数(Variadic Functions)&lt;/li&gt;
+&lt;li&gt;高阶函数&lt;/li&gt;
+&lt;li&gt;其它函数相关内容&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;版权:&lt;/p&gt;
+
+&lt;p&gt;This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp;amp; stylesheets). The source is available on Github.&lt;/p&gt;
+
+&lt;h1&gt;针对Clojure版本&lt;/h1&gt;
+
+&lt;p&gt;Clojure 1.5&lt;/p&gt;
+
+&lt;h1&gt;简介&lt;/h1&gt;
+
+&lt;p&gt;Clojure是函数式编程语言.自然的,函数是Clojure非常重要的一部分.&lt;/p&gt;
+
+&lt;h1&gt;如何定义函数&lt;/h1&gt;
+
+&lt;p&gt;函数定义一般使用defn宏:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn round
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;类型提示有时能避免编译器使用反射,从而能生成更高效的字节码.但是,基本上你没必要使用类型提示.后期优化时再考虑.&lt;/p&gt;
+
+&lt;p&gt;函数可以添加注释文档,给API添加文档说明是个好习惯:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn round
+  &quot;Round down a double to the given precision (number of significant digits)&quot;
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Clojure中函数参数可以有类型提示,不过是可选的.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn round
+  [^double d ^long precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;函数还可以定义前置和后置条件来限制函数的参数和返回值.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn round
+  &quot;Round down a double to the given precision (number of significant digits)&quot;
+  [^double d ^long precision]
+  {:pre [(not-nil? d) (not-nil? precision)]}
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,我们使用了前置条件来检查两个参数是否为nil.&lt;/p&gt;
+
+&lt;p&gt;not-nil?宏(或函数),没有在该例子中展示,我们假设它已经在其它地方实现了.&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;匿名函数&lt;/h1&gt;
+
+&lt;p&gt;匿名函数使用fn特殊形式来定义;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(fn [x]
+  (* 2 x))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;匿名函数可以赋给局部变量,作为参数传递给函数或作为函数的返回值.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [f (fn [x]
+          (* 2 x))]
+  (map f (range 0 10)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Clojure提供了语法糖来简化匿名函数的编写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [f #(* 2 %)]
+  (map f (range 0 10)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;%表示第一个参数.如果要引用多个参数,可以使用%1,%2.以此类推:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; 一个包含了三个参数的匿名函数,返回三个参数的和
+(let [f #(+ %1 %2 %3)]
+  (f 1 2 3))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;语法糖简化了代码,但是降低了代码的可读性.所以使用前请斟酌.&lt;/p&gt;
+
+&lt;h1&gt;如何执行函数&lt;/h1&gt;
+
+&lt;p&gt;要执行函数,只需要将函数名放在list的第一个位置就行了:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(format &quot;Hello, %s&quot; &quot;world&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于赋给局部变量,变量或这从参数传递的函数,此法同样适用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [f format]
+  (f &quot;Hello, %s&quot; &quot;world&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另外你也可以使用clojure.core/apply来执行函数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(apply format &quot;Hello, %s&quot; [&quot;world&quot;])
+
+(apply format &quot;Hello, %s %s&quot; [&quot;Clojure&quot; &quot;world&quot;])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;clojure.core/apply一般在调用不定参函数或者需要将参数作为集合传递时才会使用&lt;/p&gt;
+
+&lt;h1&gt;多元数函数&lt;/h1&gt;
+
+&lt;p&gt;在Clojure中有多元数函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn tax-amount
+  ([amount]
+     (tax-amount amount 35))
+  ([amount rate]
+     (Math/round (double (* amount (/ rate 100))))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,只有一个参数的函数调用了有两个参数的函数.这在多参函数中很常见(相当于默认值的功能).Clojure没有提供默认值的功能,是因为JVM不支持.&lt;/p&gt;
+
+&lt;p&gt;在Clojure中,元数只和参数个数有关,而和参数类型无关.这是因为Clojure是动态语言,类型信息可能在编译期是无效的.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn range
+  ([]
+    (range 0 Double/POSITIVE_INFINITY 1))
+  ([end]
+    (range 0 end 1))
+  ([start end]
+    (range start end 1))
+  ([start end step]
+    (comment Omitted for clarity)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;解构函数参数&lt;/h1&gt;
+
+&lt;p&gt;有时函数的参数是数据结构:向量,序列,map.当你想访问这些数据结构的其中一部分数据时,你可能需要编写类似下面的代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [m]
+  (let [currency (get m :currency)]
+    currency))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对向量来说,需要编写类似这样的代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [pair]
+  (let [amount   (first  pair)
+        currency (second pair)]
+    currency))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是呢,这样的样板代码可重用性并不高.所以Clojure提供了解构.&lt;/p&gt;
+
+&lt;h2&gt;基于位置的解构&lt;/h2&gt;
+
+&lt;p&gt;解构向量的方式如下:使用一个向量替换原来作为函数参数的数据结构,这个向量包含了占位符,而占位符会将对应位置的数据结构的值绑定过来.&lt;/p&gt;
+
+&lt;p&gt;举例来说,如果一个参数是一对值,你想要获得第二个参数值,那么代码可以这样写:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [[amount currency]]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,参数的第一个值被绑定到了amount上,第二个参数是被绑定到了currency上.看起来很棒,但是,这里我们并没有使用amount.在这种情况下,我们可以使用下划线来忽略它:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [[_ currency]]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;解构是能够嵌套的:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn first-first
+  [[[i _] _]]
+  i)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;虽然本文不会涉及到let这个form和本地变量.但是需要提一下,解构对let也生效,而且作用一模一样&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [pair         [10 :gbp]
+      [_ currency] pair]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;解构Map&lt;/h2&gt;
+
+&lt;p&gt;对Map和Record的解构方式与解构向量略有不同:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{currency :currency}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,我们想把:currency这个key对应的value绑定到currency上.Key并不一定需要是关键字:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{currency &quot;currency&quot;}]
+  currency)
+
+(defn currency-of
+  [{currency 'currency}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以一次性解构多个key:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{:keys [currency amount]}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的例子中,keys需要为关键字,其名字与currency和amount相同(即:currency,:amount).如果keys是字符串,则将上面的:keys改为:strs即可:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{:strs [currency amount]}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然也可以是symbol:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{:syms [currency amount]}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然了,使用关键字作为key在Clojure中是推荐做法.&lt;/p&gt;
+
+&lt;p&gt;解构Map时,如果找不到我们需要的key的值,我们可以设置默认值:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn currency-of
+  [{:keys [currency amount] :or {currency :gbp}}]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此功能对于编写包含额外属性的函数大有裨益.和基于位置的解构相同,Map解构对let同样适用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [money               {:currency :gbp :amount 10}
+     {currency :currency} money]
+  currency)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;变参函数&lt;/h1&gt;
+
+&lt;p&gt;参数数量可变的函数叫做变参函数.clojure.core/str和clojure.core/format就是两个变参函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(str &quot;a&quot; &quot;b&quot;)      ; ⇒ &quot;ab&quot;
+(str &quot;a&quot; &quot;b&quot; &quot;c&quot;)  ; ⇒ &quot;abc&quot;
+
+(format &quot;Hello, %s&quot; &quot;world&quot;)               ; ⇒ &quot;Hello, world&quot;
+(format &quot;Hello, %s %s&quot; &quot;Clojure&quot; &quot;world&quot;)  ; ⇒ &quot;Hello, Clojure world&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;要定义变参函数,只需要在变参前面加个&amp;amp;就可以了:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn log
+  [message &amp;amp; args]
+  (comment ...))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中,只有一个参数是必须的.变参函数的调用方式和普通函数相同:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn log
+  [message &amp;amp; args]
+  (println &quot;args: &quot; args))
+
+(log &quot;message from &quot; &quot;192.0.0.76&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在REPL中执行:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (log &quot;message from &quot; &quot;192.0.0.76&quot;)
+args:  (192.0.0.76)
+
+user=&amp;gt; (log &quot;message from &quot; &quot;192.0.0.76&quot; &quot;service:xyz&quot;)
+args:  (192.0.0.76 service:xyz)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以看到,可选的参数被包装到了一个list里面.&lt;/p&gt;
+
+&lt;h2&gt;具名参数(Named Parameters)&lt;/h2&gt;
+
+&lt;p&gt;具名参数是通过对变参函数的解构来实现的.&lt;/p&gt;
+
+&lt;p&gt;从解构变参函数的立场上来看,具名参数具有较好的可读性.下面是一个例子:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(defn job-info
+  [&amp;amp; {:keys [name job income] :or {job &quot;unemployed&quot; income &quot;$0.00&quot;}}]
+  (if name
+    [name job income]
+    (println &quot;No name specified&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用函数方式如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.bash}&quot;&gt;user=&amp;gt; (job-info :name &quot;Robert&quot; :job &quot;Engineer&quot;)
+[&quot;Robert&quot; &quot;Engineer&quot; &quot;$0.00&quot;]
+
+user=&amp;gt; (job-info :job &quot;Engineer&quot;)
+No name specified
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果不使用变参列表,那么你需要使用形如{:name &quot;Robert&quot; :job &quot;Engineer&quot;}这样的map作为参数.&lt;/p&gt;
+
+&lt;p&gt;关键字的默认值依据:or后跟的map来确定.如果关键字没有传递值,且无默认值,则为nil.&lt;/p&gt;
+
+&lt;h1&gt;高阶函数&lt;/h1&gt;
+
+&lt;p&gt;高阶函数是将其它函数作为参数的函数.高阶函数在函数式编程中是很重要的技术,在Clojure中经常使用到.一个高阶函数的例子是将一个函数和一个集合作为参数,返回符合这个函数条件的集合.在Clojure中,这叫做clojure.core/filter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(filter even? (range 0 10))  ;=&amp;gt;(0 2 4 6 8)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的例子中,clojure.core/filter函数接收clojure.core/even?作为参数.
+clojure.core中有很多高阶函数.经常使用的函数请参见&lt;a href=&quot;http://clojure-doc.org/articles/language/core_overview.html&quot;&gt;clojure.core&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;私有函数&lt;/h1&gt;
+
+&lt;p&gt;在Clojure中,函数可以在其命名空间中设置为私有的.&lt;/p&gt;
+
+&lt;p&gt;具体细节请参考&lt;a href=&quot;http://clojure-doc.org/articles/language/namespaces.html&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;关键字作为函数&lt;/h1&gt;
+
+&lt;p&gt;在Clojure中,关键字可以作为函数使用.他们接收map或record并从中查找信息:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(:age {:age 27 :name &quot;Michael&quot;})  ; ⇒ 27
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;他们经常和高阶函数结合使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(map :age [{:age 45 :name &quot;Joe&quot;} {:age 42 :name &quot;Jill&quot;} {:age 17 :name &quot;Matt&quot;}])  ; ⇒ (45 42 17)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也能和-&gt;宏一起使用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(-&amp;gt; [{:age 45 :name &quot;Joe&quot;} {:age 42 :name &quot;Jill&quot;}] first :name)  ; ⇒ &quot;Joe&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Map作为函数&lt;/h1&gt;
+
+&lt;p&gt;Clojure的Map也能作为函数使用,来查找key对应的value:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;({:age 42 :name &quot;Joe&quot;} :name)     ; ⇒ &quot;Joe&quot;
+({:age 42 :name &quot;Joe&quot;} :age)      ; ⇒ 42
+({:age 42 :name &quot;Joe&quot;} :unknown)  ; ⇒ nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;需要注意的是,虽然大部分情况下map和record可以等同对待,但是这里不行!record不能作为函数使用!&lt;/p&gt;
+
+&lt;h1&gt;Set作为函数&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(#{1 2 3} 1)   ; ⇒ 1
+(#{1 2 3} 10)  ; ⇒ nil
+
+(#{:us :au :ru :uk} :uk)  ; ⇒ :uk
+(#{:us :au :ru :uk} :cn)  ; ⇒ nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此功能被用来验证某值是否在set中:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(when (countries :in)
+  (comment ...))
+
+(if (countries :in)
+  (comment Implement positive case)
+  (comment Implement negative case))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为在Clojure中除了false和nil,其它值都是true.&lt;/p&gt;
+
+&lt;h1&gt;函数作为比较器&lt;/h1&gt;
+
+&lt;p&gt;Clojure函数实现了java.util.Comparator接口,所以能作为比较器使用.&lt;/p&gt;
+
+&lt;h1&gt;结束语&lt;/h1&gt;
+
+&lt;p&gt;函数是Clojure的核心.他们通过defn宏来定义,可以有多个元数,不定参数并支持参数解构.&lt;/p&gt;
+
+&lt;p&gt;函数参数和返回值可以有类型提示,当然这不是必须的.&lt;/p&gt;
+
+&lt;p&gt;函数是一等值,它能被传递给其它函数.这是函数式编程的基石.&lt;/p&gt;
+
+&lt;p&gt;有一些数据类型有函数特性.适时的使用这些特性可以是代码更简洁易读.&lt;/p&gt;
+
+&lt;h1&gt;贡献&lt;/h1&gt;
+
+&lt;p&gt;Michael Klishin michael@defprotocol.org, 2012 (original author)
+Translated by Ivan 2014&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Clojure教程-数学计算</title>
+        <link href="http://ivanpig.github.io/2014/02/19/math.html"/>
+        <updated>2014-02-19T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2014/02/19/math</id>
+        <content type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/cookbooks/math.html&quot;&gt;Mathematics with Clojure&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文包含了使用Clojure的内建函数,扩展包和部分JDK功能进行数学计算.&lt;/p&gt;
+
+&lt;p&gt;版权:&lt;/p&gt;
+
+&lt;p&gt;This work is licensed under a Creative Commons Attribution 3.0 Unported
+License (including images &amp;amp; stylesheets). The source is available on
+Github.&lt;/p&gt;
+
+&lt;h1&gt;准备&lt;/h1&gt;
+
+&lt;p&gt;这里的一些例子使用了&lt;a href=&quot;https://github.com/clojure/math.numeric-tower&quot;&gt;math.numeric-tower&lt;/a&gt;和&lt;a href=&quot;https://github.com/clojure/math.combinatorics&quot;&gt;math.combinatorics&lt;/a&gt;库.所以需要
+你在代码的命名空间中包含如下代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(:require [clojure.math.numeric-tower :as math]
+          [clojure.math.combinatorics :as combo])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者在REPL里载入:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[clojure.math.numeric-tower :as math])
+(require '[clojure.math.combinatorics :as combo])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;方法&lt;/h1&gt;
+
+&lt;h2&gt;简单计算&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(+ 3 4)    ;=&amp;gt; 7
+(- 3 4)    ;=&amp;gt; -1
+(* 3 4)    ;=&amp;gt; 12
+(/ 3 4)    ;=&amp;gt; 3/4  (an exact ratio)
+(/ 3.0 4)  ;=&amp;gt; 0.75
+
+(inc 5)    ;=&amp;gt; 6
+(dec 5)    ;=&amp;gt; 4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;想要计算整数的除法,取余和取模,请看&lt;a href=&quot;http://clojuredocs.org/clojure_core/clojure.core/quot&quot;&gt;quot&lt;/a&gt;,&lt;a href=&quot;http://clojuredocs.org/clojure_core/clojure.core/rem&quot;&gt;rem&lt;/a&gt;,&lt;a href=&quot;http://clojuredocs.org/clojure_core/clojure.core/mod&quot;&gt;mod&lt;/a&gt;
+想计算指数的平方根,四舍五入,上下限,绝对值和最大公约数/最小公倍数,请看&lt;a href=&quot;http://clojure.github.com/math.numeric-tower/&quot;&gt;math.numeric-tower&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;三角函数&lt;/h2&gt;
+
+&lt;p&gt;使用Java平台提供的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;Math/PI       ;=&amp;gt; 3.14159...
+(Math/sin x)
+(Math/cos x)
+(Math/tan x)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;还有很多的函数,你可以查看&lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html&quot;&gt;java.lang.Math&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;组合数学&lt;/h2&gt;
+
+&lt;p&gt;对于组合数学相关函数(比如:combinations和permutations),请看&lt;a href=&quot;http://clojure.github.com/math.combinatorics/&quot;&gt;math.combinatorics&lt;/a&gt;&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/cookbooks/math.html&quot;&gt;Mathematics with Clojure&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文包含了使用Clojure的内建函数,扩展包和部分JDK功能进行数学计算.&lt;/p&gt;
+
+&lt;p&gt;版权:&lt;/p&gt;
+
+&lt;p&gt;This work is licensed under a Creative Commons Attribution 3.0 Unported
+License (including images &amp;amp; stylesheets). The source is available on
+Github.&lt;/p&gt;
+
+&lt;h1&gt;准备&lt;/h1&gt;
+
+&lt;p&gt;这里的一些例子使用了&lt;a href=&quot;https://github.com/clojure/math.numeric-tower&quot;&gt;math.numeric-tower&lt;/a&gt;和&lt;a href=&quot;https://github.com/clojure/math.combinatorics&quot;&gt;math.combinatorics&lt;/a&gt;库.所以需要
+你在代码的命名空间中包含如下代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(:require [clojure.math.numeric-tower :as math]
+          [clojure.math.combinatorics :as combo])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者在REPL里载入:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[clojure.math.numeric-tower :as math])
+(require '[clojure.math.combinatorics :as combo])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;方法&lt;/h1&gt;
+
+&lt;h2&gt;简单计算&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(+ 3 4)    ;=&amp;gt; 7
+(- 3 4)    ;=&amp;gt; -1
+(* 3 4)    ;=&amp;gt; 12
+(/ 3 4)    ;=&amp;gt; 3/4  (an exact ratio)
+(/ 3.0 4)  ;=&amp;gt; 0.75
+
+(inc 5)    ;=&amp;gt; 6
+(dec 5)    ;=&amp;gt; 4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;想要计算整数的除法,取余和取模,请看&lt;a href=&quot;http://clojuredocs.org/clojure_core/clojure.core/quot&quot;&gt;quot&lt;/a&gt;,&lt;a href=&quot;http://clojuredocs.org/clojure_core/clojure.core/rem&quot;&gt;rem&lt;/a&gt;,&lt;a href=&quot;http://clojuredocs.org/clojure_core/clojure.core/mod&quot;&gt;mod&lt;/a&gt;
+想计算指数的平方根,四舍五入,上下限,绝对值和最大公约数/最小公倍数,请看&lt;a href=&quot;http://clojure.github.com/math.numeric-tower/&quot;&gt;math.numeric-tower&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;三角函数&lt;/h2&gt;
+
+&lt;p&gt;使用Java平台提供的函数:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;Math/PI       ;=&amp;gt; 3.14159...
+(Math/sin x)
+(Math/cos x)
+(Math/tan x)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;还有很多的函数,你可以查看&lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html&quot;&gt;java.lang.Math&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;组合数学&lt;/h2&gt;
+
+&lt;p&gt;对于组合数学相关函数(比如:combinations和permutations),请看&lt;a href=&quot;http://clojure.github.com/math.combinatorics/&quot;&gt;math.combinatorics&lt;/a&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Clojure教程-文件处理</title>
+        <link href="http://ivanpig.github.io/2014/02/08/file.html"/>
+        <updated>2014-02-08T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2014/02/08/file</id>
+        <content type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/cookbooks/files_and_directories.html&quot;&gt;Working with Files and Directories in Clojure&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文介绍使用Clojure的clojure.java.io命名空间下的函数以及JDK相关方法来操作文件和目录.&lt;/p&gt;
+
+&lt;p&gt;版权:&lt;/p&gt;
+
+&lt;p&gt;This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp;amp; stylesheets). The source is available on Github.&lt;/p&gt;
+
+&lt;h1&gt;准备&lt;/h1&gt;
+
+&lt;p&gt;请注意,在下面的例子中,&quot;io&quot;是clojure.java.io命名空间的简写引用.请确保你的ns宏包含如下代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(:require [clojure.java.io :as io])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者在REPL中加载了:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[clojure.java.io :as io])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;方法&lt;/h1&gt;
+
+&lt;h2&gt;将文件读到字符串中&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def a-long-string (slurp &quot;foo.txt&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意,你可以给slurp函数传递url.请看&lt;a href=&quot;http://clojuredocs.org/clojure_core/clojure.core/slurp&quot;&gt;slurp文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;一行一行的读取文件&lt;/h2&gt;
+
+&lt;p&gt;假设你想针对文件的每行内容调用my-func函数,并返回结果序列:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(with-open [rdr (io/reader &quot;foo.txt&quot;)]
+  (doall (map my-func (line-seq rdr))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;doall函数是必须的,因为map函数返回的是个lazy序列.line-seq返回的每行内容没有是去除了末尾的回车标记的,且空行将返回空字符串.&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h2&gt;将字符串写到文件中&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(spit &quot;foo.txt&quot;
+      &quot;A long
+multi-line string.
+Bye.&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果foo.txt文件不存在则会创建,如果存在,将会覆盖其内容.如果想追加内容,而不是覆盖:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(spit &quot;foo.txt&quot; &quot;file content&quot; :append true)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;每次向文件中写一行&lt;/h2&gt;
+
+&lt;p&gt;假设你想将vector里的内容写到文件中,每个元素一行:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(with-open [wrtr (io/writer &quot;foo.txt&quot;)]
+  (doseq [i my-vec]
+    (.write wrtr (str i &quot;\n&quot;))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;检查文件是否存在&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.exists (io/file &quot;filename.txt&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;判断是否是目录:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.isDirectory (io/file &quot;path/to/something&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;io/file是java.io.File对象(文件或目录).你能直接调用该对象上的方法,包括:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;exists        文件是否存在?
+isDirectory   文件还是目录?
+getName       获取文件名字
+getParent     过去文件所在目录名称
+getPath       获取文件全路径
+mkdir         创建目录
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更多内容请查看&lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/io/File.html&quot;&gt;java.io.File&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;获取给定目录下的文件列表和目录列表&lt;/h2&gt;
+
+&lt;p&gt;对于File对象:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.listFiles (io/file &quot;path/to/some-dir&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的方法返回File对象序列,如果想返回字符串序列:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.list (io/file &quot;path/to/some-dir&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;所有的结果都是列表形式的,可使用Clojure中的seq相关函数对其操作.&lt;/p&gt;
+
+&lt;h1&gt;更多内容&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/Raynes/fs&quot;&gt;https://github.com/Raynes/fs&lt;/a&gt;
+&lt;a href=&quot;http://clojure.org/cheatsheet&quot;&gt;cheatsheet&lt;/a&gt;的I/O节&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/cookbooks/files_and_directories.html&quot;&gt;Working with Files and Directories in Clojure&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文介绍使用Clojure的clojure.java.io命名空间下的函数以及JDK相关方法来操作文件和目录.&lt;/p&gt;
+
+&lt;p&gt;版权:&lt;/p&gt;
+
+&lt;p&gt;This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp;amp; stylesheets). The source is available on Github.&lt;/p&gt;
+
+&lt;h1&gt;准备&lt;/h1&gt;
+
+&lt;p&gt;请注意,在下面的例子中,&quot;io&quot;是clojure.java.io命名空间的简写引用.请确保你的ns宏包含如下代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(:require [clojure.java.io :as io])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者在REPL中加载了:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[clojure.java.io :as io])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;方法&lt;/h1&gt;
+
+&lt;h2&gt;将文件读到字符串中&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(def a-long-string (slurp &quot;foo.txt&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意,你可以给slurp函数传递url.请看&lt;a href=&quot;http://clojuredocs.org/clojure_core/clojure.core/slurp&quot;&gt;slurp文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;一行一行的读取文件&lt;/h2&gt;
+
+&lt;p&gt;假设你想针对文件的每行内容调用my-func函数,并返回结果序列:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(with-open [rdr (io/reader &quot;foo.txt&quot;)]
+  (doall (map my-func (line-seq rdr))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;doall函数是必须的,因为map函数返回的是个lazy序列.line-seq返回的每行内容没有是去除了末尾的回车标记的,且空行将返回空字符串.&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h2&gt;将字符串写到文件中&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(spit &quot;foo.txt&quot;
+      &quot;A long
+multi-line string.
+Bye.&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果foo.txt文件不存在则会创建,如果存在,将会覆盖其内容.如果想追加内容,而不是覆盖:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(spit &quot;foo.txt&quot; &quot;file content&quot; :append true)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;每次向文件中写一行&lt;/h2&gt;
+
+&lt;p&gt;假设你想将vector里的内容写到文件中,每个元素一行:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(with-open [wrtr (io/writer &quot;foo.txt&quot;)]
+  (doseq [i my-vec]
+    (.write wrtr (str i &quot;\n&quot;))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;检查文件是否存在&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.exists (io/file &quot;filename.txt&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;判断是否是目录:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.isDirectory (io/file &quot;path/to/something&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;io/file是java.io.File对象(文件或目录).你能直接调用该对象上的方法,包括:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;exists        文件是否存在?
+isDirectory   文件还是目录?
+getName       获取文件名字
+getParent     过去文件所在目录名称
+getPath       获取文件全路径
+mkdir         创建目录
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更多内容请查看&lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/io/File.html&quot;&gt;java.io.File&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;获取给定目录下的文件列表和目录列表&lt;/h2&gt;
+
+&lt;p&gt;对于File对象:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.listFiles (io/file &quot;path/to/some-dir&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的方法返回File对象序列,如果想返回字符串序列:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(.list (io/file &quot;path/to/some-dir&quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;所有的结果都是列表形式的,可使用Clojure中的seq相关函数对其操作.&lt;/p&gt;
+
+&lt;h1&gt;更多内容&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/Raynes/fs&quot;&gt;https://github.com/Raynes/fs&lt;/a&gt;
+&lt;a href=&quot;http://clojure.org/cheatsheet&quot;&gt;cheatsheet&lt;/a&gt;的I/O节&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Clojure教程-字符串处理</title>
+        <link href="http://ivanpig.github.io/2014/02/05/string.html"/>
+        <updated>2014-02-05T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2014/02/05/string</id>
+        <content type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/cookbooks/strings.html&quot;&gt;Strings&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文内容包括使用Clojure内建的函数和标准库来操作字符串,以及JDK中的相关操作.&lt;/p&gt;
+
+&lt;p&gt;版权:&lt;/p&gt;
+
+&lt;p&gt;This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp;amp; stylesheets).&lt;/p&gt;
+
+&lt;p&gt;源代码在&lt;a href=&quot;https://github.com/clojuredocs/guides&quot;&gt;Github&lt;/a&gt;上.&lt;/p&gt;
+
+&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Clojure中的字符串就是Java字符串.你可以使用Java中的相应方法来对其进行处理.&lt;/li&gt;
+&lt;li&gt;Java字符串是不可变的,所以能很方便的在Clojure中使用&lt;/li&gt;
+&lt;li&gt;你不能给Java字符串添加元数据&lt;/li&gt;
+&lt;li&gt;Clojure提供一些方便的符号&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;    &quot;foo&quot;    java.lang.String
+    #&quot;\d&quot;    java.util.regex.Pattern (正则表达式,匹配一个数字)
+    \f       java.lang.Character (表示'f')
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;注意&lt;/strong&gt;:
+人类的大脑和计算机之间还是有很大的差异的.所以Java的字符串(UTF-16编码)并不能像人们所认为的那样很好的和字符一一对应.比如说,一个Unicode的位和我们所认为的字符的一位是无法对应的(像韩国韩语尊宝,这些词由多个字符组成.)同样的,一个Unicode位可能是由2个UTF-16字符组成.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;预备知识&lt;/h1&gt;
+
+&lt;p&gt;一些例子用到了clojure.string,clojure.edn和clojure.pprint.我们假设你的ns宏里面已经包含了如下内容:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(:require [clojure.string :as str]
+          [clojure.edn :as edn]
+          [clojure.pprint :as pp])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者在REPL里面,你需要载入:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[clojure.string :as str])
+(require '[clojure.edn :as edn])
+(require '[clojure.pprint :as pp])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;方法&lt;/h1&gt;
+
+&lt;h2&gt;基础方法&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; 长度计算
+(count &quot;0123&quot;)      ;=&amp;gt; 4
+(empty? &quot;0123&quot;)     ;=&amp;gt; false
+(empty? &quot;&quot;)         ;=&amp;gt; true
+(str/blank? &quot;    &quot;) ;=&amp;gt; true
+
+;; 字符串连接
+(str &quot;foo&quot; &quot;bar&quot;)            ;=&amp;gt; &quot;foobar&quot;
+(str/join [&quot;0&quot; &quot;1&quot; &quot;2&quot;])     ;=&amp;gt; &quot;012&quot;
+(str/join &quot;.&quot; [&quot;0&quot; &quot;1&quot; &quot;2&quot;]) ;=&amp;gt; &quot;0.1.2&quot;
+
+;; 使用Java方法来匹配.
+;;
+;; 对于下面的情况,你应该更喜欢使用正则表达式.比如,你在进行测试,当失败时需要返回-1.
+;; 或者一个字符\o需要转换成字符串或数字.
+(.indexOf &quot;foo&quot; &quot;oo&quot;)         ;=&amp;gt; 1
+(.indexOf &quot;foo&quot; &quot;x&quot;)          ;=&amp;gt; -1
+(.lastIndexOf &quot;foo&quot; (int \o)) ;=&amp;gt; 2
+
+;; 字符串截取
+(subs &quot;0123&quot; 1)       ;=&amp;gt; &quot;123&quot;
+(subs &quot;0123&quot; 1 3)     ;=&amp;gt; &quot;12&quot;
+(str/trim &quot;  foo  &quot;)  ;=&amp;gt; &quot;foo&quot;
+(str/triml &quot;  foo  &quot;) ;=&amp;gt; &quot;foo  &quot;
+(str/trimr &quot;  foo  &quot;) ;=&amp;gt; &quot;  foo&quot;
+
+;; 切分字符串
+(seq &quot;foo&quot;)                       ;=&amp;gt; (\f \o \o)
+(str/split &quot;foo/bar/quux&quot; #&quot;/&quot;)   ;=&amp;gt; [&quot;foo&quot; &quot;bar&quot; &quot;quux&quot;]
+(str/split &quot;foo/bar/quux&quot; #&quot;/&quot; 2) ;=&amp;gt; [&quot;foo&quot; &quot;bar/quux&quot;]
+(str/split-lines &quot;foo
+bar&quot;)                             ;=&amp;gt; [&quot;foo&quot; &quot;bar&quot;]
+
+;; 大小写转换
+(str/lower-case &quot;fOo&quot;) ;=&amp;gt; &quot;foo&quot;
+(str/upper-case &quot;fOo&quot;) ;=&amp;gt; &quot;FOO&quot;
+(str/capitalize &quot;fOo&quot;) ;=&amp;gt; &quot;Foo&quot;
+
+;; 转换
+(str/escape &quot;foo|bar|quux&quot; {\| &quot;||&quot;}) ;=&amp;gt; &quot;foo||bar||quux&quot;
+
+;; 获得给定编码的字节数组
+;; (输出可能和下面的&quot;3c3660&quot;不同)
+(.getBytes &quot;foo&quot; &quot;UTF-8&quot;) ;=&amp;gt; #&amp;lt;byte[] [B@3c3660&amp;gt;
+
+;; 解析为keyword
+(keyword &quot;foo&quot;)    ;=&amp;gt; :foo
+
+;; 解析为数字
+(bigint &quot;20000000000000000000000000000&quot;) ;=&amp;gt; 20000000000000000000000000000N
+(bigdec &quot;20000000000000000000.00000000&quot;) ;=&amp;gt; 20000000000000000000.00000000M
+(Integer/parseInt &quot;2&quot;)                   ;=&amp;gt; 2
+(Float/parseFloat &quot;2&quot;)                   ;=&amp;gt; 2.0
+
+;; 解析为edn,它是Clojure形式的一个子集
+(edn/read-string &quot;0xffff&quot;) ;=&amp;gt; 65535
+
+;; 读取Clojure形式的方法.
+;;
+;; 安全警告:当你无法确保你能100%信任要处理的字符串时,请将*read-eval*置为false.
+;; 从Clojure1.5开始*read-eval*默认为false,但为了安全起见,
+;; 在处理字符串时还是先手动置一下false
+;; 因为可能有操作将其置为了true.
+
+(binding [*read-eval* false]
+  (read-string &quot;#\&quot;[abc]\&quot;&quot;))
+;=&amp;gt; #&quot;[abc]&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;解析复杂字符串&lt;/h2&gt;
+
+&lt;h3&gt;正则表达式&lt;/h3&gt;
+
+&lt;p&gt;正则表达式增强了字符串匹配.你可以重复匹配,匹配其中之一,等等等等&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html&quot;&gt;Regex reference&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;em&gt;Groups&lt;/em&gt;:当我们想匹配多于一个子串时,正则表达式的组就起到了作用.在正则表达式#&quot;(group-1) (group-2)&quot;中,第0个组为整个匹配表达式.第1个组从最左边的(开始,第2个组从左起第二个(开始,依次类推.你还可以嵌套组.也可以后续通过\$0,\$1等来引用组.&lt;/p&gt;
+
+&lt;h4&gt;匹配&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; 简单匹配
+(re-find #&quot;\d+&quot; &quot;foo 123 bar&quot;) ;=&amp;gt; &quot;123&quot;
+
+;; 匹配不到时会怎样?
+(re-find #&quot;\d+&quot; &quot;foobar&quot;) ;=&amp;gt; nil
+
+;; 对每个组返回第一个满足匹配条件的内容
+(re-matches #&quot;(@\w+)\s([.0-9]+)%&quot;
+            &quot;@shanley 19.8%&quot;)
+;=&amp;gt;[&quot;@shanley 19.8%&quot; &quot;@shanley&quot; &quot;19.8&quot;]
+
+;; 返回所有匹配的组的结果
+(re-seq #&quot;(@\w+)\s([.0-9]+)%&quot;
+        &quot;@davidgraeber 12.3%,@shanley 19.8%&quot;)
+;=&amp;gt; ([&quot;@davidgraeber 12.3%&quot; &quot;@davidgraeber&quot; &quot;12.3&quot;]
+;    [&quot;@shanley 19.8%&quot; &quot;@shanley&quot; &quot;19.8&quot;])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;替换&lt;/h4&gt;
+
+&lt;p&gt;我们使用str/replace来进行替换.
+第一个参数是源字符串,下一个是匹配字符串,最后一个是替换的内容.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;   match / replacement can be:
+   string / string
+   char / char
+   pattern / (string or function of match).
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; 在替换字符串中,$0,$1等用来引用匹配字符串中的组.
+(str/replace &quot;@davidgraeber 12.3%,@shanley 19.8%&quot;
+             #&quot;(@\S+)\s([.0-9]+)%&quot;
+             &quot;$2 ($1)&quot;)
+;=&amp;gt; &quot;12.3 (@davidgraeber),19.8 (@shanley)&quot;
+
+;; 使用函数来替换字符串,更灵活
+(println
+  (str/replace &quot;@davidgraeber 12.3%,@shanley 19.8%&quot;
+               #&quot;(@\w+)\s([.0-9]+)%,?&quot;
+               (fn [[_ person percent]]
+                   (let [points (-&amp;gt; percent Float/parseFloat (* 100) Math/round)]
+                     (str person &quot;'s followers grew &quot; points &quot; points.\n&quot;)))))
+;print=&amp;gt; @davidgraeber's followers grew 1230 points.
+;print=&amp;gt; @shanley's followers grew 1980 points.
+;print=&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;上下文无关语法&lt;/h3&gt;
+
+&lt;p&gt;和正则表达式相比上下文无关语法提供了更具表现力的匹配方式.你能使用例如嵌套来表达想法.
+我们将在JSON语法上使用&lt;a href=&quot;https://github.com/Engelberg/instaparse&quot;&gt;Instapares&lt;/a&gt;.(这个例子没有经过严格的测试也没什么特色.如果想应用到实际开发中,请使用&lt;a href=&quot;https://github.com/clojure/data.json&quot;&gt;data.json&lt;/a&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; 你项目中的project.clj需要包含如下依赖(你可能需要重启JVM)
+;;   :dependencies [[instaparse &quot;1.2.4&quot;]]
+;;
+;;  我们假设你的ns宏包含了如下内容:
+;;   (:require [instaparse.core :as insta])
+;; 或你在REPL里加载了:
+;;   (require '[instaparse.core :as insta])
+
+(def barely-tested-json-parser
+  (insta/parser
+   &quot;object     = &amp;lt;'{'&amp;gt; &amp;lt;w*&amp;gt; (members &amp;lt;w*&amp;gt;)* &amp;lt;'}'&amp;gt;
+    &amp;lt;members&amp;gt;  = pair (&amp;lt;w*&amp;gt; &amp;lt;','&amp;gt; &amp;lt;w*&amp;gt; members)*
+    &amp;lt;pair&amp;gt;     = string &amp;lt;w*&amp;gt; &amp;lt;':'&amp;gt; &amp;lt;w*&amp;gt; value
+    &amp;lt;value&amp;gt;    = string | number | object | array | 'true' | 'false' | 'null'
+    array      = &amp;lt;'['&amp;gt; elements* &amp;lt;']'&amp;gt;
+    &amp;lt;elements&amp;gt; = value &amp;lt;w*&amp;gt; (&amp;lt;','&amp;gt; &amp;lt;w*&amp;gt; elements)*
+    number     = int frac? exp?
+    &amp;lt;int&amp;gt;      = '-'? digits
+    &amp;lt;frac&amp;gt;     = '.' digits
+    &amp;lt;exp&amp;gt;      = e digits
+    &amp;lt;e&amp;gt;        = ('e' | 'E') (&amp;lt;'+'&amp;gt; | '-')?
+    &amp;lt;digits&amp;gt;   = #'[0-9]+'
+    (* First sketched state machine; then it was easier to figure out
+       regex syntax and all the maddening escape-backslashes. *)
+    string     = &amp;lt;'\\\&quot;'&amp;gt; #'([^\&quot;\\\\]|\\\\.)*' &amp;lt;'\\\&quot;'&amp;gt;
+    &amp;lt;w&amp;gt;        = #'\\s+'&quot;))
+
+(barely-tested-json-parser &quot;{\&quot;foo\&quot;: {\&quot;bar\&quot;: 99.9e-9, \&quot;quux\&quot;: [1, 2, -3]}}&quot;)
+;=&amp;gt; [:object
+;     [:string &quot;foo&quot;]
+;     [:object
+;       [:string &quot;bar&quot;]
+;       [:number &quot;99&quot; &quot;.&quot; &quot;9&quot; &quot;e&quot; &quot;-&quot; &quot;9&quot;]
+;       [:string &quot;quux&quot;]
+;       [:array [:number &quot;1&quot;] [:number &quot;2&quot;] [:number &quot;-&quot; &quot;3&quot;]]]]
+
+;; 最后的输出有点啰嗦,我们改进一下.
+(-&amp;gt;&amp;gt; (barely-tested-json-parser &quot;{\&quot;foo\&quot;: {\&quot;bar\&quot;: 99.9e-9, \&quot;quux\&quot;: [1, 2, -3]}}&quot;)
+     (insta/transform {:object hash-map
+                       :string str
+                       :array vector
+                       :number (comp edn/read-string str)}))
+;=&amp;gt; {&quot;foo&quot; {&quot;quux&quot; [1 2 -3], &quot;bar&quot; 9.99E-8}}
+
+
+;; 所有的内容都在上面了
+;;
+;; =右边的语法主要用来隐藏多余信息.比如说,我们不关心空格,所以我们通过设置&amp;lt;w*&amp;gt;来隐藏
+;;
+;; =左边的语法只是用来避免嵌套输出的.例如,&quot;members&quot;仅仅是一个人为设置的实体,
+;; 所以我们阻止了这个无意义的嵌套关系
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;构建复杂的字符串&lt;/h2&gt;
+
+&lt;h3&gt;重定向&lt;/h3&gt;
+
+&lt;p&gt;with-out-str提供了一个简单的方法来构建字符串.它重定向标准输出(&lt;strong&gt;out&lt;/strong&gt;)到StringWriter,然后返回结果字符串.这样你就可以使用print这样的函数来获得字符串(即使在嵌套函数中)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [shrimp-varieties [&quot;shrimp-kabobs&quot; &quot;shrimp creole&quot; &quot;shrimp gumbo&quot;]]
+  (with-out-str
+    (print &quot;We have &quot;)
+    (doseq [name (str/join &quot;, &quot; shrimp-varieties)]
+      (print name))
+    (print &quot;...&quot;)))
+;=&amp;gt; &quot;We have shrimp-kabobs, shrimp creole, shrimp gumbo...&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;格式化字符串&lt;/h3&gt;
+
+&lt;p&gt;Java里的模板能帮助你方便的构造字符串.&lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html&quot;&gt;Reference&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; %s经常会作为print的参数. 而%需要使用%%
+(format &quot;%s enjoyed %s%%.&quot; &quot;Mozambique&quot; 19.8) ;=&amp;gt; &quot;Mozambique enjoyed 19.8%.&quot;
+
+;; 1$前缀能引用到其后的第一个参数
+(format &quot;%1$tY-%1$tm-%1$td&quot; #inst&quot;2000-01-02T00:00:00&quot;) ;=&amp;gt; &quot;2000-01-02&quot;
+
+;; 同上1$, 2$前缀可以引用其后面的参数
+(format &quot;New year: %2$tY. Old year: %1$tY&quot;
+        #inst&quot;2000-01-02T00:00:00&quot;
+        #inst&quot;3111-12-31T00:00:00&quot;)
+;=&amp;gt; &quot;New year: 3111. Old year: 2000&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;CL-Format&lt;/h3&gt;
+
+&lt;p&gt;cl-format是Common
+Lisp中的一个臭名昭著的功能.例如,你可以从序列来构建字符串(其怪异程度就像使用英文来表示数字,使用两种类型的罗马数字).但对于打印日期和上面的对无序参数的引用方面却又比普通的格式化功能弱.&lt;/p&gt;
+
+&lt;p&gt;你只需要记住cl-format就是个无人问津的不值一学的语言.但是如果你喜欢并想学习它,那么看&lt;a href=&quot;http://www.gigamonkeys.com/book/a-few-format-recipes.html&quot;&gt;Practical
+Common
+Lisp教程&lt;/a&gt;.或者&lt;a href=&quot;http://www.lispworks.com/documentation/HyperSpec/Body/22_c.htm&quot;&gt;Common
+Lisp手册&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; The first param prints to *out* if true. To string if false.
+;; To a stream if it's a stream.
+(pp/cl-format true &quot;~{~{~a had ~s percentage point~:p.~}~^~%~}&quot;
+              {&quot;@davidgraeber&quot; 12.3
+               &quot;@shanley&quot; 19.8
+               &quot;@tjgabbour&quot; 1})
+;print=&amp;gt; @davidgraeber had 12.3 percentage points.
+;print=&amp;gt; @tjgabbour had 1 percentage point.
+;print=&amp;gt; @shanley had 19.8 percentage points.
+
+(def format-string &quot;~{~#[~;~a~;~a and ~a~:;~@{~a~#[~;, and ~:;, ~]~}~]~}&quot;)
+(pp/cl-format nil format-string [])
+;=&amp;gt; &quot;&quot;
+(pp/cl-format nil format-string [&quot;@shanley&quot;])
+;=&amp;gt; &quot;@shanley&quot;
+(pp/cl-format nil format-string [&quot;@shanley&quot;, &quot;@davidgraeber&quot;])
+;=&amp;gt; &quot;@shanley and @davidgraeber&quot;
+(pp/cl-format nil format-string [&quot;@shanley&quot;, &quot;@davidgraeber&quot;, &quot;@sarahkendzior&quot;])
+;=&amp;gt; &quot;@shanley, @davidgraeber, and @sarahkendzior&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;贡献者&lt;/h1&gt;
+
+&lt;p&gt;Tj Gabbour tjg@simplevalue.de, 2013 (original author)&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/cookbooks/strings.html&quot;&gt;Strings&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本文内容包括使用Clojure内建的函数和标准库来操作字符串,以及JDK中的相关操作.&lt;/p&gt;
+
+&lt;p&gt;版权:&lt;/p&gt;
+
+&lt;p&gt;This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp;amp; stylesheets).&lt;/p&gt;
+
+&lt;p&gt;源代码在&lt;a href=&quot;https://github.com/clojuredocs/guides&quot;&gt;Github&lt;/a&gt;上.&lt;/p&gt;
+
+&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Clojure中的字符串就是Java字符串.你可以使用Java中的相应方法来对其进行处理.&lt;/li&gt;
+&lt;li&gt;Java字符串是不可变的,所以能很方便的在Clojure中使用&lt;/li&gt;
+&lt;li&gt;你不能给Java字符串添加元数据&lt;/li&gt;
+&lt;li&gt;Clojure提供一些方便的符号&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;    &quot;foo&quot;    java.lang.String
+    #&quot;\d&quot;    java.util.regex.Pattern (正则表达式,匹配一个数字)
+    \f       java.lang.Character (表示'f')
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;注意&lt;/strong&gt;:
+人类的大脑和计算机之间还是有很大的差异的.所以Java的字符串(UTF-16编码)并不能像人们所认为的那样很好的和字符一一对应.比如说,一个Unicode的位和我们所认为的字符的一位是无法对应的(像韩国韩语尊宝,这些词由多个字符组成.)同样的,一个Unicode位可能是由2个UTF-16字符组成.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;预备知识&lt;/h1&gt;
+
+&lt;p&gt;一些例子用到了clojure.string,clojure.edn和clojure.pprint.我们假设你的ns宏里面已经包含了如下内容:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(:require [clojure.string :as str]
+          [clojure.edn :as edn]
+          [clojure.pprint :as pp])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者在REPL里面,你需要载入:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(require '[clojure.string :as str])
+(require '[clojure.edn :as edn])
+(require '[clojure.pprint :as pp])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;方法&lt;/h1&gt;
+
+&lt;h2&gt;基础方法&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; 长度计算
+(count &quot;0123&quot;)      ;=&amp;gt; 4
+(empty? &quot;0123&quot;)     ;=&amp;gt; false
+(empty? &quot;&quot;)         ;=&amp;gt; true
+(str/blank? &quot;    &quot;) ;=&amp;gt; true
+
+;; 字符串连接
+(str &quot;foo&quot; &quot;bar&quot;)            ;=&amp;gt; &quot;foobar&quot;
+(str/join [&quot;0&quot; &quot;1&quot; &quot;2&quot;])     ;=&amp;gt; &quot;012&quot;
+(str/join &quot;.&quot; [&quot;0&quot; &quot;1&quot; &quot;2&quot;]) ;=&amp;gt; &quot;0.1.2&quot;
+
+;; 使用Java方法来匹配.
+;;
+;; 对于下面的情况,你应该更喜欢使用正则表达式.比如,你在进行测试,当失败时需要返回-1.
+;; 或者一个字符\o需要转换成字符串或数字.
+(.indexOf &quot;foo&quot; &quot;oo&quot;)         ;=&amp;gt; 1
+(.indexOf &quot;foo&quot; &quot;x&quot;)          ;=&amp;gt; -1
+(.lastIndexOf &quot;foo&quot; (int \o)) ;=&amp;gt; 2
+
+;; 字符串截取
+(subs &quot;0123&quot; 1)       ;=&amp;gt; &quot;123&quot;
+(subs &quot;0123&quot; 1 3)     ;=&amp;gt; &quot;12&quot;
+(str/trim &quot;  foo  &quot;)  ;=&amp;gt; &quot;foo&quot;
+(str/triml &quot;  foo  &quot;) ;=&amp;gt; &quot;foo  &quot;
+(str/trimr &quot;  foo  &quot;) ;=&amp;gt; &quot;  foo&quot;
+
+;; 切分字符串
+(seq &quot;foo&quot;)                       ;=&amp;gt; (\f \o \o)
+(str/split &quot;foo/bar/quux&quot; #&quot;/&quot;)   ;=&amp;gt; [&quot;foo&quot; &quot;bar&quot; &quot;quux&quot;]
+(str/split &quot;foo/bar/quux&quot; #&quot;/&quot; 2) ;=&amp;gt; [&quot;foo&quot; &quot;bar/quux&quot;]
+(str/split-lines &quot;foo
+bar&quot;)                             ;=&amp;gt; [&quot;foo&quot; &quot;bar&quot;]
+
+;; 大小写转换
+(str/lower-case &quot;fOo&quot;) ;=&amp;gt; &quot;foo&quot;
+(str/upper-case &quot;fOo&quot;) ;=&amp;gt; &quot;FOO&quot;
+(str/capitalize &quot;fOo&quot;) ;=&amp;gt; &quot;Foo&quot;
+
+;; 转换
+(str/escape &quot;foo|bar|quux&quot; {\| &quot;||&quot;}) ;=&amp;gt; &quot;foo||bar||quux&quot;
+
+;; 获得给定编码的字节数组
+;; (输出可能和下面的&quot;3c3660&quot;不同)
+(.getBytes &quot;foo&quot; &quot;UTF-8&quot;) ;=&amp;gt; #&amp;lt;byte[] [B@3c3660&amp;gt;
+
+;; 解析为keyword
+(keyword &quot;foo&quot;)    ;=&amp;gt; :foo
+
+;; 解析为数字
+(bigint &quot;20000000000000000000000000000&quot;) ;=&amp;gt; 20000000000000000000000000000N
+(bigdec &quot;20000000000000000000.00000000&quot;) ;=&amp;gt; 20000000000000000000.00000000M
+(Integer/parseInt &quot;2&quot;)                   ;=&amp;gt; 2
+(Float/parseFloat &quot;2&quot;)                   ;=&amp;gt; 2.0
+
+;; 解析为edn,它是Clojure形式的一个子集
+(edn/read-string &quot;0xffff&quot;) ;=&amp;gt; 65535
+
+;; 读取Clojure形式的方法.
+;;
+;; 安全警告:当你无法确保你能100%信任要处理的字符串时,请将*read-eval*置为false.
+;; 从Clojure1.5开始*read-eval*默认为false,但为了安全起见,
+;; 在处理字符串时还是先手动置一下false
+;; 因为可能有操作将其置为了true.
+
+(binding [*read-eval* false]
+  (read-string &quot;#\&quot;[abc]\&quot;&quot;))
+;=&amp;gt; #&quot;[abc]&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;解析复杂字符串&lt;/h2&gt;
+
+&lt;h3&gt;正则表达式&lt;/h3&gt;
+
+&lt;p&gt;正则表达式增强了字符串匹配.你可以重复匹配,匹配其中之一,等等等等&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html&quot;&gt;Regex reference&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;em&gt;Groups&lt;/em&gt;:当我们想匹配多于一个子串时,正则表达式的组就起到了作用.在正则表达式#&quot;(group-1) (group-2)&quot;中,第0个组为整个匹配表达式.第1个组从最左边的(开始,第2个组从左起第二个(开始,依次类推.你还可以嵌套组.也可以后续通过\$0,\$1等来引用组.&lt;/p&gt;
+
+&lt;h4&gt;匹配&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; 简单匹配
+(re-find #&quot;\d+&quot; &quot;foo 123 bar&quot;) ;=&amp;gt; &quot;123&quot;
+
+;; 匹配不到时会怎样?
+(re-find #&quot;\d+&quot; &quot;foobar&quot;) ;=&amp;gt; nil
+
+;; 对每个组返回第一个满足匹配条件的内容
+(re-matches #&quot;(@\w+)\s([.0-9]+)%&quot;
+            &quot;@shanley 19.8%&quot;)
+;=&amp;gt;[&quot;@shanley 19.8%&quot; &quot;@shanley&quot; &quot;19.8&quot;]
+
+;; 返回所有匹配的组的结果
+(re-seq #&quot;(@\w+)\s([.0-9]+)%&quot;
+        &quot;@davidgraeber 12.3%,@shanley 19.8%&quot;)
+;=&amp;gt; ([&quot;@davidgraeber 12.3%&quot; &quot;@davidgraeber&quot; &quot;12.3&quot;]
+;    [&quot;@shanley 19.8%&quot; &quot;@shanley&quot; &quot;19.8&quot;])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;替换&lt;/h4&gt;
+
+&lt;p&gt;我们使用str/replace来进行替换.
+第一个参数是源字符串,下一个是匹配字符串,最后一个是替换的内容.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;   match / replacement can be:
+   string / string
+   char / char
+   pattern / (string or function of match).
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; 在替换字符串中,$0,$1等用来引用匹配字符串中的组.
+(str/replace &quot;@davidgraeber 12.3%,@shanley 19.8%&quot;
+             #&quot;(@\S+)\s([.0-9]+)%&quot;
+             &quot;$2 ($1)&quot;)
+;=&amp;gt; &quot;12.3 (@davidgraeber),19.8 (@shanley)&quot;
+
+;; 使用函数来替换字符串,更灵活
+(println
+  (str/replace &quot;@davidgraeber 12.3%,@shanley 19.8%&quot;
+               #&quot;(@\w+)\s([.0-9]+)%,?&quot;
+               (fn [[_ person percent]]
+                   (let [points (-&amp;gt; percent Float/parseFloat (* 100) Math/round)]
+                     (str person &quot;'s followers grew &quot; points &quot; points.\n&quot;)))))
+;print=&amp;gt; @davidgraeber's followers grew 1230 points.
+;print=&amp;gt; @shanley's followers grew 1980 points.
+;print=&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;上下文无关语法&lt;/h3&gt;
+
+&lt;p&gt;和正则表达式相比上下文无关语法提供了更具表现力的匹配方式.你能使用例如嵌套来表达想法.
+我们将在JSON语法上使用&lt;a href=&quot;https://github.com/Engelberg/instaparse&quot;&gt;Instapares&lt;/a&gt;.(这个例子没有经过严格的测试也没什么特色.如果想应用到实际开发中,请使用&lt;a href=&quot;https://github.com/clojure/data.json&quot;&gt;data.json&lt;/a&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; 你项目中的project.clj需要包含如下依赖(你可能需要重启JVM)
+;;   :dependencies [[instaparse &quot;1.2.4&quot;]]
+;;
+;;  我们假设你的ns宏包含了如下内容:
+;;   (:require [instaparse.core :as insta])
+;; 或你在REPL里加载了:
+;;   (require '[instaparse.core :as insta])
+
+(def barely-tested-json-parser
+  (insta/parser
+   &quot;object     = &amp;lt;'{'&amp;gt; &amp;lt;w*&amp;gt; (members &amp;lt;w*&amp;gt;)* &amp;lt;'}'&amp;gt;
+    &amp;lt;members&amp;gt;  = pair (&amp;lt;w*&amp;gt; &amp;lt;','&amp;gt; &amp;lt;w*&amp;gt; members)*
+    &amp;lt;pair&amp;gt;     = string &amp;lt;w*&amp;gt; &amp;lt;':'&amp;gt; &amp;lt;w*&amp;gt; value
+    &amp;lt;value&amp;gt;    = string | number | object | array | 'true' | 'false' | 'null'
+    array      = &amp;lt;'['&amp;gt; elements* &amp;lt;']'&amp;gt;
+    &amp;lt;elements&amp;gt; = value &amp;lt;w*&amp;gt; (&amp;lt;','&amp;gt; &amp;lt;w*&amp;gt; elements)*
+    number     = int frac? exp?
+    &amp;lt;int&amp;gt;      = '-'? digits
+    &amp;lt;frac&amp;gt;     = '.' digits
+    &amp;lt;exp&amp;gt;      = e digits
+    &amp;lt;e&amp;gt;        = ('e' | 'E') (&amp;lt;'+'&amp;gt; | '-')?
+    &amp;lt;digits&amp;gt;   = #'[0-9]+'
+    (* First sketched state machine; then it was easier to figure out
+       regex syntax and all the maddening escape-backslashes. *)
+    string     = &amp;lt;'\\\&quot;'&amp;gt; #'([^\&quot;\\\\]|\\\\.)*' &amp;lt;'\\\&quot;'&amp;gt;
+    &amp;lt;w&amp;gt;        = #'\\s+'&quot;))
+
+(barely-tested-json-parser &quot;{\&quot;foo\&quot;: {\&quot;bar\&quot;: 99.9e-9, \&quot;quux\&quot;: [1, 2, -3]}}&quot;)
+;=&amp;gt; [:object
+;     [:string &quot;foo&quot;]
+;     [:object
+;       [:string &quot;bar&quot;]
+;       [:number &quot;99&quot; &quot;.&quot; &quot;9&quot; &quot;e&quot; &quot;-&quot; &quot;9&quot;]
+;       [:string &quot;quux&quot;]
+;       [:array [:number &quot;1&quot;] [:number &quot;2&quot;] [:number &quot;-&quot; &quot;3&quot;]]]]
+
+;; 最后的输出有点啰嗦,我们改进一下.
+(-&amp;gt;&amp;gt; (barely-tested-json-parser &quot;{\&quot;foo\&quot;: {\&quot;bar\&quot;: 99.9e-9, \&quot;quux\&quot;: [1, 2, -3]}}&quot;)
+     (insta/transform {:object hash-map
+                       :string str
+                       :array vector
+                       :number (comp edn/read-string str)}))
+;=&amp;gt; {&quot;foo&quot; {&quot;quux&quot; [1 2 -3], &quot;bar&quot; 9.99E-8}}
+
+
+;; 所有的内容都在上面了
+;;
+;; =右边的语法主要用来隐藏多余信息.比如说,我们不关心空格,所以我们通过设置&amp;lt;w*&amp;gt;来隐藏
+;;
+;; =左边的语法只是用来避免嵌套输出的.例如,&quot;members&quot;仅仅是一个人为设置的实体,
+;; 所以我们阻止了这个无意义的嵌套关系
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;构建复杂的字符串&lt;/h2&gt;
+
+&lt;h3&gt;重定向&lt;/h3&gt;
+
+&lt;p&gt;with-out-str提供了一个简单的方法来构建字符串.它重定向标准输出(&lt;strong&gt;out&lt;/strong&gt;)到StringWriter,然后返回结果字符串.这样你就可以使用print这样的函数来获得字符串(即使在嵌套函数中)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;(let [shrimp-varieties [&quot;shrimp-kabobs&quot; &quot;shrimp creole&quot; &quot;shrimp gumbo&quot;]]
+  (with-out-str
+    (print &quot;We have &quot;)
+    (doseq [name (str/join &quot;, &quot; shrimp-varieties)]
+      (print name))
+    (print &quot;...&quot;)))
+;=&amp;gt; &quot;We have shrimp-kabobs, shrimp creole, shrimp gumbo...&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;格式化字符串&lt;/h3&gt;
+
+&lt;p&gt;Java里的模板能帮助你方便的构造字符串.&lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html&quot;&gt;Reference&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; %s经常会作为print的参数. 而%需要使用%%
+(format &quot;%s enjoyed %s%%.&quot; &quot;Mozambique&quot; 19.8) ;=&amp;gt; &quot;Mozambique enjoyed 19.8%.&quot;
+
+;; 1$前缀能引用到其后的第一个参数
+(format &quot;%1$tY-%1$tm-%1$td&quot; #inst&quot;2000-01-02T00:00:00&quot;) ;=&amp;gt; &quot;2000-01-02&quot;
+
+;; 同上1$, 2$前缀可以引用其后面的参数
+(format &quot;New year: %2$tY. Old year: %1$tY&quot;
+        #inst&quot;2000-01-02T00:00:00&quot;
+        #inst&quot;3111-12-31T00:00:00&quot;)
+;=&amp;gt; &quot;New year: 3111. Old year: 2000&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;CL-Format&lt;/h3&gt;
+
+&lt;p&gt;cl-format是Common
+Lisp中的一个臭名昭著的功能.例如,你可以从序列来构建字符串(其怪异程度就像使用英文来表示数字,使用两种类型的罗马数字).但对于打印日期和上面的对无序参数的引用方面却又比普通的格式化功能弱.&lt;/p&gt;
+
+&lt;p&gt;你只需要记住cl-format就是个无人问津的不值一学的语言.但是如果你喜欢并想学习它,那么看&lt;a href=&quot;http://www.gigamonkeys.com/book/a-few-format-recipes.html&quot;&gt;Practical
+Common
+Lisp教程&lt;/a&gt;.或者&lt;a href=&quot;http://www.lispworks.com/documentation/HyperSpec/Body/22_c.htm&quot;&gt;Common
+Lisp手册&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.clojure}&quot;&gt;;; The first param prints to *out* if true. To string if false.
+;; To a stream if it's a stream.
+(pp/cl-format true &quot;~{~{~a had ~s percentage point~:p.~}~^~%~}&quot;
+              {&quot;@davidgraeber&quot; 12.3
+               &quot;@shanley&quot; 19.8
+               &quot;@tjgabbour&quot; 1})
+;print=&amp;gt; @davidgraeber had 12.3 percentage points.
+;print=&amp;gt; @tjgabbour had 1 percentage point.
+;print=&amp;gt; @shanley had 19.8 percentage points.
+
+(def format-string &quot;~{~#[~;~a~;~a and ~a~:;~@{~a~#[~;, and ~:;, ~]~}~]~}&quot;)
+(pp/cl-format nil format-string [])
+;=&amp;gt; &quot;&quot;
+(pp/cl-format nil format-string [&quot;@shanley&quot;])
+;=&amp;gt; &quot;@shanley&quot;
+(pp/cl-format nil format-string [&quot;@shanley&quot;, &quot;@davidgraeber&quot;])
+;=&amp;gt; &quot;@shanley and @davidgraeber&quot;
+(pp/cl-format nil format-string [&quot;@shanley&quot;, &quot;@davidgraeber&quot;, &quot;@sarahkendzior&quot;])
+;=&amp;gt; &quot;@shanley, @davidgraeber, and @sarahkendzior&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;贡献者&lt;/h1&gt;
+
+&lt;p&gt;Tj Gabbour tjg@simplevalue.de, 2013 (original author)&lt;/p&gt;
 </summary>
     </entry>
     
@@ -147,6 +4845,9 @@
 &lt;li&gt;提供给Java调用&lt;/li&gt;
 &lt;li&gt;打包&lt;/li&gt;
 &lt;/ul&gt;
+
+
+&lt;!-- more --&gt;
 
 
 &lt;h2&gt;读取简繁字典&lt;/h2&gt;
@@ -765,6 +5466,9 @@ repl里面输入&lt;/p&gt;
 &lt;li&gt;提供给Java调用&lt;/li&gt;
 &lt;li&gt;打包&lt;/li&gt;
 &lt;/ul&gt;
+
+
+&lt;!-- more --&gt;
 
 
 &lt;h2&gt;读取简繁字典&lt;/h2&gt;

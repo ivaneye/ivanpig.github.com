@@ -103,9 +103,9 @@
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/09/14/your_first_application.html">Luminus手册-第一个应用</a></h2>
+        <h2 class="post-title"><a href="/2013/09/22/custom_middleware.html">Luminus手册-自定义中间件</a></h2>
 
-        <p class="post-meta">By 09月14日  2013
+        <p class="post-meta">By 09月22日  2013
             
             
             
@@ -119,7 +119,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (22)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -131,59 +131,536 @@
 </header>
 
 <div class="post-description">
-    <h1>Guestbook应用</h1>
+    <h1>Adding custom middleware</h1>
 
-<p>此文使用Luminus构建一个简单的guestbook应用。guestbook可以保存信息，展示信息。此应用将涉及到简单的HTML模板，数据库访问和项目结构.</p>
+<p>Luminus使用Ring来路由应用的处理程序，你也可以添加一些中间件。</p>
 
-<h1>安装Leiningen</h1>
+<p>中间件可以给处理程序添加一些额外的功能。中间件函数主要被用来扩展Ring的基本处理函数。</p>
 
-<p>首先你需要安装Leiningen才能使用Luminus。安装Leiningen非常的简单:</p>
+<p>中间件其实就是个简单的函数，它接受现有的处理程序和一些可选参数作为函数参数并返回一个新的处理程序。</p>
+
+<pre><code class="{.clojure}">(defn wrap-nocache [handler]
+  (fn [request]
+     (let [response (handler request)]
+        (assoc-in response [:headers  "Pragma"] "no-cache"))))
+
+(def app (wrap-nocache handler))
+</code></pre>
+
+<p>可以看到，上面的函数接受一个处理函数并返回一个新的函数，这个函数接受request作为参数。返回的函数只在handler所在的范围内有效。当调用这个函数时，它将会给响应map添加Pragma:no-cache键值对。</p>
+
+<p>你可以添加自定义的中间件，只需要使用:middleware关键字就可以了:</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler
+          all-routes
+          ;;put any custom middleware
+          ;;in the middleware vector
+          :middleware [wrap-nocache]))
+</code></pre>
+
+<p>具体内容可参见Ring官方文档。</p>
+
+
+
+
+    <a href="/2013/09/22/custom_middleware.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/21/response_types.html">Luminus手册-响应</a></h2>
+
+        <p class="post-meta">By 09月21日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Responses</h1>
+
+<p>noir.response提供了很多辅助函数来处理响应.</p>
+
+<h1>Setting headers</h1>
+
+<p>可以使用set-header来设置响应头，使用一个map作为参数。这里需要注意的是,map的key必须是字符串。</p>
+
+<pre><code class="{.clojure}">(set-headers {"x-csrf" csrf}
+    (common/layout [:p "hi there"]))
+</code></pre>
+
+<h1>Setting content type</h1>
+
+<p>你可以使用content-type函数来设置响应的类型:</p>
+
+<pre><code class="{.clojure}">(GET "/project" []
+       (noir.response/content-type
+       "application/pdf"
+       (clojure.java.io/input-stream "report.pdf")))
+</code></pre>
+
+<p>下面是有效的响应类型设置:</p>
 
 <ul>
-<li>下载脚本</li>
-<li>将其设置为可执行权限(chmod +x lein)</li>
-<li>将脚本放到你的PATH下面</li>
-<li>运行lein self-install ，然后等待安装结束</li>
+<li>XML - Wraps the response with the content type for xml and sets the body to the content.</li>
+<li>JSON- Wraps the response in the json content type and generates JSON from the content</li>
+<li>JSONP - Generates JSON for the given content and creates a javascript response for calling func-name with it.</li>
+<li>edn - Wraps the response in the application/edn content-type and calls pr-str on the Clojure data stuctures passed in.</li>
 </ul>
 
 
-<pre><code class="sh">wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
-chmod +x lein
-mv lein ~/bin
-lein self-install
+<pre><code class="{.clojure}">(GET "/xml" [] (xml "&lt;foo&gt;&lt;/foo&gt;"))
+(GET "/json" [] (json {:response "ok"}))
+(GET "/jsonp" [] (jsonp  "showUsers" [{:name "John"} {:name "Jane"}]))
+(GET "/edn" [] (edn {:foo 1 :bar 2}))
 </code></pre>
 
-<h1>创建一个新应用</h1>
+<p>为了设置响应类型，你还需要设置noir.util.middleware/app-handler中间件。和上一节的请求一样，你只需要配置:formats键就可以了</p>
 
-<p>安装完Leiningen后，你就可以在命令行中输入如下的命令</p>
-
-<pre><code class="sh">lein new luminus guestbook +h2
-cd guestbook
-</code></pre>
-
-<p>上面的命令将会创建一个使用了H2嵌入式数据库的模板项目。现在我们就可以运行这个项目了.</p>
-
-<pre><code class="sh">lein ring server
-guestbook started successfully...
-2013-03-01 19:05:30.389:INFO:oejs.Server:jetty-7.6.1.v20120215
-Started server on port 3000
-2013-03-01 19:05:30.459:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:3000
-</code></pre>
-
-<p>浏览器会自动打开，你将能看到运行的应用。如果你不想浏览器自动打开，你可以用下面的命令来启动项目.</p>
-
-<pre><code class="sh">lein ring server-headless
-</code></pre>
-
-<p>你也可以自定义端口号，命令如下:</p>
-
-<pre><code class="sh">lein ring server-headless 8000
+<pre><code class="{.clojure}">(app-handler routes :formats [:json])
 </code></pre>
 
 
 
 
-    <a href="/2013/09/14/your_first_application.html" class="post-categorybut">阅读全文</a>
+    <a href="/2013/09/21/response_types.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/20/request_types.html">Luminus手册-请求</a></h2>
+
+        <p class="post-meta">By 09月20日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Requests</h1>
+
+<p>默认情况下，请求的参数(比如一个form的POST请求)将会被自动绑定到request的:params键上。</p>
+
+<p>但是，如果你在请求体内传递一些特殊类型的参数，则你需要使用适合的中间件来处理他们。Luminus使用ring-middleware-format来处理这些参数。</p>
+
+<p>中间件可以通过在noir.util.middleware/app-handler上添加:formats键来开启:</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler
+          all-routes
+          :formats [:json :edn]))
+</code></pre>
+
+<p>这样请求中的application/json和application/edn类型将会被中间件处理。相应的请求参数会在:params中。注意，这也会处理响应中的对应类型参数。具体信息请见Response Types章节。</p>
+
+<p>下面是有效的格式化类型:</p>
+
+<pre><code class="{.clojure}">:json - JSON with string keys in :params and :body-params
+:json-kw - JSON with keywodized keys in :params and :body-params
+:edn - native Clojure format.
+:yaml - YAML format
+:yaml-kw - YAML format with keywodized keys in :params and :body-params
+:yaml-in-html - yaml in a html page
+</code></pre>
+
+
+
+    <a href="/2013/09/20/request_types.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/19/staticresource.html">Luminus手册-静态资源</a></h2>
+
+        <p class="post-meta">By 09月19日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Static resources</h1>
+
+<p>在noir.io下有多个访问静态资源的帮助方法。
+你可以通过调用resource-path来获取public目录的路径。</p>
+
+<h1>Handling file uploads</h1>
+
+<p>上传文件通过noir.io空间下的upload-file方法来实现，upload-file接受一个路径和文件的map。
+例如我们有一个upload.html文件:</p>
+
+<pre><code class="{.html}">    &lt;h2&gt;Upload a file&lt;/h2&gt;
+    &lt;form action="/upload" enctype="multipart/form-data" method="POST"&gt;
+        &lt;input id="file" name="file" type="file" /&gt;
+        &lt;input type="submit" value="upload" /&gt;
+    &lt;/form&gt;
+</code></pre>
+
+<p>我们可以这样来处理文件上传。</p>
+
+<pre><code class="{.clojure}">(ns myapp.upload
+  ...
+  (:require [upload-test.views.layout :as layout]
+            [noir.response :as response]
+            [noir.io :as io]))
+
+(defn upload-page []
+  (layout/render "upload.html"))
+
+(defn handle-upload [file]
+  (io/upload-file "/" file)
+  (response/redirect
+    (str "/" (:filename file))))
+
+(defroutes upload-routes
+  (GET "/upload" [] (upload-page))
+  (POST "/upload" [file] (handle-upload file)))
+</code></pre>
+
+
+
+
+    <a href="/2013/09/19/staticresource.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/18/defining_routes.html">Luminus手册-路由定义</a></h2>
+
+        <p class="post-meta">By 09月18日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Defining routes</h1>
+
+<p>Luminus使用Compojure来定义应用的路由.路由由HTTP请求方法和接受它的URI，
+参数和以及相应的处理程序组成。Compojure定义了所有标准HTTP请求的路由，
+比如ANY,DELETE,GET,HEAD,OPTIONS,PATCH,POST和PUT。</p>
+
+<p>例如：如果我们想定义一个应用，它指向/，/返回"Hello World!"字符串。我们
+可以这样写:</p>
+
+<pre><code class="{.clojure}">(defroutes app-routes
+  (GET "/" [] "Hello World!"))
+</code></pre>
+
+<p>如果你想构建一个路由来响应POST请求，我们可以这样写：</p>
+
+<pre><code class="{.clojure}">(POST "/hello" [id] (str "Welcome " id))
+</code></pre>
+
+<p>有些路由需要访问请求的map，我们只需要在路由上定义第二个参数就可以了。</p>
+
+<pre><code class="{.clojure}">(GET "/foo" request (interpose ", " (keys request)))
+</code></pre>
+
+<p>上面的路由读出请求map中所有的key并展示出来。结果如下:</p>
+
+<pre><code class="{.example}">:ssl-client-cert, :remote-addr, :scheme, :query-params, :session, :form-params,
+:multipart-params, :request-method, :query-string, :route-params, :content-type,
+:cookies, :uri, :server-name, :params, :headers, :content-length, :server-port,
+:character-encoding, :body, :flash
+</code></pre>
+
+<p>Compojure还提供了一些有用的函数来处理请求map和表单参数。例如，在
+guestbook应用的例子中，我们看到了如下的路由定义:</p>
+
+<pre><code class="{.clojure}">(POST "/"  [name message] (save-message name message))
+</code></pre>
+
+
+
+
+    <a href="/2013/09/18/defining_routes.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/17/clojurescript.html">Luminus手册-ClojureScript</a></h2>
+
+        <p class="post-meta">By 09月17日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Summary</h1>
+
+<p>ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScript可以
+有如下有点：</p>
+
+<ul>
+<li>在客户端和服务端使用相同的语言</li>
+<li>在前后端共用相同的代码</li>
+<li>简介流畅的语言</li>
+<li>使用Leiningen管理依赖关系</li>
+<li>不可变数据</li>
+<li>功能强大的库</li>
+<li>Adding ClojureScript Support</li>
+</ul>
+
+
+<p>最简单的添加ClojureScript支持的方法就是在创建新项目的时候添加+cljs选项
+。不过在现有的项目中添加ClojureScript也同样的简单。你只需要在
+project.clj文件中添加如下内容即可。</p>
+
+<pre><code class="{.clojure}">:plugins [...
+          [lein-cljsbuild "0.3.0"]]
+
+:hooks [... leiningen.cljsbuild]
+
+:cljsbuild
+{:builds [{:source-paths ["src-cljs"]
+           :compiler {:output-to "resources/public/js/site.js"
+                      :optimizations :advanced}}]}
+</code></pre>
+
+<p>上面的代码将在项目中添加cljsbuild插件和一个钩子。
+所有的命名空间需要在项目根目录下的src-cljs目录内。注意，ClojureScript
+文件需要以.cljs结尾。如果文件以.clj结尾，它也会被编译，不过它就无法访
+问js命名空间。</p>
+
+<h1>Using Libraries</h1>
+
+<p>使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
+ClojureScript库和其他库一样都配置在project.clj文件中。</p>
+
+
+
+
+    <a href="/2013/09/17/clojurescript.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/16/html_templating.html">Luminus手册-HTML模板</a></h2>
+
+        <p class="post-meta">By 09月16日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Templating Options</h1>
+
+<p>Luminus包含了Hiccup的依赖.如果你熟悉Hiccup那么可以直接使用。
+Hiccup使用clojure数据结构来描述模板。并且,Hiccup提供了丰富的API来生成
+HTML元素。 Luminus也包含了Selmer，Selmer使用了普通的文本文件来描述模板。
+你可以使用它们中的任何一个模板，或者混合使用.抑或你可以选择任何你喜欢
+的模板框架，比如Enlive或者Stencil。</p>
+
+<h1>HTML Templating Using Selmer</h1>
+
+<p>Selmer是一个类似Django模板的框架。如果你熟悉Django或者其他类似的模板语
+言，那么你会感觉很熟悉.</p>
+
+<h2>Creating Templates</h2>
+
+<p>Selmer将展示逻辑和程序逻辑分开。实际上Selmer模板就是包含了动态元素的
+HTML文件。来看下面的例子。</p>
+
+<pre><code class="{.html}">&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;title&gt;My First Template&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h2&gt;Hello { {name}}&lt;/h2&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>模板使用了一个包含了键值对的上下文环境。上下文环境中包含了我们
+需要在运行时获得的变量的值。上面的代码中，我们从上下文环境中获取名字为
+name的变量的值。
+有两个函数可以渲染模板,render和render-file。render函数接收一个字符串来
+渲染模板。而render-file接收一个字符串作为路径来渲染模板。
+如果我们将上面的模板定义保存到index.html文件中。我们就可以这样来渲染:</p>
+
+<pre><code class="{.clojure}">(ns example.routes.home
+  (:use [selmer.parser :only [render-file]]))
+
+(defn index [request]
+  (render-file "example/views/templates/index.html"
+               {:name "John"}))
+</code></pre>
+
+
+
+
+    <a href="/2013/09/16/html_templating.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -197,7 +674,7 @@ Started server on port 3000
 
 
     
-    <span class=" pure-u-1-2 pagination-item"><p>Older →</p></span>
+    <a class=" pure-u-1-2 pagination-item" href="/page/5"><p>Older →</p></a>
     
 </div>
 

@@ -1,0 +1,506 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="clojure"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2014/08/29/namespace.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>Clojure教程-命名空间 - IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">Clojure教程-命名空间</h2>
+
+    <p class="post-meta">By 08月29日  2014
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">clojure (10)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">clojure (30)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <h1>版本</h1>
+
+<p>本文翻译自<a href="http://clojure-doc.org/articles/language/namespaces.html">Clojure Namespaces and Vars</a></p>
+
+<p>本文涵盖如下内容:</p>
+
+<ul>
+<li>Clojure命名空间和var概述</li>
+<li>如何定义命名空间</li>
+<li>如何使用其它命名空间里的函数</li>
+<li>require,refer和use</li>
+<li>常见错误和典型错误,以及导致这些错误的原因</li>
+<li>命名空间和代码管理</li>
+</ul>
+
+
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
+
+<p>涵盖Clojure版本:Clojure 1.5</p>
+
+<h1>概述</h1>
+
+<p>Clojure的函数通过命名空间来组织.Clojure命名空间和Java的包或者Python的模块很类似.命名空间实际上就是个map,将名字映射到了var上.在大部分情况下,这些var持有这些函数.</p>
+
+<h1>定义一个命名空间</h1>
+
+<p>一般情况下使用clojure.core/ns宏来定义命名空间.最基本的形式下,它将名字作为符号.</p>
+
+<pre><code class="clojure">(ns superlib.core)
+</code></pre>
+
+<p>命名空间可以由点号切割的好多段组成</p>
+
+<pre><code class="clojure">(ns megacorp.service.core)
+</code></pre>
+
+<p>需要注意的是,请尽量避免使用单段的命名空间,以免与其它开发人员的命名空间相冲突.如果库或者应用属于某个组织,那么建议以如下形式作为命名空间.[组织名称].[包名|应用名].[函数组名]
+例如</p>
+
+<pre><code class="clojure">(ns clojurewerkz.welle.kv)
+
+(ns megacorp.search.indexer.core)
+</code></pre>
+
+<!-- more -->
+
+
+<p>另外,ns宏可以包含如下形式:</p>
+
+<ul>
+<li>(:require ...)</li>
+<li>(:import ...)</li>
+<li>(:use ...)</li>
+<li>(:refer-clojure ...)</li>
+<li>(:gen-class ...)</li>
+</ul>
+
+
+<p>这些其实就是clojure.core/import,clojure.core/require等等这些的简写形式而已</p>
+
+<h2>:require</h2>
+
+<p>:require形式可以使你的代码能访问其它命名空间的Clojure代码.例如</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require clojure.set))
+
+;; Now it is possible to do:
+;; (clojure.set/difference #{1 2 3} #{3 4 5})
+</code></pre>
+
+<p>此代码将保证clojure.set命名空间被加载,编译并且可以通过clojure.set名来调用.当然可以给加载的命名空间取个别名:</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require [clojure.set :as cs]))
+
+;; Now it is possible to do:
+;; (cs/difference #{1 2 3} #{3 4 5})
+</code></pre>
+
+<p>一次导入两个命名空间的例子;</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require [clojure.set  :as cs]
+            [clojure.walk :as walk]))
+</code></pre>
+
+<h3>:refer选项</h3>
+
+<p>如果想在当前命名空间里通过简写名称来引用clojure.set空间里的函数,可以通过refer来实现:</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require [clojure.set :refer [difference intersection]]))
+
+;; Now it is possible to do:
+;; (difference #{1 2 3} #{3 4 5})
+</code></pre>
+
+<p>:require形式中的:refer特性为Clojure1.4新增特性.</p>
+
+<p>可能有时需要引入某个命名空间下所有的函数:</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require [clojure.set :refer :all]))
+
+;; Now it is possible to do:
+;; (difference #{1 2 3} #{3 4 5})
+</code></pre>
+
+<h2>:import</h2>
+
+<p>:import的作用是在当前命名空间引入Java类:</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:import java.util.concurrent.Executors))
+</code></pre>
+
+<p>执行上面的代码后,java.util.concurrent.Executors类将会被引入,请可以直接通过名字Executors来使用.可以同时引入多个类.</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:import java.util.concurrent.Executors
+           java.util.concurrent.TimeUnit
+           java.util.Date))
+</code></pre>
+
+<p>如果引入的多个类在同一个包下面,就像上面那样,可以使用如下的简介方式:</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:import [java.util.concurrent Executors TimeUnit]
+           java.util.Date))
+</code></pre>
+
+<p>虽然导入的list被叫做list,实际上可以使用任意的Clojure的集合(一般使用vector)</p>
+
+<h2>当前命名空间</h2>
+
+<p>Clojure将通过*ns*来持有当前的命名空间.使用def形式定义的var被添加到了当前命名空间中.</p>
+
+<h2>:refer-clojure</h2>
+
+<p>我们在使用像clojure.core/get这样的函数和clojure.core/defn这样的宏的时候我们不需要使用它的全限定名.这是因为Clojure默认将clojure.core下的内容全部加载进了当前命名空间里了.所以如果你定义了一个函数名和clojure.core里的重复了(比如find),你将会得到一个警告.</p>
+
+<pre><code class="sh">WARNING: find already refers to: #'clojure.core/find in namespace:    megacorp.profitd.scheduling, being replaced by: #'megacorp.profitd.scheduling/find
+</code></pre>
+
+<p>这个警告的意思是在megacorp.profitd.scheduling这个命名空间里,已经有一个clojure.core/find了,但是现在它被你定义的函数覆盖了.请记住,Clojure是很动态的语言,命名空间就是map而已.</p>
+
+<p>解决这个问题的办法有:你可以重命名你的函数或者不引入clojure.core里的这个函数</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:refer-clojure :exclude [find]))
+
+(defn find
+  "Finds a needle in the haystack."
+  [^String haystack]
+  (comment ...))
+</code></pre>
+
+<p>在这里,如果你想使用clojure.core/find的话,你需要通过全限定名来使用:</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:refer-clojure :exclude [find]))
+
+(defn find
+  "Finds a needle in the haystack."
+  [^String haystack]
+  (clojure.core/find haystack :needle))
+</code></pre>
+
+<h2>:use</h2>
+
+<p>Clojure在1.4之前,:require是不支持:refer的,只能使用:use</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling-test
+  (:use clojure.test))
+</code></pre>
+
+<p>在上面的例子中,clojure.test里的所有内容都被引入到了当前命名空间中.但是一般不会这样使用,建议是只引入需要的函数:</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling-test
+  (:use clojure.test :only [deftest testing is]))
+</code></pre>
+
+<p>1.4以前的做法</p>
+
+<pre><code class="clojure">(ns megacorp.profitd.scheduling-test
+  (:require clojure.test :refer [deftest testing is]))
+</code></pre>
+
+<p>而现在鼓励的做法是使用:require,通过:refer来进行限制.</p>
+
+<h2>文档与元数据</h2>
+
+<p>命名空间可以包含说明文档.你可以在ns宏里添加:</p>
+
+<pre><code class="clojure">(ns superlib.core
+  "Core functionality of Superlib.
+
+   Other parts of Superlib depend on functions and macros in this namespace."
+  (:require [clojure.set :refer [union difference]]))
+</code></pre>
+
+<p>或者元数据</p>
+
+<pre><code class="clojure">(ns ^{:doc "Core functionality of Superlib.
+            Other parts of Superlib depend on functions and macros in this namespace."
+      :author "Joe Smith"}
+   superlib.core
+  (:require [clojure.set :refer [union difference]]))
+</code></pre>
+
+<p>元数据可以包含任意的键,例如:author,很多工具可以使用(像Codox,Cadastre或者lein-clojuredocs)</p>
+
+<h1>如何在REPL里使用其它命名空间的函数</h1>
+
+<p>ns宏是你经常需要使用的,它引入其它命名空间的函数.但是它在REPL里不太方便.这里可以直接使用require:</p>
+
+<pre><code class="clojure">;; Will be available as clojure.set, e.g. clojure.set/difference.
+(require 'clojure.set)
+
+;; Will be available as io, e.g. io/resource.
+(require '[clojure.java.io :as io])
+It takes a quoted libspec. The libspec is either a namespace name or a collection (typically a vector) of [name :as alias] or [name :refer [fns]]:
+
+(require '[clojure.set :refer [difference]])
+
+(difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
+</code></pre>
+
+<p>:as和:refer可以一起使用</p>
+
+<pre><code class="clojure">(require '[clojure.set :as cs :refer [difference]])
+
+(difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
+(cs/union #{1 2 3} #{3 4 5 6})    ; ⇒ #{1 2 3 4 5 6}
+</code></pre>
+
+<p>clojure.core/use可以做和clojure.core/require一样的事情,但是不推荐使用了.</p>
+
+<h1>命名空间和编译</h1>
+
+<p>Clojure是一个需要编译的语言:代码在被加载的时候进行编译.</p>
+
+<p>命名空间可以包含var或者去继承协议,添加多重方法实现或载入其它库.所以为了完成编译,你需要引入需要的命名空间.</p>
+
+<h1>私有Vars</h1>
+
+<p>Vars(包括defn宏定义的函数)可以设为私有的.有两种方法可以来做这件事情:使用元数据或者defn-宏</p>
+
+<pre><code class="clojure">(ns megacorp.superlib)
+
+;;
+;; Implementation
+;;
+
+(def ^{:private true}
+  source-name "supersource")
+
+(defn- data-stream
+  [source]
+  (comment ...))
+</code></pre>
+
+<h1>常量Vars</h1>
+
+<p>Vars可以设为常量,通过:const元数据来设置.这将会促使Clojure编译器将其编译为常量:</p>
+
+<pre><code class="clojure">(ns megacorp.epicgame)
+
+;;
+;; Implementation
+;;
+
+(def ^{:const true}
+  default-score 100)
+</code></pre>
+
+<h1>如何通过名称来查找和执行函数</h1>
+
+<p>可以通过clojure.core/resolve在制定的命名空间里通过名字查找函数.名字需要使用引号修饰.返回值可以直接当做函数使用,比如,当做参数传递给高阶函数:</p>
+
+<pre><code class="clojure">(resolve 'clojure.set 'difference)  ; ⇒ #'clojure.set/difference
+
+(let [f (resolve 'clojure.set 'difference)]
+   (f #{1 2 3} #{3 4 5 6}))  ; ⇒ #{1 2}
+</code></pre>
+
+<h1>编译异常</h1>
+
+<p>本节讨论一些常见的编译错误.</p>
+
+<h2>ClassNotFoundException</h2>
+
+<p>这个异常的意思是JVM无法加载类.可能是因为拼写错误,或者在classpath上没有这个类.可能是你的项目没有很好的处理依赖关系.</p>
+
+<pre><code>user=&gt; (import java.uyil.concurrent.TimeUnit)
+ClassNotFoundException java.uyil.concurrent.TimeUnit  java.net.URLClassLoader$1.run (URLClassLoader.java:366)
+</code></pre>
+
+<p>在上面的例子中,java.uyil.concurrent.TimeUnit拼写错误,应该是java.util.concurrent.TimeUnit</p>
+
+<h2>CompilerException java.lang.RuntimeException: No such var</h2>
+
+<p>这个错误的意思是,使用了一个不存在的var.这可能是拼写错误,或者不正确的宏展开等类似问题.</p>
+
+<pre><code>user=&gt; (clojure.java.io/resouce "thought_leaders_quotes.csv")
+CompilerException java.lang.RuntimeException: No such var: clojure.java.io/resouce, compiling:(NO_SOURCE_PATH:1)
+</code></pre>
+
+<p>在上面的例子中,clojure.java.io/resouce应该写成clojure.java.io/resource.NO_SOURCE_PATH的意思是编译是在repl里触发的,而不是一个Clojure源文件.</p>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2014/05/11/record_protocol.html" title="Clojure教程-Record和Protocol "><p> <i class="fa fa-mail-reply"></i>&nbsp;Clojure教程-Record和Protocol</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2014/10/01/dsl.html" title="Clojure进阶:使用Clojure构建DSL"><p>Clojure进阶:使用Clojure构建DSL&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="Clojure教程-命名空间" data-thread-key="/2014/08/29/namespace" data-url="/2014/08/29/namespace.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

@@ -9,8 +9,17 @@ http://ivanpig.github.io/type/
 http://ivanpig.github.io/page/2/index.html
 http://ivanpig.github.io/page/3/index.html
 http://ivanpig.github.io/page/4/index.html
+http://ivanpig.github.io/page/5/index.html
 
 http://ivanpig.github.io/2014/11/28/pigtheme.html
+http://ivanpig.github.io/2014/10/02/clojure_spels.html
+http://ivanpig.github.io/2014/10/01/dsl.html
+http://ivanpig.github.io/2014/08/29/namespace.html
+http://ivanpig.github.io/2014/05/11/record_protocol.html
+http://ivanpig.github.io/2014/03/15/function.html
+http://ivanpig.github.io/2014/02/19/math.html
+http://ivanpig.github.io/2014/02/08/file.html
+http://ivanpig.github.io/2014/02/05/string.html
 http://ivanpig.github.io/2014/02/02/basic.html
 http://ivanpig.github.io/2014/02/01/first_step.html
 http://ivanpig.github.io/2013/10/02/upgrading.html
