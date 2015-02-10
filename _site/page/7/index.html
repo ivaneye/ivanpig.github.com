@@ -1,0 +1,627 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content=""/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/page/7/index.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/05/scala_exercises_03.html">快学Scala习题解答—第三章 数组相关操作</a></h2>
+
+        <p class="post-meta">By 03月05日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (15)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>数组相关操作</h1>
+
+<h2>编写一段代码，将a设置为一个n个随机整数的数组，要求随机数介于0(包含)和n(不包含)之间</h2>
+
+<p>random和yield的使用</p>
+
+<pre><code class="{.scala}">import scala.math.random
+
+def randomArray(n:Int)={
+  for(i &lt;- 0 until n) yield (random * n).toInt
+}
+
+println(randomArray(10).mkString(","))
+</code></pre>
+
+<h2>编写一个循环，将整数数组中相邻的元素置换。例如,Array(1,2,3,4,5)经过置换后变为Array(2,1,4,3,5)</h2>
+
+<p>对数组方法的使用</p>
+
+<pre><code class="{.scala}">def reorderArray(arr:Array[Int]):Array[Int]={
+  val t = arr.toBuffer
+  for(i &lt;- 1 until (t.length,2);tmp = t(i);j &lt;- i - 1 until i){
+    t(i) = t(j)
+    t(j) = tmp
+  }
+  t.toArray
+}
+
+println(reorderArray(Array(1,2,3,4,5)).mkString(","))
+</code></pre>
+
+<h2>重复前一个练习，不过这一次生成一个新的值交换过的数组。用for/yield</h2>
+
+<pre><code class="{.scala}">def reorderArray(arr:Array[Int]):Array[Int]={
+  (for(i &lt;- 0 until (arr.length,2)) yield if (i + 1 &lt; arr.length) Array(arr(i + 1),arr(i)) else Array(arr(i))).flatten.toArray
+}
+
+println(reorderArray(Array(1,2,3,4,5)).mkString(","))
+</code></pre>
+
+<p>感觉代码有点丑也难读。需要优化。</p>
+
+<h2>给定一个整数数组，产生一个新的数组，包含元数组中的所有正值，以原有顺序排列，之后的元素是所有零或负值，以原有顺序排列</h2>
+
+<pre><code class="{.scala}">//使用循环
+ def reorderArray(arr:Array[Int]):Array[Int]={
+     val a = ArrayBuffer[Int]()
+     val b = ArrayBuffer[Int]()
+     arr.foreach(arg =&gt; if(arg &gt; 0) a += arg else b += arg)
+     a ++= b
+     a.toArray
+ }
+//使用filter
+def reorderArray(arr:Array[Int]):Array[Int]={
+  val a = arr.filter(_ &gt; 0).map(1 * _)
+  val b = arr.filter(_ &lt;= 0).map(1 * _)
+  val c = a.toBuffer
+  c ++= b
+  c.toArray
+}
+</code></pre>
+
+<h2>如何计算Array[Double]的平均值？</h2>
+
+<pre><code class="{.scala}">def aveArray(arr:Array[Double]):Double={
+  arr.sum/arr.length
+}
+</code></pre>
+
+<h2>如何重新组织Array[Int]的元素将他们以反序排列？对于ArrayBuffer[Int]你又会怎么做呢？</h2>
+
+<pre><code class="{.scala}">def reverseArray(arr:Array[Int]):Array[Int]={
+  arr.reverse
+}
+</code></pre>
+
+<h2>编写一段代码，产出数组中的所有值，去掉重复项。(提示：查看Scaladoc)</h2>
+
+<p>产出数组的代码就不编写了。去重只需要调用api即可</p>
+
+<pre><code class="{.scala}"> def distinctArray(arr:Array[Int]):Array[Int]={
+   val t = arr.toBuffer
+   t.distinct.toArray
+ }
+</code></pre>
+
+<h2>重新编写3.4节结尾的示例。收集负值元素的下标，反序，去掉最后一个下标，然后对每个下标调用a.remove(i)。比较这样做的效率和3.4节中另外两种方法的效率</h2>
+
+<p>性能嘛，自己比较吧!</p>
+
+<pre><code class="{.scala}"> def removeArray(arr:Array[Int]):Array[Int]={
+   val t = arr.toBuffer
+   val idx = ArrayBuffer[Int]()
+   for(i &lt;- 0 until t.length){
+     if(t(i) &lt; 0)idx += i
+   }
+   idx.remove(0)
+   idx.reverse
+   idx.foreach(t.remove(_))
+   t.toArray
+ }
+</code></pre>
+
+<h2>创建一个由java.util.TimeZone.getAvailableIDs返回ide时区集合，判断条件是它们在美洲。去掉"America/"前缀并排序</h2>
+
+<p>显示的都是中文时间，后续的过滤无法操作。只列出所有的时区</p>
+
+<pre><code class="{.scala}"> val t = for(i &lt;- getAvailableIDs) yield
+           getTimeZone(i).getDisplayName()
+</code></pre>
+
+<h2>引入java.awt.datatransfer.~并构建一个类型为SystemFlavorMap类型的对象~:</h2>
+
+<p>val flavors =
+SystemFlavorMap.getDefaultFlavorMap().asInstanceOf[SystemFlavorMap]
+然后以DataFlavor.imageFlavor为参数调用getNativesForFlavor方法，以Scala缓冲保存返回值。
+(为什么用这样一个晦涩难懂的类？因为在Java标准库中很难找到使用java.util.List的代码)</p>
+
+<pre><code class="{.scala}">val flavors = SystemFlavorMap.getDefaultFlavorMap().asInstanceOf[SystemFlavorMap]
+println(flavors.getNativesForFlavor(DataFlavor.imageFlavor).toArray.toBuffer.mkString(" | ")
+</code></pre>
+
+
+
+    <a href="/2013/03/05/scala_exercises_03.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/04/scala_exercises_02.html">快学Scala习题解答—第二章 控制结构和函数</a></h2>
+
+        <p class="post-meta">By 03月04日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (15)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>控制结构和函数</h1>
+
+<h2>一个数字如果为正数，则它的signum为1;如果是负数,则signum为-1;如果为0,则signum为0.编写一个函数来计算这个值</h2>
+
+<p>简单的逻辑判断</p>
+
+<pre><code class="{.scala}">def signum(num:Int){if(num&gt;0)print(1)else if(num&lt;0)print(-1)else print(0)}
+</code></pre>
+
+<p>Scala中已经有此方法了，刚才查找API的时候，应该能看到</p>
+
+<pre><code class="{.scala}">BigInt(10).signum
+</code></pre>
+
+<h2>一个空的快表达式{}的值是什么？类型是什么？</h2>
+
+<p>在REPL中就能看出来了</p>
+
+<pre><code class="{.example}">scala&gt; val t = {}
+t: Unit = ()
+</code></pre>
+
+<p>可以看出，它的值是()类型是Unit</p>
+
+<h2>指出在Scala中何种情况下赋值语句x=y=1是合法的。(提示：给x找个合适的类型定义)</h2>
+
+<p>题目已经给了明确的提示了。本章节中已经说过了，在scala中的赋值语句是Unit类型。所以只要x为Unit类型就可以了。</p>
+
+<pre><code class="{.example}">scala&gt; var y=4;
+y: Int = 4
+
+scala&gt; var x={}
+x: Unit = ()
+
+scala&gt; x=y=7
+x: Unit = ()
+</code></pre>
+
+<p>这也再次证明了{}是Unit类型</p>
+
+<h2>针对下列Java循环编写一个Scala版本:for(int i=10;i>=0;i--)System.out.println(i);</h2>
+
+<p>使用Scala版本改写就OK了</p>
+
+<pre><code class="{.scala}">for(i &lt;- 0 to 10 reverse)print(i)
+</code></pre>
+
+<h2>编写一个过程countdown(n:Int)，打印从n到0的数字</h2>
+
+<p>这个就是将上面的循环包装到过程中而已。还是换个写法吧。</p>
+
+<pre><code class="{.scala}">def countdown(n:Int){
+    0 to n reverse foreach print
+}
+</code></pre>
+
+<h2>编写一个for循环,计算字符串中所有字母的Unicode代码的乘积。举例来说，"Hello"中所有字符串的乘积为9415087488L</h2>
+
+<pre><code class="{.example}">scala&gt; var t:Long = 1
+t: Long = 1
+
+scala&gt; for(i &lt;- "Hello"){
+     | t = t * i.toLong
+     | }
+
+scala&gt; t
+res57: Long = 9415087488
+</code></pre>
+
+<h2>同样是解决前一个练习的问题，但这次不使用循环。（提示：在Scaladoc中查看StringOps）</h2>
+
+<pre><code class="{.example}">scala&gt; var t:Long = 1
+t: Long = 1
+
+scala&gt; "Hello".foreach(t *= _.toLong)
+
+scala&gt; t
+res59: Long = 9415087488
+</code></pre>
+
+<h2>编写一个函数product(s:String)，计算前面练习中提到的乘积</h2>
+
+<pre><code class="{.scala}">def product(s:String):Long={
+    var t:Long = 1
+    for(i &lt;- s){
+    t *= i.toLong
+    }
+    t
+}
+</code></pre>
+
+<h2>把前一个练习中的函数改成递归函数</h2>
+
+<p>配合前一章的take和drop来实现</p>
+
+<pre><code class="{.scala}">def product(s:String):Long={
+    if(s.length == 1) return s.charAt(0).toLong
+    else s.take(1).charAt(0).toLong * product(s.drop(1))
+}
+</code></pre>
+
+<h2>编写函数计算x<sup>n</sup>^,其中n是整数，使用如下的递归定义:</h2>
+
+<ul>
+<li>x<sup>n</sup>^=y<sup>2</sup>^,如果n是正偶数的话，这里的y=x<sup>n/2</sup>^</li>
+<li>x<sup>n</sup>^ = x*x<sup>n-1</sup>^,如果n是正奇数的话</li>
+<li>x<sup>0</sup>^ = 1</li>
+<li>x<sup>n</sup>^ = 1/x<sup>-n</sup>^,如果n是负数的话</li>
+</ul>
+
+
+<p>不得使用return语句</p>
+
+<pre><code class="{.scala}">def mi(x:Double,n:Int):Double={
+    if(n == 0) 1
+    else if (n &gt; 0 &amp;&amp; n%2 == 0) mi(x,n/2) * mi(x,n/2)
+    else if(n&gt;0 &amp;&amp; n%2 == 1) x * mi(x,n-1)
+    else 1/mi(x,-n)
+}
+</code></pre>
+
+
+
+    <a href="/2013/03/04/scala_exercises_02.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/03/scala_exercises_01.html">快学Scala习题解答—第一章 基础</a></h2>
+
+        <p class="post-meta">By 03月03日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (15)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>基础</h1>
+
+<h2>在Scala REPL中键入3,然后按Tab键。有哪些方法可以被应用?</h2>
+
+<p>这个。。。。直接操作一遍就有结果了.此题不知是翻译的问题，还是原题的问题，在Scala
+REPL中需要按3. 然后按Tab才会提示。 直接按3加Tab是没有提示的。下面是结果</p>
+
+<pre><code class="{.example}">!=             ##             %              &amp;              *              +
+-              /              &lt;              &lt;&lt;             &lt;=             ==
+&gt;              &gt;=             &gt;&gt;             &gt;&gt;&gt;            ^              asInstanceOf
+equals         getClass       hashCode       isInstanceOf   toByte         toChar
+toDouble       toFloat        toInt          toLong         toShort        toString
+unary_+        unary_-        unary_~        |
+</code></pre>
+
+<p>列出的方法并不全，需要查询全部方法还是需要到Scaladoc中的Int,Double,RichInt,RichDouble等类中去查看。</p>
+
+<h2>在Scala REPL中，计算3的平方根,然后再对该值求平方。现在，这个结果与3相差多少？(提示:res变量是你的朋友)</h2>
+
+<p>依次进行计算即可</p>
+
+<pre><code class="{.example}">scala&gt; scala.math.sqrt(3)
+warning: there were 1 deprecation warnings; re-run with -deprecation for details
+res5: Double = 1.7320508075688772
+
+scala&gt; res5*res5
+res6: Double = 2.9999999999999996
+
+scala&gt; 3 - res6
+res7: Double = 4.440892098500626E-16
+</code></pre>
+
+<h2>res变量是val还是var?</h2>
+
+<p>val是不可变的，而var是可变的，只需要给res变量重新赋值就可以检测res是val还是var了</p>
+
+<pre><code class="{.example}">scala&gt; res9 = 3
+&lt;console&gt;:8: error: reassignment to val
+       res9 = 3
+            ^
+</code></pre>
+
+<h2>Scala允许你用数字去乘字符串---去REPL中试一下"crazy"*3。这个操作做什么？在Scaladoc中如何找到这个操作?</h2>
+
+<pre><code class="{.example}">scala&gt; "crazy"*3
+res11: String = crazycrazycrazy
+</code></pre>
+
+<p>从代码可以推断,*是"crazy"这个字符串所具有的方法，但是Java中的String可没这个方法，很明显。此方法在StringOps中。</p>
+
+<h2>10 max 2的含义是什么？max方法定义在哪个类中？</h2>
+
+<p>直接在REPL中执行</p>
+
+<pre><code class="{.example}">scala&gt; 10 max 2
+res0: Int = 10
+
+scala&gt; 7 max 8
+res1: Int = 8
+
+scala&gt; 0 max 0
+res2: Int = 0
+</code></pre>
+
+<p>可以看出,此方法返回两个数字中较大的那个。此方法Java中不存在，所以在RichInt中。</p>
+
+<h2>用BigInt计算2的1024次方</h2>
+
+<p>简单的API调用</p>
+
+<pre><code class="{.example}">scala&gt; BigInt(2).pow(1024)
+res4: scala.math.BigInt = 17976931348623159077293051907890247336179769789423065727343008115
+7732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124
+3777678934248654852763022196012460941194530829520850057688381506823424628814739131105408272
+37163350510684586298239947245938479716304835356329624224137216
+</code></pre>
+
+<h2>为了在使用probablePrime(100,Random)获取随机素数时不在probablePrime和Radom之前使用任何限定符，你需要引入什么？</h2>
+
+<p>so easy.
+import需要的包啊。Random在scala.util中，而probablePrime是BigInt中的方法，引入即可</p>
+
+<pre><code class="{.scala}">import scala.math.BigInt._
+import scala.util.Random
+
+probablePrime(3,Random)
+</code></pre>
+
+<h2>创建随机文件的方式之一是生成一个随机的BigInt，然后将它转换成三十六进制，输出类似"qsnvbevtomcj38o06kul"这样的字符串。查阅Scaladoc，找到在Scala中实现该逻辑的办法。</h2>
+
+<p>到BigInt中查找方法。</p>
+
+<pre><code class="{.example}">scala&gt; scala.math.BigInt(scala.util.Random.nextInt).toString(36)
+res21: String = utydx
+</code></pre>
+
+<h2>在Scala中如何获取字符串的首字符和尾字符？</h2>
+
+<pre><code class="{.scala}">//获取首字符
+"Hello"(0)
+"Hello".take(1)
+//获取尾字符
+"Hello".reverse(0)
+"Hello".takeRight(1)
+</code></pre>
+
+<h2>take,drop,takeRight和dropRight这些字符串函数是做什么用的？和substring相比，他们的优点和缺点都是哪些？</h2>
+
+<p>查询API即可
+take是从字符串首开始获取字符串,drop是从字符串首开始去除字符串。
+takeRight和dropRight是从字符串尾开始操作。 这四个方法都是单方向的。
+如果我想要字符串中间的子字符串，那么需要同时调用drop和dropRight，或者使用substring</p>
+
+
+
+    <a href="/2013/03/03/scala_exercises_01.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+<div class="pure-g pagination">
+    
+    
+    <a class=" pure-u-1-2 pagination-item" href="/page/6"><p>← Newer</p></a>
+    
+    
+
+
+    
+    <span class=" pure-u-1-2 pagination-item"><p>Older →</p></span>
+    
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

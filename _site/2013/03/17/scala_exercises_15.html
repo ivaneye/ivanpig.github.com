@@ -1,0 +1,471 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="java, scala"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2013/03/17/scala_exercises_15.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>快学Scala习题解答—第十五章 注解 - IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">快学Scala习题解答—第十五章 注解</h2>
+
+    <p class="post-meta">By 03月17日  2013
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">scala (15)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (15)</i></a>
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">scala (15)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <h1>注解</h1>
+
+<h2>编写四个JUnit测试用例，分别使用带或不带某个参数的@Test注解。用JUnit执行这些测试</h2>
+
+<pre><code class="{.scala}">import org.junit.Test
+
+class ScalaTest {
+
+  @Test
+  def test1(){
+    print("test1")
+  }
+
+  @Test(timeout = 1L)
+  def test2(){
+    print("test2")
+  }
+}
+</code></pre>
+
+<h2>创建一个类的示例，展示注解可以出现的所有位置。用@deprecated作为你的示例注解。</h2>
+
+<pre><code class="{.scala}">@deprecated
+class Test{
+
+  @deprecated
+  val t = _;
+
+  @deprecated(message = "unuse")
+  def hello(){
+    println("hello")
+  }
+}
+
+@deprecated
+object Test extends App{
+  val t = new Test()
+  t.hello()
+  t.t
+}
+</code></pre>
+
+<h2>Scala类库中的哪些注解用到了元注解@param,@field,@getter,@setter,@beanGetter或@beanSetter?</h2>
+
+<p>看Scala注解的源码就OK了</p>
+
+<h2>编写一个Scala方法sum,带有可变长度的整型参数，返回所有参数之和。从Java调用该方法。</h2>
+
+<pre><code class="{.scala}">import annotation.varargs
+
+class Test{
+
+  @varargs
+  def sum(n : Int*)={
+    n.sum
+  }
+}
+</code></pre>
+
+<pre><code class="{.java}">public class Hello {
+
+    public static void main(String[] args){
+        Test t = new Test();
+        System.out.println(t.sum(1,2,3));
+    }
+}
+</code></pre>
+
+<h2>编写一个返回包含某文件所有行的字符串的方法。从Java调用该方法。</h2>
+
+<pre><code class="{.scala}">import io.Source
+
+class Test{
+
+  def read()={
+    Source.fromFile("test.txt").mkString
+  }
+}
+</code></pre>
+
+<pre><code class="{.java}">public class Hello {
+    public static void main(String[] args){
+        Test t = new Test();
+        System.out.println(t.read());
+    }
+}
+</code></pre>
+
+<h2>编写一个Scala对象，该对象带有一个易失(volatile)的Boolean字段。让某一个线程睡眠一段时间，之后将该字段设为true，打印消息，然后退出。而另一个线程不停的检查该字段是否为true。如果是，它将打印一个消息并退出。如果不是，则它将短暂睡眠，然后重试。如果变量不是易失的，会发生什么？</h2>
+
+<p>这里只有一个线程修改Boolean字段，所以字段是否为volatile应该是没有区别的</p>
+
+<pre><code class="{.scala}">import scala.actors.Actor
+
+class T1(obj:Obj) extends Actor{
+  def act() {
+    println("T1 is waiting")
+    Thread.sleep(5000)
+    obj.flag = true
+    println("T1 set flag = true")
+  }
+}
+
+class T2(obj:Obj) extends Actor{
+  def act() {
+    var f = true
+    while (f){
+      if(obj.flag){
+        println("T2 is end")
+        f = false
+      }else{
+        println("T2 is waiting")
+        Thread.sleep(1000)
+      }
+    }
+  }
+}
+
+class Obj{
+//  @volatile
+  var flag : Boolean = false
+}
+
+object Test{
+  def main(args: Array[String]) {
+    val obj = new Obj()
+    val t1 = new T1(obj)
+    val t2 = new T2(obj)
+    t1.start()
+    t2.start()
+  }
+}
+</code></pre>
+
+<h2>给出一个示例，展示如果方法可被重写，则尾递归优化为非法</h2>
+
+<pre><code class="{.scala}">import annotation.tailrec
+
+class Test{
+  @tailrec
+  def sum2(xs : Seq[Int],partial : BigInt) : BigInt = {
+    if (xs.isEmpty) partial else sum2(xs.tail,xs.head + partial)
+  }
+}
+</code></pre>
+
+<p>编译报错,修改如下</p>
+
+<pre><code class="{.scala}">import annotation.tailrec
+
+object Test extends App{
+  @tailrec
+  def sum2(xs : Seq[Int],partial : BigInt) : BigInt = {
+    if (xs.isEmpty) partial else sum2(xs.tail,xs.head + partial)
+  }
+
+  println(sum2(1 to 1000000,0))
+}
+</code></pre>
+
+<h2>将allDifferent方法添加到对象，编译并检查字节码。@specialized注解产生了哪些方法?</h2>
+
+<pre><code class="{.scala}">object Test{
+  def allDifferent[@specialized T](x:T,y:T,z:T) = x != y &amp;&amp; x!= z &amp;&amp; y != z
+}
+</code></pre>
+
+<p>javap Test$得到</p>
+
+<h1>+begin_src java</h1>
+
+<p>public final class Test$ extends java.lang.Object{ public static final
+Test\$ MODULE\$; public static {}; public boolean
+allDifferent(java.lang.Object, java.lang.Object, java.lang.Ob ject);
+public boolean allDifferent\$mZc\$sp(boolean, boolean, boolean); public
+boolean allDifferent\$mBc\$sp(byte, byte, byte); public boolean
+allDifferent\$mCc\$sp(char, char, char); public boolean
+allDifferent\$mDc\$sp(double, double, double); public boolean
+allDifferent\$mFc\$sp(float, float, float); public boolean
+allDifferent\$mIc\$sp(int, int, int); public boolean
+allDifferent\$mJc\$sp(long, long, long); public boolean
+allDifferent\$mSc\$sp(short, short, short); public boolean
+allDifferent\$mVc\$sp(scala.runtime.BoxedUnit, scala.runtime.Bo xedUnit,
+scala.runtime.BoxedUnit); }</p>
+
+<p>#+end~src~</p>
+
+<h2>Range.foreach方法被注解为@specialized(Unit)。为什么？通过以下命令检查字节码:</h2>
+
+<pre><code class="{.example}">javap -classpath /path/to/scala/lib/scala-library.jar scala.collection.immutable.Range
+</code></pre>
+
+<p>并考虑Function1上的@specialized注解。点击Scaladoc中的Function1.scala链接进行查看
+首先来看Function1的源码</p>
+
+<pre><code class="{.scala}">......
+trait Function1[@specialized(scala.Int, scala.Long, scala.Float, scala.Double/*, scala.AnyRef*/) -T1, @specialized(scala.Unit, scala.Boolean, scala.Int, scala.Float, scala.Long, scala.Double/*, scala.AnyRef*/) +R] extends AnyRef { self =&gt;
+  /** Apply the body of this function to the argument.
+   *  @return   the result of function application.
+   */
+  def apply(v1: T1): R
+......
+</code></pre>
+
+<p>可以看到Function1参数可以是scala.Int,scala.Long,scala.Float,scala.Double，返回值可以是scala.Unit,scala.Boolean,scala.Int,scala.Float,scala.Long,scala.Double
+再来看Range.foreach的源码</p>
+
+<pre><code class="{.scala}">......
+@inline final override def foreach[@specialized(Unit) U](f: Int =&gt; U) {
+    if (validateRangeBoundaries(f)) {
+      var i = start
+      val terminal = terminalElement
+      val step = this.step
+      while (i != terminal) {
+        f(i)
+        i += step
+      }
+    }
+  }
+......
+</code></pre>
+
+<p>首先此方法是没有返回值的，也就是Unit。而Function1的返回值可以是scala.Unit,scala.Boolean,scala.Int,scala.Float,scala.Long,scala.Double
+如果不限定@specialized(Unit),则Function1可能返回其他类型，但是此方法体根本就不返回，即使设置了也无法获得返回值</p>
+
+<h2>添加assert(n >= 0)到factorial方法。在启用断言的情况下编译并校验factorial(-1)会抛异常。在禁用断言的情况下编译。会发生什么？用javap检查该断言调用</h2>
+
+<pre><code class="{.scala}">object Test {
+  def factorial(n: Int): Int = {
+    assert(n &gt; 0)
+    n
+  }
+
+  def main(args: Array[String]) {
+    factorial(-1)
+  }
+}
+</code></pre>
+
+<p>编译报错</p>
+
+<pre><code class="{.example}">Exception in thread "main" java.lang.AssertionError: assertion failed
+    at scala.Predef$.assert(Predef.scala:165)
+    at Test$.factorial(Test.scala:6)
+    at Test$.main(Test.scala:11)
+    at Test.main(Test.scala)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+    at java.lang.reflect.Method.invoke(Method.java:597)
+    at com.intellij.rt.execution.application.AppMain.main(AppMain.java:120)
+</code></pre>
+
+<p>禁用assert</p>
+
+<pre><code class="{.example}">-Xelide-below 2011
+</code></pre>
+
+<p>反编译此类javap -c Test\$ 得到</p>
+
+<pre><code class="{.java}">......
+public int factorial(int);
+  Code:
+   0:   getstatic       #19; //Field scala/Predef$.MODULE$:Lscala/Predef$;
+   3:   iload_1
+   4:   iconst_0
+   5:   if_icmple       12
+   8:   iconst_1
+   9:   goto    13
+   12:  iconst_0
+   13:  invokevirtual   #23; //Method scala/Predef$.assert:(Z)V
+   16:  iload_1
+   17:  ireturn
+......
+</code></pre>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/03/16/scala_exercises_14.html" title="快学Scala习题解答—第十四章 模式匹配和样例类 "><p> <i class="fa fa-mail-reply"></i>&nbsp;快学Scala习题解答—第十四章 模式匹配和样例类</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/09/14/your_first_application.html" title="Luminus手册-第一个应用"><p>Luminus手册-第一个应用&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="快学Scala习题解答—第十五章 注解" data-thread-key="/2013/03/17/scala_exercises_15" data-url="/2013/03/17/scala_exercises_15.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

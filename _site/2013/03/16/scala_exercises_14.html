@@ -1,0 +1,390 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="java, scala"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2013/03/16/scala_exercises_14.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>快学Scala习题解答—第十四章 模式匹配和样例类 - IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">快学Scala习题解答—第十四章 模式匹配和样例类</h2>
+
+    <p class="post-meta">By 03月16日  2013
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">scala (15)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (15)</i></a>
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">scala (15)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <h1>模式匹配和样例类</h1>
+
+<h2>JDK发行包有一个src.zip文件包含了JDK的大多数源代码。解压并搜索样例标签(用正则表达式case [^:]+:)。然后查找以//开头并包含[Ff]alls?thr的注释，捕获类似// Falls through或// just fall thru这样的注释。假定JDK的程序员们遵守Java编码习惯，在该写注释的地方写下了这些注释，有多少百分比的样例是会掉入到下一个分支的？</h2>
+
+<p>没读懂题意。。。。</p>
+
+<h2>利用模式匹配，编写一个swap函数，接受一个整数的对偶，返回对偶的两个组成部件互换位置的新对偶</h2>
+
+<pre><code class="{.scala}">def swap[S,T](tup: (S,T)) = {
+    tup match {
+        case (a ,b) =&gt; (b,a)
+    }
+}
+
+println(swap[String,Int](("1",2)))
+</code></pre>
+
+<h2>利用模式匹配，编写一个swap函数，交换数组中的前两个元素的位置，前提条件是数组长度至少为2</h2>
+
+<pre><code class="{.scala}">def swap(arr: Array[String]) = {
+  arr match {
+    case Array(a,b, ar @ _*) =&gt; Array(b,a) ++ ar
+    case _ =&gt; arr
+  }
+}
+
+println(swap(Array("1","2","3","4")).mkString)
+</code></pre>
+
+<h2>添加一个样例类Multiple，作为Item的子类。举例来说，Multiple(10,Article("Blackwell Toster",29.95))描述的是10个烤面包机。当然了，你应该可以在第二个参数的位置接受任何Item，无论是Bundle还是另一个Multiple。扩展price函数以应对新的样例。</h2>
+
+<pre><code class="{.scala}">abstract class Item
+
+case class Multiple(num : Int,item : Item) extends Item
+
+case class Article(description : String , price : Double) extends Item
+case class Bundle(description : String , discount : Double , item : Item*) extends Item
+
+object Test extends App{
+
+  def price(it : Item) : Double = it match {
+      case Article(_,p) =&gt; p
+      case Bundle(_,disc,its @ _*) =&gt; its.map(price _).sum - disc
+      case Multiple(n,it) =&gt; n * price(it)
+  }
+
+  val p = price(Multiple(10,Article("Blackwell Toster",29.95)))
+  println(p)
+}
+</code></pre>
+
+<h2>我们可以用列表制作只在叶子节点存放值的树。举例来说，列表((3 8) 2 (5))描述的是如下这样一棵树:</h2>
+
+<pre><code class="{.example}">      *
+    / | \
+   *  2  *
+ /  \    |
+3   8    5
+</code></pre>
+
+<p>不过，有些列表元素是数字，而另一些是列表。在Scala中，你不能拥有异构的列表，因此你必须使用List[Any]。编写一个leafSum函数，计算所有叶子节点中的元素之和，用模式匹配来区分数字和列表。</p>
+
+<pre><code class="{.scala}">val l: List[Any] = List(List(3, 8), 2, List(5))
+
+def leafSum(list: List[Any]): Int = {
+
+  var total = 0
+
+  list.foreach {
+    lst =&gt;
+      lst match {
+        case l: List[Any] =&gt; total += leafSum(l)
+        case i: Int =&gt; total += i
+      }
+  }
+  total
+}
+
+println(leafSum(l))
+</code></pre>
+
+<h2>制作这样的树更好的做法是使用样例类。我们不妨从二叉树开始。</h2>
+
+<pre><code class="{.scala}">sealed abstract class BinaryTree
+case class Leaf(value : Int) extends BinaryTree
+case class Node(left : BinaryTree,right : BinaryTree) extends BinaryTree
+</code></pre>
+
+<p>编写一个函数计算所有叶子节点中的元素之和。</p>
+
+<pre><code class="{.scala}">sealed abstract class BinaryTree
+case class Leaf(value : Int) extends BinaryTree
+case class Node(left : BinaryTree,right : BinaryTree) extends BinaryTree
+
+val r = Node(Leaf(3),Node(Leaf(3),Leaf(9)))
+
+def leafSum(tree: BinaryTree): Int = {
+
+      tree match {
+        case Node(a,b) =&gt; leafSum(a) + leafSum(b)
+        case Leaf(v) =&gt; v
+      }
+
+}
+
+println(leafSum(r))
+</code></pre>
+
+<h2>扩展前一个练习中的树，使得每个节点可以有任意多的后代，并重新实现leafSum函数。第五题中的树应该能够通过下述代码表示：</h2>
+
+<pre><code class="{.scala}">Node(Node(Leaf(3),Leaf(8)),Leaf(2),Node(Leaf(5)))
+</code></pre>
+
+<pre><code class="{.scala}">sealed abstract class BinaryTree
+case class Leaf(value: Int) extends BinaryTree
+case class Node(tr: BinaryTree*) extends BinaryTree
+
+object Test extends App {
+
+  val r = Node(Node(Leaf(3), Leaf(8)), Leaf(2), Node(Leaf(5)))
+
+  def leafSum(tree: BinaryTree): Int = {
+    tree match {
+      case Node(r @ _*) =&gt; r.map(leafSum).sum
+      case Leaf(v) =&gt; v
+    }
+  }
+
+  println(leafSum(r))
+
+}
+</code></pre>
+
+<h2>扩展前一个练习中的树，使得每个非叶子节点除了后代之外，能够存放一个操作符。然后编写一个eval函数来计算它的值。举例来说：</h2>
+
+<pre><code class="{.example}">      +
+    / | \
+   *  2  -
+ /  \    |
+3   8    5
+</code></pre>
+
+<p>上面这棵树的值为(3 * 8) + 2 + (-5) = 21</p>
+
+<pre><code class="{.scala}">sealed abstract class BinaryTree
+case class Leaf(value: Int) extends BinaryTree
+case class Node(ch : Char , tr: BinaryTree*) extends BinaryTree
+
+object Test extends App {
+
+  val r = Node('+' , Node('*',Leaf(3), Leaf(8)), Leaf(2), Node('-' , Leaf(5)))
+
+
+  def eval(tree: BinaryTree): Int = {
+    tree match {
+      case Node(c : Char , r @ _*) =&gt; if( c == '+') r.map(eval).sum else if (c == '*') r.map(eval).reduceLeft(_ * _) else r.map(eval).foldLeft(0)(_ - _)
+      case Leaf(v) =&gt; v
+    }
+  }
+
+println(eval(r))
+
+}
+</code></pre>
+
+<h2>编写一个函数，计算List[Option[Int]]中所有非None值之和。不得使用match语句。</h2>
+
+<pre><code class="{.scala}">val l : List[Option[Int]] = List(Option(-1),None,Option(2))
+println(l.map(_.getOrElse(0)).sum)
+</code></pre>
+
+<h2>编写一个函数，将两个类型为Double=>Option[Double]的函数组合在一起，产生另一个同样类型的函数。如果其中一个函数返回None，则组合函数也应返回None。例如：</h2>
+
+<pre><code class="{.scala}">def f(x : Double) = if ( x &gt;= 0) Some(sqrt(x)) else None
+def g(x : Double) = if ( x != 1) Some( 1 / ( x - 1)) else None
+val h = compose(f,g)
+</code></pre>
+
+<p>h(2)将得到Some(1)，而h(1)和h(0)将得到None</p>
+
+<pre><code class="{.scala}">import scala.math.sqrt
+
+def f(x : Double) = if ( x &gt;= 0) Some(sqrt(x)) else None
+def g(x : Double) = if ( x != 1) Some( 1 / ( x - 1)) else None
+val h = compose(f,g)
+
+def compose(f : (Double =&gt; Option[Double]), g : (Double =&gt; Option[Double])):(Double =&gt; Option[Double])={
+  (x : Double) =&gt;
+    if (f(x) == None || g(x) == None) None
+    else g(x)
+}
+
+println(h(2))
+</code></pre>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/03/15/scala_exercises_13.html" title="快学Scala习题解答—第十三章 集合 "><p> <i class="fa fa-mail-reply"></i>&nbsp;快学Scala习题解答—第十三章 集合</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/03/17/scala_exercises_15.html" title="快学Scala习题解答—第十五章 注解"><p>快学Scala习题解答—第十五章 注解&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="快学Scala习题解答—第十四章 模式匹配和样例类" data-thread-key="/2013/03/16/scala_exercises_14" data-url="/2013/03/16/scala_exercises_14.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

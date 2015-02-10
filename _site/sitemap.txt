@@ -10,6 +10,8 @@ http://ivanpig.github.io/page/2/index.html
 http://ivanpig.github.io/page/3/index.html
 http://ivanpig.github.io/page/4/index.html
 http://ivanpig.github.io/page/5/index.html
+http://ivanpig.github.io/page/6/index.html
+http://ivanpig.github.io/page/7/index.html
 
 http://ivanpig.github.io/2014/11/28/pigtheme.html
 http://ivanpig.github.io/2014/10/02/clojure_spels.html
@@ -41,3 +43,18 @@ http://ivanpig.github.io/2013/09/17/clojurescript.html
 http://ivanpig.github.io/2013/09/16/html_templating.html
 http://ivanpig.github.io/2013/09/15/application_profile.html
 http://ivanpig.github.io/2013/09/14/your_first_application.html
+http://ivanpig.github.io/2013/03/17/scala_exercises_15.html
+http://ivanpig.github.io/2013/03/16/scala_exercises_14.html
+http://ivanpig.github.io/2013/03/15/scala_exercises_13.html
+http://ivanpig.github.io/2013/03/14/scala_exercises_12.html
+http://ivanpig.github.io/2013/03/13/scala_exercises_11.html
+http://ivanpig.github.io/2013/03/12/scala_exercises_10.html
+http://ivanpig.github.io/2013/03/11/scala_exercises_09.html
+http://ivanpig.github.io/2013/03/10/scala_exercises_08.html
+http://ivanpig.github.io/2013/03/09/scala_exercises_07.html
+http://ivanpig.github.io/2013/03/08/scala_exercises_06.html
+http://ivanpig.github.io/2013/03/07/scala_exercises_05.html
+http://ivanpig.github.io/2013/03/06/scala_exercises_04.html
+http://ivanpig.github.io/2013/03/05/scala_exercises_03.html
+http://ivanpig.github.io/2013/03/04/scala_exercises_02.html
+http://ivanpig.github.io/2013/03/03/scala_exercises_01.html

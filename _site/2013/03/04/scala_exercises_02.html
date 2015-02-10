@@ -1,0 +1,316 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="java, scala"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2013/03/04/scala_exercises_02.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>快学Scala习题解答—第二章 控制结构和函数 - IvanPig's Blog</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">快学Scala习题解答—第二章 控制结构和函数</h2>
+
+    <p class="post-meta">By 03月04日  2013
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">scala (15)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (15)</i></a>
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">scala (15)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <h1>控制结构和函数</h1>
+
+<h2>一个数字如果为正数，则它的signum为1;如果是负数,则signum为-1;如果为0,则signum为0.编写一个函数来计算这个值</h2>
+
+<p>简单的逻辑判断</p>
+
+<pre><code class="{.scala}">def signum(num:Int){if(num&gt;0)print(1)else if(num&lt;0)print(-1)else print(0)}
+</code></pre>
+
+<p>Scala中已经有此方法了，刚才查找API的时候，应该能看到</p>
+
+<pre><code class="{.scala}">BigInt(10).signum
+</code></pre>
+
+<h2>一个空的快表达式{}的值是什么？类型是什么？</h2>
+
+<p>在REPL中就能看出来了</p>
+
+<pre><code class="{.example}">scala&gt; val t = {}
+t: Unit = ()
+</code></pre>
+
+<p>可以看出，它的值是()类型是Unit</p>
+
+<h2>指出在Scala中何种情况下赋值语句x=y=1是合法的。(提示：给x找个合适的类型定义)</h2>
+
+<p>题目已经给了明确的提示了。本章节中已经说过了，在scala中的赋值语句是Unit类型。所以只要x为Unit类型就可以了。</p>
+
+<pre><code class="{.example}">scala&gt; var y=4;
+y: Int = 4
+
+scala&gt; var x={}
+x: Unit = ()
+
+scala&gt; x=y=7
+x: Unit = ()
+</code></pre>
+
+<p>这也再次证明了{}是Unit类型</p>
+
+<h2>针对下列Java循环编写一个Scala版本:for(int i=10;i>=0;i--)System.out.println(i);</h2>
+
+<p>使用Scala版本改写就OK了</p>
+
+<pre><code class="{.scala}">for(i &lt;- 0 to 10 reverse)print(i)
+</code></pre>
+
+<h2>编写一个过程countdown(n:Int)，打印从n到0的数字</h2>
+
+<p>这个就是将上面的循环包装到过程中而已。还是换个写法吧。</p>
+
+<pre><code class="{.scala}">def countdown(n:Int){
+    0 to n reverse foreach print
+}
+</code></pre>
+
+<h2>编写一个for循环,计算字符串中所有字母的Unicode代码的乘积。举例来说，"Hello"中所有字符串的乘积为9415087488L</h2>
+
+<pre><code class="{.example}">scala&gt; var t:Long = 1
+t: Long = 1
+
+scala&gt; for(i &lt;- "Hello"){
+     | t = t * i.toLong
+     | }
+
+scala&gt; t
+res57: Long = 9415087488
+</code></pre>
+
+<h2>同样是解决前一个练习的问题，但这次不使用循环。（提示：在Scaladoc中查看StringOps）</h2>
+
+<pre><code class="{.example}">scala&gt; var t:Long = 1
+t: Long = 1
+
+scala&gt; "Hello".foreach(t *= _.toLong)
+
+scala&gt; t
+res59: Long = 9415087488
+</code></pre>
+
+<h2>编写一个函数product(s:String)，计算前面练习中提到的乘积</h2>
+
+<pre><code class="{.scala}">def product(s:String):Long={
+    var t:Long = 1
+    for(i &lt;- s){
+    t *= i.toLong
+    }
+    t
+}
+</code></pre>
+
+<h2>把前一个练习中的函数改成递归函数</h2>
+
+<p>配合前一章的take和drop来实现</p>
+
+<pre><code class="{.scala}">def product(s:String):Long={
+    if(s.length == 1) return s.charAt(0).toLong
+    else s.take(1).charAt(0).toLong * product(s.drop(1))
+}
+</code></pre>
+
+<h2>编写函数计算x<sup>n</sup>^,其中n是整数，使用如下的递归定义:</h2>
+
+<ul>
+<li>x<sup>n</sup>^=y<sup>2</sup>^,如果n是正偶数的话，这里的y=x<sup>n/2</sup>^</li>
+<li>x<sup>n</sup>^ = x*x<sup>n-1</sup>^,如果n是正奇数的话</li>
+<li>x<sup>0</sup>^ = 1</li>
+<li>x<sup>n</sup>^ = 1/x<sup>-n</sup>^,如果n是负数的话</li>
+</ul>
+
+
+<p>不得使用return语句</p>
+
+<pre><code class="{.scala}">def mi(x:Double,n:Int):Double={
+    if(n == 0) 1
+    else if (n &gt; 0 &amp;&amp; n%2 == 0) mi(x,n/2) * mi(x,n/2)
+    else if(n&gt;0 &amp;&amp; n%2 == 1) x * mi(x,n-1)
+    else 1/mi(x,-n)
+}
+</code></pre>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/03/03/scala_exercises_01.html" title="快学Scala习题解答—第一章 基础 "><p> <i class="fa fa-mail-reply"></i>&nbsp;快学Scala习题解答—第一章 基础</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/03/05/scala_exercises_03.html" title="快学Scala习题解答—第三章 数组相关操作"><p>快学Scala习题解答—第三章 数组相关操作&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="快学Scala习题解答—第二章 控制结构和函数" data-thread-key="/2013/03/04/scala_exercises_02" data-url="/2013/03/04/scala_exercises_02.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/love/welcome-my-blog.html">About</a>
+                    <a href="/1">Collecting</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>
