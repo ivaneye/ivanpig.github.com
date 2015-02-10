@@ -55,6 +55,8 @@ object Test extends App{
 }
 ```
 
+<!-- more -->
+
 Scala类库中的哪些注解用到了元注解@param,@field,@getter,@setter,@beanGetter或@beanSetter?
 ----------------------------------------------------------------------------------------
 
