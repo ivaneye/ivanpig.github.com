@@ -162,96 +162,6 @@ println(randomArray(10).mkString(","))
 println(reorderArray(Array(1,2,3,4,5)).mkString(","))
 </code></pre>
 
-<h2>重复前一个练习，不过这一次生成一个新的值交换过的数组。用for/yield</h2>
-
-<pre><code class="{.scala}">def reorderArray(arr:Array[Int]):Array[Int]={
-  (for(i &lt;- 0 until (arr.length,2)) yield if (i + 1 &lt; arr.length) Array(arr(i + 1),arr(i)) else Array(arr(i))).flatten.toArray
-}
-
-println(reorderArray(Array(1,2,3,4,5)).mkString(","))
-</code></pre>
-
-<p>感觉代码有点丑也难读。需要优化。</p>
-
-<h2>给定一个整数数组，产生一个新的数组，包含元数组中的所有正值，以原有顺序排列，之后的元素是所有零或负值，以原有顺序排列</h2>
-
-<pre><code class="{.scala}">//使用循环
- def reorderArray(arr:Array[Int]):Array[Int]={
-     val a = ArrayBuffer[Int]()
-     val b = ArrayBuffer[Int]()
-     arr.foreach(arg =&gt; if(arg &gt; 0) a += arg else b += arg)
-     a ++= b
-     a.toArray
- }
-//使用filter
-def reorderArray(arr:Array[Int]):Array[Int]={
-  val a = arr.filter(_ &gt; 0).map(1 * _)
-  val b = arr.filter(_ &lt;= 0).map(1 * _)
-  val c = a.toBuffer
-  c ++= b
-  c.toArray
-}
-</code></pre>
-
-<h2>如何计算Array[Double]的平均值？</h2>
-
-<pre><code class="{.scala}">def aveArray(arr:Array[Double]):Double={
-  arr.sum/arr.length
-}
-</code></pre>
-
-<h2>如何重新组织Array[Int]的元素将他们以反序排列？对于ArrayBuffer[Int]你又会怎么做呢？</h2>
-
-<pre><code class="{.scala}">def reverseArray(arr:Array[Int]):Array[Int]={
-  arr.reverse
-}
-</code></pre>
-
-<h2>编写一段代码，产出数组中的所有值，去掉重复项。(提示：查看Scaladoc)</h2>
-
-<p>产出数组的代码就不编写了。去重只需要调用api即可</p>
-
-<pre><code class="{.scala}"> def distinctArray(arr:Array[Int]):Array[Int]={
-   val t = arr.toBuffer
-   t.distinct.toArray
- }
-</code></pre>
-
-<h2>重新编写3.4节结尾的示例。收集负值元素的下标，反序，去掉最后一个下标，然后对每个下标调用a.remove(i)。比较这样做的效率和3.4节中另外两种方法的效率</h2>
-
-<p>性能嘛，自己比较吧!</p>
-
-<pre><code class="{.scala}"> def removeArray(arr:Array[Int]):Array[Int]={
-   val t = arr.toBuffer
-   val idx = ArrayBuffer[Int]()
-   for(i &lt;- 0 until t.length){
-     if(t(i) &lt; 0)idx += i
-   }
-   idx.remove(0)
-   idx.reverse
-   idx.foreach(t.remove(_))
-   t.toArray
- }
-</code></pre>
-
-<h2>创建一个由java.util.TimeZone.getAvailableIDs返回ide时区集合，判断条件是它们在美洲。去掉"America/"前缀并排序</h2>
-
-<p>显示的都是中文时间，后续的过滤无法操作。只列出所有的时区</p>
-
-<pre><code class="{.scala}"> val t = for(i &lt;- getAvailableIDs) yield
-           getTimeZone(i).getDisplayName()
-</code></pre>
-
-<h2>引入java.awt.datatransfer.~并构建一个类型为SystemFlavorMap类型的对象~:</h2>
-
-<p>val flavors =
-SystemFlavorMap.getDefaultFlavorMap().asInstanceOf[SystemFlavorMap]
-然后以DataFlavor.imageFlavor为参数调用getNativesForFlavor方法，以Scala缓冲保存返回值。
-(为什么用这样一个晦涩难懂的类？因为在Java标准库中很难找到使用java.util.List的代码)</p>
-
-<pre><code class="{.scala}">val flavors = SystemFlavorMap.getDefaultFlavorMap().asInstanceOf[SystemFlavorMap]
-println(flavors.getNativesForFlavor(DataFlavor.imageFlavor).toArray.toBuffer.mkString(" | ")
-</code></pre>
 
 
 
@@ -337,86 +247,6 @@ x: Unit = ()
 
 <p>这也再次证明了{}是Unit类型</p>
 
-<h2>针对下列Java循环编写一个Scala版本:for(int i=10;i>=0;i--)System.out.println(i);</h2>
-
-<p>使用Scala版本改写就OK了</p>
-
-<pre><code class="{.scala}">for(i &lt;- 0 to 10 reverse)print(i)
-</code></pre>
-
-<h2>编写一个过程countdown(n:Int)，打印从n到0的数字</h2>
-
-<p>这个就是将上面的循环包装到过程中而已。还是换个写法吧。</p>
-
-<pre><code class="{.scala}">def countdown(n:Int){
-    0 to n reverse foreach print
-}
-</code></pre>
-
-<h2>编写一个for循环,计算字符串中所有字母的Unicode代码的乘积。举例来说，"Hello"中所有字符串的乘积为9415087488L</h2>
-
-<pre><code class="{.example}">scala&gt; var t:Long = 1
-t: Long = 1
-
-scala&gt; for(i &lt;- "Hello"){
-     | t = t * i.toLong
-     | }
-
-scala&gt; t
-res57: Long = 9415087488
-</code></pre>
-
-<h2>同样是解决前一个练习的问题，但这次不使用循环。（提示：在Scaladoc中查看StringOps）</h2>
-
-<pre><code class="{.example}">scala&gt; var t:Long = 1
-t: Long = 1
-
-scala&gt; "Hello".foreach(t *= _.toLong)
-
-scala&gt; t
-res59: Long = 9415087488
-</code></pre>
-
-<h2>编写一个函数product(s:String)，计算前面练习中提到的乘积</h2>
-
-<pre><code class="{.scala}">def product(s:String):Long={
-    var t:Long = 1
-    for(i &lt;- s){
-    t *= i.toLong
-    }
-    t
-}
-</code></pre>
-
-<h2>把前一个练习中的函数改成递归函数</h2>
-
-<p>配合前一章的take和drop来实现</p>
-
-<pre><code class="{.scala}">def product(s:String):Long={
-    if(s.length == 1) return s.charAt(0).toLong
-    else s.take(1).charAt(0).toLong * product(s.drop(1))
-}
-</code></pre>
-
-<h2>编写函数计算x<sup>n</sup>^,其中n是整数，使用如下的递归定义:</h2>
-
-<ul>
-<li>x<sup>n</sup>^=y<sup>2</sup>^,如果n是正偶数的话，这里的y=x<sup>n/2</sup>^</li>
-<li>x<sup>n</sup>^ = x*x<sup>n-1</sup>^,如果n是正奇数的话</li>
-<li>x<sup>0</sup>^ = 1</li>
-<li>x<sup>n</sup>^ = 1/x<sup>-n</sup>^,如果n是负数的话</li>
-</ul>
-
-
-<p>不得使用return语句</p>
-
-<pre><code class="{.scala}">def mi(x:Double,n:Int):Double={
-    if(n == 0) 1
-    else if (n &gt; 0 &amp;&amp; n%2 == 0) mi(x,n/2) * mi(x,n/2)
-    else if(n&gt;0 &amp;&amp; n%2 == 1) x * mi(x,n-1)
-    else 1/mi(x,-n)
-}
-</code></pre>
 
 
 
@@ -494,86 +324,6 @@ scala&gt; 3 - res6
 res7: Double = 4.440892098500626E-16
 </code></pre>
 
-<h2>res变量是val还是var?</h2>
-
-<p>val是不可变的，而var是可变的，只需要给res变量重新赋值就可以检测res是val还是var了</p>
-
-<pre><code class="{.example}">scala&gt; res9 = 3
-&lt;console&gt;:8: error: reassignment to val
-       res9 = 3
-            ^
-</code></pre>
-
-<h2>Scala允许你用数字去乘字符串---去REPL中试一下"crazy"*3。这个操作做什么？在Scaladoc中如何找到这个操作?</h2>
-
-<pre><code class="{.example}">scala&gt; "crazy"*3
-res11: String = crazycrazycrazy
-</code></pre>
-
-<p>从代码可以推断,*是"crazy"这个字符串所具有的方法，但是Java中的String可没这个方法，很明显。此方法在StringOps中。</p>
-
-<h2>10 max 2的含义是什么？max方法定义在哪个类中？</h2>
-
-<p>直接在REPL中执行</p>
-
-<pre><code class="{.example}">scala&gt; 10 max 2
-res0: Int = 10
-
-scala&gt; 7 max 8
-res1: Int = 8
-
-scala&gt; 0 max 0
-res2: Int = 0
-</code></pre>
-
-<p>可以看出,此方法返回两个数字中较大的那个。此方法Java中不存在，所以在RichInt中。</p>
-
-<h2>用BigInt计算2的1024次方</h2>
-
-<p>简单的API调用</p>
-
-<pre><code class="{.example}">scala&gt; BigInt(2).pow(1024)
-res4: scala.math.BigInt = 17976931348623159077293051907890247336179769789423065727343008115
-7732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124
-3777678934248654852763022196012460941194530829520850057688381506823424628814739131105408272
-37163350510684586298239947245938479716304835356329624224137216
-</code></pre>
-
-<h2>为了在使用probablePrime(100,Random)获取随机素数时不在probablePrime和Radom之前使用任何限定符，你需要引入什么？</h2>
-
-<p>so easy.
-import需要的包啊。Random在scala.util中，而probablePrime是BigInt中的方法，引入即可</p>
-
-<pre><code class="{.scala}">import scala.math.BigInt._
-import scala.util.Random
-
-probablePrime(3,Random)
-</code></pre>
-
-<h2>创建随机文件的方式之一是生成一个随机的BigInt，然后将它转换成三十六进制，输出类似"qsnvbevtomcj38o06kul"这样的字符串。查阅Scaladoc，找到在Scala中实现该逻辑的办法。</h2>
-
-<p>到BigInt中查找方法。</p>
-
-<pre><code class="{.example}">scala&gt; scala.math.BigInt(scala.util.Random.nextInt).toString(36)
-res21: String = utydx
-</code></pre>
-
-<h2>在Scala中如何获取字符串的首字符和尾字符？</h2>
-
-<pre><code class="{.scala}">//获取首字符
-"Hello"(0)
-"Hello".take(1)
-//获取尾字符
-"Hello".reverse(0)
-"Hello".takeRight(1)
-</code></pre>
-
-<h2>take,drop,takeRight和dropRight这些字符串函数是做什么用的？和substring相比，他们的优点和缺点都是哪些？</h2>
-
-<p>查询API即可
-take是从字符串首开始获取字符串,drop是从字符串首开始去除字符串。
-takeRight和dropRight是从字符串尾开始操作。 这四个方法都是单方向的。
-如果我想要字符串中间的子字符串，那么需要同时调用drop和dropRight，或者使用substring</p>
 
 
 
@@ -605,8 +355,7 @@ takeRight和dropRight是从字符串尾开始操作。 这四个方法都是单�
                     </div>
                 </div>
                 <div class="footer">
-                    <a href="/love/welcome-my-blog.html">About</a>
-                    <a href="/1">Collecting</a>
+                    <a href="/about.html">About</a>
                     <a href="tencent://message/?uin=561802774">QQ</a>
                     <a href="https://github.com/ivanpig">GitHub</a>
                     <script src="/js/min/nprogress.min.js"></script>

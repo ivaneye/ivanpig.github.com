@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-02-10T09:54:01+08:00</updated>
+    <updated>2015-02-10T11:44:06+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -11831,6 +11831,9 @@ object Test extends App{
 }
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;Scala类库中的哪些注解用到了元注解@param,@field,@getter,@setter,@beanGetter或@beanSetter?&lt;/h2&gt;
 
 &lt;p&gt;看Scala注解的源码就OK了&lt;/p&gt;
@@ -12107,6 +12110,9 @@ object Test extends App{
 }
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;Scala类库中的哪些注解用到了元注解@param,@field,@getter,@setter,@beanGetter或@beanSetter?&lt;/h2&gt;
 
 &lt;p&gt;看Scala注解的源码就OK了&lt;/p&gt;
@@ -12377,6 +12383,9 @@ println(swap[String,Int]((&quot;1&quot;,2)))
 println(swap(Array(&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;)).mkString)
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;添加一个样例类Multiple，作为Item的子类。举例来说，Multiple(10,Article(&quot;Blackwell Toster&quot;,29.95))描述的是10个烤面包机。当然了，你应该可以在第二个参数的位置接受任何Item，无论是Bundle还是另一个Multiple。扩展price函数以应对新的样例。&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&quot;{.scala}&quot;&gt;abstract class Item
@@ -12571,6 +12580,9 @@ println(swap[String,Int]((&quot;1&quot;,2)))
 
 println(swap(Array(&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;)).mkString)
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;添加一个样例类Multiple，作为Item的子类。举例来说，Multiple(10,Article(&quot;Blackwell Toster&quot;,29.95))描述的是10个烤面包机。当然了，你应该可以在第二个参数的位置接受任何Item，无论是Bundle还是另一个Multiple。扩展price函数以应对新的样例。&lt;/h2&gt;
 
@@ -12792,6 +12804,9 @@ def indexs(str:String):Map[Char,ListBuffer[Int]]={
 println(indexs(&quot;Mississippi&quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;编写一个函数，从一个整型链表中去除所有的零值。&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&quot;{.scala}&quot;&gt;def removeZero(nums : List[Int]):List[Int]={
@@ -12959,6 +12974,9 @@ def indexs(str:String):Map[Char,ListBuffer[Int]]={
 println(indexs(&quot;Mississippi&quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;编写一个函数，从一个整型链表中去除所有的零值。&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&quot;{.scala}&quot;&gt;def removeZero(nums : List[Int]):List[Int]={
@@ -13122,6 +13140,9 @@ println(frequencies)
 &lt;pre&gt;&lt;code class=&quot;{.scala}&quot;&gt;println((1 to -10).foldLeft(1)(_ * _))
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;编写函数largest(fun:(Int)=&gt;Int,inputs:Seq[Int]),输出在给定输入序列中给定函数的最大值。举例来说，largest(x=&gt;10*x-x*x,1 to 10)应该返回25.不得使用循环或递归&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&quot;{.scala}&quot;&gt;object Test extends App {
@@ -13256,6 +13277,9 @@ _)((6,7))应得到42。然后用这个函数通过map计算出各个对偶的元
 &lt;pre&gt;&lt;code class=&quot;{.scala}&quot;&gt;println((1 to -10).foldLeft(1)(_ * _))
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;编写函数largest(fun:(Int)=&gt;Int,inputs:Seq[Int]),输出在给定输入序列中给定函数的最大值。举例来说，largest(x=&gt;10*x-x*x,1 to 10)应该返回25.不得使用循环或递归&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&quot;{.scala}&quot;&gt;object Test extends App {
@@ -13385,6 +13409,9 @@ _)((6,7))应得到42。然后用这个函数通过map计算出各个对偶的元
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;一般乘方的操作符是优于乘法操作的，如果使用**作为乘方的话，那么其优先级则与*相同，而如果使用^&lt;em&gt;的&lt;/em&gt;话，则优先级低于*操作。优先级都是有问题的。故没有使用这两种操作符&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;实现Fraction类，支持+~*~/操作。支持约分，例如将15/-6变为-5/2。除以最大公约数,像这样:&lt;/h2&gt;
 
@@ -13774,6 +13801,9 @@ object RichFile{
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;一般乘方的操作符是优于乘法操作的，如果使用**作为乘方的话，那么其优先级则与*相同，而如果使用^&lt;em&gt;的&lt;/em&gt;话，则优先级低于*操作。优先级都是有问题的。故没有使用这两种操作符&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;实现Fraction类，支持+~*~/操作。支持约分，例如将15/-6变为-5/2。除以最大公约数,像这样:&lt;/h2&gt;
 
@@ -14182,6 +14212,9 @@ object Test extends App{
 }
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;通过把scala.math.Ordered[Point]混入java.awt.Point的方式，定义OrderedPoint类。按辞典编辑方式排序，也就是说，如果x\&amp;lt;x'或者x=x'且y\&amp;lt;y'则(x,y)\&amp;lt;(x',y')&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&quot;{.scala}&quot;&gt;import java.awt.Point
@@ -14323,6 +14356,9 @@ object Test extends App{
   println(&quot;x = &quot; + egg.getX + &quot; y = &quot; + egg.getY)
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;通过把scala.math.Ordered[Point]混入java.awt.Point的方式，定义OrderedPoint类。按辞典编辑方式排序，也就是说，如果x\&amp;lt;x'或者x=x'且y\&amp;lt;y'则(x,y)\&amp;lt;(x',y')&lt;/h2&gt;
 
@@ -14474,6 +14510,9 @@ result.foreach(line =&amp;gt; pw.write(line + &quot;\n&quot;))
 
 pw.close()
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;编写一小段Scala代码,从一个文件读取内容并把所有字符数大于12的单词打印到控制台。如果你能用单行代码完成会有额外奖励&lt;/h2&gt;
 
@@ -14653,6 +14692,9 @@ result.foreach(line =&amp;gt; pw.write(line + &quot;\n&quot;))
 
 pw.close()
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;编写一小段Scala代码,从一个文件读取内容并把所有字符数大于12的单词打印到控制台。如果你能用单行代码完成会有额外奖励&lt;/h2&gt;
 
@@ -14844,6 +14886,9 @@ object Test extends App{
 }
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;翻开你喜欢的Java或C++教科书，一定会找到用来讲解继承层级的实例，可能是员工，宠物，图形或类似的东西。用Scala来实现这个示例。&lt;/h2&gt;
 
 &lt;p&gt;Thinking in Java中的代码&lt;/p&gt;
@@ -15012,6 +15057,9 @@ class Square(point:Point,width:Int) extends Rectangle(point.x,point.y,width,widt
   }
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;翻开你喜欢的Java或C++教科书，一定会找到用来讲解继承层级的实例，可能是员工，宠物，图形或类似的东西。用Scala来实现这个示例。&lt;/h2&gt;
 
@@ -15182,6 +15230,9 @@ package impatient
   class T4(t1:T1,t3:T3)      //无法找到T1
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;编写一段让你的Scala朋友们感到困惑的代码，使用一个不在顶部的com包&lt;/h2&gt;
 
@@ -15365,6 +15416,9 @@ package impatient
   class T4(t1:T1,t3:T3)      //无法找到T1
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;编写一段让你的Scala朋友们感到困惑的代码，使用一个不在顶部的com包&lt;/h2&gt;
 
@@ -15554,6 +15608,9 @@ object MilesToKilometers extends UnitConversion{
 }
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;定义一个扩展自java.awt.Point的Origin对象。为什么说这实际上不是个好主意？(仔细看Point类的方法)&lt;/h2&gt;
 
 &lt;p&gt;Point中的getLocation方法返回的是Point对象，如果想返回Origin对象，需要Origin类才行&lt;/p&gt;
@@ -15672,6 +15729,9 @@ object MilesToKilometers extends UnitConversion{
   override def milesToKilometers() {}
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;定义一个扩展自java.awt.Point的Origin对象。为什么说这实际上不是个好主意？(仔细看Point类的方法)&lt;/h2&gt;
 
@@ -15799,6 +15859,9 @@ object Point extends App{
    }
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;重新实现前一个类中的Time类，将内部呈现改成午夜起的分钟数(介于0到24*60-1之间)。不要改变公有接口。也就是说，客户端代码不应因你的修改而受影响&lt;/h2&gt;
 
@@ -15967,6 +16030,9 @@ public Student();
    }
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;重新实现前一个类中的Time类，将内部呈现改成午夜起的分钟数(介于0到24*60-1之间)。不要改变公有接口。也就是说，客户端代码不应因你的修改而受影响&lt;/h2&gt;
 
@@ -16153,6 +16219,9 @@ for(key &amp;lt;- tokens){
 println(map.mkString(&quot;,&quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;重复前一个练习，这次用不可变的映射&lt;/h2&gt;
 
 &lt;p&gt;不可变映射与可变映射的区别就是，每次添加元素，都会返回一个新的映射&lt;/p&gt;
@@ -16331,6 +16400,9 @@ for(key &amp;lt;- tokens){
 println(map.mkString(&quot;,&quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;重复前一个练习，这次用不可变的映射&lt;/h2&gt;
 
 &lt;p&gt;不可变映射与可变映射的区别就是，每次添加元素，都会返回一个新的映射&lt;/p&gt;
@@ -16502,6 +16574,9 @@ println(randomArray(10).mkString(&quot;,&quot;))
 println(reorderArray(Array(1,2,3,4,5)).mkString(&quot;,&quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;重复前一个练习，不过这一次生成一个新的值交换过的数组。用for/yield&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&quot;{.scala}&quot;&gt;def reorderArray(arr:Array[Int]):Array[Int]={
@@ -16623,6 +16698,9 @@ println(randomArray(10).mkString(&quot;,&quot;))
 
 println(reorderArray(Array(1,2,3,4,5)).mkString(&quot;,&quot;))
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;重复前一个练习，不过这一次生成一个新的值交换过的数组。用for/yield&lt;/h2&gt;
 
@@ -16762,6 +16840,9 @@ x: Unit = ()
 
 &lt;p&gt;这也再次证明了{}是Unit类型&lt;/p&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;针对下列Java循环编写一个Scala版本:for(int i=10;i&gt;=0;i--)System.out.println(i);&lt;/h2&gt;
 
 &lt;p&gt;使用Scala版本改写就OK了&lt;/p&gt;
@@ -16883,6 +16964,9 @@ x: Unit = ()
 
 &lt;p&gt;这也再次证明了{}是Unit类型&lt;/p&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;针对下列Java循环编写一个Scala版本:for(int i=10;i&gt;=0;i--)System.out.println(i);&lt;/h2&gt;
 
 &lt;p&gt;使用Scala版本改写就OK了&lt;/p&gt;
@@ -17003,6 +17087,9 @@ scala&amp;gt; 3 - res6
 res7: Double = 4.440892098500626E-16
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h2&gt;res变量是val还是var?&lt;/h2&gt;
 
 &lt;p&gt;val是不可变的，而var是可变的，只需要给res变量重新赋值就可以检测res是val还是var了&lt;/p&gt;
@@ -17115,6 +17202,9 @@ res6: Double = 2.9999999999999996
 scala&amp;gt; 3 - res6
 res7: Double = 4.440892098500626E-16
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h2&gt;res变量是val还是var?&lt;/h2&gt;
 

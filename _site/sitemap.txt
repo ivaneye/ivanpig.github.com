@@ -1,5 +1,6 @@
 
 http://ivanpig.github.io/Timing/
+http://ivanpig.github.io/about.html
 http://ivanpig.github.io/index.html
 http://ivanpig.github.io/rss.xml
 http://ivanpig.github.io/search/
