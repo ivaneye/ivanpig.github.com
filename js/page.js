@@ -8,6 +8,7 @@ $(function () {
 
   $(".article a").attr("target", "_blank");
   $(".brand-title,nav").remove();
+  $("#qrcode").remove();
   //     $("#nav").remove();
   $(".search").html('<hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color=#ccc SIZE=1/>');
   $(".headerpic img").css("width", "100px")
