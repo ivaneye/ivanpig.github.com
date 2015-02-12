@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://ivanpig.github.io/page/4/index.html">
         <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
-        <title>IvanPig's Blog</title>
+        <title>Less is more</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
         <!--[if lte IE 8]>
 <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
-                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+                    <h2 id="_tagline" class="brand-tagline">Thinking in Ivan</h2>
 <!--                     <br class="newline"/><br class="newline"/> -->
 
                     <nav class="nav">
@@ -83,6 +83,9 @@
                             </li>
                         </ul>
                     </nav>
+							<div>
+							<img src="/img/qrcode.jpg" width="170"/>
+							</div>
                 </div>
             </div>
 
@@ -94,6 +97,103 @@
                     <div class="posts">
 
                         
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/23/sessions_cookies.html">Luminus手册-Session与Cookie</a></h2>
+
+        <p class="post-meta">By 09月23日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Sessions</h1>
+
+<p>Session管理相关功能由noir.session提供。默认提供的noir.util.middleware/app-handler函数默认将Session保存在内存里。</p>
+
+<p>当然你可以修改它，只需要给函数传递第二个参数，告诉它将Session保存在哪里就可
+以了。 下面的例子创建了一个保存在内存里的session.</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler [home-routes app-routes]))
+</code></pre>
+
+<p>下面，我们来重新定义session的保存位置。使用:session-options来替换掉默认的值就可以了。</p>
+
+<pre><code class="{.clojure}">(def app
+  (middleware/app-handler
+    [home-routes app-routes]
+    :session-options {:cookie-name "example-app-session"
+                      :store (cookie-store)}))
+</code></pre>
+
+<h1>Accessing the session</h1>
+
+<p>你可以在任意范围内的任何函数里访问并操作session。</p>
+
+<pre><code class="{.clojure}">(require '[noir.session :as session])
+
+(defn set-user [id]
+  (session/put! :user id)
+  (session/get :user))
+
+(defn remove-user []
+  (session/remove! :user)
+  (session/get :user))
+
+(defn set-user-if-nil [id]
+  (session/get :user id))
+
+(defn clear-session []
+  (session/clear!))
+
+(defroutes app-routes
+  (GET "/login/:id" [id] (set-user id))
+  (GET "/remove" [] (remove-user))
+  (GET "/set-if-nil/:id" [id] (set-user-if-nil id))
+  (GET "/logout" [] (clear-session)))
+</code></pre>
+
+<p>你还可以通过noir.session/flash-put!和noir.session/flash-get来创建flash变量.</p>
+
+<pre><code class="{.clojure}">(session/flash-put! :message "User added!")
+(session/flash-get :message)
+</code></pre>
+
+
+
+
+    <a href="/2013/09/23/sessions_cookies.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
 
 
 <section class="post">
@@ -119,7 +219,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -193,7 +293,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -281,7 +381,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -350,7 +450,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -433,7 +533,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -515,7 +615,7 @@ guestbook应用的例子中，我们看到了如下的路由定义:</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -572,95 +672,6 @@ ClojureScript库和其他库一样都配置在project.clj文件中。</p>
 
 
     <a href="/2013/09/17/clojurescript.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/16/html_templating.html">Luminus手册-HTML模板</a></h2>
-
-        <p class="post-meta">By 09月16日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Templating Options</h1>
-
-<p>Luminus包含了Hiccup的依赖.如果你熟悉Hiccup那么可以直接使用。
-Hiccup使用clojure数据结构来描述模板。并且,Hiccup提供了丰富的API来生成
-HTML元素。 Luminus也包含了Selmer，Selmer使用了普通的文本文件来描述模板。
-你可以使用它们中的任何一个模板，或者混合使用.抑或你可以选择任何你喜欢
-的模板框架，比如Enlive或者Stencil。</p>
-
-<h1>HTML Templating Using Selmer</h1>
-
-<p>Selmer是一个类似Django模板的框架。如果你熟悉Django或者其他类似的模板语
-言，那么你会感觉很熟悉.</p>
-
-<h2>Creating Templates</h2>
-
-<p>Selmer将展示逻辑和程序逻辑分开。实际上Selmer模板就是包含了动态元素的
-HTML文件。来看下面的例子。</p>
-
-<pre><code class="{.html}">&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
-        &lt;title&gt;My First Template&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;h2&gt;Hello { {name}}&lt;/h2&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-
-<p>模板使用了一个包含了键值对的上下文环境。上下文环境中包含了我们
-需要在运行时获得的变量的值。上面的代码中，我们从上下文环境中获取名字为
-name的变量的值。
-有两个函数可以渲染模板,render和render-file。render函数接收一个字符串来
-渲染模板。而render-file接收一个字符串作为路径来渲染模板。
-如果我们将上面的模板定义保存到index.html文件中。我们就可以这样来渲染:</p>
-
-<pre><code class="{.clojure}">(ns example.routes.home
-  (:use [selmer.parser :only [render-file]]))
-
-(defn index [request]
-  (render-file "example/views/templates/index.html"
-               {:name "John"}))
-</code></pre>
-
-
-
-
-    <a href="/2013/09/16/html_templating.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

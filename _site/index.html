@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://ivanpig.github.io/index.html">
         <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
-        <title>IvanPig's Blog</title>
+        <title>Less is more</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
         <!--[if lte IE 8]>
 <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
-                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+                    <h2 id="_tagline" class="brand-tagline">Thinking in Ivan</h2>
 <!--                     <br class="newline"/><br class="newline"/> -->
 
                     <nav class="nav">
@@ -83,6 +83,9 @@
                             </li>
                         </ul>
                     </nav>
+							<div>
+							<img src="/img/qrcode.jpg" width="170"/>
+							</div>
                 </div>
             </div>
 
@@ -94,6 +97,101 @@
                     <div class="posts">
 
                         
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/02/03/singleton.html">语言与模式-01单例模式</a></h2>
+
+        <p class="post-meta">By 02月03日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (1)</i></a>
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (11)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (1)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>概述</h1>
+
+<p>设计模式是什么？如果要我现在来回答，那我的答案是：<strong>设计模式是对于语言本身缺陷的一种补充！</strong></p>
+
+<p>本系列文章通过对各个设计模式在Java与Clojure之间的实现比较来说明这一点！</p>
+
+<p>关于Clojure相关内容，可以查看<a href="/tag/#clojure">这里</a>!</p>
+
+<p>其实使用Clojure来实现设计模式并不合适！因为Clojure是函数式语言，而设计模式是针对面向对象语言的。但是Clojure能提供近似的解决方案或者根本不需要此设计模式，且Clojure的解决方案更简单！简单到都不好意思叫做模式！</p>
+
+<p>当然我也不是要黑Java，毕竟还要靠Java吃饭！Java作为工业化标准开发还是很不错的，只是表现力不足，模板代码较多而已！但是足够简单，易标准化。这就够了！</p>
+
+<p>废话不多说，开始第一个设计模式！单例模式！</p>
+
+<h1>意图</h1>
+
+<p>保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p>
+
+<p><img src="/assets/designpattern/singleton.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>当类只能有一个实例而且客户可以从一个众所周知的访问点访问它时。</li>
+<li>当这个唯一实例应该是通过子类化可扩展的，并且客户应该无需更改代码就能使用一个扩展的实例时。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<p>懒汉式：</p>
+
+<pre><code class="{.java}">public class Singleton{
+       private Singleton(){}
+
+       public synchronized static Singleton getInstance(){
+           if(single==null){
+                single=new Singleton();
+           }
+           return single;
+       }
+
+      private static Singleton single;
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/03/singleton.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
 
 
 <section class="post">
@@ -123,7 +221,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">theme (1)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             
         
@@ -167,7 +265,7 @@
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
             
             
             
@@ -176,7 +274,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             
         
@@ -245,7 +343,7 @@ user=&gt;
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
             
             
             
@@ -254,7 +352,7 @@ user=&gt;
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             
         
@@ -336,7 +434,7 @@ fi
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
             
             
             
@@ -345,7 +443,7 @@ fi
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             
         
@@ -425,7 +523,7 @@ fi
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
             
             
             
@@ -434,7 +532,7 @@ fi
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             
         
@@ -493,7 +591,7 @@ fi
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
             
             
             
@@ -502,7 +600,7 @@ fi
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
             
             
         
@@ -585,106 +683,6 @@ fi
 
 
     <a href="/2014/03/15/function.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2014/02/19/math.html">Clojure教程-数学计算</a></h2>
-
-        <p class="post-meta">By 02月19日  2014
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (30)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p>本文翻译自<a href="http://clojure-doc.org/articles/cookbooks/math.html">Mathematics with Clojure</a></p>
-
-<p>本文包含了使用Clojure的内建函数,扩展包和部分JDK功能进行数学计算.</p>
-
-<p>版权:</p>
-
-<p>This work is licensed under a Creative Commons Attribution 3.0 Unported
-License (including images &amp; stylesheets). The source is available on
-Github.</p>
-
-<h1>准备</h1>
-
-<p>这里的一些例子使用了<a href="https://github.com/clojure/math.numeric-tower">math.numeric-tower</a>和<a href="https://github.com/clojure/math.combinatorics">math.combinatorics</a>库.所以需要
-你在代码的命名空间中包含如下代码:</p>
-
-<pre><code class="{.clojure}">(:require [clojure.math.numeric-tower :as math]
-          [clojure.math.combinatorics :as combo])
-</code></pre>
-
-<p>或者在REPL里载入:</p>
-
-<pre><code class="{.clojure}">(require '[clojure.math.numeric-tower :as math])
-(require '[clojure.math.combinatorics :as combo])
-</code></pre>
-
-<h1>方法</h1>
-
-<h2>简单计算</h2>
-
-<pre><code class="{.clojure}">(+ 3 4)    ;=&gt; 7
-(- 3 4)    ;=&gt; -1
-(* 3 4)    ;=&gt; 12
-(/ 3 4)    ;=&gt; 3/4  (an exact ratio)
-(/ 3.0 4)  ;=&gt; 0.75
-
-(inc 5)    ;=&gt; 6
-(dec 5)    ;=&gt; 4
-</code></pre>
-
-<p>想要计算整数的除法,取余和取模,请看<a href="http://clojuredocs.org/clojure_core/clojure.core/quot">quot</a>,<a href="http://clojuredocs.org/clojure_core/clojure.core/rem">rem</a>,<a href="http://clojuredocs.org/clojure_core/clojure.core/mod">mod</a>
-想计算指数的平方根,四舍五入,上下限,绝对值和最大公约数/最小公倍数,请看<a href="http://clojure.github.com/math.numeric-tower/">math.numeric-tower</a></p>
-
-<h2>三角函数</h2>
-
-<p>使用Java平台提供的函数:</p>
-
-<pre><code class="{.clojure}">Math/PI       ;=&gt; 3.14159...
-(Math/sin x)
-(Math/cos x)
-(Math/tan x)
-</code></pre>
-
-<p>还有很多的函数,你可以查看<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html">java.lang.Math</a></p>
-
-<h2>组合数学</h2>
-
-<p>对于组合数学相关函数(比如:combinations和permutations),请看<a href="http://clojure.github.com/math.combinatorics/">math.combinatorics</a></p>
-
-
-
-    <a href="/2014/02/19/math.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

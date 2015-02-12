@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://ivanpig.github.io/page/6/index.html">
         <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
-        <title>IvanPig's Blog</title>
+        <title>Less is more</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
         <!--[if lte IE 8]>
 <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
-                    <h2 id="_tagline" class="brand-tagline">IvanPig's Blog</h2>
+                    <h2 id="_tagline" class="brand-tagline">Thinking in Ivan</h2>
 <!--                     <br class="newline"/><br class="newline"/> -->
 
                     <nav class="nav">
@@ -83,6 +83,9 @@
                             </li>
                         </ul>
                     </nav>
+							<div>
+							<img src="/img/qrcode.jpg" width="170"/>
+							</div>
                 </div>
             </div>
 
@@ -94,6 +97,76 @@
                     <div class="posts">
 
                         
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/13/scala_exercises_11.html">快学Scala习题解答—第十一章 操作符</a></h2>
+
+        <p class="post-meta">By 03月13日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>操作符</h1>
+
+<h2>根据优先级规则,3 + 4 -> 5和3 -> 4 + 5是如何被求值的？</h2>
+
+<p>在REPL中执行即可得到结果。都是从左至右执行</p>
+
+<h2>BigInt类有一个pow方法,但没有用操作符字符。Scala类库的设计者为什么没有选用**(像Fortran那样)或者^(像Pascal那样)作为乘方操作符呢？</h2>
+
+<p>Scala中的操作符就是方法，其优先级是根据首字母来判断的，优先级如下</p>
+
+<pre><code class="{.example}">最高优先级:除以下字符外的操作符字符
+ * / %
++ -
+:
+= !
+&lt; &gt;
+&amp;
+ˆ
+|
+非操作符
+最低优先级:赋值操作符
+</code></pre>
+
+<p>一般乘方的操作符是优于乘法操作的，如果使用**作为乘方的话，那么其优先级则与*相同，而如果使用^<em>的</em>话，则优先级低于*操作。优先级都是有问题的。故没有使用这两种操作符</p>
+
+
+
+
+    <a href="/2013/03/13/scala_exercises_11.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
 
 
 <section class="post">
@@ -119,7 +192,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (15)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -200,7 +273,7 @@ object Test extends App{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (15)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -283,7 +356,7 @@ pw.close()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (15)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -370,7 +443,7 @@ pw.close()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (15)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -451,7 +524,7 @@ package impatient
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (15)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -530,7 +603,7 @@ object MilesToKilometers extends UnitConversion{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (15)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -581,96 +654,6 @@ object MilesToKilometers extends UnitConversion{
 
 
     <a href="/2013/03/07/scala_exercises_05.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/06/scala_exercises_04.html">快学Scala习题解答—第四章 映射和元组</a></h2>
-
-        <p class="post-meta">By 03月06日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (15)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>映射和元组</h1>
-
-<h2>设置一个映射,其中包含你想要的一些装备，以及它们的价格。然后构建另一个映射，采用同一组键，但是价格上打9折</h2>
-
-<p>映射的简单操作</p>
-
-<pre><code class="{.example}">scala&gt; val map = Map("book"-&gt;10,"gun"-&gt;18,"ipad"-&gt;1000)
-map: scala.collection.immutable.Map[java.lang.String,Int] = Map(book -&gt; 10, gun -&gt; 18, ipad -&gt; 1000)
-
-scala&gt; for((k,v) &lt;- map) yield (k,v * 0.9)
-res3: scala.collection.immutable.Map[java.lang.String,Double] = Map(book -&gt; 9.0, gun -&gt; 16.2, ipad -&gt; 900.0)
-</code></pre>
-
-<h2>编写一段程序，从文件中读取单词。用一个可变映射来清点每个单词出现的频率。读取这些单词的操作可以使用java.util.Scanner:</h2>
-
-<p>val in = new java.util.Scanner(new java.io.File("myfile.txt"))
-while(in.hasNext()) 处理 in.next() 或者翻到第9章看看更Scala的做法。
-最后，打印出所有单词和它们出现的次数。
-@\&lt;p>当然使用Scala的方法啦。参考第9章@\&lt;/p>
-首先，创建一个文件myfile.txt。输入如下内容</p>
-
-<pre><code class="{.example}">test test ttt test ttt t test sss s
-</code></pre>
-
-<p>Scala代码如下</p>
-
-<pre><code class="{.scala}">import scala.io.Source
-import scala.collection.mutable.HashMap
-
-//val source = Source.fromFile("myfile.txt")
-//val tokens = source.mkString.split("\\s+")  //此写法tokens为空，不知为何
-
-val source = Source.fromFile("myfile.txt").mkString
-
-val tokens = source.split("\\s+")
-
-val map = new HashMap[String,Int]
-
-for(key &lt;- tokens){
-    map(key) = map.getOrElse(key,0) + 1
-}
-
-println(map.mkString(","))
-</code></pre>
-
-
-
-
-    <a href="/2013/03/06/scala_exercises_04.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
