@@ -44,7 +44,7 @@ public class RedPigFactory implements PigFactory{
 
 # Clojure实现
 
-修改下method就可以了！
+而在Clojure中就是选择函数的条件多了！
 
 ```clojure
 (defmulti run (fn [t] t))

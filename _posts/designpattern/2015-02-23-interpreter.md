@@ -271,3 +271,24 @@ public class Client {
 ```
 
 # Clojure实现
+
+解释器模式其实就是写了个包含上下文的解析器！这可是Clojure的强项!
+
+先演示不带上下文的解析器！其实就是内部DSL!
+
+```clojure
+(defmacro assign [a v]
+   `(def ~a ~v))
+
+(assign x false)
+(assign y true)
+(assign c true)
+
+(assign exp '(or (and c x) (and y (not x))))
+
+(println "x =" x)
+(println "y =" y)
+(println exp "=" (eval exp))
+```
+
+[这里](/assets/designpattern/comp.clj)是一个较完整的代码!

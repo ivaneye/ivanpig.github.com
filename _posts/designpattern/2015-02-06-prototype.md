@@ -99,7 +99,6 @@ public class B{
 
 ```
 //输出结果
-/*
 a-str:Hello
 a-b:Hello B
 ac-str:Hello
@@ -109,7 +108,6 @@ a-b:Hello BB
 ac-str:Hello
 ac-b:Hello BB       --浅拷贝导致了，ac和a中的B是相同的引用，a中的b被修改后，ac中的b也被修改，这应该是不想要的结果
                     --所以需要深拷贝。深拷贝就是将所有涉及到的对象都进行Clone
-*/
 ```
 
 ``` {.java}
@@ -208,7 +206,7 @@ ac-b:Hello B        --此处a中的b被修改后，ac中的b不会被影响
 
 # Clojure实现
 
-Clojure不需要原型模式！
+对于Clojure来说，根本就不需要原型模式！
 
 首先请想想为什么Java需要原型模式？
 

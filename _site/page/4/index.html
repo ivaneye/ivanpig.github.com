@@ -83,7 +83,7 @@
                             </li>
                         </ul>
                     </nav>
-							<div>
+							<div id="qrcode">
 							<img src="/img/qrcode.jpg" width="170"/>
 							</div>
                 </div>
@@ -97,6 +97,91 @@
                     <div class="posts">
 
                         
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/24/input_validation.html">Luminus手册-输入验证</a></h2>
+
+        <p class="post-meta">By 09月24日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Input Validation</h1>
+
+<p>验证相关助手方法在noir.validation命名空间中。如果我们要使用验证，我们需要先引入这个命名空间。</p>
+
+<pre><code class="clojure">(ns myapp.routes
+  (:require ... [noir.validation :as v]))
+</code></pre>
+
+<p>验证函数在当验证不通过时，将相应的错误设置到对应的字段上。验证函数接受一个条件函数和一个包含了需要验证的字段和错误信息的Vector.当验证函数验证通过时需要返回true否则返回false.</p>
+
+<p>下面是已经存在的验证函数:</p>
+
+<pre><code>has-value? args: [v] - returns true if v is truthy and not an empty string.
+has-values? args: [coll] - returns true if all members of the collection has-value? This works on maps as well.
+not-nil? args: [v] - returns true if v is not nil
+min-length? args: [v len] - returns true if v is greater than or equal to the given len
+max-length? args: [v len - returns true if v is less than or equal to the given len
+matches-regex? args: [v regex] - returns true if the string matches the given regular expression
+is-email? args: [v] - returns true if v is an email address
+valid-file? args: [m] - returns true if a valid file was supplied
+valid-number? args: [v] - returns true if the string can be parsed to a Long
+greater-than? args: [v n] - returns true if the string represents a number &gt; given
+less-than? args: [v n] - returns true if the string represents a number &lt; given
+equal-to? args: [v n] - returns true if the string represents a number = given
+</code></pre>
+
+<p>例如：如果我们想检查id和pass字段不能为空，则可以创建如下验证规则：</p>
+
+<p>````clojure
+(v/rule (has-value? id)
+        [:id "screen name is required"])</p>
+
+<p>(v/rule (has-value? pass)
+        [:pass "password is required"])
+```</p>
+
+<p>错误信息被保存在noir.validation/<em>errors</em>这个atom中，这个atom被绑定到了request上。每个error都包含一个key和一个对应的错误Vector.验证函数可以在同一字段上多次调用来设置多个错误。</p>
+
+<p>一旦验证规则被执行了，我们可以通过errors?这个函数来检查是否有错误。如果没有传递参数，则此函数会检查noir.validation/<em>error</em>是否为空，如果传递了参数，次函数根据传递的值来查询是否有错误。</p>
+
+
+
+
+    <a href="/2013/09/24/input_validation.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
 
 
 <section class="post">
@@ -122,7 +207,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -219,7 +304,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -293,7 +378,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -381,7 +466,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -450,7 +535,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -533,7 +618,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -586,92 +671,6 @@ guestbook应用的例子中，我们看到了如下的路由定义:</p>
 
 
     <a href="/2013/09/18/defining_routes.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/17/clojurescript.html">Luminus手册-ClojureScript</a></h2>
-
-        <p class="post-meta">By 09月17日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Summary</h1>
-
-<p>ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScript可以
-有如下有点：</p>
-
-<ul>
-<li>在客户端和服务端使用相同的语言</li>
-<li>在前后端共用相同的代码</li>
-<li>简介流畅的语言</li>
-<li>使用Leiningen管理依赖关系</li>
-<li>不可变数据</li>
-<li>功能强大的库</li>
-<li>Adding ClojureScript Support</li>
-</ul>
-
-
-<p>最简单的添加ClojureScript支持的方法就是在创建新项目的时候添加+cljs选项
-。不过在现有的项目中添加ClojureScript也同样的简单。你只需要在
-project.clj文件中添加如下内容即可。</p>
-
-<pre><code class="{.clojure}">:plugins [...
-          [lein-cljsbuild "0.3.0"]]
-
-:hooks [... leiningen.cljsbuild]
-
-:cljsbuild
-{:builds [{:source-paths ["src-cljs"]
-           :compiler {:output-to "resources/public/js/site.js"
-                      :optimizations :advanced}}]}
-</code></pre>
-
-<p>上面的代码将在项目中添加cljsbuild插件和一个钩子。
-所有的命名空间需要在项目根目录下的src-cljs目录内。注意，ClojureScript
-文件需要以.cljs结尾。如果文件以.clj结尾，它也会被编译，不过它就无法访
-问js命名空间。</p>
-
-<h1>Using Libraries</h1>
-
-<p>使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
-ClojureScript库和其他库一样都配置在project.clj文件中。</p>
-
-
-
-
-    <a href="/2013/09/17/clojurescript.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

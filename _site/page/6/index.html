@@ -83,7 +83,7 @@
                             </li>
                         </ul>
                     </nav>
-							<div>
+							<div id="qrcode">
 							<img src="/img/qrcode.jpg" width="170"/>
 							</div>
                 </div>
@@ -97,6 +97,87 @@
                     <div class="posts">
 
                         
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/14/scala_exercises_12.html">快学Scala习题解答—第十二章 高阶函数</a></h2>
+
+        <p class="post-meta">By 03月14日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>高阶函数</h1>
+
+<h2>编写函数values(fun:(Int)=>Int,low:Int,high:Int),该函数输出一个集合，对应给定区间内给定函数的输入和输出。比如，values(x=>x*x,-5,5)应该产出一个对偶的集合(-5,25),(-4,16),(-3,9),...,(5,25)</h2>
+
+<pre><code class="{.scala}">object Test extends App {
+  def values(fun: (Int) =&gt; Int, low: Int, high: Int) = {
+    var arr = List[(Int,Int)]()
+    low to high foreach {
+      num =&gt;
+      arr = (num, fun(num)) :: arr
+    }
+    arr
+  }
+
+  println(values(x =&gt; x * x, -5, 5).mkString)
+}
+</code></pre>
+
+<h2>如何用reduceLeft得到数组中的最大元素?</h2>
+
+<pre><code class="{.scala}">object Test extends App {
+  val arr = Array(3,2,6,8,4,6,9,3,6,7,1,2)
+  print(arr.reduceLeft((a,b)=&gt;if (a&gt;b) a else b))
+}
+</code></pre>
+
+<h2>用to和reduceLeft实现阶乘函数,不得使用循环或递归</h2>
+
+<pre><code class="{.scala}">println(1 to 10 reduceLeft(_ * _))
+</code></pre>
+
+<h2>前一个实现需要处理一个特殊情况，即n\&lt;1的情况。展示如何用foldLeft来避免这个需要。</h2>
+
+<pre><code class="{.scala}">println((1 to -10).foldLeft(1)(_ * _))
+</code></pre>
+
+
+
+
+    <a href="/2013/03/14/scala_exercises_12.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
 
 
 <section class="post">
@@ -122,7 +203,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -192,7 +273,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -273,7 +354,7 @@ object Test extends App{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -356,7 +437,7 @@ pw.close()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -443,7 +524,7 @@ pw.close()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -524,7 +605,7 @@ package impatient
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -574,86 +655,6 @@ object MilesToKilometers extends UnitConversion{
 
 
     <a href="/2013/03/08/scala_exercises_06.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/07/scala_exercises_05.html">快学Scala习题解答—第五章 类</a></h2>
-
-        <p class="post-meta">By 03月07日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>类</h1>
-
-<h2>改进5.1节的Counter类,让它不要在Int.MaxValue时变成负数</h2>
-
-<p>加个判断就OK了</p>
-
-<pre><code class="{.scala}">class Count{
-  private var value = Int.MaxValue
-  def increment(){if(value &lt; Int.MaxValue) value + 1 else value }
-  def current = value
-}
-</code></pre>
-
-<h2>编写一个BankAccount类，加入deposit和withdraw方法，和一个只读的balance属性</h2>
-
-<pre><code class="{.scala}">class BankAccount(val balance:Int = 0){
-  def deposit(){}
-  def withdraw(){}
-}
-</code></pre>
-
-<h2>编写一个Time类，加入只读属性hours和minutes，和一个检查某一时刻是否早于另一时刻的方法before(other:Time):Boolean。Time对象应该以new Time(hrs,min)方式构建。其中hrs以军用时间格式呈现(介于0和23之间)</h2>
-
-<pre><code class="{.scala}">class Time(val hours:Int,val minutes:Int){
-
-   def before(other:Time):Boolean={
-     hours &lt; other.hours || (hours == other.hours &amp;&amp; minutes &lt; other.minutes)
-   }
-
-   override def toString():String={
-     hours + " : " + minutes
-   }
-}
-</code></pre>
-
-
-
-
-    <a href="/2013/03/07/scala_exercises_05.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

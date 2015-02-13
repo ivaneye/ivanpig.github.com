@@ -83,7 +83,7 @@
                             </li>
                         </ul>
                     </nav>
-							<div>
+							<div id="qrcode">
 							<img src="/img/qrcode.jpg" width="170"/>
 							</div>
                 </div>
@@ -106,6 +106,118 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2014/03/15/function.html">Clojure教程-函数</a></h2>
+
+        <p class="post-meta">By 03月15日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (12)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>本文翻译自<a href="http://clojure-doc.org/articles/language/functions.html">Functions in Clojure</a></p>
+
+<p>本文包括如下内容:</p>
+
+<ul>
+<li>如何定义函数</li>
+<li>如何执行函数</li>
+<li>多元数函数(Multi-arity Functions)</li>
+<li>不定参函数(Variadic Functions)</li>
+<li>高阶函数</li>
+<li>其它函数相关内容</li>
+</ul>
+
+
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
+
+<h1>针对Clojure版本</h1>
+
+<p>Clojure 1.5</p>
+
+<h1>简介</h1>
+
+<p>Clojure是函数式编程语言.自然的,函数是Clojure非常重要的一部分.</p>
+
+<h1>如何定义函数</h1>
+
+<p>函数定义一般使用defn宏:</p>
+
+<pre><code class="{.clojure}">(defn round
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>类型提示有时能避免编译器使用反射,从而能生成更高效的字节码.但是,基本上你没必要使用类型提示.后期优化时再考虑.</p>
+
+<p>函数可以添加注释文档,给API添加文档说明是个好习惯:</p>
+
+<pre><code class="{.clojure}">(defn round
+  "Round down a double to the given precision (number of significant digits)"
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>在Clojure中函数参数可以有类型提示,不过是可选的.</p>
+
+<pre><code class="{.clojure}">(defn round
+  [^double d ^long precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>函数还可以定义前置和后置条件来限制函数的参数和返回值.</p>
+
+<pre><code class="{.clojure}">(defn round
+  "Round down a double to the given precision (number of significant digits)"
+  [^double d ^long precision]
+  {:pre [(not-nil? d) (not-nil? precision)]}
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>在上面的例子中,我们使用了前置条件来检查两个参数是否为nil.</p>
+
+<p>not-nil?宏(或函数),没有在该例子中展示,我们假设它已经在其它地方实现了.</p>
+
+
+
+
+    <a href="/2014/03/15/function.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2014/02/19/math.html">Clojure教程-数学计算</a></h2>
 
         <p class="post-meta">By 02月19日  2014
@@ -113,7 +225,7 @@
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (12)</i></a>
             
             
             
@@ -122,7 +234,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             
         
@@ -213,7 +325,7 @@ Github.</p>
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (12)</i></a>
             
             
             
@@ -222,7 +334,7 @@ Github.</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             
         
@@ -295,7 +407,7 @@ Github.</p>
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (12)</i></a>
             
             
             
@@ -304,7 +416,7 @@ Github.</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             
         
@@ -385,7 +497,7 @@ Github.</p>
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (12)</i></a>
             
             
             
@@ -394,7 +506,7 @@ Github.</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             
         
@@ -531,7 +643,7 @@ Github.</p>
             
             
             
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (12)</i></a>
             
             
             
@@ -540,7 +652,7 @@ Github.</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             
         
@@ -637,7 +749,7 @@ script</a></li>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -658,59 +770,6 @@ script</a></li>
 
 
     <a href="/2013/10/02/upgrading.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/10/01/useful_libraries.html">Luminus手册-实用库</a></h2>
-
-        <p class="post-meta">By 10月01日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p>Luminus的目标是从细粒度来方便你开发web应用。所以它默认包含了很多库包。</p>
-
-<p>包括lib-noir提供一般工具，Selmer/Hiccup提供HTML模板,Timbre提供日志功能，
-Tower提供国际化等等其他包。</p>
-
-<p>当然，还有很多的包能给web开发带来便利。</p>
-
-<p>具体请见<a href="http://www.luminusweb.net/docs/useful_libraries.md">此处</a></p>
-
-
-
-    <a href="/2013/10/01/useful_libraries.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

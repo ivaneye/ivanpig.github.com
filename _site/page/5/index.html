@@ -83,7 +83,7 @@
                             </li>
                         </ul>
                     </nav>
-							<div>
+							<div id="qrcode">
 							<img src="/img/qrcode.jpg" width="170"/>
 							</div>
                 </div>
@@ -97,6 +97,92 @@
                     <div class="posts">
 
                         
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/17/clojurescript.html">Luminus手册-ClojureScript</a></h2>
+
+        <p class="post-meta">By 09月17日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Summary</h1>
+
+<p>ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScript可以
+有如下有点：</p>
+
+<ul>
+<li>在客户端和服务端使用相同的语言</li>
+<li>在前后端共用相同的代码</li>
+<li>简介流畅的语言</li>
+<li>使用Leiningen管理依赖关系</li>
+<li>不可变数据</li>
+<li>功能强大的库</li>
+<li>Adding ClojureScript Support</li>
+</ul>
+
+
+<p>最简单的添加ClojureScript支持的方法就是在创建新项目的时候添加+cljs选项
+。不过在现有的项目中添加ClojureScript也同样的简单。你只需要在
+project.clj文件中添加如下内容即可。</p>
+
+<pre><code class="{.clojure}">:plugins [...
+          [lein-cljsbuild "0.3.0"]]
+
+:hooks [... leiningen.cljsbuild]
+
+:cljsbuild
+{:builds [{:source-paths ["src-cljs"]
+           :compiler {:output-to "resources/public/js/site.js"
+                      :optimizations :advanced}}]}
+</code></pre>
+
+<p>上面的代码将在项目中添加cljsbuild插件和一个钩子。
+所有的命名空间需要在项目根目录下的src-cljs目录内。注意，ClojureScript
+文件需要以.cljs结尾。如果文件以.clj结尾，它也会被编译，不过它就无法访
+问js命名空间。</p>
+
+<h1>Using Libraries</h1>
+
+<p>使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
+ClojureScript库和其他库一样都配置在project.clj文件中。</p>
+
+
+
+
+    <a href="/2013/09/17/clojurescript.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
 
 
 <section class="post">
@@ -122,7 +208,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -211,7 +297,7 @@ name的变量的值。
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -289,7 +375,7 @@ name的变量的值。
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (31)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -383,7 +469,7 @@ Started server on port 3000
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -470,7 +556,7 @@ object Test extends App{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -544,7 +630,7 @@ println(swap(Array("1","2","3","4")).mkString)
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -607,87 +693,6 @@ println(indexs("Mississippi"))
 
 
     <a href="/2013/03/15/scala_exercises_13.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/14/scala_exercises_12.html">快学Scala习题解答—第十二章 高阶函数</a></h2>
-
-        <p class="post-meta">By 03月14日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (16)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>高阶函数</h1>
-
-<h2>编写函数values(fun:(Int)=>Int,low:Int,high:Int),该函数输出一个集合，对应给定区间内给定函数的输入和输出。比如，values(x=>x*x,-5,5)应该产出一个对偶的集合(-5,25),(-4,16),(-3,9),...,(5,25)</h2>
-
-<pre><code class="{.scala}">object Test extends App {
-  def values(fun: (Int) =&gt; Int, low: Int, high: Int) = {
-    var arr = List[(Int,Int)]()
-    low to high foreach {
-      num =&gt;
-      arr = (num, fun(num)) :: arr
-    }
-    arr
-  }
-
-  println(values(x =&gt; x * x, -5, 5).mkString)
-}
-</code></pre>
-
-<h2>如何用reduceLeft得到数组中的最大元素?</h2>
-
-<pre><code class="{.scala}">object Test extends App {
-  val arr = Array(3,2,6,8,4,6,9,3,6,7,1,2)
-  print(arr.reduceLeft((a,b)=&gt;if (a&gt;b) a else b))
-}
-</code></pre>
-
-<h2>用to和reduceLeft实现阶乘函数,不得使用循环或递归</h2>
-
-<pre><code class="{.scala}">println(1 to 10 reduceLeft(_ * _))
-</code></pre>
-
-<h2>前一个实现需要处理一个特殊情况，即n\&lt;1的情况。展示如何用foldLeft来避免这个需要。</h2>
-
-<pre><code class="{.scala}">println((1 to -10).foldLeft(1)(_ * _))
-</code></pre>
-
-
-
-
-    <a href="/2013/03/14/scala_exercises_12.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
