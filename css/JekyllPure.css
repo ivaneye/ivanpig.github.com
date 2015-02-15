@@ -212,7 +212,18 @@ h3 {
     top: 0;
     bottom: 0;
   }
+
+  #qrcode{
+    display:block;
+  }
 }
+
+@media (max-width: 48em) {
+  #qrcode{
+      display:none;
+  }
+}
+
 /* Make clicks pass-through */
 #nprogress {
   pointer-events: none;

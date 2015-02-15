@@ -4,13 +4,170 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-02-13T11:41:40+08:00</updated>
+    <updated>2015-02-15T14:06:12+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
         <email>ivan.pig@foxmail.com</email>
     </author>
 
+    
+    <entry>
+        <title>语言与模式-03抽象工厂模式</title>
+        <link href="http://ivanpig.github.io/2015/02/05/abstract_factory.html"/>
+        <updated>2015-02-05T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/05/abstract_factory</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/abstract_factory.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个系统要独立于它的产品的创建、组合和表示时。&lt;/li&gt;
+&lt;li&gt;一个系统要由多个产品系列中的一个来配置时。&lt;/li&gt;
+&lt;li&gt;当你要强调一系列相关的产品对象的设计以便进行联合使用时。&lt;/li&gt;
+&lt;li&gt;当你提供一个产品类库，而只想显示它们的接口而不是实现时。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;表现在代码层面就是一个工厂可以返回多个不同的实例！&lt;/p&gt;
+
+&lt;p&gt;比如:Pig不仅分颜色，还分国家，比如荷兰Pig，新西兰Pig。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class RedPigFactory implements PigFactory{
+     public Pig getNetherlandsPig(){
+          return new RedNetherlandsPig();
+     }
+
+     public Pig getNewZealandPig(){
+          return new RedNewZealandPig();
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;而在Clojure中就是选择函数的条件多了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defmulti run (fn [t] t))
+
+(defmethod run
+  [:RedPig :Netherlands]
+  [t]
+  (println &quot;Netherlands RedPig run&quot;))
+
+(defmethod run
+  [:GreenPig :Netherlands]
+  [t]
+  (println &quot;Netherlands GreenPig run&quot;))
+
+(defmethod run
+  [:BluePig :Netherlands]
+  [t]
+  (println &quot;Netherlands BluePig run&quot;))
+
+(defmethod run
+  [:RedPig :NewZealand]
+  [t]
+  (println &quot;NewZealand RedPig run&quot;))
+
+(defmethod run
+  [:GreenPig :NewZealand]
+  [t]
+  (println &quot;NewZealand GreenPig run&quot;))
+
+(defmethod run
+  [:BluePig :NewZealand]
+  [t]
+  (println &quot;NewZealand BluePig run&quot;))
+
+(run [:BluePig :Netherlands])
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/abstract_factory.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个系统要独立于它的产品的创建、组合和表示时。&lt;/li&gt;
+&lt;li&gt;一个系统要由多个产品系列中的一个来配置时。&lt;/li&gt;
+&lt;li&gt;当你要强调一系列相关的产品对象的设计以便进行联合使用时。&lt;/li&gt;
+&lt;li&gt;当你提供一个产品类库，而只想显示它们的接口而不是实现时。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;表现在代码层面就是一个工厂可以返回多个不同的实例！&lt;/p&gt;
+
+&lt;p&gt;比如:Pig不仅分颜色，还分国家，比如荷兰Pig，新西兰Pig。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class RedPigFactory implements PigFactory{
+     public Pig getNetherlandsPig(){
+          return new RedNetherlandsPig();
+     }
+
+     public Pig getNewZealandPig(){
+          return new RedNewZealandPig();
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;而在Clojure中就是选择函数的条件多了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defmulti run (fn [t] t))
+
+(defmethod run
+  [:RedPig :Netherlands]
+  [t]
+  (println &quot;Netherlands RedPig run&quot;))
+
+(defmethod run
+  [:GreenPig :Netherlands]
+  [t]
+  (println &quot;Netherlands GreenPig run&quot;))
+
+(defmethod run
+  [:BluePig :Netherlands]
+  [t]
+  (println &quot;Netherlands BluePig run&quot;))
+
+(defmethod run
+  [:RedPig :NewZealand]
+  [t]
+  (println &quot;NewZealand RedPig run&quot;))
+
+(defmethod run
+  [:GreenPig :NewZealand]
+  [t]
+  (println &quot;NewZealand GreenPig run&quot;))
+
+(defmethod run
+  [:BluePig :NewZealand]
+  [t]
+  (println &quot;NewZealand BluePig run&quot;))
+
+(run [:BluePig :Netherlands])
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
     
     <entry>
         <title>语言与模式-02工厂模式</title>

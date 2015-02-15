@@ -106,6 +106,98 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/03/15/scala_exercises_13.html">快学Scala习题解答—第十三章 集合</a></h2>
+
+        <p class="post-meta">By 03月15日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (18)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>集合</h1>
+
+<h2>编写一个函数，给定字符串，产出一个包含所有字符的下标的映射。举例来说：indexes("Mississippi")应返回一个映射，让'M'对应集{0}，'i'对应集{1,4,7,10}，依此类推。使用字符到可变集的映射。另外，你如何保证集是经过排序的？</h2>
+
+<p>更新scala到版本2.10.0。有可变的可排序的Set，实际上还是TreeSet</p>
+
+<pre><code class="{.scala}">import collection.mutable.{Map,HashMap,SortedSet}
+
+def indexs(str:String):Map[Char,SortedSet[Int]]={
+  var map = new HashMap[Char, SortedSet[Int]]();
+  var i = 0;
+  str.foreach{
+    c=&gt;
+      map.get(c) match{
+        case Some(result) =&gt; map(c) = result + i
+        case None =&gt; map += (c-&gt; SortedSet{i})
+      }
+      i += 1
+  }
+  map
+}
+
+println(indexs("Mississippi"))
+</code></pre>
+
+<h2>重复前一个练习，这次用字符到列表的不可变映射。</h2>
+
+<pre><code class="{.scala}">import collection.immutable.HashMap
+import collection.mutable.ListBuffer
+
+def indexs(str:String):Map[Char,ListBuffer[Int]]={
+  var map = new HashMap[Char, ListBuffer[Int]]()
+  var i = 0
+  str.foreach{
+    c=&gt;
+      map.get(c) match{
+        case Some(result) =&gt; result += i
+        case None =&gt; map += (c-&gt; ListBuffer{i})
+      }
+      i += 1
+  }
+  map
+}
+
+println(indexs("Mississippi"))
+</code></pre>
+
+
+
+
+    <a href="/2013/03/15/scala_exercises_13.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/03/14/scala_exercises_12.html">快学Scala习题解答—第十二章 高阶函数</a></h2>
 
         <p class="post-meta">By 03月14日  2013
@@ -122,7 +214,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (18)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -203,7 +295,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (18)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -273,7 +365,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (18)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -354,7 +446,7 @@ object Test extends App{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (18)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -437,7 +529,7 @@ pw.close()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (18)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -524,7 +616,7 @@ pw.close()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (18)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -576,85 +668,6 @@ package impatient
 
 
     <a href="/2013/03/09/scala_exercises_07.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/08/scala_exercises_06.html">快学Scala习题解答—第六章 对象</a></h2>
-
-        <p class="post-meta">By 03月08日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (17)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>对象</h1>
-
-<h2>编写一个Conversions对象，加入inchesToCentimeters,gallonsToLiters和milesToKilometers方法</h2>
-
-<pre><code class="{.scala}">object Conversions{
-    def inchesToCentimeters(){}
-    def gallonsToLiters(){}
-    def milesToKilometers(){}
-}
-</code></pre>
-
-<h2>前一个练习不是很面向对象。提供一个通用的超类UnitConversion并定义扩展该超类的InchesToCentimeters,GallonsToLiters和MilesToKilometers对象</h2>
-
-<pre><code class="{.scala}">abstract class UnitConversion{
-
-  def inchesToCentimeters(){}
-  def gallonsToLiters(){}
-  def milesToKilometers(){}
-
-}
-
-object InchesToCentimeters extends UnitConversion{
-  override def inchesToCentimeters() {}
-}
-
-object GallonsToLiters extends UnitConversion{
-  override def gallonsToLiters() {}
-}
-
-object MilesToKilometers extends UnitConversion{
-  override def milesToKilometers() {}
-}
-</code></pre>
-
-
-
-
-    <a href="/2013/03/08/scala_exercises_06.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

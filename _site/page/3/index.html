@@ -106,6 +106,56 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/10/02/upgrading.html">Luminus手册-升级</a></h2>
+
+        <p class="post-meta">By 10月02日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Upgrading to the Latest Version</h1>
+
+<p>不幸的是，框架无法自动从老版本升级到新版本。主要原因是新版本的依赖可能会有接口方面的修改，导致老代码无法正常运行。</p>
+
+<p>最好的方法是使用<a href="https://github.com/xsc/lein-ancient">lein-ancient</a>插件来保持你的依赖包时刻为最新。这将会帮你很容易的发现哪些插件有了新的版本。</p>
+
+
+
+    <a href="/2013/10/02/upgrading.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/10/01/useful_libraries.html">Luminus手册-实用库</a></h2>
 
         <p class="post-meta">By 10月01日  2013
@@ -122,7 +172,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -175,7 +225,7 @@ Tower提供国际化等等其他包。</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -260,7 +310,7 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -346,7 +396,7 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -425,7 +475,7 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -511,7 +561,7 @@ DROP TABLE users;
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -565,85 +615,6 @@ DROP TABLE users;
 
 
     <a href="/2013/09/26/database_access.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/25/security.html">Luminus手册-安全</a></h2>
-
-        <p class="post-meta">By 09月25日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (32)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Security</h1>
-
-<p>密码的散列和对比由noir.util.crypt提供。</p>
-
-<p>他提供了两个函数$encrypt$,$compare$.其中第一个函数加密密码，而第二个则是对比密码。实际上加密是通过BCrypt来处理的。</p>
-
-<p>对比代码的函数看起来像这样:</p>
-
-<pre><code class="{.clojure}">(compare raw encrypted)
-</code></pre>
-
-<p>加密函数可以自定义salt，或者就不使用salt加密。</p>
-
-<pre><code class="{.clojure}">(encrypt salt raw)
-(encrypt raw)
-</code></pre>
-
-<p>想了解Secutiry库的更多内容，<a href="https://github.com/cemerick/friend">请点击这里</a></p>
-
-<h1>LDAP Authentication</h1>
-
-<p>下面的列子演示了如何通过clj-ldap来验证sAMAccountName</p>
-
-<p>首先，我们先添加依赖</p>
-
-<pre><code class="clojure">[org.clojars.pntblnk/clj-ldap "0.0.9"]
-</code></pre>
-
-<p>接下来，我们需要引入authentication命名空间</p>
-
-<pre><code class="clojure">(ns ldap-auth
-  (:require [clj-ldap.client :as client]))
-</code></pre>
-
-
-
-
-    <a href="/2013/09/25/security.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
