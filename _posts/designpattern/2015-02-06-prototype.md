@@ -4,7 +4,6 @@ title: 语言与模式-04原型模式
 categories: [java,clojure]
 tags: [java,clojure,designpattern]
 avatarimg: "/img/head.jpg"
-published: false
 
 ---
 
