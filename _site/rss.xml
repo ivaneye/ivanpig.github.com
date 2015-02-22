@@ -4,13 +4,5070 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-02-15T14:06:12+08:00</updated>
+    <updated>2015-02-22T14:50:24+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
         <email>ivan.pig@foxmail.com</email>
     </author>
 
+    
+    <entry>
+        <title>语言和并发-01启动线程</title>
+        <link href="http://ivanpig.github.io/2015/02/26/start.html"/>
+        <updated>2015-02-26T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/26/start</id>
+        <content type="html">&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;本系列文章意在比较Java与Clojure在线程实现上的区别！&lt;/p&gt;
+
+&lt;p&gt;Java的线程主要基于锁机制，而Clojure主要模拟了数据库事务操作，所谓的STM(软事务模型)。主要从代码层面给出两者的区别，孰优孰劣请自行判断！&lt;/p&gt;
+
+&lt;h1&gt;启动线程&lt;/h1&gt;
+
+&lt;h2&gt;Java代码&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Java实例中，两个线程类A和B，分别通过实现Runnable接口和继承Thread类来实现&lt;/li&gt;
+&lt;li&gt;两各类启动线程的方式有差异，详见代码&lt;/li&gt;
+&lt;li&gt;JDK5中提供了线程启动类Executors来执行&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package concurrent;
+
+import java.util.concurrent.*;
+
+/**
+ * Created by ivan on 15-2-22.
+ * Java启动线程
+ */
+public class Start {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        //实现Runnable接口，需要通过一个Thread实例来启动线程
+        new Thread(new A()).start();
+        //继承Thread类，直接通过自身来启动线程
+        new B().start();
+
+        //JDK1.5开始，可以通过Executor来执行线程.效果和上面没有区别
+        ExecutorService e = Executors.newCachedThreadPool();
+        e.execute(new A());
+        e.execute(new B());
+        //Callable需要submit,返回Future
+        Future&amp;lt;String&amp;gt; f = e.submit(new C());
+        //get方法是个阻塞方法
+        System.out.println(&quot;Future f = &quot; + f.get());
+        e.shutdown();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 线程类可以实现Runnable接口
+ */
+class A implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 线程类也可以继承Thread类
+ */
+class B extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 如果想线程返回结果，则实现Callable接口
+ */
+class C implements Callable&amp;lt;String&amp;gt; {
+
+    @Override
+    public String call() throws Exception {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return &quot;End&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Clojure代码&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Clojure可以直接对函数进行多线程执行，因为它没有类的概念&lt;/li&gt;
+&lt;li&gt;Clojure可以直接通过Java的Thread类来启动多线程&lt;/li&gt;
+&lt;li&gt;也可以通过future来执行多线程&lt;/li&gt;
+&lt;li&gt;future可以返回值，可对其进行解引用，获得返回值，如果线程未执行完，则阻塞。&lt;/li&gt;
+&lt;li&gt;future实际上就是Java中Future实例，可以直接调用future的get方法获取返回值，效果和解引用相同&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns concurrent.start)
+
+;Clojure没有类的概念，直接给出函数
+(defn f []
+  (dotimes [i 9]
+    (println  &quot; | i = &quot; i)
+    (Thread/sleep 300))
+  :End)
+
+;可以通过Java的Thread来执行
+(.start (Thread. f))
+
+;Clojure提供了future宏，可以方便的在另一个线程内执行
+(def fu (future  (f)))
+
+;主线程结束
+(println &quot;End&quot;)
+
+;对future可以解引用，获取计算结果，如果解引用时，future没执行完，会阻塞
+(println &quot;fu result = &quot; @fu)
+
+;fu实际上就是Java中的Future,所以可以使用Future的get方法，效果和解引用相同
+(println &quot;Future.get = &quot; (.get fu))
+
+;调用此方法结束所有线程
+(shutdown-agents)
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;本系列文章意在比较Java与Clojure在线程实现上的区别！&lt;/p&gt;
+
+&lt;p&gt;Java的线程主要基于锁机制，而Clojure主要模拟了数据库事务操作，所谓的STM(软事务模型)。主要从代码层面给出两者的区别，孰优孰劣请自行判断！&lt;/p&gt;
+
+&lt;h1&gt;启动线程&lt;/h1&gt;
+
+&lt;h2&gt;Java代码&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Java实例中，两个线程类A和B，分别通过实现Runnable接口和继承Thread类来实现&lt;/li&gt;
+&lt;li&gt;两各类启动线程的方式有差异，详见代码&lt;/li&gt;
+&lt;li&gt;JDK5中提供了线程启动类Executors来执行&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package concurrent;
+
+import java.util.concurrent.*;
+
+/**
+ * Created by ivan on 15-2-22.
+ * Java启动线程
+ */
+public class Start {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        //实现Runnable接口，需要通过一个Thread实例来启动线程
+        new Thread(new A()).start();
+        //继承Thread类，直接通过自身来启动线程
+        new B().start();
+
+        //JDK1.5开始，可以通过Executor来执行线程.效果和上面没有区别
+        ExecutorService e = Executors.newCachedThreadPool();
+        e.execute(new A());
+        e.execute(new B());
+        //Callable需要submit,返回Future
+        Future&amp;lt;String&amp;gt; f = e.submit(new C());
+        //get方法是个阻塞方法
+        System.out.println(&quot;Future f = &quot; + f.get());
+        e.shutdown();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 线程类可以实现Runnable接口
+ */
+class A implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 线程类也可以继承Thread类
+ */
+class B extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 如果想线程返回结果，则实现Callable接口
+ */
+class C implements Callable&amp;lt;String&amp;gt; {
+
+    @Override
+    public String call() throws Exception {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return &quot;End&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Clojure代码&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Clojure可以直接对函数进行多线程执行，因为它没有类的概念&lt;/li&gt;
+&lt;li&gt;Clojure可以直接通过Java的Thread类来启动多线程&lt;/li&gt;
+&lt;li&gt;也可以通过future来执行多线程&lt;/li&gt;
+&lt;li&gt;future可以返回值，可对其进行解引用，获得返回值，如果线程未执行完，则阻塞。&lt;/li&gt;
+&lt;li&gt;future实际上就是Java中Future实例，可以直接调用future的get方法获取返回值，效果和解引用相同&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns concurrent.start)
+
+;Clojure没有类的概念，直接给出函数
+(defn f []
+  (dotimes [i 9]
+    (println  &quot; | i = &quot; i)
+    (Thread/sleep 300))
+  :End)
+
+;可以通过Java的Thread来执行
+(.start (Thread. f))
+
+;Clojure提供了future宏，可以方便的在另一个线程内执行
+(def fu (future  (f)))
+
+;主线程结束
+(println &quot;End&quot;)
+
+;对future可以解引用，获取计算结果，如果解引用时，future没执行完，会阻塞
+(println &quot;fu result = &quot; @fu)
+
+;fu实际上就是Java中的Future,所以可以使用Future的get方法，效果和解引用相同
+(println &quot;Future.get = &quot; (.get fu))
+
+;调用此方法结束所有线程
+(shutdown-agents)
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-23迭代器模式</title>
+        <link href="http://ivanpig.github.io/2015/02/25/iterator.html"/>
+        <updated>2015-02-25T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/25/iterator</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;提供一种方法顺序访问一个聚合对象中各个元素, 而又不需暴露该对象的内部表示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/iterator.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;访问一个聚合对象的内容而无需暴露它的内部表示。&lt;/li&gt;
+&lt;li&gt;支持对聚合对象的多种遍历。&lt;/li&gt;
+&lt;li&gt;为遍历不同的聚合结构提供一个统一的接口（即, 支持多态迭代）。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;Java提供了Iterable接口，直接实现此接口即可!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class AList implements Iterable{
+    ...
+    private int idx;
+
+    public static void main(String[] args) {
+        AList list = new AList();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        for(Object o : list){
+            System.out.println(o);
+        }
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new Iterator() {
+            @Override
+            public boolean hasNext() {
+                return idx &amp;lt; length;
+            }
+
+            @Override
+            public Object next() {
+                return arr[idx++];
+            }
+        };
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;对于集合的操作都有相应的函数！一般不需要遍历就可以操作集合！比如map,reduce等函数！不需要此模式!&lt;/p&gt;
+
+&lt;h1&gt;总结&lt;/h1&gt;
+
+&lt;p&gt;可以看出，对于Clojure来说，绝大部分的设计模式都不是必须的！很多所谓的设计模式，在Clojure中使用语言特性就可以轻松解决！&lt;/p&gt;
+
+&lt;p&gt;同时可以看出，Java之所以需要设计模式的一个原因就是它的最小单元是类！也同时引起另一个思考，面向对象语言有鼓吹的那么好吗？&lt;/p&gt;
+
+&lt;p&gt;至少目前我的观点是：OO强项在建模，弱项是计算，而这正是函数式语言的强项！&lt;/p&gt;
+
+&lt;p&gt;所以理想方案是：OO来建模，函数式语言来计算！好像是在说Scala,不过Scala太过于复杂！我的想法是Java来建模，Clojure来计算！&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;提供一种方法顺序访问一个聚合对象中各个元素, 而又不需暴露该对象的内部表示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/iterator.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;访问一个聚合对象的内容而无需暴露它的内部表示。&lt;/li&gt;
+&lt;li&gt;支持对聚合对象的多种遍历。&lt;/li&gt;
+&lt;li&gt;为遍历不同的聚合结构提供一个统一的接口（即, 支持多态迭代）。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;Java提供了Iterable接口，直接实现此接口即可!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class AList implements Iterable{
+    ...
+    private int idx;
+
+    public static void main(String[] args) {
+        AList list = new AList();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        for(Object o : list){
+            System.out.println(o);
+        }
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new Iterator() {
+            @Override
+            public boolean hasNext() {
+                return idx &amp;lt; length;
+            }
+
+            @Override
+            public Object next() {
+                return arr[idx++];
+            }
+        };
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;对于集合的操作都有相应的函数！一般不需要遍历就可以操作集合！比如map,reduce等函数！不需要此模式!&lt;/p&gt;
+
+&lt;h1&gt;总结&lt;/h1&gt;
+
+&lt;p&gt;可以看出，对于Clojure来说，绝大部分的设计模式都不是必须的！很多所谓的设计模式，在Clojure中使用语言特性就可以轻松解决！&lt;/p&gt;
+
+&lt;p&gt;同时可以看出，Java之所以需要设计模式的一个原因就是它的最小单元是类！也同时引起另一个思考，面向对象语言有鼓吹的那么好吗？&lt;/p&gt;
+
+&lt;p&gt;至少目前我的观点是：OO强项在建模，弱项是计算，而这正是函数式语言的强项！&lt;/p&gt;
+
+&lt;p&gt;所以理想方案是：OO来建模，函数式语言来计算！好像是在说Scala,不过Scala太过于复杂！我的想法是Java来建模，Clojure来计算！&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-22访问者模式</title>
+        <link href="http://ivanpig.github.io/2015/02/24/visitor.html"/>
+        <updated>2015-02-24T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/24/visitor</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;表示一个作用于某对象结构中的各元素的操作。它使你可以在不改变各元素的类的前提下定义作用于这些元素的新操作。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/visitor.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个对象结构包含很多类对象，它们有不同的接口，而你想对这些对象实施一些依赖于其具体类的操作。&lt;/li&gt;
+&lt;li&gt;需要对一个对象结构中的对象进行很多不同的并且不相关的操作，而你想避免让这些操作“污染”这些对象的类。Visitor使得你可以将相关的操作集中起来定义在一个类中。当该对象结构被很多应用共享时，用Visitor模式让每个应用仅包含需要用到的操作。&lt;/li&gt;
+&lt;li&gt;定义对象结构的类很少改变，但经常需要在此结构上定义新的操作。改变对象结构类需要重定义对所有访问者的接口，这可能需要很大的代价。如果对象结构类经常改变，那么可能还是在这些类中定义这些操作较好。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//访问者
+public interface Visitor {
+    public void visit(Park park);
+    public void visit(ParkA parkA);
+    public void visit(ParkB parkB);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//清洁工A,负责parkA的卫生情况
+public class VisitorA implements Visitor {
+
+    public void visit(Park park) {
+    }
+
+    public void visit(ParkA parkA) {
+        System.out.println(&quot;清洁工A:完成公园&quot; + parkA.getName()+ &quot;的卫生&quot;);
+    }
+
+    public void visit(ParkB parkB) {
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//清洁工B，负责公园B部分的卫生
+public class VisitorB implements Visitor {
+
+    public void visit(Park park) {
+    }
+
+    public void visit(ParkA parkA) {
+    }
+
+    public void visit(ParkB parkB) {
+        System.out.println(&quot;清洁工B:完成公园&quot; + parkB.getName()+&quot;的卫生&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class VisitorManager implements Visitor {
+
+    public void visit(Park park) {
+        System.out.println(&quot;管理员：负责&quot; + park.getName() + &quot;卫生检查&quot;);
+    }
+
+    public void visit(ParkA parkA) {
+        System.out.println(&quot;管理员：负责公园&quot;+ parkA.getName() +&quot;部分卫生检查&quot;);
+    }
+
+    public void visit(ParkB parkB) {
+        System.out.println(&quot;管理员：负责公园&quot;+ parkB.getName() +&quot;分部卫生检查&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//公园每一部分的抽象
+public interface ParkElement {
+    //用来接纳访问者
+    public void accept(Visitor visitor);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Park implements ParkElement {
+    private String name;
+    private ParkA parkA;
+    private ParkB parkB;
+
+    public Park() {
+        this.parkA = new ParkA();
+        this.parkB = new ParkB();
+        parkA.setName(&quot;A&quot;);
+        parkB.setName(&quot;B&quot;);
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        parkA.accept(visitor);
+        parkB.accept(visitor);
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//公园的A部分
+public class ParkA implements ParkElement {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//公园的B部分
+public class ParkB implements ParkElement{
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class MainClass {
+    public static void main(String[] args) {
+        Park park = new Park();
+        park.setName(&quot;锦绣公园&quot;);
+        VisitorA visitorA = new VisitorA();
+
+        park.accept(visitorA);
+
+        VisitorB visitorB = new VisitorB();
+        park.accept(visitorB);
+
+        VisitorManager visitorManager = new VisitorManager();
+        park.accept(visitorManager);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;表示一个作用于某对象结构中的各元素的操作。它使你可以在不改变各元素的类的前提下定义作用于这些元素的新操作。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/visitor.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个对象结构包含很多类对象，它们有不同的接口，而你想对这些对象实施一些依赖于其具体类的操作。&lt;/li&gt;
+&lt;li&gt;需要对一个对象结构中的对象进行很多不同的并且不相关的操作，而你想避免让这些操作“污染”这些对象的类。Visitor使得你可以将相关的操作集中起来定义在一个类中。当该对象结构被很多应用共享时，用Visitor模式让每个应用仅包含需要用到的操作。&lt;/li&gt;
+&lt;li&gt;定义对象结构的类很少改变，但经常需要在此结构上定义新的操作。改变对象结构类需要重定义对所有访问者的接口，这可能需要很大的代价。如果对象结构类经常改变，那么可能还是在这些类中定义这些操作较好。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//访问者
+public interface Visitor {
+    public void visit(Park park);
+    public void visit(ParkA parkA);
+    public void visit(ParkB parkB);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//清洁工A,负责parkA的卫生情况
+public class VisitorA implements Visitor {
+
+    public void visit(Park park) {
+    }
+
+    public void visit(ParkA parkA) {
+        System.out.println(&quot;清洁工A:完成公园&quot; + parkA.getName()+ &quot;的卫生&quot;);
+    }
+
+    public void visit(ParkB parkB) {
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//清洁工B，负责公园B部分的卫生
+public class VisitorB implements Visitor {
+
+    public void visit(Park park) {
+    }
+
+    public void visit(ParkA parkA) {
+    }
+
+    public void visit(ParkB parkB) {
+        System.out.println(&quot;清洁工B:完成公园&quot; + parkB.getName()+&quot;的卫生&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class VisitorManager implements Visitor {
+
+    public void visit(Park park) {
+        System.out.println(&quot;管理员：负责&quot; + park.getName() + &quot;卫生检查&quot;);
+    }
+
+    public void visit(ParkA parkA) {
+        System.out.println(&quot;管理员：负责公园&quot;+ parkA.getName() +&quot;部分卫生检查&quot;);
+    }
+
+    public void visit(ParkB parkB) {
+        System.out.println(&quot;管理员：负责公园&quot;+ parkB.getName() +&quot;分部卫生检查&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//公园每一部分的抽象
+public interface ParkElement {
+    //用来接纳访问者
+    public void accept(Visitor visitor);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Park implements ParkElement {
+    private String name;
+    private ParkA parkA;
+    private ParkB parkB;
+
+    public Park() {
+        this.parkA = new ParkA();
+        this.parkB = new ParkB();
+        parkA.setName(&quot;A&quot;);
+        parkB.setName(&quot;B&quot;);
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        parkA.accept(visitor);
+        parkB.accept(visitor);
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//公园的A部分
+public class ParkA implements ParkElement {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//公园的B部分
+public class ParkB implements ParkElement{
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class MainClass {
+    public static void main(String[] args) {
+        Park park = new Park();
+        park.setName(&quot;锦绣公园&quot;);
+        VisitorA visitorA = new VisitorA();
+
+        park.accept(visitorA);
+
+        VisitorB visitorB = new VisitorB();
+        park.accept(visitorB);
+
+        VisitorManager visitorManager = new VisitorManager();
+        park.accept(visitorManager);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-21解释器模式</title>
+        <link href="http://ivanpig.github.io/2015/02/23/interpreter.html"/>
+        <updated>2015-02-23T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/23/interpreter</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;给定一个语言，定义它的文法的一种表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/interpreter.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当有一个语言需要解释执行, 并且你可将该语言中的句子表示为一个抽象语法树时，可使用解释器模式。而当存在以下情况时该模式效果最好：&lt;/li&gt;
+&lt;li&gt;该文法简单对于复杂的文法, 文法的类层次变得庞大而无法管理。此时语法分析程序生成器这样的工具是更好的选择。它们无需构建抽象语法树即可解释表达式, 这样可以节省空间而且还可能节省时间。&lt;/li&gt;
+&lt;li&gt;效率不是一个关键问题最高效的解释器通常不是通过直接解释语法分析树实现的, 而是首先将它们转换成另一种形式。例如，正则表达式通常被转换成状态机。但即使在这种情况下, 转换器仍可用解释器模式实现, 该模式仍是有用的。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;抽象表达式角色&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public abstract class Expression {
+    /**
+     * 以环境为准，本方法解释给定的任何一个表达式
+     */
+    public abstract boolean interpret(Context ctx);
+    /**
+     * 检验两个表达式在结构上是否相同
+     */
+    public abstract boolean equals(Object obj);
+    /**
+     * 返回表达式的hash code
+     */
+    public abstract int hashCode();
+    /**
+     * 将表达式转换成字符串
+     */
+    public abstract String toString();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;一个Constant对象代表一个布尔常量&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Constant extends Expression{
+
+    private boolean value;
+
+    public Constant(boolean value){
+        this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj != null &amp;amp;&amp;amp; obj instanceof Constant){
+            return this.value == ((Constant)obj).value;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public boolean interpret(Context ctx) {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return new Boolean(value).toString();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一个Variable对象代表一个有名变量&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Variable extends Expression {
+
+    private String name;
+
+    public Variable(String name){
+        this.name = name;
+    }
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj != null &amp;amp;&amp;amp; obj instanceof Variable){
+            return this.name.equals(
+                    ((Variable)obj).name);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public boolean interpret(Context ctx) {
+        return ctx.lookup(this);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代表逻辑“与”操作的And类，表示由两个布尔表达式通过逻辑“与”操作给出一个新的布尔表达式的操作&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class And extends Expression {
+
+    private Expression left,right;
+
+    public And(Expression left , Expression right){
+        this.left = left;
+        this.right = right;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj != null &amp;amp;&amp;amp; obj instanceof And){
+            return left.equals(((And)obj).left) &amp;amp;&amp;amp;
+                right.equals(((And)obj).right);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public boolean interpret(Context ctx) {
+        return left.interpret(ctx) &amp;amp;&amp;amp; right.interpret(ctx);
+    }
+
+    @Override
+    public String toString() {
+        return &quot;(&quot; + left.toString() + &quot; AND &quot; + right.toString() + &quot;)&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代表逻辑“或”操作的Or类，代表由两个布尔表达式通过逻辑“或”操作给出一个新的布尔表达式的操作&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Or extends Expression {
+    private Expression left,right;
+
+    public Or(Expression left , Expression right){
+        this.left = left;
+        this.right = right;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj != null &amp;amp;&amp;amp; obj instanceof Or){
+            return this.left.equals(((Or)obj).left) &amp;amp;&amp;amp; this.right.equals(((Or)obj).right);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public boolean interpret(Context ctx) {
+        return left.interpret(ctx) || right.interpret(ctx);
+    }
+
+    @Override
+    public String toString() {
+        return &quot;(&quot; + left.toString() + &quot; OR &quot; + right.toString() + &quot;)&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代表逻辑“非”操作的Not类，代表由一个布尔表达式通过逻辑“非”操作给出一个新的布尔表达式的操作&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Not extends Expression {
+
+    private Expression exp;
+
+    public Not(Expression exp){
+        this.exp = exp;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj != null &amp;amp;&amp;amp; obj instanceof Not){
+            return exp.equals(
+                    ((Not)obj).exp);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public boolean interpret(Context ctx) {
+        return !exp.interpret(ctx);
+    }
+
+    @Override
+    public String toString() {
+        return &quot;(Not &quot; + exp.toString() + &quot;)&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;环境(Context)类定义出从变量到布尔值的一个映射&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Context {
+
+    private Map&amp;lt;Variable,Boolean&amp;gt; map = new HashMap&amp;lt;Variable,Boolean&amp;gt;();
+
+    public void assign(Variable var , boolean value){
+        map.put(var, new Boolean(value));
+    }
+
+    public boolean lookup(Variable var) throws IllegalArgumentException{
+        Boolean value = map.get(var);
+        if(value == null){
+            throw new IllegalArgumentException();
+        }
+        return value.booleanValue();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;客户端类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    public static void main(String[] args) {
+        Context ctx = new Context();
+        Variable x = new Variable(&quot;x&quot;);
+        Variable y = new Variable(&quot;y&quot;);
+        Constant c = new Constant(true);
+        ctx.assign(x, false);
+        ctx.assign(y, true);
+
+        Expression exp = new Or(new And(c,x) , new And(y,new Not(x)));
+        System.out.println(&quot;x=&quot; + x.interpret(ctx));
+        System.out.println(&quot;y=&quot; + y.interpret(ctx));
+        System.out.println(exp.toString() + &quot;=&quot; + exp.interpret(ctx));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;解释器模式其实就是写了个包含上下文的解析器！这可是Clojure的强项!&lt;/p&gt;
+
+&lt;p&gt;先演示不带上下文的解析器！其实就是内部DSL!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defmacro assign [a v]
+   `(def ~a ~v))
+
+(assign x false)
+(assign y true)
+(assign c true)
+
+(assign exp '(or (and c x) (and y (not x))))
+
+(println &quot;x =&quot; x)
+(println &quot;y =&quot; y)
+(println exp &quot;=&quot; (eval exp))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/designpattern/comp.clj&quot;&gt;这里&lt;/a&gt;是一个较完整的代码!&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;给定一个语言，定义它的文法的一种表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/interpreter.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当有一个语言需要解释执行, 并且你可将该语言中的句子表示为一个抽象语法树时，可使用解释器模式。而当存在以下情况时该模式效果最好：&lt;/li&gt;
+&lt;li&gt;该文法简单对于复杂的文法, 文法的类层次变得庞大而无法管理。此时语法分析程序生成器这样的工具是更好的选择。它们无需构建抽象语法树即可解释表达式, 这样可以节省空间而且还可能节省时间。&lt;/li&gt;
+&lt;li&gt;效率不是一个关键问题最高效的解释器通常不是通过直接解释语法分析树实现的, 而是首先将它们转换成另一种形式。例如，正则表达式通常被转换成状态机。但即使在这种情况下, 转换器仍可用解释器模式实现, 该模式仍是有用的。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;抽象表达式角色&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public abstract class Expression {
+    /**
+     * 以环境为准，本方法解释给定的任何一个表达式
+     */
+    public abstract boolean interpret(Context ctx);
+    /**
+     * 检验两个表达式在结构上是否相同
+     */
+    public abstract boolean equals(Object obj);
+    /**
+     * 返回表达式的hash code
+     */
+    public abstract int hashCode();
+    /**
+     * 将表达式转换成字符串
+     */
+    public abstract String toString();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;一个Constant对象代表一个布尔常量&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Constant extends Expression{
+
+    private boolean value;
+
+    public Constant(boolean value){
+        this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj != null &amp;amp;&amp;amp; obj instanceof Constant){
+            return this.value == ((Constant)obj).value;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public boolean interpret(Context ctx) {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return new Boolean(value).toString();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一个Variable对象代表一个有名变量&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Variable extends Expression {
+
+    private String name;
+
+    public Variable(String name){
+        this.name = name;
+    }
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj != null &amp;amp;&amp;amp; obj instanceof Variable){
+            return this.name.equals(
+                    ((Variable)obj).name);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public boolean interpret(Context ctx) {
+        return ctx.lookup(this);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代表逻辑“与”操作的And类，表示由两个布尔表达式通过逻辑“与”操作给出一个新的布尔表达式的操作&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class And extends Expression {
+
+    private Expression left,right;
+
+    public And(Expression left , Expression right){
+        this.left = left;
+        this.right = right;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj != null &amp;amp;&amp;amp; obj instanceof And){
+            return left.equals(((And)obj).left) &amp;amp;&amp;amp;
+                right.equals(((And)obj).right);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public boolean interpret(Context ctx) {
+        return left.interpret(ctx) &amp;amp;&amp;amp; right.interpret(ctx);
+    }
+
+    @Override
+    public String toString() {
+        return &quot;(&quot; + left.toString() + &quot; AND &quot; + right.toString() + &quot;)&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代表逻辑“或”操作的Or类，代表由两个布尔表达式通过逻辑“或”操作给出一个新的布尔表达式的操作&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Or extends Expression {
+    private Expression left,right;
+
+    public Or(Expression left , Expression right){
+        this.left = left;
+        this.right = right;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj != null &amp;amp;&amp;amp; obj instanceof Or){
+            return this.left.equals(((Or)obj).left) &amp;amp;&amp;amp; this.right.equals(((Or)obj).right);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public boolean interpret(Context ctx) {
+        return left.interpret(ctx) || right.interpret(ctx);
+    }
+
+    @Override
+    public String toString() {
+        return &quot;(&quot; + left.toString() + &quot; OR &quot; + right.toString() + &quot;)&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代表逻辑“非”操作的Not类，代表由一个布尔表达式通过逻辑“非”操作给出一个新的布尔表达式的操作&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Not extends Expression {
+
+    private Expression exp;
+
+    public Not(Expression exp){
+        this.exp = exp;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj != null &amp;amp;&amp;amp; obj instanceof Not){
+            return exp.equals(
+                    ((Not)obj).exp);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public boolean interpret(Context ctx) {
+        return !exp.interpret(ctx);
+    }
+
+    @Override
+    public String toString() {
+        return &quot;(Not &quot; + exp.toString() + &quot;)&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;环境(Context)类定义出从变量到布尔值的一个映射&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Context {
+
+    private Map&amp;lt;Variable,Boolean&amp;gt; map = new HashMap&amp;lt;Variable,Boolean&amp;gt;();
+
+    public void assign(Variable var , boolean value){
+        map.put(var, new Boolean(value));
+    }
+
+    public boolean lookup(Variable var) throws IllegalArgumentException{
+        Boolean value = map.get(var);
+        if(value == null){
+            throw new IllegalArgumentException();
+        }
+        return value.booleanValue();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;客户端类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    public static void main(String[] args) {
+        Context ctx = new Context();
+        Variable x = new Variable(&quot;x&quot;);
+        Variable y = new Variable(&quot;y&quot;);
+        Constant c = new Constant(true);
+        ctx.assign(x, false);
+        ctx.assign(y, true);
+
+        Expression exp = new Or(new And(c,x) , new And(y,new Not(x)));
+        System.out.println(&quot;x=&quot; + x.interpret(ctx));
+        System.out.println(&quot;y=&quot; + y.interpret(ctx));
+        System.out.println(exp.toString() + &quot;=&quot; + exp.interpret(ctx));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;解释器模式其实就是写了个包含上下文的解析器！这可是Clojure的强项!&lt;/p&gt;
+
+&lt;p&gt;先演示不带上下文的解析器！其实就是内部DSL!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defmacro assign [a v]
+   `(def ~a ~v))
+
+(assign x false)
+(assign y true)
+(assign c true)
+
+(assign exp '(or (and c x) (and y (not x))))
+
+(println &quot;x =&quot; x)
+(println &quot;y =&quot; y)
+(println exp &quot;=&quot; (eval exp))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&quot;/assets/designpattern/comp.clj&quot;&gt;这里&lt;/a&gt;是一个较完整的代码!&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-20中介者模式</title>
+        <link href="http://ivanpig.github.io/2015/02/22/mediator.html"/>
+        <updated>2015-02-22T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/22/mediator</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/mediator.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一组对象以定义良好但是复杂的方式进行通信。产生的相互依赖关系结构混乱且难以理解。&lt;/li&gt;
+&lt;li&gt;一个对象引用其他很多对象并且直接与这些对象通信,导致难以复用该对象。&lt;/li&gt;
+&lt;li&gt;想定制一个分布在多个类中的行为，而又不想生成太多的子类。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//抽象同事类
+public abstract class Person {
+    // 维持一个抽象中介者的引用
+    protected Mediator mediator;
+
+    protected String name;
+
+    public Person(String name, Mediator mediator){
+        this.mediator = mediator;
+        this.name = name;
+    }
+
+    /**
+     * 设置中介者对象
+     * @param mediator
+     */
+    public void setMediator(Mediator mediator){
+        this.mediator = mediator;
+    }
+
+    /**
+     * 向中介 发送消息
+     */
+    protected abstract void sendMessage(String msg);
+
+    /**
+     * 从中介 获取消息
+     */
+    protected abstract void getMessage(String msg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; //具体同事类：这里的角色是 租房者
+public class Renter extends Person {
+
+    public Renter(String name, Mediator mediator) {
+        super(name, mediator);
+    }
+
+    @Override
+    protected void sendMessage(String msg) {
+        mediator.operation(this, msg);
+    }
+
+    @Override
+    protected void getMessage(String msg) {
+        System.out.println(&quot;求租者[&quot; + name + &quot;]收到中介发来的消息： &quot; + msg);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; //具体同事类：这里的角色是 房东
+public class Landlord extends Person {
+
+    public Landlord(String name, Mediator mediator) {
+        super(name,mediator);
+    }
+
+    @Override
+    protected void sendMessage(String msg) {
+        mediator.operation(this, msg);
+    }
+
+    @Override
+    protected void getMessage(String msg) {
+        System.out.println(&quot;房东[&quot;+ name +&quot;]收到中介发来的消息：&quot; + msg);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; //抽象中介者类
+public abstract class Mediator {
+    // 用于添加储存 &quot;房东&quot;角色
+    protected List&amp;lt;Person&amp;gt; landlordList = new ArrayList&amp;lt;Person&amp;gt;();
+
+    // 用于添加储存 &quot;求租者&quot;角色
+    protected List&amp;lt;Person&amp;gt; renterList = new ArrayList&amp;lt;Person&amp;gt;();
+
+    /**
+     * 中介者注册房东信息
+     * @param landlord 房东实体
+     */
+    public void registerLandlord(Person landlord){
+        landlordList.add(landlord);
+    }
+
+    /**
+     * 中介者注册 求租者信息
+     * @param landlord 房东实体
+     */
+    public void registerRenter(Person landlord){
+        renterList.add(landlord);
+    }
+
+    /**
+     * 声明抽象方法 由具体中介者子类实现 消息的中转和协调
+     */
+    public abstract void operation(Person person, String message);
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; //具体中介者类：这里的角色是 房屋出租中介
+public class HouseMediator extends Mediator {
+
+    @Override
+    public void operation(Person person, String message) {
+        if(person instanceof Renter){
+            // 将租屋的需求消息传递给 注册了的房东们
+            for(Person landlord: landlordList){
+                landlord.getMessage(message);
+            }
+        } else if(person instanceof Landlord){
+            // 将房东的出租房消息传递给 注册了的 房屋求租者们
+            for(Person renter : renterList){
+                renter.getMessage(message);
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//客户端测试类
+public class Client {
+
+    public static void main(String[] args) {
+        // 实例化房屋中介
+        Mediator mediator = new HouseMediator();
+
+        Person landlordA, landlordB, renter;
+        landlordA = new Landlord(&quot;房东李&quot;, mediator);
+        landlordB = new Landlord(&quot;房东黎&quot;, mediator);
+
+        renter = new Renter(&quot;小吕&quot;,mediator);
+
+        // 房东注册中介
+        mediator.registerLandlord(landlordA);
+        mediator.registerLandlord(landlordB);
+        // 求租者注册中介
+        mediator.registerRenter(renter);
+
+        // 求租者 发送求租消息
+        renter.sendMessage(&quot;在天河公园附近租套房子，价格1000元左右一个月&quot;);
+        System.out.println(&quot;--------------------------&quot;);
+        // 房东A 发送房屋出租消息
+        landlordA.sendMessage(&quot;天河公园学院站三巷27号四楼有一房一厅出租  1200/月  光线好 近公交站&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/mediator.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一组对象以定义良好但是复杂的方式进行通信。产生的相互依赖关系结构混乱且难以理解。&lt;/li&gt;
+&lt;li&gt;一个对象引用其他很多对象并且直接与这些对象通信,导致难以复用该对象。&lt;/li&gt;
+&lt;li&gt;想定制一个分布在多个类中的行为，而又不想生成太多的子类。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//抽象同事类
+public abstract class Person {
+    // 维持一个抽象中介者的引用
+    protected Mediator mediator;
+
+    protected String name;
+
+    public Person(String name, Mediator mediator){
+        this.mediator = mediator;
+        this.name = name;
+    }
+
+    /**
+     * 设置中介者对象
+     * @param mediator
+     */
+    public void setMediator(Mediator mediator){
+        this.mediator = mediator;
+    }
+
+    /**
+     * 向中介 发送消息
+     */
+    protected abstract void sendMessage(String msg);
+
+    /**
+     * 从中介 获取消息
+     */
+    protected abstract void getMessage(String msg);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; //具体同事类：这里的角色是 租房者
+public class Renter extends Person {
+
+    public Renter(String name, Mediator mediator) {
+        super(name, mediator);
+    }
+
+    @Override
+    protected void sendMessage(String msg) {
+        mediator.operation(this, msg);
+    }
+
+    @Override
+    protected void getMessage(String msg) {
+        System.out.println(&quot;求租者[&quot; + name + &quot;]收到中介发来的消息： &quot; + msg);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; //具体同事类：这里的角色是 房东
+public class Landlord extends Person {
+
+    public Landlord(String name, Mediator mediator) {
+        super(name,mediator);
+    }
+
+    @Override
+    protected void sendMessage(String msg) {
+        mediator.operation(this, msg);
+    }
+
+    @Override
+    protected void getMessage(String msg) {
+        System.out.println(&quot;房东[&quot;+ name +&quot;]收到中介发来的消息：&quot; + msg);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; //抽象中介者类
+public abstract class Mediator {
+    // 用于添加储存 &quot;房东&quot;角色
+    protected List&amp;lt;Person&amp;gt; landlordList = new ArrayList&amp;lt;Person&amp;gt;();
+
+    // 用于添加储存 &quot;求租者&quot;角色
+    protected List&amp;lt;Person&amp;gt; renterList = new ArrayList&amp;lt;Person&amp;gt;();
+
+    /**
+     * 中介者注册房东信息
+     * @param landlord 房东实体
+     */
+    public void registerLandlord(Person landlord){
+        landlordList.add(landlord);
+    }
+
+    /**
+     * 中介者注册 求租者信息
+     * @param landlord 房东实体
+     */
+    public void registerRenter(Person landlord){
+        renterList.add(landlord);
+    }
+
+    /**
+     * 声明抽象方法 由具体中介者子类实现 消息的中转和协调
+     */
+    public abstract void operation(Person person, String message);
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt; //具体中介者类：这里的角色是 房屋出租中介
+public class HouseMediator extends Mediator {
+
+    @Override
+    public void operation(Person person, String message) {
+        if(person instanceof Renter){
+            // 将租屋的需求消息传递给 注册了的房东们
+            for(Person landlord: landlordList){
+                landlord.getMessage(message);
+            }
+        } else if(person instanceof Landlord){
+            // 将房东的出租房消息传递给 注册了的 房屋求租者们
+            for(Person renter : renterList){
+                renter.getMessage(message);
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//客户端测试类
+public class Client {
+
+    public static void main(String[] args) {
+        // 实例化房屋中介
+        Mediator mediator = new HouseMediator();
+
+        Person landlordA, landlordB, renter;
+        landlordA = new Landlord(&quot;房东李&quot;, mediator);
+        landlordB = new Landlord(&quot;房东黎&quot;, mediator);
+
+        renter = new Renter(&quot;小吕&quot;,mediator);
+
+        // 房东注册中介
+        mediator.registerLandlord(landlordA);
+        mediator.registerLandlord(landlordB);
+        // 求租者注册中介
+        mediator.registerRenter(renter);
+
+        // 求租者 发送求租消息
+        renter.sendMessage(&quot;在天河公园附近租套房子，价格1000元左右一个月&quot;);
+        System.out.println(&quot;--------------------------&quot;);
+        // 房东A 发送房屋出租消息
+        landlordA.sendMessage(&quot;天河公园学院站三巷27号四楼有一房一厅出租  1200/月  光线好 近公交站&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-19策略模式</title>
+        <link href="http://ivanpig.github.io/2015/02/21/strategy.html"/>
+        <updated>2015-02-21T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/21/strategy</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/strategy.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;许多相关的类仅仅是行为有异。“策略”提供了一种用多个行为中的一个行为来配置一个类的方法。&lt;/li&gt;
+&lt;li&gt;需要使用一个算法的不同变体。例如，你可能会定义一些反映不同的空间/时间权衡的算法。当这些变体实现为一个算法的类层次时，可以使用策略模式。&lt;/li&gt;
+&lt;li&gt;算法使用客户不应该知道的数据。可使用策略模式以避免暴露复杂的、与算法相关的数据结构。&lt;/li&gt;
+&lt;li&gt;一个类定义了多种行为, 并且这些行为在这个类的操作中以多个条件语句的形式出现。将相关的条件分支移入它们各自的Strategy类中以代替这些条件语句。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Context {
+    //持有一个具体策略的对象
+    private Strategy strategy;
+    /**
+     * 构造函数，传入一个具体策略对象
+     * @param strategy    具体策略对象
+     */
+    public Context(Strategy strategy){
+        this.strategy = strategy;
+    }
+    /**
+     * 策略方法
+     */
+    public void contextInterface(){
+        strategy.strategyInterface();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Strategy {
+    /**
+     * 策略方法
+     */
+    public void strategyInterface();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteStrategyA implements Strategy {
+
+    @Override
+    public void strategyInterface() {
+        //相关的业务
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteStrategyB implements Strategy {
+
+    @Override
+    public void strategyInterface() {
+        //相关的业务
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteStrategyC implements Strategy {
+
+    @Override
+    public void strategyInterface() {
+        //相关的业务
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;依然还是first-class function！&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/strategy.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;许多相关的类仅仅是行为有异。“策略”提供了一种用多个行为中的一个行为来配置一个类的方法。&lt;/li&gt;
+&lt;li&gt;需要使用一个算法的不同变体。例如，你可能会定义一些反映不同的空间/时间权衡的算法。当这些变体实现为一个算法的类层次时，可以使用策略模式。&lt;/li&gt;
+&lt;li&gt;算法使用客户不应该知道的数据。可使用策略模式以避免暴露复杂的、与算法相关的数据结构。&lt;/li&gt;
+&lt;li&gt;一个类定义了多种行为, 并且这些行为在这个类的操作中以多个条件语句的形式出现。将相关的条件分支移入它们各自的Strategy类中以代替这些条件语句。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Context {
+    //持有一个具体策略的对象
+    private Strategy strategy;
+    /**
+     * 构造函数，传入一个具体策略对象
+     * @param strategy    具体策略对象
+     */
+    public Context(Strategy strategy){
+        this.strategy = strategy;
+    }
+    /**
+     * 策略方法
+     */
+    public void contextInterface(){
+        strategy.strategyInterface();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Strategy {
+    /**
+     * 策略方法
+     */
+    public void strategyInterface();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteStrategyA implements Strategy {
+
+    @Override
+    public void strategyInterface() {
+        //相关的业务
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteStrategyB implements Strategy {
+
+    @Override
+    public void strategyInterface() {
+        //相关的业务
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteStrategyC implements Strategy {
+
+    @Override
+    public void strategyInterface() {
+        //相关的业务
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;依然还是first-class function！&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-18状态模式</title>
+        <link href="http://ivanpig.github.io/2015/02/20/state.html"/>
+        <updated>2015-02-20T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/20/state</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/state.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。&lt;/li&gt;
+&lt;li&gt;一个操作中含有庞大的多分支的条件语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常, 有多个操作包含这一相同的条件结构。State模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Order{
+     private State unPayState;
+     private State payedState;
+     private State sendState;
+     private State doneState;    //四种状态，四种类,对应的get,set方法省略
+
+     private State state = unPayState;     //当前状态
+
+     public Order(){
+        unPayState = new UnPayState(this);
+        payedState = new PayedState(this);            //传入Order对象，为了修改Order的状态
+        ...
+     }
+
+     public void pay(){
+          state.pay();
+     }
+
+     public void send(){
+          state.send();
+     }
+
+     ....
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//State接口
+public interface State{
+     public void pay();
+     public void send();
+     ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//UnPayState
+public class UnPayState implements State{
+
+     private Order order;
+     public UnPayState(Order order){
+           this.order = order;
+     }
+
+     public void pay(){
+         //pay money
+         order.setState(order.getPayedState());
+     }
+
+     public void send(){
+         //exception: can't send
+     }
+     .....
+}
+
+//其他实现略
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;first-class function&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/state.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。&lt;/li&gt;
+&lt;li&gt;一个操作中含有庞大的多分支的条件语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常, 有多个操作包含这一相同的条件结构。State模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Order{
+     private State unPayState;
+     private State payedState;
+     private State sendState;
+     private State doneState;    //四种状态，四种类,对应的get,set方法省略
+
+     private State state = unPayState;     //当前状态
+
+     public Order(){
+        unPayState = new UnPayState(this);
+        payedState = new PayedState(this);            //传入Order对象，为了修改Order的状态
+        ...
+     }
+
+     public void pay(){
+          state.pay();
+     }
+
+     public void send(){
+          state.send();
+     }
+
+     ....
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//State接口
+public interface State{
+     public void pay();
+     public void send();
+     ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//UnPayState
+public class UnPayState implements State{
+
+     private Order order;
+     public UnPayState(Order order){
+           this.order = order;
+     }
+
+     public void pay(){
+         //pay money
+         order.setState(order.getPayedState());
+     }
+
+     public void send(){
+         //exception: can't send
+     }
+     .....
+}
+
+//其他实现略
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;first-class function&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-17命令模式</title>
+        <link href="http://ivanpig.github.io/2015/02/19/command.html"/>
+        <updated>2015-02-19T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/19/command</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可取消的操作&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/command.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;像上面讨论的MenuItem对象那样，抽象出待执行的动作以参数化某对象。你可用过程语言中的回调（callback）函数表达这种参数化机制。所谓回调函数是指函数先在某处注册，而它将在稍后某个需要的时候被调用。Command模式是回调机制的一个面向对象的替代品。&lt;/li&gt;
+&lt;li&gt;在不同的时刻指定、排列和执行请求。一个Command对象可以有一个与初始请求无关的生存期。如果一个请求的接收者可用一种与地址空间无关的方式表达，那么就可将负责该请求的命令对象传送给另一个不同的进程并在那儿实现该请求。&lt;/li&gt;
+&lt;li&gt;支持取消操作。Command的Execute操作可在实施操作前将状态存储起来，在取消操作时这个状态用来消除该操作的影响。Command接口必须添加一个Execute操作，该操作取消上一次Execute调用的效果。执行的命令被存储在一个历史列表中。可通过向后和向前遍历这一列表并分别调用Unexecute和Execute来实现重数不限的“取消”和“重做”。&lt;/li&gt;
+&lt;li&gt;支持修改日志，这样当系统崩溃时，这些修改可以被重做一遍。在Command接口中添加装载操作和存储操作，可以用来保持变动的一个一致的修改日志。从崩溃中恢复的过程包括从磁盘中重新读入记录下来的命令并用Execute操作重新执行它们。&lt;/li&gt;
+&lt;li&gt;用构建在原语操作上的高层操作构造一个系统。这样一种结构在支持事务（Transaction）的信息系统中很常见。一个事务封装了对数据的一组变动。Command模式提供了对事务进行建模的方法。Command有一个公共的接口，使得你可以用同一种方式调用所有的事务。同时使用该模式也易于添加新事务以扩展系统。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;接收者角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Receiver {
+    /**
+     * 真正执行命令相应的操作
+     */
+    public void action(){
+        System.out.println(&quot;执行操作&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;抽象命令角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Command {
+    /**
+     * 执行方法
+     */
+    void execute();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;具体命令角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteCommand implements Command {
+    //持有相应的接收者对象
+    private Receiver receiver = null;
+    /**
+     * 构造方法
+     */
+    public ConcreteCommand(Receiver receiver){
+        this.receiver = receiver;
+    }
+    @Override
+    public void execute() {
+        //通常会转调接收者对象的相应方法，让接收者来真正执行功能
+        receiver.action();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;请求者角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Invoker {
+    /**
+     * 持有命令对象
+     */
+    private Command command = null;
+    /**
+     * 构造方法
+     */
+    public Invoker(Command command){
+        this.command = command;
+    }
+    /**
+     * 行动方法
+     */
+    public void action(){
+        command.execute();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;客户端角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    public static void main(String[] args) {
+        //创建接收者
+        Receiver receiver = new Receiver();
+        //创建命令对象，设定它的接收者
+        Command command = new ConcreteCommand(receiver);
+        //创建请求者，把命令对象设置进去
+        Invoker invoker = new Invoker(command);
+        //执行方法
+        invoker.action();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;还是first-class function!!!&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可取消的操作&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/command.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;像上面讨论的MenuItem对象那样，抽象出待执行的动作以参数化某对象。你可用过程语言中的回调（callback）函数表达这种参数化机制。所谓回调函数是指函数先在某处注册，而它将在稍后某个需要的时候被调用。Command模式是回调机制的一个面向对象的替代品。&lt;/li&gt;
+&lt;li&gt;在不同的时刻指定、排列和执行请求。一个Command对象可以有一个与初始请求无关的生存期。如果一个请求的接收者可用一种与地址空间无关的方式表达，那么就可将负责该请求的命令对象传送给另一个不同的进程并在那儿实现该请求。&lt;/li&gt;
+&lt;li&gt;支持取消操作。Command的Execute操作可在实施操作前将状态存储起来，在取消操作时这个状态用来消除该操作的影响。Command接口必须添加一个Execute操作，该操作取消上一次Execute调用的效果。执行的命令被存储在一个历史列表中。可通过向后和向前遍历这一列表并分别调用Unexecute和Execute来实现重数不限的“取消”和“重做”。&lt;/li&gt;
+&lt;li&gt;支持修改日志，这样当系统崩溃时，这些修改可以被重做一遍。在Command接口中添加装载操作和存储操作，可以用来保持变动的一个一致的修改日志。从崩溃中恢复的过程包括从磁盘中重新读入记录下来的命令并用Execute操作重新执行它们。&lt;/li&gt;
+&lt;li&gt;用构建在原语操作上的高层操作构造一个系统。这样一种结构在支持事务（Transaction）的信息系统中很常见。一个事务封装了对数据的一组变动。Command模式提供了对事务进行建模的方法。Command有一个公共的接口，使得你可以用同一种方式调用所有的事务。同时使用该模式也易于添加新事务以扩展系统。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;接收者角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Receiver {
+    /**
+     * 真正执行命令相应的操作
+     */
+    public void action(){
+        System.out.println(&quot;执行操作&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;抽象命令角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Command {
+    /**
+     * 执行方法
+     */
+    void execute();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;具体命令角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteCommand implements Command {
+    //持有相应的接收者对象
+    private Receiver receiver = null;
+    /**
+     * 构造方法
+     */
+    public ConcreteCommand(Receiver receiver){
+        this.receiver = receiver;
+    }
+    @Override
+    public void execute() {
+        //通常会转调接收者对象的相应方法，让接收者来真正执行功能
+        receiver.action();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;请求者角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Invoker {
+    /**
+     * 持有命令对象
+     */
+    private Command command = null;
+    /**
+     * 构造方法
+     */
+    public Invoker(Command command){
+        this.command = command;
+    }
+    /**
+     * 行动方法
+     */
+    public void action(){
+        command.execute();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;客户端角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    public static void main(String[] args) {
+        //创建接收者
+        Receiver receiver = new Receiver();
+        //创建命令对象，设定它的接收者
+        Command command = new ConcreteCommand(receiver);
+        //创建请求者，把命令对象设置进去
+        Invoker invoker = new Invoker(command);
+        //执行方法
+        invoker.action();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;还是first-class function!!!&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-16责任链模式</title>
+        <link href="http://ivanpig.github.io/2015/02/18/chain_of_responsibility.html"/>
+        <updated>2015-02-18T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/18/chain_of_responsibility</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/chain.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;有多个的对象可以处理一个请求，哪个对象处理该请求运行时刻自动确定。&lt;/li&gt;
+&lt;li&gt;你想在不明确指定接收者的情况下，向多个对象中的一个提交一个请求。&lt;/li&gt;
+&lt;li&gt;可处理一个请求的对象集合应被动态指定。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public abstract class Handler {
+
+    protected Handler successor;
+
+    public abstract void handlerRequest(String condition);
+
+
+    public Handler getSuccessor() {
+        return successor;
+    }
+    public void setSuccessor(Handler successor) {
+        this.successor = successor;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteHandler1 extends Handler {
+
+    @Override
+    public void handlerRequest(String condition) {
+        // 如果是自己的责任，就自己处理，负责传给下家处理
+        if(condition.equals(&quot;ConcreteHandler1&quot;)){
+            System.out.println( &quot;ConcreteHandler1 handled &quot;);
+            return ;
+        }else{
+            System.out.println( &quot;ConcreteHandler1 passed &quot;);
+            getSuccessor().handlerRequest(condition);
+        }
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteHandler2 extends Handler {
+
+    @Override
+    public void handlerRequest(String condition) {
+        // 如果是自己的责任，就自己处理，负责传给下家处理
+        if(condition.equals(&quot;ConcreteHandler2&quot;)){
+            System.out.println( &quot;ConcreteHandler2 handled &quot;);
+            return ;
+        }else{
+            System.out.println( &quot;ConcreteHandler2 passed &quot;);
+            getSuccessor().handlerRequest(condition);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteHandlerN extends Handler {
+
+    /**
+     * 这里假设n是链的最后一个节点必须处理掉
+     * 在实际情况下，可能出现环，或者是树形，
+     * 这里并不一定是最后一个节点。
+     */
+    @Override
+    public void handlerRequest(String condition) {
+        System.out.println( &quot;ConcreteHandlerN handled&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    public static void main(String[] args) {
+
+        Handler handler1 = new ConcreteHandler1();
+        Handler handler2 = new ConcreteHandler2();
+        Handler handlern = new ConcreteHandlerN();
+
+        //链起来
+        handler1.setSuccessor(handler2);
+        handler2.setSuccessor(handlern);
+
+        //假设这个请求是ConcreteHandler2的责任
+        handler1.handlerRequest(&quot;ConcreteHandler2&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;又是first-class function!&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/chain.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;有多个的对象可以处理一个请求，哪个对象处理该请求运行时刻自动确定。&lt;/li&gt;
+&lt;li&gt;你想在不明确指定接收者的情况下，向多个对象中的一个提交一个请求。&lt;/li&gt;
+&lt;li&gt;可处理一个请求的对象集合应被动态指定。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public abstract class Handler {
+
+    protected Handler successor;
+
+    public abstract void handlerRequest(String condition);
+
+
+    public Handler getSuccessor() {
+        return successor;
+    }
+    public void setSuccessor(Handler successor) {
+        this.successor = successor;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteHandler1 extends Handler {
+
+    @Override
+    public void handlerRequest(String condition) {
+        // 如果是自己的责任，就自己处理，负责传给下家处理
+        if(condition.equals(&quot;ConcreteHandler1&quot;)){
+            System.out.println( &quot;ConcreteHandler1 handled &quot;);
+            return ;
+        }else{
+            System.out.println( &quot;ConcreteHandler1 passed &quot;);
+            getSuccessor().handlerRequest(condition);
+        }
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteHandler2 extends Handler {
+
+    @Override
+    public void handlerRequest(String condition) {
+        // 如果是自己的责任，就自己处理，负责传给下家处理
+        if(condition.equals(&quot;ConcreteHandler2&quot;)){
+            System.out.println( &quot;ConcreteHandler2 handled &quot;);
+            return ;
+        }else{
+            System.out.println( &quot;ConcreteHandler2 passed &quot;);
+            getSuccessor().handlerRequest(condition);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteHandlerN extends Handler {
+
+    /**
+     * 这里假设n是链的最后一个节点必须处理掉
+     * 在实际情况下，可能出现环，或者是树形，
+     * 这里并不一定是最后一个节点。
+     */
+    @Override
+    public void handlerRequest(String condition) {
+        System.out.println( &quot;ConcreteHandlerN handled&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    public static void main(String[] args) {
+
+        Handler handler1 = new ConcreteHandler1();
+        Handler handler2 = new ConcreteHandler2();
+        Handler handlern = new ConcreteHandlerN();
+
+        //链起来
+        handler1.setSuccessor(handler2);
+        handler2.setSuccessor(handlern);
+
+        //假设这个请求是ConcreteHandler2的责任
+        handler1.handlerRequest(&quot;ConcreteHandler2&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;又是first-class function!&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-15观察者模式</title>
+        <link href="http://ivanpig.github.io/2015/02/17/observer.html"/>
+        <updated>2015-02-17T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/17/observer</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;定义对象间的一种一对多的依赖关系,当一个对象的状态发生改变时, 所有依赖于它的对象都得到通知并被自动更新。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/observer.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当一个抽象模型有两个方面, 其中一个方面依赖于另一方面。将这二者封装在独立的对象中以使它们可以各自独立地改变和复用。&lt;/li&gt;
+&lt;li&gt;当对一个对象的改变需要同时改变其它对象, 而不知道具体有多少对象有待改变。&lt;/li&gt;
+&lt;li&gt;当一个对象必须通知其它对象，而它又不能假定其它对象是谁。换言之，你不希望这些对象是紧密耦合的。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public abstract class Subject {
+    /**
+     * 用来保存注册的观察者对象
+     */
+    private    List&amp;lt;Observer&amp;gt; list = new ArrayList&amp;lt;Observer&amp;gt;();
+    /**
+     * 注册观察者对象
+     * @param observer    观察者对象
+     */
+    public void attach(Observer observer){
+
+        list.add(observer);
+        System.out.println(&quot;Attached an observer&quot;);
+    }
+    /**
+     * 删除观察者对象
+     * @param observer    观察者对象
+     */
+    public void detach(Observer observer){
+
+        list.remove(observer);
+    }
+    /**
+     * 通知所有注册的观察者对象
+     */
+    public void nodifyObservers(String newState){
+
+        for(Observer observer : list){
+            observer.update(newState);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteSubject extends Subject{
+
+    private String state;
+
+    public String getState() {
+        return state;
+    }
+
+    public void change(String newState){
+        state = newState;
+        System.out.println(&quot;主题状态为：&quot; + state);
+        //状态发生改变，通知各个观察者
+        this.nodifyObservers(state);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Observer {
+    /**
+     * 更新接口
+     * @param state    更新的状态
+     */
+    public void update(String state);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteObserver implements Observer {
+    //观察者的状态
+    private String observerState;
+
+    @Override
+    public void update(String state) {
+        /**
+         * 更新观察者的状态，使其与目标的状态保持一致
+         */
+        observerState = state;
+        System.out.println(&quot;状态为：&quot;+observerState);
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    public static void main(String[] args) {
+        //创建主题对象
+        ConcreteSubject subject = new ConcreteSubject();
+        //创建观察者对象
+        Observer observer = new ConcreteObserver();
+        //将观察者对象登记到主题对象上
+        subject.attach(observer);
+        //改变主题对象的状态
+        subject.change(&quot;new state&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;Clojure有add-watch函数可实现此模式.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def a (atom {}))
+
+(add-watch a :watcher
+  (fn [key atom old-state new-state]
+    (prn &quot;-- Atom Changed --&quot;)
+    (prn &quot;key&quot; key)
+    (prn &quot;atom&quot; atom)
+    (prn &quot;old-state&quot; old-state)
+    (prn &quot;new-state&quot; new-state)))
+
+(reset! a {:foo &quot;bar&quot;})
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;定义对象间的一种一对多的依赖关系,当一个对象的状态发生改变时, 所有依赖于它的对象都得到通知并被自动更新。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/observer.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当一个抽象模型有两个方面, 其中一个方面依赖于另一方面。将这二者封装在独立的对象中以使它们可以各自独立地改变和复用。&lt;/li&gt;
+&lt;li&gt;当对一个对象的改变需要同时改变其它对象, 而不知道具体有多少对象有待改变。&lt;/li&gt;
+&lt;li&gt;当一个对象必须通知其它对象，而它又不能假定其它对象是谁。换言之，你不希望这些对象是紧密耦合的。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public abstract class Subject {
+    /**
+     * 用来保存注册的观察者对象
+     */
+    private    List&amp;lt;Observer&amp;gt; list = new ArrayList&amp;lt;Observer&amp;gt;();
+    /**
+     * 注册观察者对象
+     * @param observer    观察者对象
+     */
+    public void attach(Observer observer){
+
+        list.add(observer);
+        System.out.println(&quot;Attached an observer&quot;);
+    }
+    /**
+     * 删除观察者对象
+     * @param observer    观察者对象
+     */
+    public void detach(Observer observer){
+
+        list.remove(observer);
+    }
+    /**
+     * 通知所有注册的观察者对象
+     */
+    public void nodifyObservers(String newState){
+
+        for(Observer observer : list){
+            observer.update(newState);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteSubject extends Subject{
+
+    private String state;
+
+    public String getState() {
+        return state;
+    }
+
+    public void change(String newState){
+        state = newState;
+        System.out.println(&quot;主题状态为：&quot; + state);
+        //状态发生改变，通知各个观察者
+        this.nodifyObservers(state);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Observer {
+    /**
+     * 更新接口
+     * @param state    更新的状态
+     */
+    public void update(String state);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteObserver implements Observer {
+    //观察者的状态
+    private String observerState;
+
+    @Override
+    public void update(String state) {
+        /**
+         * 更新观察者的状态，使其与目标的状态保持一致
+         */
+        observerState = state;
+        System.out.println(&quot;状态为：&quot;+observerState);
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    public static void main(String[] args) {
+        //创建主题对象
+        ConcreteSubject subject = new ConcreteSubject();
+        //创建观察者对象
+        Observer observer = new ConcreteObserver();
+        //将观察者对象登记到主题对象上
+        subject.attach(observer);
+        //改变主题对象的状态
+        subject.change(&quot;new state&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;Clojure有add-watch函数可实现此模式.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def a (atom {}))
+
+(add-watch a :watcher
+  (fn [key atom old-state new-state]
+    (prn &quot;-- Atom Changed --&quot;)
+    (prn &quot;key&quot; key)
+    (prn &quot;atom&quot; atom)
+    (prn &quot;old-state&quot; old-state)
+    (prn &quot;new-state&quot; new-state)))
+
+(reset! a {:foo &quot;bar&quot;})
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-14备忘录模式</title>
+        <link href="http://ivanpig.github.io/2015/02/16/memento.html"/>
+        <updated>2015-02-16T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/16/memento</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到保存的状态。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/memento.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;必须保存一个对象在某一个时刻的(部分)状态, 这样以后需要时它才能恢复到先前的状态。&lt;/li&gt;
+&lt;li&gt;如果一个用接口来让其它对象直接得到这些状态，将会暴露对象的实现细节并破坏对象的封装性。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Memento {
+
+    private String state;
+
+    public Memento(String state){
+        this.state = state;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Originator {
+
+    private String state;
+
+    public Memento createMemento(){
+        return new Memento(state);
+    }
+
+    public void restoreMemento(Memento memento){
+        this.state = memento.getState();
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Caretaker {
+
+    private Memento memento;
+
+    public Memento retrieveMemento(){
+        return memento;
+    }
+
+    public void saveMemento(Memento memento){
+        this.memento = memento;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    private static Originator o = new Originator();
+    private static Caretaker c = new Caretaker();
+
+    public static void main(String[] args) {
+        //改变发起人的状态
+        o.setState(&quot;on&quot;);
+        //创建备忘录对象，并保持于管理保持
+        c.saveMemento(o.createMemento());
+        //改变发起人的状态
+        o.setState(&quot;off&quot;);
+        //还原状态
+        o.restoreMemento(c.retrieveMemento());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;Clojure没有对象的概念，直接对数据进行操作！可以直接对数据进行保存与恢复，所以不需要此模式！&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到保存的状态。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/memento.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;必须保存一个对象在某一个时刻的(部分)状态, 这样以后需要时它才能恢复到先前的状态。&lt;/li&gt;
+&lt;li&gt;如果一个用接口来让其它对象直接得到这些状态，将会暴露对象的实现细节并破坏对象的封装性。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Memento {
+
+    private String state;
+
+    public Memento(String state){
+        this.state = state;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Originator {
+
+    private String state;
+
+    public Memento createMemento(){
+        return new Memento(state);
+    }
+
+    public void restoreMemento(Memento memento){
+        this.state = memento.getState();
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Caretaker {
+
+    private Memento memento;
+
+    public Memento retrieveMemento(){
+        return memento;
+    }
+
+    public void saveMemento(Memento memento){
+        this.memento = memento;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    private static Originator o = new Originator();
+    private static Caretaker c = new Caretaker();
+
+    public static void main(String[] args) {
+        //改变发起人的状态
+        o.setState(&quot;on&quot;);
+        //创建备忘录对象，并保持于管理保持
+        c.saveMemento(o.createMemento());
+        //改变发起人的状态
+        o.setState(&quot;off&quot;);
+        //还原状态
+        o.restoreMemento(c.retrieveMemento());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;Clojure没有对象的概念，直接对数据进行操作！可以直接对数据进行保存与恢复，所以不需要此模式！&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-13模板模式</title>
+        <link href="http://ivanpig.github.io/2015/02/15/template.html"/>
+        <updated>2015-02-15T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/15/template</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。Template Method使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/template.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一次性实现一个算法的不变的部分，并将可变的行为留给子类来实现。&lt;/li&gt;
+&lt;li&gt;各子类中公共的行为应被提取出来并集中到一个公共父类中以避免代码重复。这是Opdyke和Johnson所描述过的“重分解以一般化”的一个很好的例子。首先识别现有代码中的不同之处，并且将不同之处分离为新的操作。最后，用一个调用这些新的操作的模板方法来替换这些不同的代码。&lt;/li&gt;
+&lt;li&gt;控制子类扩展。模板方法只在特定点调用“hook”操作，这样就只允许在这些点进行扩展。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;web开发中使用的布局就是模板模式的典型应用！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public abstract class Layout{
+
+     public void show(){
+          System.out.println(&quot;Header&quot;);
+          body();
+          System.out.println(&quot;Footer&quot;);
+     }
+
+     public abstract void body();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class Index extends Layout{
+
+     public void body(){
+       System.out.println(&quot;Index&quot;);
+     }
+}
+
+public class Detail extends Layout{
+
+     public void body(){
+       System.out.println(&quot;Detail&quot;);
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;调用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;Layout layout = new Index();
+layout.show();
+layout = new Detail();
+layout.show();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;直接上代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn show [body]
+  (println &quot;Header&quot;)
+  (body)
+  (println &quot;Footer&quot;))
+
+(defn index []
+  (println &quot;Index&quot;))
+
+(defn detail []
+  (println &quot;Detail&quot;))
+
+(show index)
+(show detail)
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。Template Method使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/template.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一次性实现一个算法的不变的部分，并将可变的行为留给子类来实现。&lt;/li&gt;
+&lt;li&gt;各子类中公共的行为应被提取出来并集中到一个公共父类中以避免代码重复。这是Opdyke和Johnson所描述过的“重分解以一般化”的一个很好的例子。首先识别现有代码中的不同之处，并且将不同之处分离为新的操作。最后，用一个调用这些新的操作的模板方法来替换这些不同的代码。&lt;/li&gt;
+&lt;li&gt;控制子类扩展。模板方法只在特定点调用“hook”操作，这样就只允许在这些点进行扩展。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;web开发中使用的布局就是模板模式的典型应用！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public abstract class Layout{
+
+     public void show(){
+          System.out.println(&quot;Header&quot;);
+          body();
+          System.out.println(&quot;Footer&quot;);
+     }
+
+     public abstract void body();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class Index extends Layout{
+
+     public void body(){
+       System.out.println(&quot;Index&quot;);
+     }
+}
+
+public class Detail extends Layout{
+
+     public void body(){
+       System.out.println(&quot;Detail&quot;);
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;调用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;Layout layout = new Index();
+layout.show();
+layout = new Detail();
+layout.show();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;直接上代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn show [body]
+  (println &quot;Header&quot;)
+  (body)
+  (println &quot;Footer&quot;))
+
+(defn index []
+  (println &quot;Index&quot;))
+
+(defn detail []
+  (println &quot;Detail&quot;))
+
+(show index)
+(show detail)
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-12享元模式</title>
+        <link href="http://ivanpig.github.io/2015/02/14/flyweight.html"/>
+        <updated>2015-02-14T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/14/flyweight</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;运用共享技术有效地支持大量细粒度的对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/flyweight.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个应用程序使用了大量的对象。&lt;/li&gt;
+&lt;li&gt;完全由于使用大量的对象，造成很大的存储开销。&lt;/li&gt;
+&lt;li&gt;对象的大多数状态都可变为外部状态。&lt;/li&gt;
+&lt;li&gt;如果删除对象的外部状态，那么可以用相对较少的共享对象取代很多组对象。&lt;/li&gt;
+&lt;li&gt;应用程序不依赖于对象标识。由于Flyweight对象可以被共享，对于概念上明显有别的对象，标识测试将返回真值。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;抽象享元角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Flyweight {
+    //一个示意性方法，参数state是外蕴状态
+    public void operation(String state);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteFlyweight implements Flyweight {
+    private Character intrinsicState = null;
+    /**
+     * 构造函数，内蕴状态作为参数传入
+     * @param state
+     */
+    public ConcreteFlyweight(Character state){
+        this.intrinsicState = state;
+    }
+
+
+    /**
+     * 外蕴状态作为参数传入方法中，改变方法的行为，
+     * 但是并不改变对象的内蕴状态。
+     */
+    @Override
+    public void operation(String state) {
+        // TODO Auto-generated method stub
+        System.out.println(&quot;Intrinsic State = &quot; + this.intrinsicState);
+        System.out.println(&quot;Extrinsic State = &quot; + state);
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class FlyweightFactory {
+    private Map&amp;lt;Character,Flyweight&amp;gt; files = new HashMap&amp;lt;Character,Flyweight&amp;gt;();
+
+    public Flyweight factory(Character state){
+        //先从缓存中查找对象
+        Flyweight fly = files.get(state);
+        if(fly == null){
+            //如果对象不存在则创建一个新的Flyweight对象
+            fly = new ConcreteFlyweight(state);
+            //把这个新的Flyweight对象添加到缓存中
+            files.put(state, fly);
+        }
+        return fly;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;调用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    public static void main(String[] args) {
+        FlyweightFactory factory = new FlyweightFactory();
+        Flyweight fly = factory.factory(new Character('a'));
+        fly.operation(&quot;First Call&quot;);
+
+        fly = factory.factory(new Character('b'));
+        fly.operation(&quot;Second Call&quot;);
+
+        fly = factory.factory(new Character('a'));
+        fly.operation(&quot;Third Call&quot;);
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;Clojure就不需要这种模式！其所有数据都是唯一的！&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;运用共享技术有效地支持大量细粒度的对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/flyweight.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个应用程序使用了大量的对象。&lt;/li&gt;
+&lt;li&gt;完全由于使用大量的对象，造成很大的存储开销。&lt;/li&gt;
+&lt;li&gt;对象的大多数状态都可变为外部状态。&lt;/li&gt;
+&lt;li&gt;如果删除对象的外部状态，那么可以用相对较少的共享对象取代很多组对象。&lt;/li&gt;
+&lt;li&gt;应用程序不依赖于对象标识。由于Flyweight对象可以被共享，对于概念上明显有别的对象，标识测试将返回真值。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;抽象享元角色类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Flyweight {
+    //一个示意性方法，参数state是外蕴状态
+    public void operation(String state);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class ConcreteFlyweight implements Flyweight {
+    private Character intrinsicState = null;
+    /**
+     * 构造函数，内蕴状态作为参数传入
+     * @param state
+     */
+    public ConcreteFlyweight(Character state){
+        this.intrinsicState = state;
+    }
+
+
+    /**
+     * 外蕴状态作为参数传入方法中，改变方法的行为，
+     * 但是并不改变对象的内蕴状态。
+     */
+    @Override
+    public void operation(String state) {
+        // TODO Auto-generated method stub
+        System.out.println(&quot;Intrinsic State = &quot; + this.intrinsicState);
+        System.out.println(&quot;Extrinsic State = &quot; + state);
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class FlyweightFactory {
+    private Map&amp;lt;Character,Flyweight&amp;gt; files = new HashMap&amp;lt;Character,Flyweight&amp;gt;();
+
+    public Flyweight factory(Character state){
+        //先从缓存中查找对象
+        Flyweight fly = files.get(state);
+        if(fly == null){
+            //如果对象不存在则创建一个新的Flyweight对象
+            fly = new ConcreteFlyweight(state);
+            //把这个新的Flyweight对象添加到缓存中
+            files.put(state, fly);
+        }
+        return fly;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;调用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Client {
+
+    public static void main(String[] args) {
+        FlyweightFactory factory = new FlyweightFactory();
+        Flyweight fly = factory.factory(new Character('a'));
+        fly.operation(&quot;First Call&quot;);
+
+        fly = factory.factory(new Character('b'));
+        fly.operation(&quot;Second Call&quot;);
+
+        fly = factory.factory(new Character('a'));
+        fly.operation(&quot;Third Call&quot;);
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;Clojure就不需要这种模式！其所有数据都是唯一的！&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-11桥接模式</title>
+        <link href="http://ivanpig.github.io/2015/02/13/bridge.html"/>
+        <updated>2015-02-13T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/13/bridge</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;将抽象部分与它的实现部分分离，使它们都可以独立地变化。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/bridge.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;你不希望在抽象和它的实现部分之间有一个固定的绑定关系。例如这种情况可能是因为，在程序运行时刻实现部分应可以被选择或者切换。&lt;/li&gt;
+&lt;li&gt;类的抽象以及它的实现都应该可以通过生成子类的方法加以扩充。这时B r i d g e 模式使你可以对不同的抽象接口和实现部分进行组合，并分别对它们进行扩充。&lt;/li&gt;
+&lt;li&gt;对一个抽象的实现部分的修改应对客户不产生影响，即客户的代码不必重新编译。&lt;/li&gt;
+&lt;li&gt;（C++）你想对客户完全隐藏抽象的实现部分。在C++中，类的表示在类接口中是可见的。&lt;/li&gt;
+&lt;li&gt;有许多类要生成。这样一种类层次结构说明你必须将一个对象分解成两个部分。Rumbaugh称这种类层次结构为“嵌套的普化”（nested generalizations ）。&lt;/li&gt;
+&lt;li&gt;你想在多个对象间共享实现（可能使用引用计数），但同时要求客户并不知道这一点。一个简单的例子便是Coplien的String类，在这个类中多个对象可以共享同一个字符串表示（StringRep）。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//电视机的接口
+public interface ITV {
+    public void on();
+    public void off();
+    public void switchChannel(int channel);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//三星的ITV
+public class SamsungTV implements ITV {
+    @Override
+    public void on() {
+        System.out.println(&quot;Samsung is turned on.&quot;);
+    }
+
+    @Override
+    public void off() {
+        System.out.println(&quot;Samsung is turned off.&quot;);
+    }
+
+    @Override
+    public void switchChannel(int channel) {
+        System.out.println(&quot;Samsung: channel - &quot; + channel);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//索尼的ITV
+public class SonyTV implements ITV {
+
+    @Override
+    public void on() {
+        System.out.println(&quot;Sony is turned on.&quot;);
+    }
+
+    @Override
+    public void off() {
+        System.out.println(&quot;Sony is turned off.&quot;);
+    }
+
+    @Override
+    public void switchChannel(int channel) {
+        System.out.println(&quot;Sony: channel - &quot; + channel);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//遥控器要包含对TV的引用
+public abstract class AbstractRemoteControl {
+
+    private ITV tv;
+
+    public AbstractRemoteControl(ITV tv){
+        this.tv = tv;
+    }
+
+    public void turnOn(){
+        tv.on();
+    }
+
+    public void turnOff(){
+        tv.off();
+    }
+
+    public void setChannel(int channel){
+        tv.switchChannel(channel);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//定义遥控器的具体类
+public class LogitechRemoteControl extends AbstractRemoteControl {
+
+    public LogitechRemoteControl(ITV tv) {
+        super(tv);
+    }
+
+    public void setChannelKeyboard(int channel){
+        setChannel(channel);
+        System.out.println(&quot;Logitech use keyword to set channel.&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//调用
+public class Main {
+    public static void main(String[] args){
+        ITV tv = new SonyTV();
+        LogitechRemoteControl lrc = new LogitechRemoteControl(tv);
+        lrc.setChannelKeyboard(100);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;first-class function轻松解决！&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;将抽象部分与它的实现部分分离，使它们都可以独立地变化。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/bridge.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;你不希望在抽象和它的实现部分之间有一个固定的绑定关系。例如这种情况可能是因为，在程序运行时刻实现部分应可以被选择或者切换。&lt;/li&gt;
+&lt;li&gt;类的抽象以及它的实现都应该可以通过生成子类的方法加以扩充。这时B r i d g e 模式使你可以对不同的抽象接口和实现部分进行组合，并分别对它们进行扩充。&lt;/li&gt;
+&lt;li&gt;对一个抽象的实现部分的修改应对客户不产生影响，即客户的代码不必重新编译。&lt;/li&gt;
+&lt;li&gt;（C++）你想对客户完全隐藏抽象的实现部分。在C++中，类的表示在类接口中是可见的。&lt;/li&gt;
+&lt;li&gt;有许多类要生成。这样一种类层次结构说明你必须将一个对象分解成两个部分。Rumbaugh称这种类层次结构为“嵌套的普化”（nested generalizations ）。&lt;/li&gt;
+&lt;li&gt;你想在多个对象间共享实现（可能使用引用计数），但同时要求客户并不知道这一点。一个简单的例子便是Coplien的String类，在这个类中多个对象可以共享同一个字符串表示（StringRep）。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//电视机的接口
+public interface ITV {
+    public void on();
+    public void off();
+    public void switchChannel(int channel);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//三星的ITV
+public class SamsungTV implements ITV {
+    @Override
+    public void on() {
+        System.out.println(&quot;Samsung is turned on.&quot;);
+    }
+
+    @Override
+    public void off() {
+        System.out.println(&quot;Samsung is turned off.&quot;);
+    }
+
+    @Override
+    public void switchChannel(int channel) {
+        System.out.println(&quot;Samsung: channel - &quot; + channel);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//索尼的ITV
+public class SonyTV implements ITV {
+
+    @Override
+    public void on() {
+        System.out.println(&quot;Sony is turned on.&quot;);
+    }
+
+    @Override
+    public void off() {
+        System.out.println(&quot;Sony is turned off.&quot;);
+    }
+
+    @Override
+    public void switchChannel(int channel) {
+        System.out.println(&quot;Sony: channel - &quot; + channel);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//遥控器要包含对TV的引用
+public abstract class AbstractRemoteControl {
+
+    private ITV tv;
+
+    public AbstractRemoteControl(ITV tv){
+        this.tv = tv;
+    }
+
+    public void turnOn(){
+        tv.on();
+    }
+
+    public void turnOff(){
+        tv.off();
+    }
+
+    public void setChannel(int channel){
+        tv.switchChannel(channel);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//定义遥控器的具体类
+public class LogitechRemoteControl extends AbstractRemoteControl {
+
+    public LogitechRemoteControl(ITV tv) {
+        super(tv);
+    }
+
+    public void setChannelKeyboard(int channel){
+        setChannel(channel);
+        System.out.println(&quot;Logitech use keyword to set channel.&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//调用
+public class Main {
+    public static void main(String[] args){
+        ITV tv = new SonyTV();
+        LogitechRemoteControl lrc = new LogitechRemoteControl(tv);
+        lrc.setChannelKeyboard(100);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;first-class function轻松解决！&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-10装饰模式</title>
+        <link href="http://ivanpig.github.io/2015/02/12/decorator.html"/>
+        <updated>2015-02-12T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/12/decorator</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;动态地给一个对象添加一些额外的职责。就增加功能来说，Decorator模式相比生成子类更为灵活。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/decorator.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在不影响其他对象的情况下，以动态、透明的方式给单个对象添加职责。&lt;/li&gt;
+&lt;li&gt;处理那些可以撤消的职责。&lt;/li&gt;
+&lt;li&gt;当不能采用生成子类的方法进行扩充时。一种情况是，可能有大量独立的扩展，为支持每一种组合将产生大量的子类，使得子类数目呈爆炸性增长。另一种情况可能是因为类定义被隐藏，或类定义不能用于生成子类。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;JavaIO库的使用可能如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;BufferedInputStream bi = new BufferedInputStream(new FileInputStream(filename));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们都知道FileInputStream是用来读取文件的，BufferedInputStream是提供了缓存的能力。我们分别看下他们的源代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class BufferedInputStream extends FilterInputStream
+...
+
+public class FilterInputStream extends InputStream
+...
+
+public class FileInputStream extends InputStream
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;BufferedInputStream继承了FilterInputStream，FilterInputStream和FileInputStream一样都继承自InputStream.&lt;/p&gt;
+
+&lt;p&gt;可以看出InputStream是公共父类。&lt;/p&gt;
+
+&lt;p&gt;FilterInputStream是装饰类的公共父类，看看FilterInputStream的源代码就知道了，他只是做了简单的方法委托。&lt;/p&gt;
+
+&lt;p&gt;BufferedInputStream继承了FilterInputStream，并添加了缓存的方法（其实就是用一个字节数组保存字节，一次性读出）。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;不就是添加个方法吗？直接添加方法就可以了啊。还要搞个类出来！&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;动态地给一个对象添加一些额外的职责。就增加功能来说，Decorator模式相比生成子类更为灵活。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/decorator.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在不影响其他对象的情况下，以动态、透明的方式给单个对象添加职责。&lt;/li&gt;
+&lt;li&gt;处理那些可以撤消的职责。&lt;/li&gt;
+&lt;li&gt;当不能采用生成子类的方法进行扩充时。一种情况是，可能有大量独立的扩展，为支持每一种组合将产生大量的子类，使得子类数目呈爆炸性增长。另一种情况可能是因为类定义被隐藏，或类定义不能用于生成子类。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;JavaIO库的使用可能如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;BufferedInputStream bi = new BufferedInputStream(new FileInputStream(filename));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们都知道FileInputStream是用来读取文件的，BufferedInputStream是提供了缓存的能力。我们分别看下他们的源代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class BufferedInputStream extends FilterInputStream
+...
+
+public class FilterInputStream extends InputStream
+...
+
+public class FileInputStream extends InputStream
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;BufferedInputStream继承了FilterInputStream，FilterInputStream和FileInputStream一样都继承自InputStream.&lt;/p&gt;
+
+&lt;p&gt;可以看出InputStream是公共父类。&lt;/p&gt;
+
+&lt;p&gt;FilterInputStream是装饰类的公共父类，看看FilterInputStream的源代码就知道了，他只是做了简单的方法委托。&lt;/p&gt;
+
+&lt;p&gt;BufferedInputStream继承了FilterInputStream，并添加了缓存的方法（其实就是用一个字节数组保存字节，一次性读出）。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;不就是添加个方法吗？直接添加方法就可以了啊。还要搞个类出来！&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-09组合模式</title>
+        <link href="http://ivanpig.github.io/2015/02/11/composite.html"/>
+        <updated>2015-02-11T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/11/composite</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;将对象组合成树形结构以表示“部分-整体”的层次结构。Composite使得用户对单个对象和组合对象的使用具有一致性。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/composite.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;你想表示对象的部分—整体层次结构。&lt;/li&gt;
+&lt;li&gt;你希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;public interface Node {
+    void check();
+    void add(Node node) throws Exception;
+    void remove(Node node) throws Exception;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;public class ParentNode implements Node {
+    private List&amp;lt;Node&amp;gt; list = new ArrayList&amp;lt;Node&amp;gt;();
+
+    public void check() {
+        System.out.println(&quot;ParentNode is checked&quot;);
+        for(Node n : list){
+          n.check();
+        }
+    }
+
+    public void add(Node node) {
+        list.add(node);
+    }
+
+    public void remove(Node node) {
+        list.remove(node);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code&gt;public class ChildNode implements Node {
+    public void check() {
+        System.out.println(&quot;ChildNode is Checked&quot;);
+    }
+
+    public void add(Node node) throws Exception {
+        throw new Exception(&quot;This node can not add&quot;);
+    }
+
+    public void remove(Node node) throws Exception {
+        throw new Exception(&quot;This node can not remove&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;public class Main {
+
+    public static void main(String[] args) throws Exception {
+        Node node1 = new ChildNode();
+        Node node2 = new ChildNode();
+        Node node3 = new ParentNode();
+        node3.add(node1);
+        node3.add(node2);
+        node1.check();
+        node2.check();
+        node3.check();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;实际上就是对树的操作！Clojure提供了clojure.zip,clojure.walk或者tree-seq来进行对树的操作！&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;将对象组合成树形结构以表示“部分-整体”的层次结构。Composite使得用户对单个对象和组合对象的使用具有一致性。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/composite.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;你想表示对象的部分—整体层次结构。&lt;/li&gt;
+&lt;li&gt;你希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;public interface Node {
+    void check();
+    void add(Node node) throws Exception;
+    void remove(Node node) throws Exception;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;public class ParentNode implements Node {
+    private List&amp;lt;Node&amp;gt; list = new ArrayList&amp;lt;Node&amp;gt;();
+
+    public void check() {
+        System.out.println(&quot;ParentNode is checked&quot;);
+        for(Node n : list){
+          n.check();
+        }
+    }
+
+    public void add(Node node) {
+        list.add(node);
+    }
+
+    public void remove(Node node) {
+        list.remove(node);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code&gt;public class ChildNode implements Node {
+    public void check() {
+        System.out.println(&quot;ChildNode is Checked&quot;);
+    }
+
+    public void add(Node node) throws Exception {
+        throw new Exception(&quot;This node can not add&quot;);
+    }
+
+    public void remove(Node node) throws Exception {
+        throw new Exception(&quot;This node can not remove&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;public class Main {
+
+    public static void main(String[] args) throws Exception {
+        Node node1 = new ChildNode();
+        Node node2 = new ChildNode();
+        Node node3 = new ParentNode();
+        node3.add(node1);
+        node3.add(node2);
+        node1.check();
+        node2.check();
+        node3.check();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;实际上就是对树的操作！Clojure提供了clojure.zip,clojure.walk或者tree-seq来进行对树的操作！&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-08适配器模式</title>
+        <link href="http://ivanpig.github.io/2015/02/10/adapter.html"/>
+        <updated>2015-02-10T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/10/adapter</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;将一个类的接口转换成另外一个客户希望的接口。Adapter 模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/adapter.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;你想使用一个已经存在的类，而它的接口不符合你的需求。&lt;/li&gt;
+&lt;li&gt;你想创建一个可以复用的类，该类可以与其他不相关的类或不可预见的类（即那些接口可能不一定兼容的类）协同工作。&lt;/li&gt;
+&lt;li&gt;（仅适用于对象Adapter）你想使用一些已经存在的子类，但是不可能对每一个都进行子类化以匹配它们的接口。对象适配器可以适配它的父类接口。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;假设目前做一个新系统，有如下代码结构。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public interface Car{
+     public void drive();
+}
+
+public class Benz implements Car{
+     public void drive(){
+          System.out.println(&quot;Benz run&quot;);
+     }
+}
+
+public class Cruze implements Car{
+     public void drive(){
+          System.out.println(&quot;Cruze run&quot;);
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有一个老系统，里面有如下代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class Smart{
+     public void run(){
+         System.out.println(&quot;Smart run&quot;);
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;类适配器:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class SmartCar extends Smart implements Car{
+      public void drive(){
+           this.run();
+      }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对象适配器:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class SmartCar implements Car{
+     private Smart smart = new Smart();
+
+     public void drive(){
+          smart.run();
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;first-class function轻松解决!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn drive []
+  (println &quot;drive&quot;))
+
+(defn run []
+  (println &quot;run&quot;))
+
+(defn do-drive [f]
+  (f))
+
+(do-drive drive)
+(do-drive run)
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;将一个类的接口转换成另外一个客户希望的接口。Adapter 模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/adapter.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;你想使用一个已经存在的类，而它的接口不符合你的需求。&lt;/li&gt;
+&lt;li&gt;你想创建一个可以复用的类，该类可以与其他不相关的类或不可预见的类（即那些接口可能不一定兼容的类）协同工作。&lt;/li&gt;
+&lt;li&gt;（仅适用于对象Adapter）你想使用一些已经存在的子类，但是不可能对每一个都进行子类化以匹配它们的接口。对象适配器可以适配它的父类接口。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;p&gt;假设目前做一个新系统，有如下代码结构。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public interface Car{
+     public void drive();
+}
+
+public class Benz implements Car{
+     public void drive(){
+          System.out.println(&quot;Benz run&quot;);
+     }
+}
+
+public class Cruze implements Car{
+     public void drive(){
+          System.out.println(&quot;Cruze run&quot;);
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有一个老系统，里面有如下代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class Smart{
+     public void run(){
+         System.out.println(&quot;Smart run&quot;);
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;类适配器:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class SmartCar extends Smart implements Car{
+      public void drive(){
+           this.run();
+      }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对象适配器:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;public class SmartCar implements Car{
+     private Smart smart = new Smart();
+
+     public void drive(){
+          smart.run();
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;first-class function轻松解决!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn drive []
+  (println &quot;drive&quot;))
+
+(defn run []
+  (println &quot;run&quot;))
+
+(defn do-drive [f]
+  (f))
+
+(do-drive drive)
+(do-drive run)
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-07代理模式</title>
+        <link href="http://ivanpig.github.io/2015/02/09/proxy.html"/>
+        <updated>2015-02-09T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/09/proxy</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;为其他对象提供一种代理以控制对这个对象的访问。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/proxy.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;p&gt;在需要用比较通用和复杂的对象指针代替简单的指针的时候，使用Proxy模式。下面是一些可以使用Proxy模式常见情况：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;远程代理（Remote Proxy）为一个对象在不同的地址空间提供局部代表。&lt;/li&gt;
+&lt;li&gt;虚代理（Virtual Proxy）根据需要创建开销很大的对象。&lt;/li&gt;
+&lt;li&gt;保护代理（Protection Proxy）控制对原始对象的访问。保护代理用于对象应该有不同 的访问权限的时候。&lt;/li&gt;
+&lt;li&gt;智能指引（Smart Reference）取代了简单的指针，它在访问对象时执行一些附加操作。 它的典型用途包括：&lt;/li&gt;
+&lt;li&gt;对指向实际对象的引用计数，这样当该对象没有引用时，可以自动释放它（也称为SmartPointers）。&lt;/li&gt;
+&lt;li&gt;当第一次引用一个持久对象时，将它装入内存。&lt;/li&gt;
+&lt;li&gt;在访问一个实际对象前，检查是否已经锁定了它，以确保其他对象不能改变它。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//工厂接口
+public interface ItemFactory{
+     public Item getItem();
+}
+
+//工厂实现,Item就不实现了，随便怎么写都行
+public class ItemFactoryImpl implements ItemFactory{
+      public Item getItem(){
+          return new Item();
+      }
+}
+
+//商店类，就是代理
+public class Shop implements ItemFactory{
+
+     private ItemFactory factory = new ItemFactoryImpl();
+
+     public Item getItem(){
+          System.out.println(&quot;附加服务&quot;);
+          return factory.getItem();
+     }
+}
+
+//实际调用
+public class Main{
+     public static void main(String[] args){
+          ItemFactory f = new Shop();
+          f.getItem();
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn factory []
+  (println &quot;Return item&quot;))
+
+(defn shop [f]
+  (println &quot;附加服务&quot;)
+  (f))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这叫模式吗？！只是Clojure的特性而已:first-class function!&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;为其他对象提供一种代理以控制对这个对象的访问。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/proxy.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;p&gt;在需要用比较通用和复杂的对象指针代替简单的指针的时候，使用Proxy模式。下面是一些可以使用Proxy模式常见情况：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;远程代理（Remote Proxy）为一个对象在不同的地址空间提供局部代表。&lt;/li&gt;
+&lt;li&gt;虚代理（Virtual Proxy）根据需要创建开销很大的对象。&lt;/li&gt;
+&lt;li&gt;保护代理（Protection Proxy）控制对原始对象的访问。保护代理用于对象应该有不同 的访问权限的时候。&lt;/li&gt;
+&lt;li&gt;智能指引（Smart Reference）取代了简单的指针，它在访问对象时执行一些附加操作。 它的典型用途包括：&lt;/li&gt;
+&lt;li&gt;对指向实际对象的引用计数，这样当该对象没有引用时，可以自动释放它（也称为SmartPointers）。&lt;/li&gt;
+&lt;li&gt;当第一次引用一个持久对象时，将它装入内存。&lt;/li&gt;
+&lt;li&gt;在访问一个实际对象前，检查是否已经锁定了它，以确保其他对象不能改变它。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//工厂接口
+public interface ItemFactory{
+     public Item getItem();
+}
+
+//工厂实现,Item就不实现了，随便怎么写都行
+public class ItemFactoryImpl implements ItemFactory{
+      public Item getItem(){
+          return new Item();
+      }
+}
+
+//商店类，就是代理
+public class Shop implements ItemFactory{
+
+     private ItemFactory factory = new ItemFactoryImpl();
+
+     public Item getItem(){
+          System.out.println(&quot;附加服务&quot;);
+          return factory.getItem();
+     }
+}
+
+//实际调用
+public class Main{
+     public static void main(String[] args){
+          ItemFactory f = new Shop();
+          f.getItem();
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defn factory []
+  (println &quot;Return item&quot;))
+
+(defn shop [f]
+  (println &quot;附加服务&quot;)
+  (f))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这叫模式吗？！只是Clojure的特性而已:first-class function!&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-06门面模式</title>
+        <link href="http://ivanpig.github.io/2015/02/08/facade.html"/>
+        <updated>2015-02-08T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/08/facade</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/facade.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当你要为一个复杂子系统提供一个简单接口时。子系统往往因为不断演化而变得越来越复杂。大多数模式使用时都会产生更多更小的类。这使得子系统更具可重用性，也更容易对子系统进行定制，但这也给那些不需要定制子系统的用户带来一些使用上的困难。Facade可以提供一个简单的缺省视图，这一视图对大多数用户来说已经足够，而那些需要更多的可定制性的用户可以越过Facade层。&lt;/li&gt;
+&lt;li&gt;客户程序与抽象类的实现部分之间存在着很大的依赖性。引入Facade将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性和可移植性。&lt;/li&gt;
+&lt;li&gt;当你需要构建一个层次结构的子系统时，使用门面模式定义子系统中每层的入口点。如果子系统之间是相互依赖的，你可以让它们仅通过Facade进行通讯，从而简化了它们之间的依赖关系。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;public class Camara {
+    public void turnOn(){
+        System.out.println(&quot;开启摄像头！&quot;);
+    }
+
+    public void turnOff(){
+        System.out.println(&quot;关闭摄像头！&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;public class Light {
+    public void turnOn(){
+        System.out.println(&quot;开灯！&quot;);
+    }
+
+    public void turnOff(){
+        System.out.println(&quot;关灯！&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code&gt;public class Sensor {
+    public void activate(){
+        System.out.println(&quot;开启感应器！&quot;);
+    }
+
+    public void deactivate(){
+        System.out.println(&quot;关闭感应器！&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;public class CamaraFacade {
+    private Camara c1, c2;
+    private Light l1, l2, l3;
+    private Sensor s;
+
+   {
+        c1 = new Camara();
+        c2 = new Camara();
+        l1 = new Light();
+        l2 = new Light();
+        l3 = new Light();
+        s = new Sensor();
+    }
+
+    public void activate(){
+        c1.turnOn();
+        c2.turnOn();
+
+        l1.turnOn();
+        l2.turnOn();
+        l3.turnOn();
+
+        s.activate();
+    }
+
+    public void deactivate(){
+        c1.turnOff();
+        c2.turnOff();
+
+        l1.turnOff();
+        l2.turnOff();
+        l3.turnOff();
+
+        s.deactivate();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;public class ClientTest {
+
+    public static void main(String[] args) {
+        CamaraFacade facade = new CamaraFacade();
+        //打开
+        facade.activate();
+        //关闭
+        facade.deactivate();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;这不就是组合函数吗？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn turn-on-camara []
+  (println &quot;开启摄像头&quot;))
+
+(defn turn-on-light []
+  (println &quot;打开闪光灯&quot;))
+
+(defn turn-on-sensor []
+  (println &quot;开启感应器&quot;))
+
+(defn turn-on-facade []
+  (turn-on-camara)
+  (turn-on-light)
+  (turn-on-sensor))
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/facade.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当你要为一个复杂子系统提供一个简单接口时。子系统往往因为不断演化而变得越来越复杂。大多数模式使用时都会产生更多更小的类。这使得子系统更具可重用性，也更容易对子系统进行定制，但这也给那些不需要定制子系统的用户带来一些使用上的困难。Facade可以提供一个简单的缺省视图，这一视图对大多数用户来说已经足够，而那些需要更多的可定制性的用户可以越过Facade层。&lt;/li&gt;
+&lt;li&gt;客户程序与抽象类的实现部分之间存在着很大的依赖性。引入Facade将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性和可移植性。&lt;/li&gt;
+&lt;li&gt;当你需要构建一个层次结构的子系统时，使用门面模式定义子系统中每层的入口点。如果子系统之间是相互依赖的，你可以让它们仅通过Facade进行通讯，从而简化了它们之间的依赖关系。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;public class Camara {
+    public void turnOn(){
+        System.out.println(&quot;开启摄像头！&quot;);
+    }
+
+    public void turnOff(){
+        System.out.println(&quot;关闭摄像头！&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;public class Light {
+    public void turnOn(){
+        System.out.println(&quot;开灯！&quot;);
+    }
+
+    public void turnOff(){
+        System.out.println(&quot;关灯！&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code&gt;public class Sensor {
+    public void activate(){
+        System.out.println(&quot;开启感应器！&quot;);
+    }
+
+    public void deactivate(){
+        System.out.println(&quot;关闭感应器！&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;public class CamaraFacade {
+    private Camara c1, c2;
+    private Light l1, l2, l3;
+    private Sensor s;
+
+   {
+        c1 = new Camara();
+        c2 = new Camara();
+        l1 = new Light();
+        l2 = new Light();
+        l3 = new Light();
+        s = new Sensor();
+    }
+
+    public void activate(){
+        c1.turnOn();
+        c2.turnOn();
+
+        l1.turnOn();
+        l2.turnOn();
+        l3.turnOn();
+
+        s.activate();
+    }
+
+    public void deactivate(){
+        c1.turnOff();
+        c2.turnOff();
+
+        l1.turnOff();
+        l2.turnOff();
+        l3.turnOff();
+
+        s.deactivate();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;public class ClientTest {
+
+    public static void main(String[] args) {
+        CamaraFacade facade = new CamaraFacade();
+        //打开
+        facade.activate();
+        //关闭
+        facade.deactivate();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;这不就是组合函数吗？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn turn-on-camara []
+  (println &quot;开启摄像头&quot;))
+
+(defn turn-on-light []
+  (println &quot;打开闪光灯&quot;))
+
+(defn turn-on-sensor []
+  (println &quot;开启感应器&quot;))
+
+(defn turn-on-facade []
+  (turn-on-camara)
+  (turn-on-light)
+  (turn-on-sensor))
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-05生成器模式</title>
+        <link href="http://ivanpig.github.io/2015/02/07/builder.html"/>
+        <updated>2015-02-07T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/07/builder</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/builder.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当创建复杂对象的算法应该独立于该对象的组成部分以及它们的装配方式时。&lt;/li&gt;
+&lt;li&gt;当构造过程必须允许被构造的对象有不同的表示时。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;// 待构建产品
+class Starbucks {
+    private String size;
+    private String drink;
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setDrink(String drink) {
+        this.drink = drink;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//抽象builder
+abstract class StarbucksBuilder {
+    protected Starbucks starbucks;
+
+    public Starbucks getStarbucks() {
+        return starbucks;
+    }
+
+    public void createStarbucks() {
+        starbucks = new Starbucks();
+        System.out.println(&quot;a drink is created&quot;);
+    }
+
+    public abstract void buildSize();
+    public abstract void buildDrink();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code&gt;// 泡茶builder
+class TeaBuilder extends StarbucksBuilder {
+    public void buildSize() {
+        starbucks.setSize(&quot;large&quot;);
+        System.out.println(&quot;build large size&quot;);
+    }
+
+    public void buildDrink() {
+        starbucks.setDrink(&quot;tea&quot;);
+        System.out.println(&quot;build tea&quot;);
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;// 泡咖啡builder
+class CoffeeBuilder extends StarbucksBuilder {
+    public void buildSize() {
+        starbucks.setSize(&quot;medium&quot;);
+        System.out.println(&quot;build medium size&quot;);
+    }
+
+    public void buildDrink() {
+        starbucks.setDrink(&quot;coffee&quot;);
+        System.out.println(&quot;build coffee&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;//指导如何封装builder
+class Waiter {
+    private StarbucksBuilder starbucksBuilder;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public void setStarbucksBuilder(StarbucksBuilder builder) {
+    starbucksBuilder = builder;
+}
+
+public Starbucks getstarbucksDrink() {
+    return starbucksBuilder.getStarbucks();
+}
+
+public void constructStarbucks() {
+    starbucksBuilder.createStarbucks();
+    starbucksBuilder.buildDrink();
+    starbucksBuilder.buildSize();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}
+```&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//客户
+public class Customer {
+    public static void main(String[] args) {
+        Waiter waiter = new Waiter();
+        StarbucksBuilder coffeeBuilder = new CoffeeBuilder();
+
+        //也可以用泡茶builder沏茶
+        //StarbucksBuilder teaBuilder = new TeaBuilder();
+
+        waiter.setStarbucksBuilder(coffeeBuilder);
+        waiter.constructStarbucks();
+
+        //取到饮料
+        Starbucks drink = waiter.getstarbucksDrink();
+
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;在Clojure里也是个没必要的模式！可以使用multimethod,或者简单实现可以如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn type [d t]
+  (assoc d :type t))
+
+(defn size [d t]
+  (assoc d :size t))
+
+(def drink {})
+
+(-&amp;gt; drink (type :tea) (size :large))
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/builder.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当创建复杂对象的算法应该独立于该对象的组成部分以及它们的装配方式时。&lt;/li&gt;
+&lt;li&gt;当构造过程必须允许被构造的对象有不同的表示时。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;// 待构建产品
+class Starbucks {
+    private String size;
+    private String drink;
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setDrink(String drink) {
+        this.drink = drink;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//抽象builder
+abstract class StarbucksBuilder {
+    protected Starbucks starbucks;
+
+    public Starbucks getStarbucks() {
+        return starbucks;
+    }
+
+    public void createStarbucks() {
+        starbucks = new Starbucks();
+        System.out.println(&quot;a drink is created&quot;);
+    }
+
+    public abstract void buildSize();
+    public abstract void buildDrink();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code&gt;// 泡茶builder
+class TeaBuilder extends StarbucksBuilder {
+    public void buildSize() {
+        starbucks.setSize(&quot;large&quot;);
+        System.out.println(&quot;build large size&quot;);
+    }
+
+    public void buildDrink() {
+        starbucks.setDrink(&quot;tea&quot;);
+        System.out.println(&quot;build tea&quot;);
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;// 泡咖啡builder
+class CoffeeBuilder extends StarbucksBuilder {
+    public void buildSize() {
+        starbucks.setSize(&quot;medium&quot;);
+        System.out.println(&quot;build medium size&quot;);
+    }
+
+    public void buildDrink() {
+        starbucks.setDrink(&quot;coffee&quot;);
+        System.out.println(&quot;build coffee&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;//指导如何封装builder
+class Waiter {
+    private StarbucksBuilder starbucksBuilder;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public void setStarbucksBuilder(StarbucksBuilder builder) {
+    starbucksBuilder = builder;
+}
+
+public Starbucks getstarbucksDrink() {
+    return starbucksBuilder.getStarbucks();
+}
+
+public void constructStarbucks() {
+    starbucksBuilder.createStarbucks();
+    starbucksBuilder.buildDrink();
+    starbucksBuilder.buildSize();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}
+```&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//客户
+public class Customer {
+    public static void main(String[] args) {
+        Waiter waiter = new Waiter();
+        StarbucksBuilder coffeeBuilder = new CoffeeBuilder();
+
+        //也可以用泡茶builder沏茶
+        //StarbucksBuilder teaBuilder = new TeaBuilder();
+
+        waiter.setStarbucksBuilder(coffeeBuilder);
+        waiter.constructStarbucks();
+
+        //取到饮料
+        Starbucks drink = waiter.getstarbucksDrink();
+
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;在Clojure里也是个没必要的模式！可以使用multimethod,或者简单实现可以如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defn type [d t]
+  (assoc d :type t))
+
+(defn size [d t]
+  (assoc d :size t))
+
+(def drink {})
+
+(-&amp;gt; drink (type :tea) (size :large))
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言与模式-04原型模式</title>
+        <link href="http://ivanpig.github.io/2015/02/06/prototype.html"/>
+        <updated>2015-02-06T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/02/06/prototype</id>
+        <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/prototype.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当要实例化的类是在运行时刻指定时，例如，通过动态装载；或者&lt;/li&gt;
+&lt;li&gt;为了避免创建一个与产品类层次平行的工厂类层次时；或者&lt;/li&gt;
+&lt;li&gt;当一个类的实例只能有几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;//浅拷贝
+public class A implements Cloneable{
+
+    private String str;
+    private B b;
+
+    public void setStr(String str){
+        this.str = str;
+    }
+
+    public String getStr(){
+        return str;
+    }
+
+    public B getB() {
+        return b;
+    }
+
+    public void setB(B b) {
+        this.b = b;
+    }
+
+    @Override
+    protected Object clone(){
+        A a = null;
+        try {
+            a = (A) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return a;
+    }
+
+    public static void main(String[] args) {
+        A a = new A();
+        a.setStr(&quot;Hello&quot;);
+        B b = new B();
+        b.setStr(&quot;Hello B&quot;);
+        a.setB(b);
+        System.out.println(&quot;a-str:&quot; + a.getStr());
+        System.out.println(&quot;a-b:&quot; + a.getB().getStr());
+        A ac = null;
+        ac = (A) a.clone();
+        System.out.println(&quot;ac-str:&quot; + ac.getStr());
+        System.out.println(&quot;ac-b:&quot; + ac.getB().getStr());
+
+        a.setStr(&quot;Hello A&quot;);
+        b.setStr(&quot;Hello BB&quot;);
+        a.setB(b);
+
+        System.out.println(&quot;a-str:&quot; + a.getStr());
+        System.out.println(&quot;a-b:&quot; + a.getB().getStr());
+        System.out.println(&quot;ac-str:&quot; + ac.getStr());
+        System.out.println(&quot;ac-b:&quot; + ac.getB().getStr());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code&gt;public class B{
+     private String str;
+
+    public String getStr() {
+        return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//输出结果
+a-str:Hello
+a-b:Hello B
+ac-str:Hello
+ac-b:Hello B
+a-str:Hello A
+a-b:Hello BB
+ac-str:Hello
+ac-b:Hello BB       --浅拷贝导致了，ac和a中的B是相同的引用，a中的b被修改后，ac中的b也被修改，这应该是不想要的结果
+                    --所以需要深拷贝。深拷贝就是将所有涉及到的对象都进行Clone
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;//深拷贝
+public class A implements Cloneable{
+
+    private String str;
+    private B b;
+
+    public void setStr(String str){
+        this.str = str;
+    }
+
+    public String getStr(){
+        return str;
+    }
+
+    public B getB() {
+        return b;
+    }
+
+    public void setB(B b) {
+        this.b = b;
+    }
+
+    @Override
+    protected Object clone(){
+        A a = null;
+        try {
+            a = (A) super.clone();
+            a.b = (B) b.clone();       //此处对b进行clone
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return a;
+    }
+
+    public static void main(String[] args) {
+        A a = new A();
+        a.setStr(&quot;Hello&quot;);
+        B b = new B();
+        b.setStr(&quot;Hello B&quot;);
+        a.setB(b);
+        System.out.println(&quot;a-str:&quot; + a.getStr());
+        System.out.println(&quot;a-b:&quot; + a.getB().getStr());
+        A ac = null;
+        ac = (A) a.clone();
+        System.out.println(&quot;ac-str:&quot; + ac.getStr());
+        System.out.println(&quot;ac-b:&quot; + ac.getB().getStr());
+
+        a.setStr(&quot;Hello A&quot;);
+        b.setStr(&quot;Hello BB&quot;);
+        a.setB(b);
+
+        System.out.println(&quot;a-str:&quot; + a.getStr());
+        System.out.println(&quot;a-b:&quot; + a.getB().getStr());
+        System.out.println(&quot;ac-str:&quot; + ac.getStr());
+        System.out.println(&quot;ac-b:&quot; + ac.getB().getStr());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//B也要实现Cloneable并重写clone方法
+public class B implements Cloneable{
+     private String str;
+
+    public String getStr() {
+        return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//输出结果
+/*
+a-str:Hello
+a-b:Hello B
+ac-str:Hello
+ac-b:Hello B
+a-str:Hello A
+a-b:Hello BB
+ac-str:Hello
+ac-b:Hello B        --此处a中的b被修改后，ac中的b不会被影响
+*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;对于Clojure来说，根本就不需要原型模式！&lt;/p&gt;
+
+&lt;p&gt;首先请想想为什么Java需要原型模式？&lt;/p&gt;
+
+&lt;p&gt;根本原因是Java中的对象是可变的！就像上面的str属性，如果不拷贝，则两个引用指向同一个对象，当其中一个引用改变了str的值，那么另一个引用也会受到影响！&lt;/p&gt;
+
+&lt;p&gt;而在Clojure中，所有数据都是不可变的！当你修改了一个数据，原来的数据并没有变化，而是返回了一个新的数据。这样的话，在Clojure中根本就不需要原型模式。&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
+
+&lt;p&gt;用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/prototype.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;适用性&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当要实例化的类是在运行时刻指定时，例如，通过动态装载；或者&lt;/li&gt;
+&lt;li&gt;为了避免创建一个与产品类层次平行的工厂类层次时；或者&lt;/li&gt;
+&lt;li&gt;当一个类的实例只能有几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Java实现&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;//浅拷贝
+public class A implements Cloneable{
+
+    private String str;
+    private B b;
+
+    public void setStr(String str){
+        this.str = str;
+    }
+
+    public String getStr(){
+        return str;
+    }
+
+    public B getB() {
+        return b;
+    }
+
+    public void setB(B b) {
+        this.b = b;
+    }
+
+    @Override
+    protected Object clone(){
+        A a = null;
+        try {
+            a = (A) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return a;
+    }
+
+    public static void main(String[] args) {
+        A a = new A();
+        a.setStr(&quot;Hello&quot;);
+        B b = new B();
+        b.setStr(&quot;Hello B&quot;);
+        a.setB(b);
+        System.out.println(&quot;a-str:&quot; + a.getStr());
+        System.out.println(&quot;a-b:&quot; + a.getB().getStr());
+        A ac = null;
+        ac = (A) a.clone();
+        System.out.println(&quot;ac-str:&quot; + ac.getStr());
+        System.out.println(&quot;ac-b:&quot; + ac.getB().getStr());
+
+        a.setStr(&quot;Hello A&quot;);
+        b.setStr(&quot;Hello BB&quot;);
+        a.setB(b);
+
+        System.out.println(&quot;a-str:&quot; + a.getStr());
+        System.out.println(&quot;a-b:&quot; + a.getB().getStr());
+        System.out.println(&quot;ac-str:&quot; + ac.getStr());
+        System.out.println(&quot;ac-b:&quot; + ac.getB().getStr());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code&gt;public class B{
+     private String str;
+
+    public String getStr() {
+        return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//输出结果
+a-str:Hello
+a-b:Hello B
+ac-str:Hello
+ac-b:Hello B
+a-str:Hello A
+a-b:Hello BB
+ac-str:Hello
+ac-b:Hello BB       --浅拷贝导致了，ac和a中的B是相同的引用，a中的b被修改后，ac中的b也被修改，这应该是不想要的结果
+                    --所以需要深拷贝。深拷贝就是将所有涉及到的对象都进行Clone
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;//深拷贝
+public class A implements Cloneable{
+
+    private String str;
+    private B b;
+
+    public void setStr(String str){
+        this.str = str;
+    }
+
+    public String getStr(){
+        return str;
+    }
+
+    public B getB() {
+        return b;
+    }
+
+    public void setB(B b) {
+        this.b = b;
+    }
+
+    @Override
+    protected Object clone(){
+        A a = null;
+        try {
+            a = (A) super.clone();
+            a.b = (B) b.clone();       //此处对b进行clone
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return a;
+    }
+
+    public static void main(String[] args) {
+        A a = new A();
+        a.setStr(&quot;Hello&quot;);
+        B b = new B();
+        b.setStr(&quot;Hello B&quot;);
+        a.setB(b);
+        System.out.println(&quot;a-str:&quot; + a.getStr());
+        System.out.println(&quot;a-b:&quot; + a.getB().getStr());
+        A ac = null;
+        ac = (A) a.clone();
+        System.out.println(&quot;ac-str:&quot; + ac.getStr());
+        System.out.println(&quot;ac-b:&quot; + ac.getB().getStr());
+
+        a.setStr(&quot;Hello A&quot;);
+        b.setStr(&quot;Hello BB&quot;);
+        a.setB(b);
+
+        System.out.println(&quot;a-str:&quot; + a.getStr());
+        System.out.println(&quot;a-b:&quot; + a.getB().getStr());
+        System.out.println(&quot;ac-str:&quot; + ac.getStr());
+        System.out.println(&quot;ac-b:&quot; + ac.getB().getStr());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//B也要实现Cloneable并重写clone方法
+public class B implements Cloneable{
+     private String str;
+
+    public String getStr() {
+        return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//输出结果
+/*
+a-str:Hello
+a-b:Hello B
+ac-str:Hello
+ac-b:Hello B
+a-str:Hello A
+a-b:Hello BB
+ac-str:Hello
+ac-b:Hello B        --此处a中的b被修改后，ac中的b不会被影响
+*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;对于Clojure来说，根本就不需要原型模式！&lt;/p&gt;
+
+&lt;p&gt;首先请想想为什么Java需要原型模式？&lt;/p&gt;
+
+&lt;p&gt;根本原因是Java中的对象是可变的！就像上面的str属性，如果不拷贝，则两个引用指向同一个对象，当其中一个引用改变了str的值，那么另一个引用也会受到影响！&lt;/p&gt;
+
+&lt;p&gt;而在Clojure中，所有数据都是不可变的！当你修改了一个数据，原来的数据并没有变化，而是返回了一个新的数据。这样的话，在Clojure中根本就不需要原型模式。&lt;/p&gt;
+</summary>
+    </entry>
     
     <entry>
         <title>语言与模式-03抽象工厂模式</title>
@@ -626,6 +5683,1895 @@ factory.getPig().run();
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;需要模式吗？&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>Java基础</title>
+        <link href="http://ivanpig.github.io/2014/11/29/javabasic.html"/>
+        <updated>2014-11-29T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2014/11/29/javabasic</id>
+        <content type="html">&lt;p&gt;一种记录、分析、总结、组织、讨论及解释信息的、有插图或无插图的、硬抄或平装的、加套或不加套的，包含有前言、介绍、目录表、索引的用以增长知识、加深理解、提升并教育人类大脑的装置，该装置需要视觉、有触碰的感官形式使用。 --- 《三傻大闹宝莱坞》&lt;/p&gt;
+
+&lt;h1&gt;抽象&lt;/h1&gt;
+
+&lt;p&gt;上面的长篇大论实际上是要解释什么是&quot;书&quot;！在电影中是男主角用来讽刺教授的死板的。实际上，仔细想来，我们所熟悉的任何东西都需要长篇大论来解释，而有些词甚至难以解释！比如说：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;人&lt;/li&gt;
+&lt;li&gt;1&lt;/li&gt;
+&lt;li&gt;美：难以解释，很感性的东西&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;我们不断的学习知识来认知这个世界。而我们所学习的知识实际上是对这个世界的抽象！&lt;/p&gt;
+
+&lt;p&gt;和自然语言一样，编程语言也是对现实世界的抽象。自然语言是抽象给我们来认知，而编程语言则是抽象给计算机来认知。计算机擅长高频次简单计算，所以针对计算机的抽象与数学更接近。&lt;/p&gt;
+
+&lt;p&gt;所以我们从多项式开始，来引出编程语言！首先看如下一组多项式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1
+1 + 1
+(1 + 1) * 3 + (1 + 1)
+(1 + 1) * 3 + (1 + 2)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;请找出如上多项式的共同点？&lt;/li&gt;
+&lt;li&gt;数学上如何处理上面的问题呢？&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;令 a = 1 + 1,b = 1 + 2
+1       =&amp;gt;    (1 + 1) - 1  =&amp;gt;  a - 1  =&amp;gt; 1 * a + (-1)
+1 + 1   =&amp;gt;    a   =&amp;gt;  1 * a + (0 * a)
+(1 + 1) * 3 + (1 + 1)    =&amp;gt;   3 * a + a
+(1 + 1) * 3 + (1 + 2)    =&amp;gt;   3 * a + b
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出:上面的多项式都可以表示为na+b的形式&lt;/p&gt;
+
+&lt;p&gt;那编程语言如何处理这些问题呢?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;int a = 1 + 1;
+int b = 1 + 2;
+//a,b称为变量，类似自然语言中的代词。变量是编程语言中最基本的抽象
+//1称为字面量
+1       =&amp;gt;    (1 + 1) - 1  =&amp;gt;  a - 1  =&amp;gt; 1 * a + (-1)
+1 + 1   =&amp;gt;    a   =&amp;gt;  1 * a + (0 * a)
+(1 + 1) * 3 + (1 + 1)    =&amp;gt;   3 * a + a
+(1 + 1) * 3 + (1 + 2)    =&amp;gt;   3 * a + b
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出，基本是没有区别的!&lt;/p&gt;
+
+&lt;p&gt;在我们动手运行代码前！我们先来搭建Java环境!&lt;/p&gt;
+
+&lt;h1&gt;Java环境搭建&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;到&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/index.html&quot;&gt;Oracle官方网站&lt;/a&gt;下载相应操作系统的JDK进行安装&lt;/li&gt;
+&lt;li&gt;打开命令行,输入&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;java -version
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;得到如下信息，则表示搭建成功!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;java version &quot;1.8.0&quot;
+Java(TM) SE Runtime Environment (build 1.8.0-b132)
+Java HotSpot(TM) 64-Bit Server VM (build 25.0-b70, mixed mode)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Java中需要理解两个路径：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;path是系统查找程序的路径&lt;/li&gt;
+&lt;li&gt;classpath是Java查找类的路径&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;练习&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;请从服务器下载jdk,并进行安装&lt;/li&gt;
+&lt;li&gt;验证安装是否成功&lt;/li&gt;
+&lt;li&gt;修改path,理解path的作用&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;编辑器选择&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;文本编辑器&lt;/li&gt;
+&lt;li&gt;Notepad++&lt;/li&gt;
+&lt;li&gt;Editplus&lt;/li&gt;
+&lt;li&gt;UltraEdit&lt;/li&gt;
+&lt;li&gt;TextMate&lt;/li&gt;
+&lt;li&gt;Sublime Text&lt;/li&gt;
+&lt;li&gt;Vim&lt;/li&gt;
+&lt;li&gt;Emacs&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;学习曲线&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/javabasic/5.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;练习&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;下载Notepad++,并打开&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;IDE选择&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;eclipse&lt;/li&gt;
+&lt;li&gt;Netbeans&lt;/li&gt;
+&lt;li&gt;Intellij IDEA&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;第一个程序&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;创建文件Hello.java&lt;/li&gt;
+&lt;li&gt;输入如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+//例子代码
+public class Hello{
+    public static void main(String[] args){
+        int a = 1 + 1;
+        int b = 1 + 2;
+        System.out.println(&quot;(1 + 1) * 3 + (1 + 2) = &quot; + (a * 3 + b));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;打开命令行,切换到文件所在路径&lt;/li&gt;
+&lt;li&gt;输入javac Hello.java&lt;/li&gt;
+&lt;li&gt;输入java Hello&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;课堂练习&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;请按步骤,新建Hello.java程序,并运行&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;运行机制&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;思考,Java如何做到跨平台?&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;#&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;代码组成&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+//例子代码
+public class Hello{
+    public static void main(String[] args){
+        int a = 1 + 1;
+        int b = 1 + 2;
+        System.out.println(&quot;(1 + 1) * 3 + (1 + 2) = &quot; + (a * 3 + b));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;注释&lt;/li&gt;
+&lt;li&gt;标识符(Hello,args)&lt;/li&gt;
+&lt;li&gt;关键字(public,class,static,void)&lt;/li&gt;
+&lt;li&gt;字面量(字符串) (&quot;(1 + 1) * 3 + (1 + 2) = &quot;)&lt;/li&gt;
+&lt;li&gt;变量(args,a,b)&lt;/li&gt;
+&lt;li&gt;类&lt;/li&gt;
+&lt;li&gt;方法&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;注释&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+//单行注释
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+/*
+多行注释
+*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+/**
+ * javadoc注释
+ */
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;标识符&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;标识符由字母（A-Z或者a-z）,美元符（\$）、下划线（_）或数字组成&lt;/li&gt;
+&lt;li&gt;标识符都应该以字母（A-Z或者a-z）,美元符（\$）、或者下划线（_）开始&lt;/li&gt;
+&lt;li&gt;关键字不能用作标识符&lt;/li&gt;
+&lt;li&gt;标识符是大小写敏感的&lt;/li&gt;
+&lt;li&gt;合法标识符举例：age、\$salary、~value~、_~1value~&lt;/li&gt;
+&lt;li&gt;非法标识符举例：123abc、-salary&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;关键字&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;字面量&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;字符串:&quot;Hello&quot;&lt;/li&gt;
+&lt;li&gt;字符:'H','e','l','l','o'&lt;/li&gt;
+&lt;li&gt;布尔值:true,false&lt;/li&gt;
+&lt;li&gt;数值:1,2.4&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;变量&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;变量就是一个命名的内存块&lt;/li&gt;
+&lt;li&gt;变量只能存储一种具体类型的数据&lt;/li&gt;
+&lt;li&gt;使用变量之前必须声明(变量名和类型)&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;使用前需要初始化&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;局部变量:方法或语句块内部&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;成员变量:方法外,类内部&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;类和对象&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;类是对一个特定类型对象的描述,它定义了一种新的类型&lt;/li&gt;
+&lt;li&gt;类定义中的成员变量可以是任意类型&lt;/li&gt;
+&lt;li&gt;对象是类的实体,使用关键字new来创建&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;方法&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;实例方法&lt;/li&gt;
+&lt;li&gt;静态方法(static)&lt;/li&gt;
+&lt;li&gt;方法调用[递归调用]&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Hello{
+    public static void main(String[] args){
+        System.out.println(&quot;Hello&quot;);
+        Hello.main(null);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;基本类型&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/4.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;使用递归来计算基本类型的范围&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test{
+    public static long p(int num){
+        if(num == 0) return 1;
+        return 2 * p(--num);  //--num 与 num--
+    }
+
+    public static long caculateRange(int num){
+        if(num == 0) return 1;
+        return p(num) + caculateRange(--num);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;数组&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;数组是相同类型的,用一个标示符名称封装到一起的一个对象序列或基本类型数据序列&lt;/p&gt;
+
+&lt;h2&gt;一维数组&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+int[] arr;
+int arr[];
+//初始化
+arr = {1,2,3};
+arr = new int[3];  //默认初始化
+//使用,下标从0开始
+arr[0];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;多维数组&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+int[][] arr = { {1,2,3},{4,5,6}};
+int[][][] arr = new int[2][3][4];
+//每一维长度可以不同
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;运算符(操作符)&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;运算符指明对操作数的运算方式&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;算术运算符&lt;/li&gt;
+&lt;li&gt;关系运算符&lt;/li&gt;
+&lt;li&gt;位运算符&lt;/li&gt;
+&lt;li&gt;逻辑运算符&lt;/li&gt;
+&lt;li&gt;赋值运算符&lt;/li&gt;
+&lt;li&gt;其他运算符&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;算术运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
++    加法 - 相加运算符两侧的值
+-    减法 - 左操作数减去右操作数
+*    乘法 - 相乘操作符两侧的值
+/    除法 - 左操作数除以右操作数
+%    取模 - 右操作数除左操作数的余数
+++   自增 - 操作数的值增加1
+-    自减 - 操作数的值减少1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+  public static void main(String args[]) {
+     int a = 10;
+     int b = 20;
+     int c = 25;
+     int d = 25;
+     System.out.println(&quot;a + b = &quot; + (a + b) );
+     System.out.println(&quot;a - b = &quot; + (a - b) );
+     System.out.println(&quot;a * b = &quot; + (a * b) );
+     System.out.println(&quot;b / a = &quot; + (b / a) );
+     System.out.println(&quot;b % a = &quot; + (b % a) );
+     System.out.println(&quot;c % a = &quot; + (c % a) );
+     System.out.println(&quot;a++   = &quot; +  (a++) );
+     System.out.println(&quot;b--   = &quot; +  (a--) );
+     System.out.println(&quot;d++   = &quot; +  (d++) );
+     System.out.println(&quot;++d   = &quot; +  (++d) );
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;关系运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+==   检查如果两个操作数的值是否相等，如果相等则条件为真
+=!   检查如果两个操作数的值是否相等，如果值不相等则条件为真
+&amp;gt;    检查左操作数的值是否大于右操作数的值，如果是那么条件为真
+&amp;lt;    检查左操作数的值是否小于右操作数的值，如果是那么条件为真
+&amp;gt;=   检查左操作数的值是否大于或等于右操作数的值，如果是那么条件为真
+&amp;lt;=   检查左操作数的值是否小于或等于右操作数的值，如果是那么条件为真
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+  public static void main(String args[]) {
+     int a = 10;
+     int b = 20;
+     System.out.println(&quot;a == b = &quot; + (a == b) );
+     System.out.println(&quot;a != b = &quot; + (a != b) );
+     System.out.println(&quot;a &amp;gt; b = &quot; + (a &amp;gt; b) );
+     System.out.println(&quot;a &amp;lt; b = &quot; + (a &amp;lt; b) );
+     System.out.println(&quot;b &amp;gt;= a = &quot; + (b &amp;gt;= a) );
+     System.out.println(&quot;b &amp;lt;= a = &quot; + (b &amp;lt;= a) );
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;位运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+&amp;amp;    按位与操作符，当且仅当两个操作数的某一位都非0时候结果的该位才为1
+|    按位或操作符，只要两个操作数的某一位有一个非0时候结果的该位就为1
+^    按位异或操作符，两个操作数的某一位不相同时候结果的该位就为1
+~    按位补运算符翻转操作数的每一位
+&amp;lt;&amp;lt;   按位左移运算符。左操作数按位左移右操作数指定的位数
+&amp;gt;&amp;gt;   按位右移运算符。左操作数按位右移右操作数指定的位数
+&amp;gt;&amp;gt;&amp;gt;      按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+  public static void main(String args[]) {
+     int a = 60; /* 60 = 0011 1100 */
+     int b = 13; /* 13 = 0000 1101 */
+     int c = 0;
+     c = a &amp;amp; b;       /* 12 = 0000 1100 */
+     System.out.println(&quot;a &amp;amp; b = &quot; + c );
+     c = a | b;       /* 61 = 0011 1101 */
+     System.out.println(&quot;a | b = &quot; + c );
+     c = a ^ b;       /* 49 = 0011 0001 */
+     System.out.println(&quot;a ^ b = &quot; + c );
+     c = ~a;          /*-61 = 1100 0011 */
+     System.out.println(&quot;~a = &quot; + c );
+     c = a &amp;lt;&amp;lt; 2;     /* 240 = 1111 0000 */
+     System.out.println(&quot;a &amp;lt;&amp;lt; 2 = &quot; + c );
+     c = a &amp;gt;&amp;gt; 2;     /* 215 = 1111 */
+     System.out.println(&quot;a &amp;gt;&amp;gt; 2  = &quot; + c );
+     c = a &amp;gt;&amp;gt;&amp;gt; 2;     /* 215 = 0000 1111 */
+     System.out.println(&quot;a &amp;gt;&amp;gt;&amp;gt; 2 = &quot; + c );
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;逻辑运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+&amp;amp;&amp;amp;   称为逻辑与运算符。当且仅当两个操作数都为真，条件才为真
+||   称为逻辑或操作符。如果任何两个操作数任何一个为真，条件为真
+!    称为逻辑非运算符。用来反转操作数的逻辑状态。如果条件为true，则逻辑非运算符将得到false。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+  public static void main(String args[]) {
+     boolean a = true;
+     boolean b = false;
+     System.out.println(&quot;a &amp;amp;&amp;amp; b = &quot; + (a&amp;amp;&amp;amp;b));
+     System.out.println(&quot;a || b = &quot; + (a||b) );
+     System.out.println(&quot;!(a &amp;amp;&amp;amp; b) = &quot; + !(a &amp;amp;&amp;amp; b));
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;赋值运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+=    简单的赋值运算符，将右操作数的值赋给左侧操作数
++=   加和赋值操作符，它把左操作数和右操作数相加赋值给左操作数
+-=   减和赋值操作符，它把左操作数和右操作数相减赋值给左操作数
+*=   乘和赋值操作符，它把左操作数和右操作数相乘赋值给左操作数
+/=   除和赋值操作符，它把左操作数和右操作数相除赋值给左操作数
+%=   取模和赋值操作符，它把左操作数和右操作数取模后赋值给左操作数
+&amp;lt;&amp;lt;=  左移位赋值运算符
+&amp;gt;&amp;gt;=  右移位赋值运算符
+&amp;amp;=   按位与赋值运算符
+^=   按位异或赋值操作符
+|=   按位或赋值操作符
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+  public static void main(String args[]) {
+     int a = 10; int b = 20; int c = 0; c = a + b;
+     System.out.println(&quot;c = a + b = &quot; + c );
+     c += a ;
+     System.out.println(&quot;c += a  = &quot; + c );
+     c -= a ;
+     System.out.println(&quot;c -= a = &quot; + c );
+     c *= a ;
+     System.out.println(&quot;c *= a = &quot; + c );
+     a = 10; c = 15; c /= a ;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;三目运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+variable x = (expression) ? value if true : value if false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+        int a , b;
+        a = 10;
+        b = (a == 1) ? 20: 30;
+        System.out.println( &quot;Value of b is : &quot; +  b );
+        b = (a == 10) ? 20: 30;
+        System.out.println( &quot;Value of b is : &quot; + b );
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;instanceof&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+( Object reference variable ) instanceof  (class/interface type)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+&quot;James&quot; instanceof String;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;运算符优先级&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+后缀     () [] . (点操作符)
+一元   ++ - ！ ~
+乘性   * / %
+加性   + -
+移位   &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;  &amp;lt;&amp;lt;
+关系   &amp;gt;&amp;gt; = &amp;lt;&amp;lt; =
+相等   ==  !=
+按位与  &amp;amp;
+按位异或     ^
+按位或  |
+逻辑与  &amp;amp;&amp;amp;
+逻辑或  ||
+条件   ? ：
+赋值   = += -= *= /= %= &amp;gt;&amp;gt;= &amp;lt;&amp;lt;= ＆= ^= |=
+逗号   ,
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;控制执行流程&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;if-else&lt;/li&gt;
+&lt;li&gt;switch&lt;/li&gt;
+&lt;li&gt;while&lt;/li&gt;
+&lt;li&gt;do-while&lt;/li&gt;
+&lt;li&gt;for&lt;/li&gt;
+&lt;li&gt;foreach&lt;/li&gt;
+&lt;li&gt;break&lt;/li&gt;
+&lt;li&gt;continue&lt;/li&gt;
+&lt;li&gt;return&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;if&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+if(布尔表达式) {
+   //如果布尔表达式为true将执行的语句
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int x = 10;
+      if( x &amp;lt; 20 ){
+         System.out.print(&quot;这是 if 语句&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;if...else&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+if(布尔表达式){
+   //如果布尔表达式的值为true
+}else{
+   //如果布尔表达式的值为false
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      if( x &amp;lt; 20 ){
+         System.out.print(&quot;这是 if 语句&quot;);
+      }else{
+         System.out.print(&quot;这是 else 语句&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;if...else if...else&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+if(布尔表达式 1){
+   //如果布尔表达式 1的值为true执行代码
+}else if(布尔表达式 2){
+   //如果布尔表达式 2的值为true执行代码
+}else if(布尔表达式 3){
+   //如果布尔表达式 3的值为true执行代码
+}else {
+   //如果以上布尔表达式都不为true执行代码
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      if( x == 10 ){
+         System.out.print(&quot;Value of X is 10&quot;);
+      }else if( x == 20 ){
+         System.out.print(&quot;Value of X is 20&quot;);
+      }else if( x == 30 ){
+         System.out.print(&quot;Value of X is 30&quot;);
+      }else{
+         System.out.print(&quot;This is else statement&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;if嵌套&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      int y = 10;
+      if( x == 30 ){
+         if( y == 10 ){
+             System.out.print(&quot;X = 30 and Y = 10&quot;);
+          }
+       }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;switch&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+switch(expression){
+    case value :
+       //语句
+       break; //可选
+    case value :
+       //语句
+       break; //可选
+    //你可以有任意数量的case语句
+    default : //可选
+       //语句
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;注意点&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;switch语句中的变量类型只能为byte、short、int或者char,enum.
+&lt;strong&gt;JDK7开始支持String&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;switch语句可以拥有多个case语句。每个case后面跟一个要比较的值和冒号。&lt;/li&gt;
+&lt;li&gt;case语句中的值的数据类型必须与变量的数据类型相同，而且只能是常量或者字面常量。&lt;/li&gt;
+&lt;li&gt;当变量的值与case语句的值相等时，那么case语句之后的语句开始执行，直到break语句出现才会跳出switch语句。&lt;/li&gt;
+&lt;li&gt;当遇到break语句时，switch语句终止。程序跳转到switch语句后面的语句执行。&lt;/li&gt;
+&lt;li&gt;switch语句可以包含一个default分支，该分支必须是switch语句的最后一个分支。default在没有case语句的值和变量值相等的时候执行。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      char grade = 'C';
+      switch(grade) {
+         case 'A' :
+            System.out.println(&quot;Excellent!&quot;);
+            break;
+         case 'B' :
+         case 'C' :
+            System.out.println(&quot;Well done&quot;);
+            break;
+         case 'D' :
+            System.out.println(&quot;You passed&quot;);
+         case 'F' :
+            System.out.println(&quot;Better try again&quot;);
+            break;
+         default :
+            System.out.println(&quot;Invalid grade&quot;);
+      }
+      System.out.println(&quot;Your grade is &quot; + grade);
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;while&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+while( 布尔表达式 ) {
+    //循环内容
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]) {
+      int x = 10;
+      while( x &amp;lt; 20 ) {
+         System.out.print(&quot;value of x : &quot; + x );
+         x++;
+         System.out.print(&quot;\n&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;do-while&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+do {
+       //代码语句
+}while(布尔表达式);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int x = 10;
+      do{
+         System.out.print(&quot;value of x : &quot; + x );
+         x++;
+         System.out.print(&quot;\n&quot;);
+      }while( x &amp;lt; 20 );
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;for&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+for(初始化; 布尔表达式; 更新) {
+    //代码语句
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;最先执行初始化步骤。可以声明并初始化一个或多个循环控制变量，也可以是空语句。&lt;/li&gt;
+&lt;li&gt;然后，检测布尔表达式的值。如果为true，循环体被执行。如果为false，循环终止，开始执行循环体后面的语句。&lt;/li&gt;
+&lt;li&gt;执行一次循环后，更新循环控制变量。&lt;/li&gt;
+&lt;li&gt;再次检测布尔表达式。循环执行上面的过程。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]) {
+      for(int x = 10; x &amp;lt; 20; x = x+1) {
+         System.out.print(&quot;value of x : &quot; + x );
+         System.out.print(&quot;\n&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;foreach&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+for(声明语句 : 表达式) {
+   //代码句子
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int[] numbers = {10, 20, 30, 40, 50};
+      for(int x : numbers){
+         System.out.print( x );
+         System.out.print(&quot;,&quot;);
+      }
+      System.out.print(&quot;\n&quot;);
+
+      String[] names ={&quot;James&quot;, &quot;Larry&quot;, &quot;Tom&quot;, &quot;Lacy&quot;};
+      for(String name : names) {
+         System.out.print( name );
+         System.out.print(&quot;,&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;break&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]) {
+      int [] numbers = {10, 20, 30, 40, 50};
+
+      for(int x : numbers) {
+         if(x == 30) {
+          break;
+         }
+         System.out.print(x);
+         System.out.print(&quot;\n&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;continue&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]) {
+      int [] numbers = {10, 20, 30, 40, 50};
+      for(int x : numbers) {
+         if(x == 30) {
+          continue;
+         }
+         System.out.print(x);
+         System.out.print(&quot;\n&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;labeled break与labeled continue&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]) {
+        int [] numbers = {10, 20, 30, 40, 50};
+        outer: for(int x : numbers) {
+            for(int i = 1;i &amp;lt; 3;i++) {
+                if (x == 30) {
+                    break outer;
+                }
+                System.out.print(x);
+                System.out.print(&quot;\n&quot;);
+            }
+            System.out.println(&quot;outer&quot; + x);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;return&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;跳出当前方法,并返回方法所需要的值(如果有返回值的话)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;课堂练习&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用数组计算矩阵乘法&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;答案&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test{
+    public static void main(String[] args){
+        int[][] a = { {1,0,2},{-1,3,1}};
+        int[][] b = { {3,1},{2,1},{1,0}};
+        int[][] c = new int[2][2];
+        for(int i = 0; i &amp;lt; 2;i++){
+            int tmp = 0;
+            int tmp2 = 0;
+            for(int j = 0;j &amp;lt; 3;j++){
+                tmp += a[i][j] * b[j][i];
+                tmp2 += a[i][j] * b[j][1-i];
+            }
+            c[i][i] = tmp;
+            c[i][1-i]=tmp2;
+        }
+        System.out.println(c[0][0]);
+        System.out.println(c[0][1]);
+        System.out.println(c[1][0]);
+        System.out.println(c[1][1]);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;课后作业&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;理解path与classpath&lt;/li&gt;
+&lt;li&gt;请任意修改hello world,并尝试编译运行!如报错,请尝试理解报错信息!&lt;/li&gt;
+&lt;li&gt;请编写程序,打印如下图形.你能想出几种方法?你认为最简单的方法是哪种?&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;
+  1
+ 111
+11111
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;请使用循环和递归分别实现斐波那契数列&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;
+1 1 2 3 5 8 13 ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;本机安装eclipse,并在eclipse中运行hello world&lt;/li&gt;
+&lt;li&gt;请到网上搜索面向对象编程,尝试理解面向对象编程,及其与面向过程编程的区别&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+        <summary type="html">&lt;p&gt;一种记录、分析、总结、组织、讨论及解释信息的、有插图或无插图的、硬抄或平装的、加套或不加套的，包含有前言、介绍、目录表、索引的用以增长知识、加深理解、提升并教育人类大脑的装置，该装置需要视觉、有触碰的感官形式使用。 --- 《三傻大闹宝莱坞》&lt;/p&gt;
+
+&lt;h1&gt;抽象&lt;/h1&gt;
+
+&lt;p&gt;上面的长篇大论实际上是要解释什么是&quot;书&quot;！在电影中是男主角用来讽刺教授的死板的。实际上，仔细想来，我们所熟悉的任何东西都需要长篇大论来解释，而有些词甚至难以解释！比如说：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;人&lt;/li&gt;
+&lt;li&gt;1&lt;/li&gt;
+&lt;li&gt;美：难以解释，很感性的东西&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;我们不断的学习知识来认知这个世界。而我们所学习的知识实际上是对这个世界的抽象！&lt;/p&gt;
+
+&lt;p&gt;和自然语言一样，编程语言也是对现实世界的抽象。自然语言是抽象给我们来认知，而编程语言则是抽象给计算机来认知。计算机擅长高频次简单计算，所以针对计算机的抽象与数学更接近。&lt;/p&gt;
+
+&lt;p&gt;所以我们从多项式开始，来引出编程语言！首先看如下一组多项式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1
+1 + 1
+(1 + 1) * 3 + (1 + 1)
+(1 + 1) * 3 + (1 + 2)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;请找出如上多项式的共同点？&lt;/li&gt;
+&lt;li&gt;数学上如何处理上面的问题呢？&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;令 a = 1 + 1,b = 1 + 2
+1       =&amp;gt;    (1 + 1) - 1  =&amp;gt;  a - 1  =&amp;gt; 1 * a + (-1)
+1 + 1   =&amp;gt;    a   =&amp;gt;  1 * a + (0 * a)
+(1 + 1) * 3 + (1 + 1)    =&amp;gt;   3 * a + a
+(1 + 1) * 3 + (1 + 2)    =&amp;gt;   3 * a + b
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出:上面的多项式都可以表示为na+b的形式&lt;/p&gt;
+
+&lt;p&gt;那编程语言如何处理这些问题呢?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;int a = 1 + 1;
+int b = 1 + 2;
+//a,b称为变量，类似自然语言中的代词。变量是编程语言中最基本的抽象
+//1称为字面量
+1       =&amp;gt;    (1 + 1) - 1  =&amp;gt;  a - 1  =&amp;gt; 1 * a + (-1)
+1 + 1   =&amp;gt;    a   =&amp;gt;  1 * a + (0 * a)
+(1 + 1) * 3 + (1 + 1)    =&amp;gt;   3 * a + a
+(1 + 1) * 3 + (1 + 2)    =&amp;gt;   3 * a + b
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出，基本是没有区别的!&lt;/p&gt;
+
+&lt;p&gt;在我们动手运行代码前！我们先来搭建Java环境!&lt;/p&gt;
+
+&lt;h1&gt;Java环境搭建&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;到&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/index.html&quot;&gt;Oracle官方网站&lt;/a&gt;下载相应操作系统的JDK进行安装&lt;/li&gt;
+&lt;li&gt;打开命令行,输入&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;java -version
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;得到如下信息，则表示搭建成功!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;java version &quot;1.8.0&quot;
+Java(TM) SE Runtime Environment (build 1.8.0-b132)
+Java HotSpot(TM) 64-Bit Server VM (build 25.0-b70, mixed mode)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Java中需要理解两个路径：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;path是系统查找程序的路径&lt;/li&gt;
+&lt;li&gt;classpath是Java查找类的路径&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;练习&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;请从服务器下载jdk,并进行安装&lt;/li&gt;
+&lt;li&gt;验证安装是否成功&lt;/li&gt;
+&lt;li&gt;修改path,理解path的作用&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;编辑器选择&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;文本编辑器&lt;/li&gt;
+&lt;li&gt;Notepad++&lt;/li&gt;
+&lt;li&gt;Editplus&lt;/li&gt;
+&lt;li&gt;UltraEdit&lt;/li&gt;
+&lt;li&gt;TextMate&lt;/li&gt;
+&lt;li&gt;Sublime Text&lt;/li&gt;
+&lt;li&gt;Vim&lt;/li&gt;
+&lt;li&gt;Emacs&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;学习曲线&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/javabasic/5.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;练习&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;下载Notepad++,并打开&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;IDE选择&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;eclipse&lt;/li&gt;
+&lt;li&gt;Netbeans&lt;/li&gt;
+&lt;li&gt;Intellij IDEA&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;第一个程序&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;创建文件Hello.java&lt;/li&gt;
+&lt;li&gt;输入如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+//例子代码
+public class Hello{
+    public static void main(String[] args){
+        int a = 1 + 1;
+        int b = 1 + 2;
+        System.out.println(&quot;(1 + 1) * 3 + (1 + 2) = &quot; + (a * 3 + b));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;打开命令行,切换到文件所在路径&lt;/li&gt;
+&lt;li&gt;输入javac Hello.java&lt;/li&gt;
+&lt;li&gt;输入java Hello&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;课堂练习&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;请按步骤,新建Hello.java程序,并运行&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;运行机制&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;思考,Java如何做到跨平台?&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;#&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;代码组成&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+//例子代码
+public class Hello{
+    public static void main(String[] args){
+        int a = 1 + 1;
+        int b = 1 + 2;
+        System.out.println(&quot;(1 + 1) * 3 + (1 + 2) = &quot; + (a * 3 + b));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;注释&lt;/li&gt;
+&lt;li&gt;标识符(Hello,args)&lt;/li&gt;
+&lt;li&gt;关键字(public,class,static,void)&lt;/li&gt;
+&lt;li&gt;字面量(字符串) (&quot;(1 + 1) * 3 + (1 + 2) = &quot;)&lt;/li&gt;
+&lt;li&gt;变量(args,a,b)&lt;/li&gt;
+&lt;li&gt;类&lt;/li&gt;
+&lt;li&gt;方法&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;注释&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+//单行注释
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+/*
+多行注释
+*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+/**
+ * javadoc注释
+ */
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;标识符&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;标识符由字母（A-Z或者a-z）,美元符（\$）、下划线（_）或数字组成&lt;/li&gt;
+&lt;li&gt;标识符都应该以字母（A-Z或者a-z）,美元符（\$）、或者下划线（_）开始&lt;/li&gt;
+&lt;li&gt;关键字不能用作标识符&lt;/li&gt;
+&lt;li&gt;标识符是大小写敏感的&lt;/li&gt;
+&lt;li&gt;合法标识符举例：age、\$salary、~value~、_~1value~&lt;/li&gt;
+&lt;li&gt;非法标识符举例：123abc、-salary&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;关键字&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;字面量&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;字符串:&quot;Hello&quot;&lt;/li&gt;
+&lt;li&gt;字符:'H','e','l','l','o'&lt;/li&gt;
+&lt;li&gt;布尔值:true,false&lt;/li&gt;
+&lt;li&gt;数值:1,2.4&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;变量&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;变量就是一个命名的内存块&lt;/li&gt;
+&lt;li&gt;变量只能存储一种具体类型的数据&lt;/li&gt;
+&lt;li&gt;使用变量之前必须声明(变量名和类型)&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;使用前需要初始化&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;局部变量:方法或语句块内部&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;成员变量:方法外,类内部&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;类和对象&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;类是对一个特定类型对象的描述,它定义了一种新的类型&lt;/li&gt;
+&lt;li&gt;类定义中的成员变量可以是任意类型&lt;/li&gt;
+&lt;li&gt;对象是类的实体,使用关键字new来创建&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;方法&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;实例方法&lt;/li&gt;
+&lt;li&gt;静态方法(static)&lt;/li&gt;
+&lt;li&gt;方法调用[递归调用]&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Hello{
+    public static void main(String[] args){
+        System.out.println(&quot;Hello&quot;);
+        Hello.main(null);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;基本类型&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/4.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;使用递归来计算基本类型的范围&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test{
+    public static long p(int num){
+        if(num == 0) return 1;
+        return 2 * p(--num);  //--num 与 num--
+    }
+
+    public static long caculateRange(int num){
+        if(num == 0) return 1;
+        return p(num) + caculateRange(--num);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;数组&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;数组是相同类型的,用一个标示符名称封装到一起的一个对象序列或基本类型数据序列&lt;/p&gt;
+
+&lt;h2&gt;一维数组&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+int[] arr;
+int arr[];
+//初始化
+arr = {1,2,3};
+arr = new int[3];  //默认初始化
+//使用,下标从0开始
+arr[0];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;多维数组&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+int[][] arr = { {1,2,3},{4,5,6}};
+int[][][] arr = new int[2][3][4];
+//每一维长度可以不同
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;运算符(操作符)&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;运算符指明对操作数的运算方式&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;算术运算符&lt;/li&gt;
+&lt;li&gt;关系运算符&lt;/li&gt;
+&lt;li&gt;位运算符&lt;/li&gt;
+&lt;li&gt;逻辑运算符&lt;/li&gt;
+&lt;li&gt;赋值运算符&lt;/li&gt;
+&lt;li&gt;其他运算符&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;算术运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
++    加法 - 相加运算符两侧的值
+-    减法 - 左操作数减去右操作数
+*    乘法 - 相乘操作符两侧的值
+/    除法 - 左操作数除以右操作数
+%    取模 - 右操作数除左操作数的余数
+++   自增 - 操作数的值增加1
+-    自减 - 操作数的值减少1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+  public static void main(String args[]) {
+     int a = 10;
+     int b = 20;
+     int c = 25;
+     int d = 25;
+     System.out.println(&quot;a + b = &quot; + (a + b) );
+     System.out.println(&quot;a - b = &quot; + (a - b) );
+     System.out.println(&quot;a * b = &quot; + (a * b) );
+     System.out.println(&quot;b / a = &quot; + (b / a) );
+     System.out.println(&quot;b % a = &quot; + (b % a) );
+     System.out.println(&quot;c % a = &quot; + (c % a) );
+     System.out.println(&quot;a++   = &quot; +  (a++) );
+     System.out.println(&quot;b--   = &quot; +  (a--) );
+     System.out.println(&quot;d++   = &quot; +  (d++) );
+     System.out.println(&quot;++d   = &quot; +  (++d) );
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;关系运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+==   检查如果两个操作数的值是否相等，如果相等则条件为真
+=!   检查如果两个操作数的值是否相等，如果值不相等则条件为真
+&amp;gt;    检查左操作数的值是否大于右操作数的值，如果是那么条件为真
+&amp;lt;    检查左操作数的值是否小于右操作数的值，如果是那么条件为真
+&amp;gt;=   检查左操作数的值是否大于或等于右操作数的值，如果是那么条件为真
+&amp;lt;=   检查左操作数的值是否小于或等于右操作数的值，如果是那么条件为真
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+  public static void main(String args[]) {
+     int a = 10;
+     int b = 20;
+     System.out.println(&quot;a == b = &quot; + (a == b) );
+     System.out.println(&quot;a != b = &quot; + (a != b) );
+     System.out.println(&quot;a &amp;gt; b = &quot; + (a &amp;gt; b) );
+     System.out.println(&quot;a &amp;lt; b = &quot; + (a &amp;lt; b) );
+     System.out.println(&quot;b &amp;gt;= a = &quot; + (b &amp;gt;= a) );
+     System.out.println(&quot;b &amp;lt;= a = &quot; + (b &amp;lt;= a) );
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;位运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+&amp;amp;    按位与操作符，当且仅当两个操作数的某一位都非0时候结果的该位才为1
+|    按位或操作符，只要两个操作数的某一位有一个非0时候结果的该位就为1
+^    按位异或操作符，两个操作数的某一位不相同时候结果的该位就为1
+~    按位补运算符翻转操作数的每一位
+&amp;lt;&amp;lt;   按位左移运算符。左操作数按位左移右操作数指定的位数
+&amp;gt;&amp;gt;   按位右移运算符。左操作数按位右移右操作数指定的位数
+&amp;gt;&amp;gt;&amp;gt;      按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+  public static void main(String args[]) {
+     int a = 60; /* 60 = 0011 1100 */
+     int b = 13; /* 13 = 0000 1101 */
+     int c = 0;
+     c = a &amp;amp; b;       /* 12 = 0000 1100 */
+     System.out.println(&quot;a &amp;amp; b = &quot; + c );
+     c = a | b;       /* 61 = 0011 1101 */
+     System.out.println(&quot;a | b = &quot; + c );
+     c = a ^ b;       /* 49 = 0011 0001 */
+     System.out.println(&quot;a ^ b = &quot; + c );
+     c = ~a;          /*-61 = 1100 0011 */
+     System.out.println(&quot;~a = &quot; + c );
+     c = a &amp;lt;&amp;lt; 2;     /* 240 = 1111 0000 */
+     System.out.println(&quot;a &amp;lt;&amp;lt; 2 = &quot; + c );
+     c = a &amp;gt;&amp;gt; 2;     /* 215 = 1111 */
+     System.out.println(&quot;a &amp;gt;&amp;gt; 2  = &quot; + c );
+     c = a &amp;gt;&amp;gt;&amp;gt; 2;     /* 215 = 0000 1111 */
+     System.out.println(&quot;a &amp;gt;&amp;gt;&amp;gt; 2 = &quot; + c );
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;逻辑运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+&amp;amp;&amp;amp;   称为逻辑与运算符。当且仅当两个操作数都为真，条件才为真
+||   称为逻辑或操作符。如果任何两个操作数任何一个为真，条件为真
+!    称为逻辑非运算符。用来反转操作数的逻辑状态。如果条件为true，则逻辑非运算符将得到false。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+  public static void main(String args[]) {
+     boolean a = true;
+     boolean b = false;
+     System.out.println(&quot;a &amp;amp;&amp;amp; b = &quot; + (a&amp;amp;&amp;amp;b));
+     System.out.println(&quot;a || b = &quot; + (a||b) );
+     System.out.println(&quot;!(a &amp;amp;&amp;amp; b) = &quot; + !(a &amp;amp;&amp;amp; b));
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;赋值运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+=    简单的赋值运算符，将右操作数的值赋给左侧操作数
++=   加和赋值操作符，它把左操作数和右操作数相加赋值给左操作数
+-=   减和赋值操作符，它把左操作数和右操作数相减赋值给左操作数
+*=   乘和赋值操作符，它把左操作数和右操作数相乘赋值给左操作数
+/=   除和赋值操作符，它把左操作数和右操作数相除赋值给左操作数
+%=   取模和赋值操作符，它把左操作数和右操作数取模后赋值给左操作数
+&amp;lt;&amp;lt;=  左移位赋值运算符
+&amp;gt;&amp;gt;=  右移位赋值运算符
+&amp;amp;=   按位与赋值运算符
+^=   按位异或赋值操作符
+|=   按位或赋值操作符
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+  public static void main(String args[]) {
+     int a = 10; int b = 20; int c = 0; c = a + b;
+     System.out.println(&quot;c = a + b = &quot; + c );
+     c += a ;
+     System.out.println(&quot;c += a  = &quot; + c );
+     c -= a ;
+     System.out.println(&quot;c -= a = &quot; + c );
+     c *= a ;
+     System.out.println(&quot;c *= a = &quot; + c );
+     a = 10; c = 15; c /= a ;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;三目运算符&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+variable x = (expression) ? value if true : value if false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+        int a , b;
+        a = 10;
+        b = (a == 1) ? 20: 30;
+        System.out.println( &quot;Value of b is : &quot; +  b );
+        b = (a == 10) ? 20: 30;
+        System.out.println( &quot;Value of b is : &quot; + b );
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;instanceof&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+( Object reference variable ) instanceof  (class/interface type)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+&quot;James&quot; instanceof String;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;运算符优先级&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
+后缀     () [] . (点操作符)
+一元   ++ - ！ ~
+乘性   * / %
+加性   + -
+移位   &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;  &amp;lt;&amp;lt;
+关系   &amp;gt;&amp;gt; = &amp;lt;&amp;lt; =
+相等   ==  !=
+按位与  &amp;amp;
+按位异或     ^
+按位或  |
+逻辑与  &amp;amp;&amp;amp;
+逻辑或  ||
+条件   ? ：
+赋值   = += -= *= /= %= &amp;gt;&amp;gt;= &amp;lt;&amp;lt;= ＆= ^= |=
+逗号   ,
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;控制执行流程&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;if-else&lt;/li&gt;
+&lt;li&gt;switch&lt;/li&gt;
+&lt;li&gt;while&lt;/li&gt;
+&lt;li&gt;do-while&lt;/li&gt;
+&lt;li&gt;for&lt;/li&gt;
+&lt;li&gt;foreach&lt;/li&gt;
+&lt;li&gt;break&lt;/li&gt;
+&lt;li&gt;continue&lt;/li&gt;
+&lt;li&gt;return&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;if&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+if(布尔表达式) {
+   //如果布尔表达式为true将执行的语句
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int x = 10;
+      if( x &amp;lt; 20 ){
+         System.out.print(&quot;这是 if 语句&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;if...else&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+if(布尔表达式){
+   //如果布尔表达式的值为true
+}else{
+   //如果布尔表达式的值为false
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      if( x &amp;lt; 20 ){
+         System.out.print(&quot;这是 if 语句&quot;);
+      }else{
+         System.out.print(&quot;这是 else 语句&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;if...else if...else&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+if(布尔表达式 1){
+   //如果布尔表达式 1的值为true执行代码
+}else if(布尔表达式 2){
+   //如果布尔表达式 2的值为true执行代码
+}else if(布尔表达式 3){
+   //如果布尔表达式 3的值为true执行代码
+}else {
+   //如果以上布尔表达式都不为true执行代码
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      if( x == 10 ){
+         System.out.print(&quot;Value of X is 10&quot;);
+      }else if( x == 20 ){
+         System.out.print(&quot;Value of X is 20&quot;);
+      }else if( x == 30 ){
+         System.out.print(&quot;Value of X is 30&quot;);
+      }else{
+         System.out.print(&quot;This is else statement&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;if嵌套&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      int y = 10;
+      if( x == 30 ){
+         if( y == 10 ){
+             System.out.print(&quot;X = 30 and Y = 10&quot;);
+          }
+       }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;switch&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+switch(expression){
+    case value :
+       //语句
+       break; //可选
+    case value :
+       //语句
+       break; //可选
+    //你可以有任意数量的case语句
+    default : //可选
+       //语句
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;注意点&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;switch语句中的变量类型只能为byte、short、int或者char,enum.
+&lt;strong&gt;JDK7开始支持String&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;switch语句可以拥有多个case语句。每个case后面跟一个要比较的值和冒号。&lt;/li&gt;
+&lt;li&gt;case语句中的值的数据类型必须与变量的数据类型相同，而且只能是常量或者字面常量。&lt;/li&gt;
+&lt;li&gt;当变量的值与case语句的值相等时，那么case语句之后的语句开始执行，直到break语句出现才会跳出switch语句。&lt;/li&gt;
+&lt;li&gt;当遇到break语句时，switch语句终止。程序跳转到switch语句后面的语句执行。&lt;/li&gt;
+&lt;li&gt;switch语句可以包含一个default分支，该分支必须是switch语句的最后一个分支。default在没有case语句的值和变量值相等的时候执行。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      char grade = 'C';
+      switch(grade) {
+         case 'A' :
+            System.out.println(&quot;Excellent!&quot;);
+            break;
+         case 'B' :
+         case 'C' :
+            System.out.println(&quot;Well done&quot;);
+            break;
+         case 'D' :
+            System.out.println(&quot;You passed&quot;);
+         case 'F' :
+            System.out.println(&quot;Better try again&quot;);
+            break;
+         default :
+            System.out.println(&quot;Invalid grade&quot;);
+      }
+      System.out.println(&quot;Your grade is &quot; + grade);
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;while&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+while( 布尔表达式 ) {
+    //循环内容
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]) {
+      int x = 10;
+      while( x &amp;lt; 20 ) {
+         System.out.print(&quot;value of x : &quot; + x );
+         x++;
+         System.out.print(&quot;\n&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;do-while&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+do {
+       //代码语句
+}while(布尔表达式);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int x = 10;
+      do{
+         System.out.print(&quot;value of x : &quot; + x );
+         x++;
+         System.out.print(&quot;\n&quot;);
+      }while( x &amp;lt; 20 );
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;for&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+for(初始化; 布尔表达式; 更新) {
+    //代码语句
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;最先执行初始化步骤。可以声明并初始化一个或多个循环控制变量，也可以是空语句。&lt;/li&gt;
+&lt;li&gt;然后，检测布尔表达式的值。如果为true，循环体被执行。如果为false，循环终止，开始执行循环体后面的语句。&lt;/li&gt;
+&lt;li&gt;执行一次循环后，更新循环控制变量。&lt;/li&gt;
+&lt;li&gt;再次检测布尔表达式。循环执行上面的过程。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]) {
+      for(int x = 10; x &amp;lt; 20; x = x+1) {
+         System.out.print(&quot;value of x : &quot; + x );
+         System.out.print(&quot;\n&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;foreach&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+for(声明语句 : 表达式) {
+   //代码句子
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]){
+      int[] numbers = {10, 20, 30, 40, 50};
+      for(int x : numbers){
+         System.out.print( x );
+         System.out.print(&quot;,&quot;);
+      }
+      System.out.print(&quot;\n&quot;);
+
+      String[] names ={&quot;James&quot;, &quot;Larry&quot;, &quot;Tom&quot;, &quot;Lacy&quot;};
+      for(String name : names) {
+         System.out.print( name );
+         System.out.print(&quot;,&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;break&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]) {
+      int [] numbers = {10, 20, 30, 40, 50};
+
+      for(int x : numbers) {
+         if(x == 30) {
+          break;
+         }
+         System.out.print(x);
+         System.out.print(&quot;\n&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;continue&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]) {
+      int [] numbers = {10, 20, 30, 40, 50};
+      for(int x : numbers) {
+         if(x == 30) {
+          continue;
+         }
+         System.out.print(x);
+         System.out.print(&quot;\n&quot;);
+      }
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;labeled break与labeled continue&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test {
+   public static void main(String args[]) {
+        int [] numbers = {10, 20, 30, 40, 50};
+        outer: for(int x : numbers) {
+            for(int i = 1;i &amp;lt; 3;i++) {
+                if (x == 30) {
+                    break outer;
+                }
+                System.out.print(x);
+                System.out.print(&quot;\n&quot;);
+            }
+            System.out.println(&quot;outer&quot; + x);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;return&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;跳出当前方法,并返回方法所需要的值(如果有返回值的话)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;课堂练习&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用数组计算矩阵乘法&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;答案&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
+public class Test{
+    public static void main(String[] args){
+        int[][] a = { {1,0,2},{-1,3,1}};
+        int[][] b = { {3,1},{2,1},{1,0}};
+        int[][] c = new int[2][2];
+        for(int i = 0; i &amp;lt; 2;i++){
+            int tmp = 0;
+            int tmp2 = 0;
+            for(int j = 0;j &amp;lt; 3;j++){
+                tmp += a[i][j] * b[j][i];
+                tmp2 += a[i][j] * b[j][1-i];
+            }
+            c[i][i] = tmp;
+            c[i][1-i]=tmp2;
+        }
+        System.out.println(c[0][0]);
+        System.out.println(c[0][1]);
+        System.out.println(c[1][0]);
+        System.out.println(c[1][1]);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;课后作业&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;理解path与classpath&lt;/li&gt;
+&lt;li&gt;请任意修改hello world,并尝试编译运行!如报错,请尝试理解报错信息!&lt;/li&gt;
+&lt;li&gt;请编写程序,打印如下图形.你能想出几种方法?你认为最简单的方法是哪种?&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;
+  1
+ 111
+11111
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;请使用循环和递归分别实现斐波那契数列&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;
+1 1 2 3 5 8 13 ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;本机安装eclipse,并在eclipse中运行hello world&lt;/li&gt;
+&lt;li&gt;请到网上搜索面向对象编程,尝试理解面向对象编程,及其与面向过程编程的区别&lt;/li&gt;
+&lt;/ul&gt;
+
 </summary>
     </entry>
     

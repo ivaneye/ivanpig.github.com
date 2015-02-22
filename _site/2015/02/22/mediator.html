@@ -1,0 +1,373 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="java, clojure, designpattern"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2015/02/22/mediator.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>语言与模式-20中介者模式 - Less is more</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">Thinking in Ivan</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+							<div id="qrcode">
+							<img src="/img/qrcode.jpg" width="170"/>
+							</div>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">语言与模式-20中介者模式</h2>
+
+    <p class="post-meta">By 02月22日  2015
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">java (23)</i></a>
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">clojure (33)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (40)</i></a>
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">clojure (54)</i></a>
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">designpattern (23)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <h1>意图</h1>
+
+<p>用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
+
+<p><img src="/assets/designpattern/mediator.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>一组对象以定义良好但是复杂的方式进行通信。产生的相互依赖关系结构混乱且难以理解。</li>
+<li>一个对象引用其他很多对象并且直接与这些对象通信,导致难以复用该对象。</li>
+<li>想定制一个分布在多个类中的行为，而又不想生成太多的子类。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="java">//抽象同事类
+public abstract class Person {
+    // 维持一个抽象中介者的引用
+    protected Mediator mediator;
+
+    protected String name;
+
+    public Person(String name, Mediator mediator){
+        this.mediator = mediator;
+        this.name = name;
+    }
+
+    /**
+     * 设置中介者对象
+     * @param mediator
+     */
+    public void setMediator(Mediator mediator){
+        this.mediator = mediator;
+    }
+
+    /**
+     * 向中介 发送消息
+     */
+    protected abstract void sendMessage(String msg);
+
+    /**
+     * 从中介 获取消息
+     */
+    protected abstract void getMessage(String msg);
+}
+</code></pre>
+
+<!-- more -->
+
+
+<pre><code class="java"> //具体同事类：这里的角色是 租房者
+public class Renter extends Person {
+
+    public Renter(String name, Mediator mediator) {
+        super(name, mediator);
+    }
+
+    @Override
+    protected void sendMessage(String msg) {
+        mediator.operation(this, msg);
+    }
+
+    @Override
+    protected void getMessage(String msg) {
+        System.out.println("求租者[" + name + "]收到中介发来的消息： " + msg);
+    }
+}
+</code></pre>
+
+<pre><code class="java"> //具体同事类：这里的角色是 房东
+public class Landlord extends Person {
+
+    public Landlord(String name, Mediator mediator) {
+        super(name,mediator);
+    }
+
+    @Override
+    protected void sendMessage(String msg) {
+        mediator.operation(this, msg);
+    }
+
+    @Override
+    protected void getMessage(String msg) {
+        System.out.println("房东["+ name +"]收到中介发来的消息：" + msg);
+    }
+}
+</code></pre>
+
+<pre><code class="java"> //抽象中介者类
+public abstract class Mediator {
+    // 用于添加储存 "房东"角色
+    protected List&lt;Person&gt; landlordList = new ArrayList&lt;Person&gt;();
+
+    // 用于添加储存 "求租者"角色
+    protected List&lt;Person&gt; renterList = new ArrayList&lt;Person&gt;();
+
+    /**
+     * 中介者注册房东信息
+     * @param landlord 房东实体
+     */
+    public void registerLandlord(Person landlord){
+        landlordList.add(landlord);
+    }
+
+    /**
+     * 中介者注册 求租者信息
+     * @param landlord 房东实体
+     */
+    public void registerRenter(Person landlord){
+        renterList.add(landlord);
+    }
+
+    /**
+     * 声明抽象方法 由具体中介者子类实现 消息的中转和协调
+     */
+    public abstract void operation(Person person, String message);
+
+}
+</code></pre>
+
+<pre><code class="java"> //具体中介者类：这里的角色是 房屋出租中介
+public class HouseMediator extends Mediator {
+
+    @Override
+    public void operation(Person person, String message) {
+        if(person instanceof Renter){
+            // 将租屋的需求消息传递给 注册了的房东们
+            for(Person landlord: landlordList){
+                landlord.getMessage(message);
+            }
+        } else if(person instanceof Landlord){
+            // 将房东的出租房消息传递给 注册了的 房屋求租者们
+            for(Person renter : renterList){
+                renter.getMessage(message);
+            }
+        }
+    }
+}
+</code></pre>
+
+<pre><code class="java">//客户端测试类
+public class Client {
+
+    public static void main(String[] args) {
+        // 实例化房屋中介
+        Mediator mediator = new HouseMediator();
+
+        Person landlordA, landlordB, renter;
+        landlordA = new Landlord("房东李", mediator);
+        landlordB = new Landlord("房东黎", mediator);
+
+        renter = new Renter("小吕",mediator);
+
+        // 房东注册中介
+        mediator.registerLandlord(landlordA);
+        mediator.registerLandlord(landlordB);
+        // 求租者注册中介
+        mediator.registerRenter(renter);
+
+        // 求租者 发送求租消息
+        renter.sendMessage("在天河公园附近租套房子，价格1000元左右一个月");
+        System.out.println("--------------------------");
+        // 房东A 发送房屋出租消息
+        landlordA.sendMessage("天河公园学院站三巷27号四楼有一房一厅出租  1200/月  光线好 近公交站");
+    }
+}
+</code></pre>
+
+<h1>Clojure实现</h1>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2015/02/21/strategy.html" title="语言与模式-19策略模式 "><p> <i class="fa fa-mail-reply"></i>&nbsp;语言与模式-19策略模式</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2015/02/23/interpreter.html" title="语言与模式-21解释器模式"><p>语言与模式-21解释器模式&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="语言与模式-20中介者模式" data-thread-key="/2015/02/22/mediator" data-url="/2015/02/22/mediator.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/about.html">About</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

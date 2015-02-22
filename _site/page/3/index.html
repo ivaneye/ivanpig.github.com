@@ -106,14 +106,16 @@
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/10/02/upgrading.html">Luminus手册-升级</a></h2>
+        <h2 class="post-title"><a href="/2015/02/12/decorator.html">语言与模式-10装饰模式</a></h2>
 
-        <p class="post-meta">By 10月02日  2013
+        <p class="post-meta">By 02月12日  2015
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
             
             
             
@@ -122,9 +124,11 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
             
         
@@ -134,15 +138,52 @@
 </header>
 
 <div class="post-description">
-    <h1>Upgrading to the Latest Version</h1>
+    <h1>意图</h1>
 
-<p>不幸的是，框架无法自动从老版本升级到新版本。主要原因是新版本的依赖可能会有接口方面的修改，导致老代码无法正常运行。</p>
+<p>动态地给一个对象添加一些额外的职责。就增加功能来说，Decorator模式相比生成子类更为灵活。</p>
 
-<p>最好的方法是使用<a href="https://github.com/xsc/lein-ancient">lein-ancient</a>插件来保持你的依赖包时刻为最新。这将会帮你很容易的发现哪些插件有了新的版本。</p>
+<p><img src="/assets/designpattern/decorator.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>在不影响其他对象的情况下，以动态、透明的方式给单个对象添加职责。</li>
+<li>处理那些可以撤消的职责。</li>
+<li>当不能采用生成子类的方法进行扩充时。一种情况是，可能有大量独立的扩展，为支持每一种组合将产生大量的子类，使得子类数目呈爆炸性增长。另一种情况可能是因为类定义被隐藏，或类定义不能用于生成子类。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<p>JavaIO库的使用可能如下</p>
+
+<pre><code class="{.java}">BufferedInputStream bi = new BufferedInputStream(new FileInputStream(filename));
+</code></pre>
+
+<p>我们都知道FileInputStream是用来读取文件的，BufferedInputStream是提供了缓存的能力。我们分别看下他们的源代码</p>
+
+<pre><code class="{.java}">public class BufferedInputStream extends FilterInputStream
+...
+
+public class FilterInputStream extends InputStream
+...
+
+public class FileInputStream extends InputStream
+...
+</code></pre>
+
+<p>BufferedInputStream继承了FilterInputStream，FilterInputStream和FileInputStream一样都继承自InputStream.</p>
+
+<p>可以看出InputStream是公共父类。</p>
+
+<p>FilterInputStream是装饰类的公共父类，看看FilterInputStream的源代码就知道了，他只是做了简单的方法委托。</p>
+
+<p>BufferedInputStream继承了FilterInputStream，并添加了缓存的方法（其实就是用一个字节数组保存字节，一次性读出）。</p>
 
 
 
-    <a href="/2013/10/02/upgrading.html" class="post-categorybut">阅读全文</a>
+
+    <a href="/2015/02/12/decorator.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -156,14 +197,16 @@
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/10/01/useful_libraries.html">Luminus手册-实用库</a></h2>
+        <h2 class="post-title"><a href="/2015/02/11/composite.html">语言与模式-09组合模式</a></h2>
 
-        <p class="post-meta">By 10月01日  2013
+        <p class="post-meta">By 02月11日  2015
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
             
             
             
@@ -172,9 +215,11 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
             
         
@@ -184,18 +229,53 @@
 </header>
 
 <div class="post-description">
-    <p>Luminus的目标是从细粒度来方便你开发web应用。所以它默认包含了很多库包。</p>
+    <h1>意图</h1>
 
-<p>包括lib-noir提供一般工具，Selmer/Hiccup提供HTML模板,Timbre提供日志功能，
-Tower提供国际化等等其他包。</p>
+<p>将对象组合成树形结构以表示“部分-整体”的层次结构。Composite使得用户对单个对象和组合对象的使用具有一致性。</p>
 
-<p>当然，还有很多的包能给web开发带来便利。</p>
+<p><img src="/assets/designpattern/composite.jpg" alt="" /></p>
 
-<p>具体请见<a href="http://www.luminusweb.net/docs/useful_libraries.md">此处</a></p>
+<h1>适用性</h1>
+
+<ul>
+<li>你想表示对象的部分—整体层次结构。</li>
+<li>你希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code>public interface Node {
+    void check();
+    void add(Node node) throws Exception;
+    void remove(Node node) throws Exception;
+}
+</code></pre>
+
+<pre><code>public class ParentNode implements Node {
+    private List&lt;Node&gt; list = new ArrayList&lt;Node&gt;();
+
+    public void check() {
+        System.out.println("ParentNode is checked");
+        for(Node n : list){
+          n.check();
+        }
+    }
+
+    public void add(Node node) {
+        list.add(node);
+    }
+
+    public void remove(Node node) {
+        list.remove(node);
+    }
+}
+</code></pre>
 
 
 
-    <a href="/2013/10/01/useful_libraries.html" class="post-categorybut">阅读全文</a>
+
+    <a href="/2015/02/11/composite.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -209,14 +289,16 @@ Tower提供国际化等等其他包。</p>
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/09/30/deployment.html">Luminus手册-部署</a></h2>
+        <h2 class="post-title"><a href="/2015/02/10/adapter.html">语言与模式-08适配器模式</a></h2>
 
-        <p class="post-meta">By 09月30日  2013
+        <p class="post-meta">By 02月10日  2015
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
             
             
             
@@ -225,9 +307,11 @@ Tower提供国际化等等其他包。</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
             
         
@@ -237,50 +321,55 @@ Tower提供国际化等等其他包。</p>
 </header>
 
 <div class="post-description">
-    <h1>Running Standalone</h1>
+    <h1>意图</h1>
 
-<p>要创建一个可独立运行的包，只需要运行如下的命令:</p>
+<p>将一个类的接口转换成另外一个客户希望的接口。Adapter 模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。</p>
 
-<pre><code class="{.bash}">lein ring uberjar
+<p><img src="/assets/designpattern/adapter.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>你想使用一个已经存在的类，而它的接口不符合你的需求。</li>
+<li>你想创建一个可以复用的类，该类可以与其他不相关的类或不可预见的类（即那些接口可能不一定兼容的类）协同工作。</li>
+<li>（仅适用于对象Adapter）你想使用一些已经存在的子类，但是不可能对每一个都进行子类化以匹配它们的接口。对象适配器可以适配它的父类接口。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<p>假设目前做一个新系统，有如下代码结构。</p>
+
+<pre><code class="{.java}">public interface Car{
+     public void drive();
+}
+
+public class Benz implements Car{
+     public void drive(){
+          System.out.println("Benz run");
+     }
+}
+
+public class Cruze implements Car{
+     public void drive(){
+          System.out.println("Cruze run");
+     }
+}
 </code></pre>
 
-<p>打包完成的jar会出现在target目录下。可以通过下面的命令运行:</p>
+<p>有一个老系统，里面有如下代码</p>
 
-<pre><code class="{.clojure}">java -jar myapp-0.1.0-SNAPSHOT-standalone.jar
-</code></pre>
-
-<p>独立可运行的程序可以使用Jetty来运行。如果要设置端口号，你需要设置\$PORT
-环境变量:</p>
-
-<pre><code class="{.bash}">export PORT=8080
-java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
-</code></pre>
-
-<h1>Delpoying on Immutant</h1>
-
-<p>如果想部署应用到Immutant，请执行如下命令:</p>
-
-<pre><code class="{.bash}">lein immutant deploy
-</code></pre>
-
-<p>更多信息请访问<a href="http://immutant.org/tutorials/deploying/index.html">官网</a></p>
-
-<h1>Deploying to Tomcat</h1>
-
-<p>如果想打包应用为war包:</p>
-
-<pre><code class="{.bash}">lein ring uberwar
-</code></pre>
-
-<p>然后只需要将打好的包拷贝到tomcat的webapps目录下即可:</p>
-
-<pre><code class="{.bash}">cp target/myapp-0.1.0-SNAPSHOT-standalone.war ~/tomcat/webapps/myapp.war
+<pre><code class="{.java}">public class Smart{
+     public void run(){
+         System.out.println("Smart run");
+     }
+}
 </code></pre>
 
 
 
 
-    <a href="/2013/09/30/deployment.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/02/10/adapter.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -294,14 +383,16 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/09/29/internationalization.html">Luminus手册-国际化</a></h2>
+        <h2 class="post-title"><a href="/2015/02/09/proxy.html">语言与模式-07代理模式</a></h2>
 
-        <p class="post-meta">By 09月29日  2013
+        <p class="post-meta">By 02月09日  2015
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
             
             
             
@@ -310,9 +401,11 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
             
         
@@ -322,51 +415,65 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
 </header>
 
 <div class="post-description">
-    <h1>Internationalization</h1>
+    <h1>意图</h1>
 
-<p>Luminius模板包含了<a href="https://github.com/ptaoussanis/tower">Tower</a>依赖，Tower提供了函数式的国际化和翻译。</p>
+<p>为其他对象提供一种代理以控制对这个对象的访问。</p>
 
-<p>首先，我们需要创建一个字典map：</p>
+<p><img src="/assets/designpattern/proxy.jpg" alt="" /></p>
 
-<pre><code class="clojure">(def tconfig
-  {:fallback-locale :en-US
-   :dictionary
-   {:en-US   {:page {:title "Here is a title"
-                     :content "Time to start building your site."}
-              :missing  "&lt;Missing translation: [%1$s %2$s %3$s]&gt;"}
-    :fr-FR {:page {:title "Voici un titre"
-                   :content "Il est temps de commencer votre site."}}
-    }})
+<h1>适用性</h1>
+
+<p>在需要用比较通用和复杂的对象指针代替简单的指针的时候，使用Proxy模式。下面是一些可以使用Proxy模式常见情况：</p>
+
+<ul>
+<li>远程代理（Remote Proxy）为一个对象在不同的地址空间提供局部代表。</li>
+<li>虚代理（Virtual Proxy）根据需要创建开销很大的对象。</li>
+<li>保护代理（Protection Proxy）控制对原始对象的访问。保护代理用于对象应该有不同 的访问权限的时候。</li>
+<li>智能指引（Smart Reference）取代了简单的指针，它在访问对象时执行一些附加操作。 它的典型用途包括：</li>
+<li>对指向实际对象的引用计数，这样当该对象没有引用时，可以自动释放它（也称为SmartPointers）。</li>
+<li>当第一次引用一个持久对象时，将它装入内存。</li>
+<li>在访问一个实际对象前，检查是否已经锁定了它，以确保其他对象不能改变它。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="java">//工厂接口
+public interface ItemFactory{
+     public Item getItem();
+}
+
+//工厂实现,Item就不实现了，随便怎么写都行
+public class ItemFactoryImpl implements ItemFactory{
+      public Item getItem(){
+          return new Item();
+      }
+}
+
+//商店类，就是代理
+public class Shop implements ItemFactory{
+
+     private ItemFactory factory = new ItemFactoryImpl();
+
+     public Item getItem(){
+          System.out.println("附加服务");
+          return factory.getItem();
+     }
+}
+
+//实际调用
+public class Main{
+     public static void main(String[] args){
+          ItemFactory f = new Shop();
+          f.getItem();
+     }
+}
 </code></pre>
 
-<p>然后添加Tower中间件来包装我们的配置:</p>
-
-<pre><code>(def app
- (app-handler
-   [routes]
-   :middleware
-   [#(taoensso.tower.ring/wrap-tower-middleware % {:tconfig tconfig})]))
-</code></pre>
-
-<p>中间件将会通过accept-language头来确定相应的语言。中间件将会添加两个key到请求中。地一个key是:t,它的值是翻译函数。第二个key是:locale，它的值是中间件提供的语言类型。</p>
-
-<p>你可以提供一个自定义的locale-selector函数给中间件。</p>
-
-<pre><code class="clojure">(defn my-selector [req]
-  (when (= (:remote-addr req) "127.0.0.1") :en))
-
-(def app
-  (app-handler
-    [routes]
-    :middleware
-    [#(wrap-tower-middleware % {:tconfig tconfig
-                                :locale-selector my-selector})]))
-</code></pre>
 
 
 
-
-    <a href="/2013/09/29/internationalization.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/02/09/proxy.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -380,14 +487,16 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/09/28/logging.html">Luminus手册-日志</a></h2>
+        <h2 class="post-title"><a href="/2015/02/08/facade.html">语言与模式-06门面模式</a></h2>
 
-        <p class="post-meta">By 09月28日  2013
+        <p class="post-meta">By 02月08日  2015
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
             
             
             
@@ -396,9 +505,11 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
             
         
@@ -408,44 +519,49 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
 </header>
 
 <div class="post-description">
-    <h1>Logging</h1>
+    <h1>意图</h1>
 
-<p>Luminus模板中包括<a href="https://github.com/ptaoussanis/timbre">Timbre</a>和<a href="https://bitbucket.org/postspectacular/rotor">Rotor</a>。</p>
+<p>为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
 
-<p>日志通过在handler/init函数中进行如下的设置进行初始化:</p>
+<p><img src="/assets/designpattern/facade.jpg" alt="" /></p>
 
-<pre><code class="{.clojure}">  (timbre/set-config!
-    [:appenders :rotor]
-    {:min-level :info
-     :enabled? true
-     :async? false ; should be always false for rotor
-     :max-message-per-msecs nil
-     :fn rotor/append})
+<h1>适用性</h1>
 
-  (timbre/set-config!
-    [:shared-appender-config :rotor]
-    {:path ".log" :max-size 10000 :backlog 10})
+<ul>
+<li>当你要为一个复杂子系统提供一个简单接口时。子系统往往因为不断演化而变得越来越复杂。大多数模式使用时都会产生更多更小的类。这使得子系统更具可重用性，也更容易对子系统进行定制，但这也给那些不需要定制子系统的用户带来一些使用上的困难。Facade可以提供一个简单的缺省视图，这一视图对大多数用户来说已经足够，而那些需要更多的可定制性的用户可以越过Facade层。</li>
+<li>客户程序与抽象类的实现部分之间存在着很大的依赖性。引入Facade将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性和可移植性。</li>
+<li>当你需要构建一个层次结构的子系统时，使用门面模式定义子系统中每层的入口点。如果子系统之间是相互依赖的，你可以让它们仅通过Facade进行通讯，从而简化了它们之间的依赖关系。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code>public class Camara {
+    public void turnOn(){
+        System.out.println("开启摄像头！");
+    }
+
+    public void turnOff(){
+        System.out.println("关闭摄像头！");
+    }
+}
 </code></pre>
 
-<p>Timbre可以记录Clojure的所有日志.</p>
+<pre><code>public class Light {
+    public void turnOn(){
+        System.out.println("开灯！");
+    }
 
-<pre><code class="{.clojure}">(ns example
- (:use [taoensso.timbre :only [trace debug info warn error fatal]]))
-
-(info "Hello")
-
-=&gt;2012-Dec-24 09:03:09 -0500 Helios.local INFO [timbretest] - Hello
-
-(info {:user {:id "Anonymous"}})
-
-=&gt;2012-Dec-24 09:02:44 -0500 Helios.local INFO [timbretest] - {:user {:id "Anonymous"}}
+    public void turnOff(){
+        System.out.println("关灯！");
+    }
+}
 </code></pre>
 
-<p>更多信息请见<a href="https://github.com/ptaoussanis/timbre">Github</a></p>
 
 
 
-    <a href="/2013/09/28/logging.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/02/08/facade.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -459,14 +575,16 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/09/27/database_migrations.html">Luminus手册-数据迁移</a></h2>
+        <h2 class="post-title"><a href="/2015/02/07/builder.html">语言与模式-05生成器模式</a></h2>
 
-        <p class="post-meta">By 09月27日  2013
+        <p class="post-meta">By 02月07日  2015
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
             
             
             
@@ -475,9 +593,11 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
             
         
@@ -487,51 +607,59 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
 </header>
 
 <div class="post-description">
-    <h1>Migrations</h1>
+    <h1>意图</h1>
 
-<p>默认情况下Luminus使用Ragtime来进行数据迁移。当你在创建Luminus项目时添加了+mysql或+postgres选项时，Ragtime会自动被添加进来。</p>
+<p>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</p>
 
-<h1>Migrations with Ragtime</h1>
+<p><img src="/assets/designpattern/builder.jpg" alt="" /></p>
 
-<p>Ragtime通过Leiningen插件来执行。此插件需要配置project.clj的:plugins中。</p>
+<h1>适用性</h1>
 
-<pre><code class="clojure">:plugins [... [ragtime/ragtime.lein "0.3.4"]]
+<ul>
+<li>当创建复杂对象的算法应该独立于该对象的组成部分以及它们的装配方式时。</li>
+<li>当构造过程必须允许被构造的对象有不同的表示时。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code>// 待构建产品
+class Starbucks {
+    private String size;
+    private String drink;
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setDrink(String drink) {
+        this.drink = drink;
+    }
+}
 </code></pre>
 
-<p>实际的迁移动作是由ragtime.sql.files这个适配器来执行。此适配器需要配置在依赖列表中，同时配置相关数据库配置。</p>
+<pre><code>//抽象builder
+abstract class StarbucksBuilder {
+    protected Starbucks starbucks;
 
-<pre><code class="clojure">:dependencies [... [ragtime/ragtime.sql.files "0.3.4"]]
-:ragtime {:migrations ragtime.sql.files/migrations
-          :database "jdbc:mysql://localhost:3306/example_db?user=root"}
-</code></pre>
+    public Starbucks getStarbucks() {
+        return starbucks;
+    }
 
-<p>ragtime.sql.files适配器会从项目根目录下的指定目录查找sql脚本。我们只需要将脚本添加到对应目录下即可。</p>
+    public void createStarbucks() {
+        starbucks = new Starbucks();
+        System.out.println("a drink is created");
+    }
 
-<p>脚本按字母顺序排序。我们来创建两个脚本。</p>
-
-<pre><code>migrations/2014-13-57-30-create-tables.up.sql
-
-CREATE TABLE users (id INT, name VARCHAR(25));
-
-migrations/2014-13-57-30-create-tables.down.sql
-
-DROP TABLE users;
-</code></pre>
-
-<p>通过如下命令执行：</p>
-
-<pre><code>lein ragtime migrate
-</code></pre>
-
-<p>通过如下命令回滚:</p>
-
-<pre><code>lein ragtime rollback
+    public abstract void buildSize();
+    public abstract void buildDrink();
+}
 </code></pre>
 
 
 
 
-    <a href="/2013/09/27/database_migrations.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/02/07/builder.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -545,14 +673,16 @@ DROP TABLE users;
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/09/26/database_access.html">Luminus手册-访问数据库</a></h2>
+        <h2 class="post-title"><a href="/2015/02/06/prototype.html">语言与模式-04原型模式</a></h2>
 
-        <p class="post-meta">By 09月26日  2013
+        <p class="post-meta">By 02月06日  2015
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
             
             
             
@@ -561,9 +691,11 @@ DROP TABLE users;
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
             
         
@@ -573,48 +705,85 @@ DROP TABLE users;
 </header>
 
 <div class="post-description">
-    <h1>Configuring the Database</h1>
+    <h1>意图</h1>
 
-<p>当你使用数据库参数来创建Luminus工程时，比如+postgress，那么Luminus会使用Korma来处理数据库操作.</p>
+<p>用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。</p>
 
-<p>Korma是一个基于Clojure的数据库操作DSL。Korma提供了一套简单的接口，方便你来处理复杂的数据。</p>
+<p><img src="/assets/designpattern/prototype.jpg" alt="" /></p>
 
-<p>给一个现有的项目添加数据库支持，非常的简单。首先，你需要在project.clj文件中添加Korma依赖。</p>
+<h1>适用性</h1>
 
-<pre><code class="{.clojure}">[korma "0.4.0"]
+<ul>
+<li>当要实例化的类是在运行时刻指定时，例如，通过动态装载；或者</li>
+<li>为了避免创建一个与产品类层次平行的工厂类层次时；或者</li>
+<li>当一个类的实例只能有几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="{.java}">//浅拷贝
+public class A implements Cloneable{
+
+    private String str;
+    private B b;
+
+    public void setStr(String str){
+        this.str = str;
+    }
+
+    public String getStr(){
+        return str;
+    }
+
+    public B getB() {
+        return b;
+    }
+
+    public void setB(B b) {
+        this.b = b;
+    }
+
+    @Override
+    protected Object clone(){
+        A a = null;
+        try {
+            a = (A) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return a;
+    }
+
+    public static void main(String[] args) {
+        A a = new A();
+        a.setStr("Hello");
+        B b = new B();
+        b.setStr("Hello B");
+        a.setB(b);
+        System.out.println("a-str:" + a.getStr());
+        System.out.println("a-b:" + a.getB().getStr());
+        A ac = null;
+        ac = (A) a.clone();
+        System.out.println("ac-str:" + ac.getStr());
+        System.out.println("ac-b:" + ac.getB().getStr());
+
+        a.setStr("Hello A");
+        b.setStr("Hello BB");
+        a.setB(b);
+
+        System.out.println("a-str:" + a.getStr());
+        System.out.println("a-b:" + a.getB().getStr());
+        System.out.println("ac-str:" + ac.getStr());
+        System.out.println("ac-b:" + ac.getB().getStr());
+    }
+}
 </code></pre>
 
-<p>另外还需要相应数据库的驱动，所以你还需要在project.clj中添加相关的数据库驱动。比如说，你要连接PostreSQL数据库，你需要添加如下的依赖.</p>
-
-<pre><code class="{.clojure}">[postgresql/postgresql "9.3-1102-jdbc41"]
-</code></pre>
-
-<p>添加完依赖后，你可以创建一个新的namespace来管理你的model,这个namespace建议叫db.core。你需要在里面引入korma.db。</p>
-
-<pre><code class="clojure">(ns myapp.db.core
-  (:use korma.core
-        [korma.db :only (defdb)]))
-</code></pre>
-
-<h2>Setting up the database connection</h2>
-
-<p>配置完依赖后，我们要做的事情就是定义数据库连接。我们只需要提供一个包含连接信息的map。</p>
-
-<pre><code class="{.clojure}">(def db-spec {:subprotocol "postgresql"
-         :subname "//localhost/my_website"
-         :user "admin"
-         :password "admin"})
-</code></pre>
-
-<p>或者也可以配置服务器提供的JNDI名称来创建连接。</p>
-
-<pre><code class="{.clojure}">(def db-spec {:name "jdbc/myDatasource"})
-</code></pre>
 
 
 
-
-    <a href="/2013/09/26/database_access.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/02/06/prototype.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

@@ -106,93 +106,16 @@
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/09/25/security.html">Luminus手册-安全</a></h2>
+        <h2 class="post-title"><a href="/2015/02/05/abstract_factory.html">语言与模式-03抽象工厂模式</a></h2>
 
-        <p class="post-meta">By 09月25日  2013
+        <p class="post-meta">By 02月05日  2015
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
             
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Security</h1>
-
-<p>密码的散列和对比由noir.util.crypt提供。</p>
-
-<p>他提供了两个函数$encrypt$,$compare$.其中第一个函数加密密码，而第二个则是对比密码。实际上加密是通过BCrypt来处理的。</p>
-
-<p>对比代码的函数看起来像这样:</p>
-
-<pre><code class="{.clojure}">(compare raw encrypted)
-</code></pre>
-
-<p>加密函数可以自定义salt，或者就不使用salt加密。</p>
-
-<pre><code class="{.clojure}">(encrypt salt raw)
-(encrypt raw)
-</code></pre>
-
-<p>想了解Secutiry库的更多内容，<a href="https://github.com/cemerick/friend">请点击这里</a></p>
-
-<h1>LDAP Authentication</h1>
-
-<p>下面的列子演示了如何通过clj-ldap来验证sAMAccountName</p>
-
-<p>首先，我们先添加依赖</p>
-
-<pre><code class="clojure">[org.clojars.pntblnk/clj-ldap "0.0.9"]
-</code></pre>
-
-<p>接下来，我们需要引入authentication命名空间</p>
-
-<pre><code class="clojure">(ns ldap-auth
-  (:require [clj-ldap.client :as client]))
-</code></pre>
-
-
-
-
-    <a href="/2013/09/25/security.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/24/input_validation.html">Luminus手册-输入验证</a></h2>
-
-        <p class="post-meta">By 09月24日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
             
             
             
@@ -201,9 +124,11 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
             
         
@@ -213,309 +138,43 @@
 </header>
 
 <div class="post-description">
-    <h1>Input Validation</h1>
+    <h1>意图</h1>
 
-<p>验证相关助手方法在noir.validation命名空间中。如果我们要使用验证，我们需要先引入这个命名空间。</p>
+<p>提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。</p>
 
-<pre><code class="clojure">(ns myapp.routes
-  (:require ... [noir.validation :as v]))
-</code></pre>
+<p><img src="/assets/designpattern/abstract_factory.jpg" alt="" /></p>
 
-<p>验证函数在当验证不通过时，将相应的错误设置到对应的字段上。验证函数接受一个条件函数和一个包含了需要验证的字段和错误信息的Vector.当验证函数验证通过时需要返回true否则返回false.</p>
-
-<p>下面是已经存在的验证函数:</p>
-
-<pre><code>has-value? args: [v] - returns true if v is truthy and not an empty string.
-has-values? args: [coll] - returns true if all members of the collection has-value? This works on maps as well.
-not-nil? args: [v] - returns true if v is not nil
-min-length? args: [v len] - returns true if v is greater than or equal to the given len
-max-length? args: [v len - returns true if v is less than or equal to the given len
-matches-regex? args: [v regex] - returns true if the string matches the given regular expression
-is-email? args: [v] - returns true if v is an email address
-valid-file? args: [m] - returns true if a valid file was supplied
-valid-number? args: [v] - returns true if the string can be parsed to a Long
-greater-than? args: [v n] - returns true if the string represents a number &gt; given
-less-than? args: [v n] - returns true if the string represents a number &lt; given
-equal-to? args: [v n] - returns true if the string represents a number = given
-</code></pre>
-
-<p>例如：如果我们想检查id和pass字段不能为空，则可以创建如下验证规则：</p>
-
-<p>````clojure
-(v/rule (has-value? id)
-        [:id "screen name is required"])</p>
-
-<p>(v/rule (has-value? pass)
-        [:pass "password is required"])
-```</p>
-
-<p>错误信息被保存在noir.validation/<em>errors</em>这个atom中，这个atom被绑定到了request上。每个error都包含一个key和一个对应的错误Vector.验证函数可以在同一字段上多次调用来设置多个错误。</p>
-
-<p>一旦验证规则被执行了，我们可以通过errors?这个函数来检查是否有错误。如果没有传递参数，则此函数会检查noir.validation/<em>error</em>是否为空，如果传递了参数，次函数根据传递的值来查询是否有错误。</p>
-
-
-
-
-    <a href="/2013/09/24/input_validation.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/23/sessions_cookies.html">Luminus手册-Session与Cookie</a></h2>
-
-        <p class="post-meta">By 09月23日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Sessions</h1>
-
-<p>Session管理相关功能由noir.session提供。默认提供的noir.util.middleware/app-handler函数默认将Session保存在内存里。</p>
-
-<p>当然你可以修改它，只需要给函数传递第二个参数，告诉它将Session保存在哪里就可
-以了。 下面的例子创建了一个保存在内存里的session.</p>
-
-<pre><code class="{.clojure}">(def app (middleware/app-handler [home-routes app-routes]))
-</code></pre>
-
-<p>下面，我们来重新定义session的保存位置。使用:session-options来替换掉默认的值就可以了。</p>
-
-<pre><code class="{.clojure}">(def app
-  (middleware/app-handler
-    [home-routes app-routes]
-    :session-options {:cookie-name "example-app-session"
-                      :store (cookie-store)}))
-</code></pre>
-
-<h1>Accessing the session</h1>
-
-<p>你可以在任意范围内的任何函数里访问并操作session。</p>
-
-<pre><code class="{.clojure}">(require '[noir.session :as session])
-
-(defn set-user [id]
-  (session/put! :user id)
-  (session/get :user))
-
-(defn remove-user []
-  (session/remove! :user)
-  (session/get :user))
-
-(defn set-user-if-nil [id]
-  (session/get :user id))
-
-(defn clear-session []
-  (session/clear!))
-
-(defroutes app-routes
-  (GET "/login/:id" [id] (set-user id))
-  (GET "/remove" [] (remove-user))
-  (GET "/set-if-nil/:id" [id] (set-user-if-nil id))
-  (GET "/logout" [] (clear-session)))
-</code></pre>
-
-<p>你还可以通过noir.session/flash-put!和noir.session/flash-get来创建flash变量.</p>
-
-<pre><code class="{.clojure}">(session/flash-put! :message "User added!")
-(session/flash-get :message)
-</code></pre>
-
-
-
-
-    <a href="/2013/09/23/sessions_cookies.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/22/custom_middleware.html">Luminus手册-自定义中间件</a></h2>
-
-        <p class="post-meta">By 09月22日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Adding custom middleware</h1>
-
-<p>Luminus使用Ring来路由应用的处理程序，你也可以添加一些中间件。</p>
-
-<p>中间件可以给处理程序添加一些额外的功能。中间件函数主要被用来扩展Ring的基本处理函数。</p>
-
-<p>中间件其实就是个简单的函数，它接受现有的处理程序和一些可选参数作为函数参数并返回一个新的处理程序。</p>
-
-<pre><code class="{.clojure}">(defn wrap-nocache [handler]
-  (fn [request]
-     (let [response (handler request)]
-        (assoc-in response [:headers  "Pragma"] "no-cache"))))
-
-(def app (wrap-nocache handler))
-</code></pre>
-
-<p>可以看到，上面的函数接受一个处理函数并返回一个新的函数，这个函数接受request作为参数。返回的函数只在handler所在的范围内有效。当调用这个函数时，它将会给响应map添加Pragma:no-cache键值对。</p>
-
-<p>你可以添加自定义的中间件，只需要使用:middleware关键字就可以了:</p>
-
-<pre><code class="{.clojure}">(def app (middleware/app-handler
-          all-routes
-          ;;put any custom middleware
-          ;;in the middleware vector
-          :middleware [wrap-nocache]))
-</code></pre>
-
-<p>具体内容可参见Ring官方文档。</p>
-
-
-
-
-    <a href="/2013/09/22/custom_middleware.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/21/response_types.html">Luminus手册-响应</a></h2>
-
-        <p class="post-meta">By 09月21日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Responses</h1>
-
-<p>noir.response提供了很多辅助函数来处理响应.</p>
-
-<h1>Setting headers</h1>
-
-<p>可以使用set-header来设置响应头，使用一个map作为参数。这里需要注意的是,map的key必须是字符串。</p>
-
-<pre><code class="{.clojure}">(set-headers {"x-csrf" csrf}
-    (common/layout [:p "hi there"]))
-</code></pre>
-
-<h1>Setting content type</h1>
-
-<p>你可以使用content-type函数来设置响应的类型:</p>
-
-<pre><code class="{.clojure}">(GET "/project" []
-       (noir.response/content-type
-       "application/pdf"
-       (clojure.java.io/input-stream "report.pdf")))
-</code></pre>
-
-<p>下面是有效的响应类型设置:</p>
+<h1>适用性</h1>
 
 <ul>
-<li>XML - Wraps the response with the content type for xml and sets the body to the content.</li>
-<li>JSON- Wraps the response in the json content type and generates JSON from the content</li>
-<li>JSONP - Generates JSON for the given content and creates a javascript response for calling func-name with it.</li>
-<li>edn - Wraps the response in the application/edn content-type and calls pr-str on the Clojure data stuctures passed in.</li>
+<li>一个系统要独立于它的产品的创建、组合和表示时。</li>
+<li>一个系统要由多个产品系列中的一个来配置时。</li>
+<li>当你要强调一系列相关的产品对象的设计以便进行联合使用时。</li>
+<li>当你提供一个产品类库，而只想显示它们的接口而不是实现时。</li>
 </ul>
 
 
-<pre><code class="{.clojure}">(GET "/xml" [] (xml "&lt;foo&gt;&lt;/foo&gt;"))
-(GET "/json" [] (json {:response "ok"}))
-(GET "/jsonp" [] (jsonp  "showUsers" [{:name "John"} {:name "Jane"}]))
-(GET "/edn" [] (edn {:foo 1 :bar 2}))
+<h1>Java实现</h1>
+
+<p>表现在代码层面就是一个工厂可以返回多个不同的实例！</p>
+
+<p>比如:Pig不仅分颜色，还分国家，比如荷兰Pig，新西兰Pig。</p>
+
+<pre><code class="{.java}">public class RedPigFactory implements PigFactory{
+     public Pig getNetherlandsPig(){
+          return new RedNetherlandsPig();
+     }
+
+     public Pig getNewZealandPig(){
+          return new RedNewZealandPig();
+     }
+}
 </code></pre>
 
-<p>为了设置响应类型，你还需要设置noir.util.middleware/app-handler中间件。和上一节的请求一样，你只需要配置:formats键就可以了</p>
-
-<pre><code class="{.clojure}">(app-handler routes :formats [:json])
-</code></pre>
 
 
 
-
-    <a href="/2013/09/21/response_types.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/02/05/abstract_factory.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -529,14 +188,16 @@ equal-to? args: [v n] - returns true if the string represents a number = given
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/09/20/request_types.html">Luminus手册-请求</a></h2>
+        <h2 class="post-title"><a href="/2015/02/04/factory.html">语言与模式-02工厂模式</a></h2>
 
-        <p class="post-meta">By 09月20日  2013
+        <p class="post-meta">By 02月04日  2015
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
             
             
             
@@ -545,9 +206,11 @@ equal-to? args: [v n] - returns true if the string represents a number = given
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
             
         
@@ -557,34 +220,62 @@ equal-to? args: [v n] - returns true if the string represents a number = given
 </header>
 
 <div class="post-description">
-    <h1>Requests</h1>
+    <h1>意图</h1>
 
-<p>默认情况下，请求的参数(比如一个form的POST请求)将会被自动绑定到request的:params键上。</p>
+<p>定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method使一个类的实例化延迟到其子类。</p>
 
-<p>但是，如果你在请求体内传递一些特殊类型的参数，则你需要使用适合的中间件来处理他们。Luminus使用ring-middleware-format来处理这些参数。</p>
+<p><img src="/assets/designpattern/factory.jpg" alt="" /></p>
 
-<p>中间件可以通过在noir.util.middleware/app-handler上添加:formats键来开启:</p>
+<h1>适用性</h1>
 
-<pre><code class="{.clojure}">(def app (middleware/app-handler
-          all-routes
-          :formats [:json :edn]))
+<ul>
+<li>当一个类不知道它所必须创建的对象的类的时候。</li>
+<li>当一个类希望由它的子类来指定它所创建的对象的时候。</li>
+<li>当类将创建对象的职责委托给多个帮助子类中的某一个，并且你希望将哪一个帮助子类是代理者这一信息局部化的时候。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="{.java}">public interface Pig{
+     public void run();
+}
+
+public interface PigFactory{
+     public Pig getPig();
+}
 </code></pre>
 
-<p>这样请求中的application/json和application/edn类型将会被中间件处理。相应的请求参数会在:params中。注意，这也会处理响应中的对应类型参数。具体信息请见Response Types章节。</p>
+<pre><code class="{.java}">public class RedPig{
+     public void run(){
+       System.out.println("RedPig run");
+     }
+}
 
-<p>下面是有效的格式化类型:</p>
+public class RedPigFactory implements PigFactory{
+     public Pig getPig(){
+          return new RedPig();
+     }
+}
+</code></pre>
 
-<pre><code class="{.clojure}">:json - JSON with string keys in :params and :body-params
-:json-kw - JSON with keywodized keys in :params and :body-params
-:edn - native Clojure format.
-:yaml - YAML format
-:yaml-kw - YAML format with keywodized keys in :params and :body-params
-:yaml-in-html - yaml in a html page
+<pre><code class="{.java}">public class GreenPig{
+     public void run(){
+       System.out.println("GreenPig run");
+     }
+}
+
+public class GreenPigFactory implements PigFactory{
+     public Pig getPig(){
+          return new GreenPig();
+     }
+}
 </code></pre>
 
 
 
-    <a href="/2013/09/20/request_types.html" class="post-categorybut">阅读全文</a>
+
+    <a href="/2015/02/04/factory.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
@@ -598,14 +289,16 @@ equal-to? args: [v n] - returns true if the string represents a number = given
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/09/19/staticresource.html">Luminus手册-静态资源</a></h2>
+        <h2 class="post-title"><a href="/2015/02/03/singleton.html">语言与模式-01单例模式</a></h2>
 
-        <p class="post-meta">By 09月19日  2013
+        <p class="post-meta">By 02月03日  2015
             
             
             
             
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
+            
+            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
             
             
             
@@ -614,9 +307,11 @@ equal-to? args: [v n] - returns true if the string represents a number = given
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (33)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
             
         
@@ -626,48 +321,1269 @@ equal-to? args: [v n] - returns true if the string represents a number = given
 </header>
 
 <div class="post-description">
-    <h1>Static resources</h1>
+    <h1>概述</h1>
 
-<p>在noir.io下有多个访问静态资源的帮助方法。
-你可以通过调用resource-path来获取public目录的路径。</p>
+<p>设计模式是什么？如果要我现在来回答，那我的答案是：<strong>设计模式是对于语言本身缺陷的一种补充！</strong></p>
 
-<h1>Handling file uploads</h1>
+<p>本系列文章通过对各个设计模式在Java与Clojure之间的实现比较来说明这一点！</p>
 
-<p>上传文件通过noir.io空间下的upload-file方法来实现，upload-file接受一个路径和文件的map。
-例如我们有一个upload.html文件:</p>
+<p>关于Clojure相关内容，可以查看<a href="/tag/#clojure">这里</a>!</p>
 
-<pre><code class="{.html}">    &lt;h2&gt;Upload a file&lt;/h2&gt;
-    &lt;form action="/upload" enctype="multipart/form-data" method="POST"&gt;
-        &lt;input id="file" name="file" type="file" /&gt;
-        &lt;input type="submit" value="upload" /&gt;
-    &lt;/form&gt;
+<p>其实使用Clojure来实现设计模式并不合适！因为Clojure是函数式语言，而设计模式是针对面向对象语言的。但是Clojure能提供近似的解决方案或者根本不需要此设计模式，且Clojure的解决方案更简单！简单到都不好意思叫做模式！</p>
+
+<p>当然我也不是要黑Java，毕竟还要靠Java吃饭！Java作为工业化标准开发还是很不错的，只是表现力不足，模板代码较多而已！但是足够简单，易标准化。这就够了！</p>
+
+<p>废话不多说，开始第一个设计模式！单例模式！</p>
+
+<h1>意图</h1>
+
+<p>保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p>
+
+<p><img src="/assets/designpattern/singleton.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>当类只能有一个实例而且客户可以从一个众所周知的访问点访问它时。</li>
+<li>当这个唯一实例应该是通过子类化可扩展的，并且客户应该无需更改代码就能使用一个扩展的实例时。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<p>懒汉式：</p>
+
+<pre><code class="{.java}">public class Singleton{
+       private Singleton(){}
+
+       public synchronized static Singleton getInstance(){
+           if(single==null){
+                single=new Singleton();
+           }
+           return single;
+       }
+
+      private static Singleton single;
+}
 </code></pre>
 
-<p>我们可以这样来处理文件上传。</p>
 
-<pre><code class="{.clojure}">(ns myapp.upload
-  ...
-  (:require [upload-test.views.layout :as layout]
-            [noir.response :as response]
-            [noir.io :as io]))
 
-(defn upload-page []
-  (layout/render "upload.html"))
 
-(defn handle-upload [file]
-  (io/upload-file "/" file)
-  (response/redirect
-    (str "/" (:filename file))))
+    <a href="/2015/02/03/singleton.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
-(defroutes upload-routes
-  (GET "/upload" [] (upload-page))
-  (POST "/upload" [file] (handle-upload file)))
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/11/29/javabasic.html">Java基础</a></h2>
+
+        <p class="post-meta">By 11月29日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#train"><i class="fa fa-folder-open">train (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">javase (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">train (1)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>一种记录、分析、总结、组织、讨论及解释信息的、有插图或无插图的、硬抄或平装的、加套或不加套的，包含有前言、介绍、目录表、索引的用以增长知识、加深理解、提升并教育人类大脑的装置，该装置需要视觉、有触碰的感官形式使用。 --- 《三傻大闹宝莱坞》</p>
+
+<h1>抽象</h1>
+
+<p>上面的长篇大论实际上是要解释什么是"书"！在电影中是男主角用来讽刺教授的死板的。实际上，仔细想来，我们所熟悉的任何东西都需要长篇大论来解释，而有些词甚至难以解释！比如说：</p>
+
+<ul>
+<li>人</li>
+<li>1</li>
+<li>美：难以解释，很感性的东西</li>
+</ul>
+
+
+<p>我们不断的学习知识来认知这个世界。而我们所学习的知识实际上是对这个世界的抽象！</p>
+
+<p>和自然语言一样，编程语言也是对现实世界的抽象。自然语言是抽象给我们来认知，而编程语言则是抽象给计算机来认知。计算机擅长高频次简单计算，所以针对计算机的抽象与数学更接近。</p>
+
+<p>所以我们从多项式开始，来引出编程语言！首先看如下一组多项式：</p>
+
+<pre><code>1
+1 + 1
+(1 + 1) * 3 + (1 + 1)
+(1 + 1) * 3 + (1 + 2)
+</code></pre>
+
+<ul>
+<li>请找出如上多项式的共同点？</li>
+<li>数学上如何处理上面的问题呢？</li>
+</ul>
+
+
+<pre><code>令 a = 1 + 1,b = 1 + 2
+1       =&gt;    (1 + 1) - 1  =&gt;  a - 1  =&gt; 1 * a + (-1)
+1 + 1   =&gt;    a   =&gt;  1 * a + (0 * a)
+(1 + 1) * 3 + (1 + 1)    =&gt;   3 * a + a
+(1 + 1) * 3 + (1 + 2)    =&gt;   3 * a + b
+</code></pre>
+
+<p>可以看出:上面的多项式都可以表示为na+b的形式</p>
+
+<p>那编程语言如何处理这些问题呢?</p>
+
+<pre><code class="java">int a = 1 + 1;
+int b = 1 + 2;
+//a,b称为变量，类似自然语言中的代词。变量是编程语言中最基本的抽象
+//1称为字面量
+1       =&gt;    (1 + 1) - 1  =&gt;  a - 1  =&gt; 1 * a + (-1)
+1 + 1   =&gt;    a   =&gt;  1 * a + (0 * a)
+(1 + 1) * 3 + (1 + 1)    =&gt;   3 * a + a
+(1 + 1) * 3 + (1 + 2)    =&gt;   3 * a + b
+</code></pre>
+
+<p>可以看出，基本是没有区别的!</p>
+
+<p>在我们动手运行代码前！我们先来搭建Java环境!</p>
+
+<h1>Java环境搭建</h1>
+
+<ul>
+<li>到<a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Oracle官方网站</a>下载相应操作系统的JDK进行安装</li>
+<li>打开命令行,输入</li>
+</ul>
+
+
+<pre><code>java -version
+</code></pre>
+
+<p>得到如下信息，则表示搭建成功!</p>
+
+<pre><code class="{.example}">java version "1.8.0"
+Java(TM) SE Runtime Environment (build 1.8.0-b132)
+Java HotSpot(TM) 64-Bit Server VM (build 25.0-b70, mixed mode)
+</code></pre>
+
+<p>Java中需要理解两个路径：</p>
+
+<ul>
+<li>path是系统查找程序的路径</li>
+<li>classpath是Java查找类的路径</li>
+</ul>
+
+
+<h2>练习</h2>
+
+<ul>
+<li>请从服务器下载jdk,并进行安装</li>
+<li>验证安装是否成功</li>
+<li>修改path,理解path的作用</li>
+</ul>
+
+
+<h2>编辑器选择</h2>
+
+<ul>
+<li>文本编辑器</li>
+<li>Notepad++</li>
+<li>Editplus</li>
+<li>UltraEdit</li>
+<li>TextMate</li>
+<li>Sublime Text</li>
+<li>Vim</li>
+<li>Emacs</li>
+</ul>
+
+
+<h2>学习曲线</h2>
+
+<p><img src="../assets/javabasic/5.jpg" alt="" /></p>
+
+<h2>练习</h2>
+
+<ul>
+<li>下载Notepad++,并打开</li>
+</ul>
+
+
+<h1>IDE选择</h1>
+
+<ul>
+<li>eclipse</li>
+<li>Netbeans</li>
+<li>Intellij IDEA</li>
+</ul>
+
+
+<h1>第一个程序</h1>
+
+<ul>
+<li>创建文件Hello.java</li>
+<li>输入如下代码</li>
+</ul>
+
+
+<pre><code class="{.java}">
+//例子代码
+public class Hello{
+    public static void main(String[] args){
+        int a = 1 + 1;
+        int b = 1 + 2;
+        System.out.println("(1 + 1) * 3 + (1 + 2) = " + (a * 3 + b));
+    }
+}
+</code></pre>
+
+<ul>
+<li>打开命令行,切换到文件所在路径</li>
+<li>输入javac Hello.java</li>
+<li>输入java Hello</li>
+</ul>
+
+
+<h2>课堂练习</h2>
+
+<ul>
+<li>请按步骤,新建Hello.java程序,并运行</li>
+</ul>
+
+
+<h1>运行机制</h1>
+
+<hr />
+
+<p><img src="/home/ivan/my/teach/java/javase/01_basic/file/2.jpg" alt="" /></p>
+
+<ul>
+<li>思考,Java如何做到跨平台?</li>
+</ul>
+
+
+<h1>#</h1>
+
+<p><img src="/home/ivan/my/teach/java/javase/01_basic/file/1.jpg" alt="" /></p>
+
+<h1>代码组成</h1>
+
+<hr />
+
+<pre><code class="{.java}">
+//例子代码
+public class Hello{
+    public static void main(String[] args){
+        int a = 1 + 1;
+        int b = 1 + 2;
+        System.out.println("(1 + 1) * 3 + (1 + 2) = " + (a * 3 + b));
+    }
+}
+</code></pre>
+
+<ul>
+<li>注释</li>
+<li>标识符(Hello,args)</li>
+<li>关键字(public,class,static,void)</li>
+<li>字面量(字符串) ("(1 + 1) * 3 + (1 + 2) = ")</li>
+<li>变量(args,a,b)</li>
+<li>类</li>
+<li>方法</li>
+</ul>
+
+
+<h2>注释</h2>
+
+<pre><code class="{.java}">
+//单行注释
+</code></pre>
+
+<pre><code class="{.java}">
+/*
+多行注释
+*/
+</code></pre>
+
+<pre><code class="{.java}">
+/**
+ * javadoc注释
+ */
+</code></pre>
+
+<h2>标识符</h2>
+
+<ul>
+<li>标识符由字母（A-Z或者a-z）,美元符（\$）、下划线（_）或数字组成</li>
+<li>标识符都应该以字母（A-Z或者a-z）,美元符（\$）、或者下划线（_）开始</li>
+<li>关键字不能用作标识符</li>
+<li>标识符是大小写敏感的</li>
+<li>合法标识符举例：age、\$salary、~value~、_~1value~</li>
+<li>非法标识符举例：123abc、-salary</li>
+</ul>
+
+
+<h2>关键字</h2>
+
+<p><img src="/home/ivan/my/teach/java/javase/01_basic/file/3.jpg" alt="" /></p>
+
+<h2>字面量</h2>
+
+<ul>
+<li>字符串:"Hello"</li>
+<li>字符:'H','e','l','l','o'</li>
+<li>布尔值:true,false</li>
+<li>数值:1,2.4</li>
+</ul>
+
+
+<h2>变量</h2>
+
+<ul>
+<li>变量就是一个命名的内存块</li>
+<li>变量只能存储一种具体类型的数据</li>
+<li>使用变量之前必须声明(变量名和类型)</li>
+<li><p>使用前需要初始化</p></li>
+<li><p>局部变量:方法或语句块内部</p></li>
+<li>成员变量:方法外,类内部</li>
+</ul>
+
+
+<h2>类和对象</h2>
+
+<ul>
+<li>类是对一个特定类型对象的描述,它定义了一种新的类型</li>
+<li>类定义中的成员变量可以是任意类型</li>
+<li>对象是类的实体,使用关键字new来创建</li>
+</ul>
+
+
+<h2>方法</h2>
+
+<ul>
+<li>实例方法</li>
+<li>静态方法(static)</li>
+<li>方法调用[递归调用]</li>
+</ul>
+
+
+<pre><code class="{.java}">
+public class Hello{
+    public static void main(String[] args){
+        System.out.println("Hello");
+        Hello.main(null);
+    }
+}
+</code></pre>
+
+<h1>基本类型</h1>
+
+<hr />
+
+<p><img src="/home/ivan/my/teach/java/javase/01_basic/file/4.jpg" alt="" /></p>
+
+<h2>使用递归来计算基本类型的范围</h2>
+
+<pre><code class="{.java}">
+public class Test{
+    public static long p(int num){
+        if(num == 0) return 1;
+        return 2 * p(--num);  //--num 与 num--
+    }
+
+    public static long caculateRange(int num){
+        if(num == 0) return 1;
+        return p(num) + caculateRange(--num);
+    }
+}
+</code></pre>
+
+<h1>数组</h1>
+
+<hr />
+
+<p>数组是相同类型的,用一个标示符名称封装到一起的一个对象序列或基本类型数据序列</p>
+
+<h2>一维数组</h2>
+
+<pre><code class="{.java}">
+int[] arr;
+int arr[];
+//初始化
+arr = {1,2,3};
+arr = new int[3];  //默认初始化
+//使用,下标从0开始
+arr[0];
+</code></pre>
+
+<h2>多维数组</h2>
+
+<pre><code class="{.java}">
+int[][] arr = { {1,2,3},{4,5,6}};
+int[][][] arr = new int[2][3][4];
+//每一维长度可以不同
+</code></pre>
+
+<h1>运算符(操作符)</h1>
+
+<hr />
+
+<p><strong>运算符指明对操作数的运算方式</strong></p>
+
+<ul>
+<li>算术运算符</li>
+<li>关系运算符</li>
+<li>位运算符</li>
+<li>逻辑运算符</li>
+<li>赋值运算符</li>
+<li>其他运算符</li>
+</ul>
+
+
+<h2>算术运算符</h2>
+
+<pre><code class="{.example}">
++    加法 - 相加运算符两侧的值
+-    减法 - 左操作数减去右操作数
+*    乘法 - 相乘操作符两侧的值
+/    除法 - 左操作数除以右操作数
+%    取模 - 右操作数除左操作数的余数
+++   自增 - 操作数的值增加1
+-    自减 - 操作数的值减少1
+</code></pre>
+
+<h2>实例</h2>
+
+<pre><code class="{.java}">
+public class Test {
+  public static void main(String args[]) {
+     int a = 10;
+     int b = 20;
+     int c = 25;
+     int d = 25;
+     System.out.println("a + b = " + (a + b) );
+     System.out.println("a - b = " + (a - b) );
+     System.out.println("a * b = " + (a * b) );
+     System.out.println("b / a = " + (b / a) );
+     System.out.println("b % a = " + (b % a) );
+     System.out.println("c % a = " + (c % a) );
+     System.out.println("a++   = " +  (a++) );
+     System.out.println("b--   = " +  (a--) );
+     System.out.println("d++   = " +  (d++) );
+     System.out.println("++d   = " +  (++d) );
+  }
+}
+</code></pre>
+
+<h2>关系运算符</h2>
+
+<pre><code class="{.example}">
+==   检查如果两个操作数的值是否相等，如果相等则条件为真
+=!   检查如果两个操作数的值是否相等，如果值不相等则条件为真
+&gt;    检查左操作数的值是否大于右操作数的值，如果是那么条件为真
+&lt;    检查左操作数的值是否小于右操作数的值，如果是那么条件为真
+&gt;=   检查左操作数的值是否大于或等于右操作数的值，如果是那么条件为真
+&lt;=   检查左操作数的值是否小于或等于右操作数的值，如果是那么条件为真
+</code></pre>
+
+<h2>实例</h2>
+
+<pre><code class="{.java}">
+public class Test {
+  public static void main(String args[]) {
+     int a = 10;
+     int b = 20;
+     System.out.println("a == b = " + (a == b) );
+     System.out.println("a != b = " + (a != b) );
+     System.out.println("a &gt; b = " + (a &gt; b) );
+     System.out.println("a &lt; b = " + (a &lt; b) );
+     System.out.println("b &gt;= a = " + (b &gt;= a) );
+     System.out.println("b &lt;= a = " + (b &lt;= a) );
+  }
+}
+</code></pre>
+
+<h2>位运算符</h2>
+
+<pre><code class="{.example}">
+&amp;    按位与操作符，当且仅当两个操作数的某一位都非0时候结果的该位才为1
+|    按位或操作符，只要两个操作数的某一位有一个非0时候结果的该位就为1
+^    按位异或操作符，两个操作数的某一位不相同时候结果的该位就为1
+~    按位补运算符翻转操作数的每一位
+&lt;&lt;   按位左移运算符。左操作数按位左移右操作数指定的位数
+&gt;&gt;   按位右移运算符。左操作数按位右移右操作数指定的位数
+&gt;&gt;&gt;      按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。
+</code></pre>
+
+<h2>实例</h2>
+
+<pre><code class="{.java}">
+public class Test {
+  public static void main(String args[]) {
+     int a = 60; /* 60 = 0011 1100 */
+     int b = 13; /* 13 = 0000 1101 */
+     int c = 0;
+     c = a &amp; b;       /* 12 = 0000 1100 */
+     System.out.println("a &amp; b = " + c );
+     c = a | b;       /* 61 = 0011 1101 */
+     System.out.println("a | b = " + c );
+     c = a ^ b;       /* 49 = 0011 0001 */
+     System.out.println("a ^ b = " + c );
+     c = ~a;          /*-61 = 1100 0011 */
+     System.out.println("~a = " + c );
+     c = a &lt;&lt; 2;     /* 240 = 1111 0000 */
+     System.out.println("a &lt;&lt; 2 = " + c );
+     c = a &gt;&gt; 2;     /* 215 = 1111 */
+     System.out.println("a &gt;&gt; 2  = " + c );
+     c = a &gt;&gt;&gt; 2;     /* 215 = 0000 1111 */
+     System.out.println("a &gt;&gt;&gt; 2 = " + c );
+  }
+}
+</code></pre>
+
+<h2>逻辑运算符</h2>
+
+<pre><code class="{.example}">
+&amp;&amp;   称为逻辑与运算符。当且仅当两个操作数都为真，条件才为真
+||   称为逻辑或操作符。如果任何两个操作数任何一个为真，条件为真
+!    称为逻辑非运算符。用来反转操作数的逻辑状态。如果条件为true，则逻辑非运算符将得到false。
+</code></pre>
+
+<h2>实例</h2>
+
+<pre><code class="{.java}">
+public class Test {
+  public static void main(String args[]) {
+     boolean a = true;
+     boolean b = false;
+     System.out.println("a &amp;&amp; b = " + (a&amp;&amp;b));
+     System.out.println("a || b = " + (a||b) );
+     System.out.println("!(a &amp;&amp; b) = " + !(a &amp;&amp; b));
+  }
+}
+</code></pre>
+
+<h2>赋值运算符</h2>
+
+<pre><code class="{.example}">
+=    简单的赋值运算符，将右操作数的值赋给左侧操作数
++=   加和赋值操作符，它把左操作数和右操作数相加赋值给左操作数
+-=   减和赋值操作符，它把左操作数和右操作数相减赋值给左操作数
+*=   乘和赋值操作符，它把左操作数和右操作数相乘赋值给左操作数
+/=   除和赋值操作符，它把左操作数和右操作数相除赋值给左操作数
+%=   取模和赋值操作符，它把左操作数和右操作数取模后赋值给左操作数
+&lt;&lt;=  左移位赋值运算符
+&gt;&gt;=  右移位赋值运算符
+&amp;=   按位与赋值运算符
+^=   按位异或赋值操作符
+|=   按位或赋值操作符
+</code></pre>
+
+<h2>实例</h2>
+
+<pre><code class="{.java}">
+public class Test {
+  public static void main(String args[]) {
+     int a = 10; int b = 20; int c = 0; c = a + b;
+     System.out.println("c = a + b = " + c );
+     c += a ;
+     System.out.println("c += a  = " + c );
+     c -= a ;
+     System.out.println("c -= a = " + c );
+     c *= a ;
+     System.out.println("c *= a = " + c );
+     a = 10; c = 15; c /= a ;
+  }
+}
+</code></pre>
+
+<h2>三目运算符</h2>
+
+<pre><code class="{.example}">
+variable x = (expression) ? value if true : value if false
+</code></pre>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]){
+        int a , b;
+        a = 10;
+        b = (a == 1) ? 20: 30;
+        System.out.println( "Value of b is : " +  b );
+        b = (a == 10) ? 20: 30;
+        System.out.println( "Value of b is : " + b );
+   }
+}
+</code></pre>
+
+<h2>instanceof</h2>
+
+<pre><code class="{.example}">
+( Object reference variable ) instanceof  (class/interface type)
+</code></pre>
+
+<pre><code class="{.java}">
+"James" instanceof String;
+</code></pre>
+
+<h2>运算符优先级</h2>
+
+<pre><code class="{.example}">
+后缀     () [] . (点操作符)
+一元   ++ - ！ ~
+乘性   * / %
+加性   + -
+移位   &gt;&gt; &gt;&gt;&gt;  &lt;&lt;
+关系   &gt;&gt; = &lt;&lt; =
+相等   ==  !=
+按位与  &amp;
+按位异或     ^
+按位或  |
+逻辑与  &amp;&amp;
+逻辑或  ||
+条件   ? ：
+赋值   = += -= *= /= %= &gt;&gt;= &lt;&lt;= ＆= ^= |=
+逗号   ,
+</code></pre>
+
+<h1>控制执行流程</h1>
+
+<hr />
+
+<ul>
+<li>if-else</li>
+<li>switch</li>
+<li>while</li>
+<li>do-while</li>
+<li>for</li>
+<li>foreach</li>
+<li>break</li>
+<li>continue</li>
+<li>return</li>
+</ul>
+
+
+<h2>if</h2>
+
+<pre><code class="{.java}">
+if(布尔表达式) {
+   //如果布尔表达式为true将执行的语句
+}
+</code></pre>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]){
+      int x = 10;
+      if( x &lt; 20 ){
+         System.out.print("这是 if 语句");
+      }
+   }
+}
+</code></pre>
+
+<h2>if...else</h2>
+
+<pre><code class="{.java}">
+if(布尔表达式){
+   //如果布尔表达式的值为true
+}else{
+   //如果布尔表达式的值为false
+}
+</code></pre>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      if( x &lt; 20 ){
+         System.out.print("这是 if 语句");
+      }else{
+         System.out.print("这是 else 语句");
+      }
+   }
+}
+</code></pre>
+
+<h2>if...else if...else</h2>
+
+<pre><code class="{.java}">
+if(布尔表达式 1){
+   //如果布尔表达式 1的值为true执行代码
+}else if(布尔表达式 2){
+   //如果布尔表达式 2的值为true执行代码
+}else if(布尔表达式 3){
+   //如果布尔表达式 3的值为true执行代码
+}else {
+   //如果以上布尔表达式都不为true执行代码
+}
+</code></pre>
+
+<h2>实例</h2>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      if( x == 10 ){
+         System.out.print("Value of X is 10");
+      }else if( x == 20 ){
+         System.out.print("Value of X is 20");
+      }else if( x == 30 ){
+         System.out.print("Value of X is 30");
+      }else{
+         System.out.print("This is else statement");
+      }
+   }
+}
+</code></pre>
+
+<h2>if嵌套</h2>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      int y = 10;
+      if( x == 30 ){
+         if( y == 10 ){
+             System.out.print("X = 30 and Y = 10");
+          }
+       }
+    }
+}
+</code></pre>
+
+<h2>switch</h2>
+
+<pre><code class="{.java}">
+switch(expression){
+    case value :
+       //语句
+       break; //可选
+    case value :
+       //语句
+       break; //可选
+    //你可以有任意数量的case语句
+    default : //可选
+       //语句
+}
+</code></pre>
+
+<h2>注意点</h2>
+
+<ul>
+<li>switch语句中的变量类型只能为byte、short、int或者char,enum.
+<strong>JDK7开始支持String</strong></li>
+<li>switch语句可以拥有多个case语句。每个case后面跟一个要比较的值和冒号。</li>
+<li>case语句中的值的数据类型必须与变量的数据类型相同，而且只能是常量或者字面常量。</li>
+<li>当变量的值与case语句的值相等时，那么case语句之后的语句开始执行，直到break语句出现才会跳出switch语句。</li>
+<li>当遇到break语句时，switch语句终止。程序跳转到switch语句后面的语句执行。</li>
+<li>switch语句可以包含一个default分支，该分支必须是switch语句的最后一个分支。default在没有case语句的值和变量值相等的时候执行。</li>
+</ul>
+
+
+<h2>实例</h2>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]){
+      char grade = 'C';
+      switch(grade) {
+         case 'A' :
+            System.out.println("Excellent!");
+            break;
+         case 'B' :
+         case 'C' :
+            System.out.println("Well done");
+            break;
+         case 'D' :
+            System.out.println("You passed");
+         case 'F' :
+            System.out.println("Better try again");
+            break;
+         default :
+            System.out.println("Invalid grade");
+      }
+      System.out.println("Your grade is " + grade);
+   }
+}
+</code></pre>
+
+<h2>while</h2>
+
+<pre><code class="{.java}">
+while( 布尔表达式 ) {
+    //循环内容
+}
+</code></pre>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]) {
+      int x = 10;
+      while( x &lt; 20 ) {
+         System.out.print("value of x : " + x );
+         x++;
+         System.out.print("\n");
+      }
+   }
+}
+</code></pre>
+
+<h2>do-while</h2>
+
+<pre><code class="{.java}">
+do {
+       //代码语句
+}while(布尔表达式);
+</code></pre>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]){
+      int x = 10;
+      do{
+         System.out.print("value of x : " + x );
+         x++;
+         System.out.print("\n");
+      }while( x &lt; 20 );
+   }
+}
+</code></pre>
+
+<h2>for</h2>
+
+<pre><code class="{.java}">
+for(初始化; 布尔表达式; 更新) {
+    //代码语句
+}
+</code></pre>
+
+<ul>
+<li>最先执行初始化步骤。可以声明并初始化一个或多个循环控制变量，也可以是空语句。</li>
+<li>然后，检测布尔表达式的值。如果为true，循环体被执行。如果为false，循环终止，开始执行循环体后面的语句。</li>
+<li>执行一次循环后，更新循环控制变量。</li>
+<li>再次检测布尔表达式。循环执行上面的过程。</li>
+</ul>
+
+
+<h2>实例</h2>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]) {
+      for(int x = 10; x &lt; 20; x = x+1) {
+         System.out.print("value of x : " + x );
+         System.out.print("\n");
+      }
+   }
+}
+</code></pre>
+
+<h2>foreach</h2>
+
+<pre><code class="{.java}">
+for(声明语句 : 表达式) {
+   //代码句子
+}
+</code></pre>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]){
+      int[] numbers = {10, 20, 30, 40, 50};
+      for(int x : numbers){
+         System.out.print( x );
+         System.out.print(",");
+      }
+      System.out.print("\n");
+
+      String[] names ={"James", "Larry", "Tom", "Lacy"};
+      for(String name : names) {
+         System.out.print( name );
+         System.out.print(",");
+      }
+   }
+}
+</code></pre>
+
+<h2>break</h2>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]) {
+      int [] numbers = {10, 20, 30, 40, 50};
+
+      for(int x : numbers) {
+         if(x == 30) {
+          break;
+         }
+         System.out.print(x);
+         System.out.print("\n");
+      }
+   }
+}
+</code></pre>
+
+<h2>continue</h2>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]) {
+      int [] numbers = {10, 20, 30, 40, 50};
+      for(int x : numbers) {
+         if(x == 30) {
+          continue;
+         }
+         System.out.print(x);
+         System.out.print("\n");
+      }
+   }
+}
+</code></pre>
+
+<h2>labeled break与labeled continue</h2>
+
+<pre><code class="{.java}">
+public class Test {
+   public static void main(String args[]) {
+        int [] numbers = {10, 20, 30, 40, 50};
+        outer: for(int x : numbers) {
+            for(int i = 1;i &lt; 3;i++) {
+                if (x == 30) {
+                    break outer;
+                }
+                System.out.print(x);
+                System.out.print("\n");
+            }
+            System.out.println("outer" + x);
+        }
+    }
+}
+</code></pre>
+
+<h2>return</h2>
+
+<ul>
+<li>跳出当前方法,并返回方法所需要的值(如果有返回值的话)</li>
+</ul>
+
+
+<h2>课堂练习</h2>
+
+<ul>
+<li>使用数组计算矩阵乘法</li>
+</ul>
+
+
+<p><img src="/home/ivan/my/teach/java/javase/01_basic/file/6.jpg" alt="" /></p>
+
+<h2>答案</h2>
+
+<pre><code class="{.java}">
+public class Test{
+    public static void main(String[] args){
+        int[][] a = { {1,0,2},{-1,3,1}};
+        int[][] b = { {3,1},{2,1},{1,0}};
+        int[][] c = new int[2][2];
+        for(int i = 0; i &lt; 2;i++){
+            int tmp = 0;
+            int tmp2 = 0;
+            for(int j = 0;j &lt; 3;j++){
+                tmp += a[i][j] * b[j][i];
+                tmp2 += a[i][j] * b[j][1-i];
+            }
+            c[i][i] = tmp;
+            c[i][1-i]=tmp2;
+        }
+        System.out.println(c[0][0]);
+        System.out.println(c[0][1]);
+        System.out.println(c[1][0]);
+        System.out.println(c[1][1]);
+    }
+}
+</code></pre>
+
+<h2>课后作业</h2>
+
+<ul>
+<li>理解path与classpath</li>
+<li>请任意修改hello world,并尝试编译运行!如报错,请尝试理解报错信息!</li>
+<li>请编写程序,打印如下图形.你能想出几种方法?你认为最简单的方法是哪种?</li>
+</ul>
+
+
+<pre><code>
+  1
+ 111
+11111
+</code></pre>
+
+<ul>
+<li>请使用循环和递归分别实现斐波那契数列</li>
+</ul>
+
+
+<pre><code>
+1 1 2 3 5 8 13 ...
+</code></pre>
+
+<ul>
+<li>本机安装eclipse,并在eclipse中运行hello world</li>
+<li>请到网上搜索面向对象编程,尝试理解面向对象编程,及其与面向过程编程的区别</li>
+</ul>
+
+
+
+
+    <a href="/2014/11/29/javabasic.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/11/28/pigtheme.html">LightTable Theme</a></h2>
+
+        <p class="post-meta">By 11月28日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#lighttable"><i class="fa fa-folder-open">lighttable (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">lighttable (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">theme (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>LightTable Theme</h1>
+
+<ul>
+<li>自用LightTable代码高亮配色,修改自solarized!</li>
+<li>从LightTable插件管理搜索pigtheme下载即可!</li>
+<li>主题修改为pigtheme生效</li>
+</ul>
+
+
+<p><img src="/assets/lighttable/shot.jpg" alt="" /></p>
+
+
+
+    <a href="/2014/11/28/pigtheme.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/10/02/clojure_spels.html">Clojure进阶:使用Clojure编写文字冒险游戏</a></h2>
+
+        <p class="post-meta">By 10月02日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>本文翻译自:<a href="http://www.lisperati.com/clojure-spels/casting.html">Casting SPELs in Clojure</a></p>
+
+<p><img src="/assets/clojure/cs_01.jpg" alt="" /></p>
+
+<h1>准备</h1>
+
+<p>任何学过Lisp的人都会说List和其它语言有很大的不同.它有很多不可思议的地方.本文将告诉你它有哪些独特之处!</p>
+
+<p>本文适用于Clojure,它是一个运行在JVM上的Lisp方言.Clojure的API和语法和
+Common Lisp很类似,但是还是有足够多的区别,需要单独为其写个教程.</p>
+
+<p>在大部分情况下,我们会说Lisp而不是Clojure,因为大部分的概念在Lisp中是通用的.我们会指出Clojure特有的内容.</p>
+
+<p><img src="/assets/clojure/cs_02.jpg" alt="" /></p>
+
+<p>Clojure是运行在JVM之上的,所以你需要先安装JVM.如果你是MAC机,那么Java已经被安装过了.如果是Linux或者Windows系统,你需要到<a href="http://java.sun.com/javase/downloads/index.jsp">Oracle Java官网</a>下载对应版本的Java.</p>
+
+<p>而Clojure,你可以从它的<a href="http://clojure.org/">官网</a>获得最新版本.下载完成后,你只需要解压缩,打开命令行,切换到解压缩目录,输入:</p>
+
+<pre><code class="{.bash}">java -jar clojure.jar
+</code></pre>
+
+<p>如果没有问题,那么你将会看到Clojure输出提示</p>
+
+<pre><code class="{.bash}">Clojure 1.6.0
+user=&gt;
+</code></pre>
+
+<p>教程中有很多Clojure代码片段,类似下面的样子:</p>
+
+<pre><code class="{.clojure}">'(these kinds of boxes)
+</code></pre>
+
+<p>你只需要将这些代码片段拷贝到Clojure REPL中运行就可以了!当你学习完此教程,你将会有一个你自己的文字冒险游戏了!</p>
+
+
+
+
+    <a href="/2014/10/02/clojure_spels.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/10/01/dsl.html">Clojure进阶:使用Clojure构建DSL</a></h2>
+
+        <p class="post-meta">By 10月01日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>翻译自<a href="http://clojure-doc.org/articles/tutorials/growing_a_dsl_with_clojure.html">Growing a DSL with Clojure</a>.主要讲解如何使用</p>
+
+<p>Clojure来创建一个简单的DSL.包括如下知识点:</p>
+
+<ul>
+<li>多重方法(Multimethods)</li>
+<li>继承(Hierarchies)</li>
+<li>元编程及"代码即数据"哲学(Metaprogramming and the "Code as data" philosophy)</li>
+</ul>
+
+
+<p>Lisp及其方言(比如Clojure)可以很方便的创建DSL并能和源语言无缝的集成.</p>
+
+<p>Lisp界鼓吹的优点中，提到最多的可能就是:数据即代码，代码即数据了。在此文中我们将依此特性来定义一个DSL。</p>
+
+<p>我们将渐进式的开发这个DSL，不断的加入Clojure的特性和抽象。</p>
+
+<h1>任务</h1>
+
+<p>我们的目标是定义一个可以生成各种脚本语言的DSL.而且DSL代码看起来和普通的Clojure代码没有区别。</p>
+
+<p>例如,我们使用Clojure形式(form)来生成Bash脚本或者Windows批处理脚本:</p>
+
+<p>输入(Clojure形式):</p>
+
+<pre><code class="{.clojure}">(if (= 1 2)
+  (println "a")
+  (println "b"))
+</code></pre>
+
+<p>输出(Bash脚本):</p>
+
+<pre><code class="{.bash}">if [ 1 -eq 2 ]; then
+  echo "a"
+else
+  echo "b"
+fi
+</code></pre>
+
+<p>输出(Windows批处理):</p>
+
+<pre><code class="{.bash}">IF 1==2 (
+  ECHO a
+) ELSE (
+  ECHO b
+)
 </code></pre>
 
 
 
 
-    <a href="/2013/09/19/staticresource.html" class="post-categorybut">阅读全文</a>
+    <a href="/2014/10/01/dsl.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

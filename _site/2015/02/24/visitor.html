@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="java, clojure, designpattern"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2015/02/24/visitor.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>语言与模式-22访问者模式 - Less is more</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">Thinking in Ivan</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+							<div id="qrcode">
+							<img src="/img/qrcode.jpg" width="170"/>
+							</div>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">语言与模式-22访问者模式</h2>
+
+    <p class="post-meta">By 02月24日  2015
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">java (23)</i></a>
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">clojure (33)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (40)</i></a>
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">clojure (54)</i></a>
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">designpattern (23)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <h1>意图</h1>
+
+<p>表示一个作用于某对象结构中的各元素的操作。它使你可以在不改变各元素的类的前提下定义作用于这些元素的新操作。</p>
+
+<p><img src="/assets/designpattern/visitor.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>一个对象结构包含很多类对象，它们有不同的接口，而你想对这些对象实施一些依赖于其具体类的操作。</li>
+<li>需要对一个对象结构中的对象进行很多不同的并且不相关的操作，而你想避免让这些操作“污染”这些对象的类。Visitor使得你可以将相关的操作集中起来定义在一个类中。当该对象结构被很多应用共享时，用Visitor模式让每个应用仅包含需要用到的操作。</li>
+<li>定义对象结构的类很少改变，但经常需要在此结构上定义新的操作。改变对象结构类需要重定义对所有访问者的接口，这可能需要很大的代价。如果对象结构类经常改变，那么可能还是在这些类中定义这些操作较好。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="java">//访问者
+public interface Visitor {
+    public void visit(Park park);
+    public void visit(ParkA parkA);
+    public void visit(ParkB parkB);
+}
+</code></pre>
+
+<pre><code class="java">//清洁工A,负责parkA的卫生情况
+public class VisitorA implements Visitor {
+
+    public void visit(Park park) {
+    }
+
+    public void visit(ParkA parkA) {
+        System.out.println("清洁工A:完成公园" + parkA.getName()+ "的卫生");
+    }
+
+    public void visit(ParkB parkB) {
+    }
+}
+</code></pre>
+
+<!-- more -->
+
+
+<pre><code class="java">//清洁工B，负责公园B部分的卫生
+public class VisitorB implements Visitor {
+
+    public void visit(Park park) {
+    }
+
+    public void visit(ParkA parkA) {
+    }
+
+    public void visit(ParkB parkB) {
+        System.out.println("清洁工B:完成公园" + parkB.getName()+"的卫生");
+    }
+}
+</code></pre>
+
+<pre><code class="java">public class VisitorManager implements Visitor {
+
+    public void visit(Park park) {
+        System.out.println("管理员：负责" + park.getName() + "卫生检查");
+    }
+
+    public void visit(ParkA parkA) {
+        System.out.println("管理员：负责公园"+ parkA.getName() +"部分卫生检查");
+    }
+
+    public void visit(ParkB parkB) {
+        System.out.println("管理员：负责公园"+ parkB.getName() +"分部卫生检查");
+    }
+}
+</code></pre>
+
+<pre><code class="java">//公园每一部分的抽象
+public interface ParkElement {
+    //用来接纳访问者
+    public void accept(Visitor visitor);
+}
+</code></pre>
+
+<pre><code class="java">public class Park implements ParkElement {
+    private String name;
+    private ParkA parkA;
+    private ParkB parkB;
+
+    public Park() {
+        this.parkA = new ParkA();
+        this.parkB = new ParkB();
+        parkA.setName("A");
+        parkB.setName("B");
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        parkA.accept(visitor);
+        parkB.accept(visitor);
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+</code></pre>
+
+<pre><code class="java">//公园的A部分
+public class ParkA implements ParkElement {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+</code></pre>
+
+<pre><code class="java">//公园的B部分
+public class ParkB implements ParkElement{
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+</code></pre>
+
+<pre><code class="java">public class MainClass {
+    public static void main(String[] args) {
+        Park park = new Park();
+        park.setName("锦绣公园");
+        VisitorA visitorA = new VisitorA();
+
+        park.accept(visitorA);
+
+        VisitorB visitorB = new VisitorB();
+        park.accept(visitorB);
+
+        VisitorManager visitorManager = new VisitorManager();
+        park.accept(visitorManager);
+    }
+}
+</code></pre>
+
+<h1>Clojure实现</h1>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2015/02/23/interpreter.html" title="语言与模式-21解释器模式 "><p> <i class="fa fa-mail-reply"></i>&nbsp;语言与模式-21解释器模式</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2015/02/25/iterator.html" title="语言与模式-23迭代器模式"><p>语言与模式-23迭代器模式&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+
+
+
+
+<a name="comments"> </a>
+<div id="comment">
+    <div class="ds-thread" data-title="语言与模式-22访问者模式" data-thread-key="/2015/02/24/visitor" data-url="/2015/02/24/visitor.html"></div>
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"ivanpig"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = '/js/min/duoshuo.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/about.html">About</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>
