@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
-        <meta name="keywords" content="java, clojure, designpattern"/>
+        <meta name="keywords" content="designpattern, java, clojure"/>
         <meta name="author" content="ivanpig.github.io"> 
         <link rel="canonical" href="http://ivanpig.github.io/2015/02/22/mediator.html">
         <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
@@ -110,9 +110,7 @@
         
         
         
-        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">java (23)</i></a>
-        
-        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">clojure (33)</i></a>
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">designpattern (23)</i></a>
         
         
         
@@ -121,11 +119,11 @@
         
         
         
-        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (40)</i></a>
+        <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">designpattern (23)</i></a>
         
-        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">clojure (54)</i></a>
+        <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">java (38)</i></a>
         
-        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">designpattern (23)</i></a>
+        <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">clojure (53)</i></a>
         
         
     
@@ -303,6 +301,35 @@ public class Client {
 </code></pre>
 
 <h1>Clojure实现</h1>
+
+<p>中介者模式类似双向的观察者模式！</p>
+
+<p>观察者模式是单向的，从Subject向多个Observer传递信息！</p>
+
+<p>中介者模式相当与ObserverA向Subject传递信息，再通过Subject传递给ObserverB,反之亦然!</p>
+
+<p>那么就可以通过实现两个add-watch来实现类似中介者模式!</p>
+
+<pre><code class="clojure">(def a (atom {}))
+(def b (atom {}))
+
+(defn func-a []
+   (println "func-a invoke"))
+
+(defn func-b []
+  (println "func-b invoke"))
+
+(add-watch a :watcherA
+           (fn [key atom old-state new-state]
+             (func-a)))
+
+(add-watch b :watcherB
+           (fn [key atom old-state new-state]
+             (func-b)))
+
+(reset! a {:foo "bar"})
+(reset! b {:foo "bar"})
+</code></pre>
 
 </div>
 

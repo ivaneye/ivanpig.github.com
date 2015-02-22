@@ -4,7 +4,6 @@ title: 语言与模式-16责任链模式
 categories: [designpattern]
 tags: [designpattern,java,clojure]
 avatarimg: "/img/head.jpg"
-published: false
 
 ---
 
@@ -111,4 +110,23 @@ public class Client {
 
 # Clojure实现
 
-又是first-class function!
+```clojure
+
+(defn handler-request1 [condition]
+  (if (= "ConcreteHandler1" condition)
+    (println "ConcreteHandler1 handled ")
+    (println "ConcreteHandler1 passed ")))
+
+(defn handler-request2 [condition]
+  (if (= "ConcreteHandler2" condition)
+    (println "ConcreteHandler2 handled ")
+    (println "ConcreteHandler2 passed ")))
+
+(defn handler-requestn [condition]
+  (println "ConcreteHandlern handled "))
+
+(->> "ConcreteHandler2"
+    handler-request1
+    handler-request2
+    handler-requestn)
+```

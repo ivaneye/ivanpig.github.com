@@ -106,97 +106,6 @@
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2015/02/12/decorator.html">语言与模式-10装饰模式</a></h2>
-
-        <p class="post-meta">By 02月12日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>动态地给一个对象添加一些额外的职责。就增加功能来说，Decorator模式相比生成子类更为灵活。</p>
-
-<p><img src="/assets/designpattern/decorator.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>在不影响其他对象的情况下，以动态、透明的方式给单个对象添加职责。</li>
-<li>处理那些可以撤消的职责。</li>
-<li>当不能采用生成子类的方法进行扩充时。一种情况是，可能有大量独立的扩展，为支持每一种组合将产生大量的子类，使得子类数目呈爆炸性增长。另一种情况可能是因为类定义被隐藏，或类定义不能用于生成子类。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<p>JavaIO库的使用可能如下</p>
-
-<pre><code class="{.java}">BufferedInputStream bi = new BufferedInputStream(new FileInputStream(filename));
-</code></pre>
-
-<p>我们都知道FileInputStream是用来读取文件的，BufferedInputStream是提供了缓存的能力。我们分别看下他们的源代码</p>
-
-<pre><code class="{.java}">public class BufferedInputStream extends FilterInputStream
-...
-
-public class FilterInputStream extends InputStream
-...
-
-public class FileInputStream extends InputStream
-...
-</code></pre>
-
-<p>BufferedInputStream继承了FilterInputStream，FilterInputStream和FileInputStream一样都继承自InputStream.</p>
-
-<p>可以看出InputStream是公共父类。</p>
-
-<p>FilterInputStream是装饰类的公共父类，看看FilterInputStream的源代码就知道了，他只是做了简单的方法委托。</p>
-
-<p>BufferedInputStream继承了FilterInputStream，并添加了缓存的方法（其实就是用一个字节数组保存字节，一次性读出）。</p>
-
-
-
-
-    <a href="/2015/02/12/decorator.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
         <h2 class="post-title"><a href="/2015/02/11/composite.html">语言与模式-09组合模式</a></h2>
 
         <p class="post-meta">By 02月11日  2015
@@ -204,9 +113,7 @@ public class FileInputStream extends InputStream
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -215,11 +122,11 @@ public class FileInputStream extends InputStream
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -296,9 +203,7 @@ public class FileInputStream extends InputStream
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -307,11 +212,11 @@ public class FileInputStream extends InputStream
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -390,9 +295,7 @@ public class Cruze implements Car{
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -401,11 +304,11 @@ public class Cruze implements Car{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -494,9 +397,7 @@ public class Main{
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -505,11 +406,11 @@ public class Main{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -582,9 +483,7 @@ public class Main{
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -593,11 +492,11 @@ public class Main{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -680,9 +579,7 @@ abstract class StarbucksBuilder {
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -691,11 +588,11 @@ abstract class StarbucksBuilder {
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -784,6 +681,86 @@ public class A implements Cloneable{
 
 
     <a href="/2015/02/06/prototype.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/02/05/abstract_factory.html">语言与模式-03抽象工厂模式</a></h2>
+
+        <p class="post-meta">By 02月05日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。</p>
+
+<p><img src="/assets/designpattern/abstract_factory.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>一个系统要独立于它的产品的创建、组合和表示时。</li>
+<li>一个系统要由多个产品系列中的一个来配置时。</li>
+<li>当你要强调一系列相关的产品对象的设计以便进行联合使用时。</li>
+<li>当你提供一个产品类库，而只想显示它们的接口而不是实现时。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<p>表现在代码层面就是一个工厂可以返回多个不同的实例！</p>
+
+<p>比如:Pig不仅分颜色，还分国家，比如荷兰Pig，新西兰Pig。</p>
+
+<pre><code class="{.java}">public class RedPigFactory implements PigFactory{
+     public Pig getNetherlandsPig(){
+          return new RedNetherlandsPig();
+     }
+
+     public Pig getNewZealandPig(){
+          return new RedNewZealandPig();
+     }
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/05/abstract_factory.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

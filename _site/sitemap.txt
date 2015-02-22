@@ -17,7 +17,6 @@ http://ivanpig.github.io/page/8/index.html
 http://ivanpig.github.io/page/9/index.html
 http://ivanpig.github.io/page/10/index.html
 
-http://ivanpig.github.io/2015/02/26/start.html
 http://ivanpig.github.io/2015/02/25/iterator.html
 http://ivanpig.github.io/2015/02/24/visitor.html
 http://ivanpig.github.io/2015/02/23/interpreter.html
@@ -41,7 +40,6 @@ http://ivanpig.github.io/2015/02/06/prototype.html
 http://ivanpig.github.io/2015/02/05/abstract_factory.html
 http://ivanpig.github.io/2015/02/04/factory.html
 http://ivanpig.github.io/2015/02/03/singleton.html
-http://ivanpig.github.io/2014/11/29/javabasic.html
 http://ivanpig.github.io/2014/11/28/pigtheme.html
 http://ivanpig.github.io/2014/10/02/clojure_spels.html
 http://ivanpig.github.io/2014/10/01/dsl.html

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
-        <meta name="keywords" content="java, clojure, designpattern"/>
+        <meta name="keywords" content="designpattern, java, clojure"/>
         <meta name="author" content="ivanpig.github.io"> 
         <link rel="canonical" href="http://ivanpig.github.io/2015/02/24/visitor.html">
         <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
@@ -110,9 +110,7 @@
         
         
         
-        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">java (23)</i></a>
-        
-        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">clojure (33)</i></a>
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">designpattern (23)</i></a>
         
         
         
@@ -121,11 +119,11 @@
         
         
         
-        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (40)</i></a>
+        <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">designpattern (23)</i></a>
         
-        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">clojure (54)</i></a>
+        <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">java (38)</i></a>
         
-        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">designpattern (23)</i></a>
+        <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">clojure (53)</i></a>
         
         
     
@@ -296,6 +294,10 @@ public class ParkB implements ParkElement{
 </code></pre>
 
 <h1>Clojure实现</h1>
+
+<p>访问者模式干了什么呢？我自己(这里是Park)有个结构，我委托给其他对象(Visitor)来实现访问逻辑!</p>
+
+<p>Clojure没有类似的结构体！比如复杂的树结构，可以使用Clojure提供的数据操作函数来进行操作即可！没必要实现个模式！</p>
 
 </div>
 

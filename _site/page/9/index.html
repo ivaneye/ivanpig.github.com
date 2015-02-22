@@ -106,172 +106,6 @@
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2013/03/16/scala_exercises_14.html">快学Scala习题解答—第十四章 模式匹配和样例类</a></h2>
-
-        <p class="post-meta">By 03月16日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>模式匹配和样例类</h1>
-
-<h2>JDK发行包有一个src.zip文件包含了JDK的大多数源代码。解压并搜索样例标签(用正则表达式case [^:]+:)。然后查找以//开头并包含[Ff]alls?thr的注释，捕获类似// Falls through或// just fall thru这样的注释。假定JDK的程序员们遵守Java编码习惯，在该写注释的地方写下了这些注释，有多少百分比的样例是会掉入到下一个分支的？</h2>
-
-<p>没读懂题意。。。。</p>
-
-<h2>利用模式匹配，编写一个swap函数，接受一个整数的对偶，返回对偶的两个组成部件互换位置的新对偶</h2>
-
-<pre><code class="{.scala}">def swap[S,T](tup: (S,T)) = {
-    tup match {
-        case (a ,b) =&gt; (b,a)
-    }
-}
-
-println(swap[String,Int](("1",2)))
-</code></pre>
-
-<h2>利用模式匹配，编写一个swap函数，交换数组中的前两个元素的位置，前提条件是数组长度至少为2</h2>
-
-<pre><code class="{.scala}">def swap(arr: Array[String]) = {
-  arr match {
-    case Array(a,b, ar @ _*) =&gt; Array(b,a) ++ ar
-    case _ =&gt; arr
-  }
-}
-
-println(swap(Array("1","2","3","4")).mkString)
-</code></pre>
-
-
-
-
-    <a href="/2013/03/16/scala_exercises_14.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/15/scala_exercises_13.html">快学Scala习题解答—第十三章 集合</a></h2>
-
-        <p class="post-meta">By 03月15日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>集合</h1>
-
-<h2>编写一个函数，给定字符串，产出一个包含所有字符的下标的映射。举例来说：indexes("Mississippi")应返回一个映射，让'M'对应集{0}，'i'对应集{1,4,7,10}，依此类推。使用字符到可变集的映射。另外，你如何保证集是经过排序的？</h2>
-
-<p>更新scala到版本2.10.0。有可变的可排序的Set，实际上还是TreeSet</p>
-
-<pre><code class="{.scala}">import collection.mutable.{Map,HashMap,SortedSet}
-
-def indexs(str:String):Map[Char,SortedSet[Int]]={
-  var map = new HashMap[Char, SortedSet[Int]]();
-  var i = 0;
-  str.foreach{
-    c=&gt;
-      map.get(c) match{
-        case Some(result) =&gt; map(c) = result + i
-        case None =&gt; map += (c-&gt; SortedSet{i})
-      }
-      i += 1
-  }
-  map
-}
-
-println(indexs("Mississippi"))
-</code></pre>
-
-<h2>重复前一个练习，这次用字符到列表的不可变映射。</h2>
-
-<pre><code class="{.scala}">import collection.immutable.HashMap
-import collection.mutable.ListBuffer
-
-def indexs(str:String):Map[Char,ListBuffer[Int]]={
-  var map = new HashMap[Char, ListBuffer[Int]]()
-  var i = 0
-  str.foreach{
-    c=&gt;
-      map.get(c) match{
-        case Some(result) =&gt; result += i
-        case None =&gt; map += (c-&gt; ListBuffer{i})
-      }
-      i += 1
-  }
-  map
-}
-
-println(indexs("Mississippi"))
-</code></pre>
-
-
-
-
-    <a href="/2013/03/15/scala_exercises_13.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
         <h2 class="post-title"><a href="/2013/03/14/scala_exercises_12.html">快学Scala习题解答—第十二章 高阶函数</a></h2>
 
         <p class="post-meta">By 03月14日  2013
@@ -288,7 +122,7 @@ println(indexs("Mississippi"))
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -369,7 +203,7 @@ println(indexs("Mississippi"))
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -439,7 +273,7 @@ println(indexs("Mississippi"))
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -520,7 +354,7 @@ object Test extends App{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -603,7 +437,7 @@ pw.close()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -661,6 +495,166 @@ pw.close()
 
 
     <a href="/2013/03/10/scala_exercises_08.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/09/scala_exercises_07.html">快学Scala习题解答—第七章 包和引入</a></h2>
+
+        <p class="post-meta">By 03月09日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>包和引入</h1>
+
+<h2>编写示例程序，展示为什么</h2>
+
+<pre><code class="{.scala}">package com.horstmann.impatient
+</code></pre>
+
+<p>不同于</p>
+
+<pre><code class="{.scala}">package com
+package horstmann
+package impatient
+</code></pre>
+
+<p>分别使用package的效果如下</p>
+
+<pre><code class="{.scala}">package com {
+  class T1() {}
+
+  package horstmann {
+    class T2(t: T1) {}
+
+    package impatient {
+      class T3(t1: T1, t2: T2) {}
+    }
+  }
+}
+</code></pre>
+
+<p>子包里的类可以使用父包里的类。但是第一种方式不可以</p>
+
+<pre><code class="{.scala}">package com.horstmann.impatient{
+  class T4(t1:T1,t3:T3)      //无法找到T1
+}
+</code></pre>
+
+
+
+
+    <a href="/2013/03/09/scala_exercises_07.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/08/scala_exercises_06.html">快学Scala习题解答—第六章 对象</a></h2>
+
+        <p class="post-meta">By 03月08日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>对象</h1>
+
+<h2>编写一个Conversions对象，加入inchesToCentimeters,gallonsToLiters和milesToKilometers方法</h2>
+
+<pre><code class="{.scala}">object Conversions{
+    def inchesToCentimeters(){}
+    def gallonsToLiters(){}
+    def milesToKilometers(){}
+}
+</code></pre>
+
+<h2>前一个练习不是很面向对象。提供一个通用的超类UnitConversion并定义扩展该超类的InchesToCentimeters,GallonsToLiters和MilesToKilometers对象</h2>
+
+<pre><code class="{.scala}">abstract class UnitConversion{
+
+  def inchesToCentimeters(){}
+  def gallonsToLiters(){}
+  def milesToKilometers(){}
+
+}
+
+object InchesToCentimeters extends UnitConversion{
+  override def inchesToCentimeters() {}
+}
+
+object GallonsToLiters extends UnitConversion{
+  override def gallonsToLiters() {}
+}
+
+object MilesToKilometers extends UnitConversion{
+  override def milesToKilometers() {}
+}
+</code></pre>
+
+
+
+
+    <a href="/2013/03/08/scala_exercises_06.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

@@ -4,306 +4,13 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-02-22T14:50:24+08:00</updated>
+    <updated>2015-02-22T17:28:12+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
         <email>ivan.pig@foxmail.com</email>
     </author>
 
-    
-    <entry>
-        <title>语言和并发-01启动线程</title>
-        <link href="http://ivanpig.github.io/2015/02/26/start.html"/>
-        <updated>2015-02-26T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/26/start</id>
-        <content type="html">&lt;h1&gt;概述&lt;/h1&gt;
-
-&lt;p&gt;本系列文章意在比较Java与Clojure在线程实现上的区别！&lt;/p&gt;
-
-&lt;p&gt;Java的线程主要基于锁机制，而Clojure主要模拟了数据库事务操作，所谓的STM(软事务模型)。主要从代码层面给出两者的区别，孰优孰劣请自行判断！&lt;/p&gt;
-
-&lt;h1&gt;启动线程&lt;/h1&gt;
-
-&lt;h2&gt;Java代码&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Java实例中，两个线程类A和B，分别通过实现Runnable接口和继承Thread类来实现&lt;/li&gt;
-&lt;li&gt;两各类启动线程的方式有差异，详见代码&lt;/li&gt;
-&lt;li&gt;JDK5中提供了线程启动类Executors来执行&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package concurrent;
-
-import java.util.concurrent.*;
-
-/**
- * Created by ivan on 15-2-22.
- * Java启动线程
- */
-public class Start {
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        //实现Runnable接口，需要通过一个Thread实例来启动线程
-        new Thread(new A()).start();
-        //继承Thread类，直接通过自身来启动线程
-        new B().start();
-
-        //JDK1.5开始，可以通过Executor来执行线程.效果和上面没有区别
-        ExecutorService e = Executors.newCachedThreadPool();
-        e.execute(new A());
-        e.execute(new B());
-        //Callable需要submit,返回Future
-        Future&amp;lt;String&amp;gt; f = e.submit(new C());
-        //get方法是个阻塞方法
-        System.out.println(&quot;Future f = &quot; + f.get());
-        e.shutdown();
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;!-- more --&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
- * 线程类可以实现Runnable接口
- */
-class A implements Runnable {
-    @Override
-    public void run() {
-        for (int i = 0; i &amp;lt; 9; i++) {
-            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
- * 线程类也可以继承Thread类
- */
-class B extends Thread {
-    @Override
-    public void run() {
-        for (int i = 0; i &amp;lt; 9; i++) {
-            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
- * 如果想线程返回结果，则实现Callable接口
- */
-class C implements Callable&amp;lt;String&amp;gt; {
-
-    @Override
-    public String call() throws Exception {
-        for (int i = 0; i &amp;lt; 9; i++) {
-            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return &quot;End&quot;;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;Clojure代码&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Clojure可以直接对函数进行多线程执行，因为它没有类的概念&lt;/li&gt;
-&lt;li&gt;Clojure可以直接通过Java的Thread类来启动多线程&lt;/li&gt;
-&lt;li&gt;也可以通过future来执行多线程&lt;/li&gt;
-&lt;li&gt;future可以返回值，可对其进行解引用，获得返回值，如果线程未执行完，则阻塞。&lt;/li&gt;
-&lt;li&gt;future实际上就是Java中Future实例，可以直接调用future的get方法获取返回值，效果和解引用相同&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns concurrent.start)
-
-;Clojure没有类的概念，直接给出函数
-(defn f []
-  (dotimes [i 9]
-    (println  &quot; | i = &quot; i)
-    (Thread/sleep 300))
-  :End)
-
-;可以通过Java的Thread来执行
-(.start (Thread. f))
-
-;Clojure提供了future宏，可以方便的在另一个线程内执行
-(def fu (future  (f)))
-
-;主线程结束
-(println &quot;End&quot;)
-
-;对future可以解引用，获取计算结果，如果解引用时，future没执行完，会阻塞
-(println &quot;fu result = &quot; @fu)
-
-;fu实际上就是Java中的Future,所以可以使用Future的get方法，效果和解引用相同
-(println &quot;Future.get = &quot; (.get fu))
-
-;调用此方法结束所有线程
-(shutdown-agents)
-&lt;/code&gt;&lt;/pre&gt;
-</content>
-        <summary type="html">&lt;h1&gt;概述&lt;/h1&gt;
-
-&lt;p&gt;本系列文章意在比较Java与Clojure在线程实现上的区别！&lt;/p&gt;
-
-&lt;p&gt;Java的线程主要基于锁机制，而Clojure主要模拟了数据库事务操作，所谓的STM(软事务模型)。主要从代码层面给出两者的区别，孰优孰劣请自行判断！&lt;/p&gt;
-
-&lt;h1&gt;启动线程&lt;/h1&gt;
-
-&lt;h2&gt;Java代码&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Java实例中，两个线程类A和B，分别通过实现Runnable接口和继承Thread类来实现&lt;/li&gt;
-&lt;li&gt;两各类启动线程的方式有差异，详见代码&lt;/li&gt;
-&lt;li&gt;JDK5中提供了线程启动类Executors来执行&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package concurrent;
-
-import java.util.concurrent.*;
-
-/**
- * Created by ivan on 15-2-22.
- * Java启动线程
- */
-public class Start {
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        //实现Runnable接口，需要通过一个Thread实例来启动线程
-        new Thread(new A()).start();
-        //继承Thread类，直接通过自身来启动线程
-        new B().start();
-
-        //JDK1.5开始，可以通过Executor来执行线程.效果和上面没有区别
-        ExecutorService e = Executors.newCachedThreadPool();
-        e.execute(new A());
-        e.execute(new B());
-        //Callable需要submit,返回Future
-        Future&amp;lt;String&amp;gt; f = e.submit(new C());
-        //get方法是个阻塞方法
-        System.out.println(&quot;Future f = &quot; + f.get());
-        e.shutdown();
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;!-- more --&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
- * 线程类可以实现Runnable接口
- */
-class A implements Runnable {
-    @Override
-    public void run() {
-        for (int i = 0; i &amp;lt; 9; i++) {
-            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
- * 线程类也可以继承Thread类
- */
-class B extends Thread {
-    @Override
-    public void run() {
-        for (int i = 0; i &amp;lt; 9; i++) {
-            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
- * 如果想线程返回结果，则实现Callable接口
- */
-class C implements Callable&amp;lt;String&amp;gt; {
-
-    @Override
-    public String call() throws Exception {
-        for (int i = 0; i &amp;lt; 9; i++) {
-            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return &quot;End&quot;;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;Clojure代码&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Clojure可以直接对函数进行多线程执行，因为它没有类的概念&lt;/li&gt;
-&lt;li&gt;Clojure可以直接通过Java的Thread类来启动多线程&lt;/li&gt;
-&lt;li&gt;也可以通过future来执行多线程&lt;/li&gt;
-&lt;li&gt;future可以返回值，可对其进行解引用，获得返回值，如果线程未执行完，则阻塞。&lt;/li&gt;
-&lt;li&gt;future实际上就是Java中Future实例，可以直接调用future的get方法获取返回值，效果和解引用相同&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns concurrent.start)
-
-;Clojure没有类的概念，直接给出函数
-(defn f []
-  (dotimes [i 9]
-    (println  &quot; | i = &quot; i)
-    (Thread/sleep 300))
-  :End)
-
-;可以通过Java的Thread来执行
-(.start (Thread. f))
-
-;Clojure提供了future宏，可以方便的在另一个线程内执行
-(def fu (future  (f)))
-
-;主线程结束
-(println &quot;End&quot;)
-
-;对future可以解引用，获取计算结果，如果解引用时，future没执行完，会阻塞
-(println &quot;fu result = &quot; @fu)
-
-;fu实际上就是Java中的Future,所以可以使用Future的get方法，效果和解引用相同
-(println &quot;Future.get = &quot; (.get fu))
-
-;调用此方法结束所有线程
-(shutdown-agents)
-&lt;/code&gt;&lt;/pre&gt;
-</summary>
-    </entry>
     
     <entry>
         <title>语言与模式-23迭代器模式</title>
@@ -360,6 +67,9 @@ class C implements Callable&amp;lt;String&amp;gt; {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
 &lt;p&gt;对于集合的操作都有相应的函数！一般不需要遍历就可以操作集合！比如map,reduce等函数！不需要此模式!&lt;/p&gt;
@@ -370,9 +80,7 @@ class C implements Callable&amp;lt;String&amp;gt; {
 
 &lt;p&gt;同时可以看出，Java之所以需要设计模式的一个原因就是它的最小单元是类！也同时引起另一个思考，面向对象语言有鼓吹的那么好吗？&lt;/p&gt;
 
-&lt;p&gt;至少目前我的观点是：OO强项在建模，弱项是计算，而这正是函数式语言的强项！&lt;/p&gt;
-
-&lt;p&gt;所以理想方案是：OO来建模，函数式语言来计算！好像是在说Scala,不过Scala太过于复杂！我的想法是Java来建模，Clojure来计算！&lt;/p&gt;
+&lt;p&gt;至少目前我的观点是：OO强项在建模，弱项是计算，而计算正是函数式语言的强项！&lt;/p&gt;
 </content>
         <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
@@ -424,6 +132,9 @@ class C implements Callable&amp;lt;String&amp;gt; {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
 &lt;p&gt;对于集合的操作都有相应的函数！一般不需要遍历就可以操作集合！比如map,reduce等函数！不需要此模式!&lt;/p&gt;
@@ -434,9 +145,7 @@ class C implements Callable&amp;lt;String&amp;gt; {
 
 &lt;p&gt;同时可以看出，Java之所以需要设计模式的一个原因就是它的最小单元是类！也同时引起另一个思考，面向对象语言有鼓吹的那么好吗？&lt;/p&gt;
 
-&lt;p&gt;至少目前我的观点是：OO强项在建模，弱项是计算，而这正是函数式语言的强项！&lt;/p&gt;
-
-&lt;p&gt;所以理想方案是：OO来建模，函数式语言来计算！好像是在说Scala,不过Scala太过于复杂！我的想法是Java来建模，Clojure来计算！&lt;/p&gt;
+&lt;p&gt;至少目前我的观点是：OO强项在建模，弱项是计算，而计算正是函数式语言的强项！&lt;/p&gt;
 </summary>
     </entry>
     
@@ -609,6 +318,10 @@ public class ParkB implements ParkElement{
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;访问者模式干了什么呢？我自己(这里是Park)有个结构，我委托给其他对象(Visitor)来实现访问逻辑!&lt;/p&gt;
+
+&lt;p&gt;Clojure没有类似的结构体！比如复杂的树结构，可以使用Clojure提供的数据操作函数来进行操作即可！没必要实现个模式！&lt;/p&gt;
 </content>
         <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
@@ -774,6 +487,10 @@ public class ParkB implements ParkElement{
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;访问者模式干了什么呢？我自己(这里是Park)有个结构，我委托给其他对象(Visitor)来实现访问逻辑!&lt;/p&gt;
+
+&lt;p&gt;Clojure没有类似的结构体！比如复杂的树结构，可以使用Clojure提供的数据操作函数来进行操作即可！没必要实现个模式！&lt;/p&gt;
 </summary>
     </entry>
     
@@ -1522,6 +1239,35 @@ public class Client {
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;中介者模式类似双向的观察者模式！&lt;/p&gt;
+
+&lt;p&gt;观察者模式是单向的，从Subject向多个Observer传递信息！&lt;/p&gt;
+
+&lt;p&gt;中介者模式相当与ObserverA向Subject传递信息，再通过Subject传递给ObserverB,反之亦然!&lt;/p&gt;
+
+&lt;p&gt;那么就可以通过实现两个add-watch来实现类似中介者模式!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def a (atom {}))
+(def b (atom {}))
+
+(defn func-a []
+   (println &quot;func-a invoke&quot;))
+
+(defn func-b []
+  (println &quot;func-b invoke&quot;))
+
+(add-watch a :watcherA
+           (fn [key atom old-state new-state]
+             (func-a)))
+
+(add-watch b :watcherB
+           (fn [key atom old-state new-state]
+             (func-b)))
+
+(reset! a {:foo &quot;bar&quot;})
+(reset! b {:foo &quot;bar&quot;})
+&lt;/code&gt;&lt;/pre&gt;
 </content>
         <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
@@ -1694,6 +1440,35 @@ public class Client {
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
+
+&lt;p&gt;中介者模式类似双向的观察者模式！&lt;/p&gt;
+
+&lt;p&gt;观察者模式是单向的，从Subject向多个Observer传递信息！&lt;/p&gt;
+
+&lt;p&gt;中介者模式相当与ObserverA向Subject传递信息，再通过Subject传递给ObserverB,反之亦然!&lt;/p&gt;
+
+&lt;p&gt;那么就可以通过实现两个add-watch来实现类似中介者模式!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def a (atom {}))
+(def b (atom {}))
+
+(defn func-a []
+   (println &quot;func-a invoke&quot;))
+
+(defn func-b []
+  (println &quot;func-b invoke&quot;))
+
+(add-watch a :watcherA
+           (fn [key atom old-state new-state]
+             (func-a)))
+
+(add-watch b :watcherB
+           (fn [key atom old-state new-state]
+             (func-b)))
+
+(reset! a {:foo &quot;bar&quot;})
+(reset! b {:foo &quot;bar&quot;})
+&lt;/code&gt;&lt;/pre&gt;
 </summary>
     </entry>
     
@@ -2137,6 +1912,8 @@ public class UnPayState implements State{
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
 &lt;p&gt;还是first-class function!!!&lt;/p&gt;
+
+&lt;p&gt;代码可以直接参考&lt;a href=&quot;/2015/02/13/bridge.html#top3&quot;&gt;桥接模式&lt;/a&gt;&lt;/p&gt;
 </content>
         <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
@@ -2243,6 +2020,8 @@ public class UnPayState implements State{
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
 &lt;p&gt;还是first-class function!!!&lt;/p&gt;
+
+&lt;p&gt;代码可以直接参考&lt;a href=&quot;/2015/02/13/bridge.html#top3&quot;&gt;桥接模式&lt;/a&gt;&lt;/p&gt;
 </summary>
     </entry>
     
@@ -2353,7 +2132,25 @@ public class UnPayState implements State{
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
-&lt;p&gt;又是first-class function!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;
+(defn handler-request1 [condition]
+  (if (= &quot;ConcreteHandler1&quot; condition)
+    (println &quot;ConcreteHandler1 handled &quot;)
+    (println &quot;ConcreteHandler1 passed &quot;)))
+
+(defn handler-request2 [condition]
+  (if (= &quot;ConcreteHandler2&quot; condition)
+    (println &quot;ConcreteHandler2 handled &quot;)
+    (println &quot;ConcreteHandler2 passed &quot;)))
+
+(defn handler-requestn [condition]
+  (println &quot;ConcreteHandlern handled &quot;))
+
+(-&amp;gt;&amp;gt; &quot;ConcreteHandler2&quot;
+    handler-request1
+    handler-request2
+    handler-requestn)
+&lt;/code&gt;&lt;/pre&gt;
 </content>
         <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
@@ -2457,7 +2254,25 @@ public class UnPayState implements State{
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
-&lt;p&gt;又是first-class function!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;
+(defn handler-request1 [condition]
+  (if (= &quot;ConcreteHandler1&quot; condition)
+    (println &quot;ConcreteHandler1 handled &quot;)
+    (println &quot;ConcreteHandler1 passed &quot;)))
+
+(defn handler-request2 [condition]
+  (if (= &quot;ConcreteHandler2&quot; condition)
+    (println &quot;ConcreteHandler2 handled &quot;)
+    (println &quot;ConcreteHandler2 passed &quot;)))
+
+(defn handler-requestn [condition]
+  (println &quot;ConcreteHandlern handled &quot;))
+
+(-&amp;gt;&amp;gt; &quot;ConcreteHandler2&quot;
+    handler-request1
+    handler-request2
+    handler-requestn)
+&lt;/code&gt;&lt;/pre&gt;
 </summary>
     </entry>
     
@@ -2583,13 +2398,19 @@ public class UnPayState implements State{
 
 &lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def a (atom {}))
 
-(add-watch a :watcher
-  (fn [key atom old-state new-state]
-    (prn &quot;-- Atom Changed --&quot;)
-    (prn &quot;key&quot; key)
-    (prn &quot;atom&quot; atom)
-    (prn &quot;old-state&quot; old-state)
-    (prn &quot;new-state&quot; new-state)))
+(defn func-a []
+   (println &quot;func-a invoke&quot;))
+
+(defn func-b []
+  (println &quot;func-b invoke&quot;))
+
+(add-watch a :watcherA
+           (fn [key atom old-state new-state]
+             (func-a)))
+
+(add-watch a :watcherB
+           (fn [key atom old-state new-state]
+             (func-b)))
 
 (reset! a {:foo &quot;bar&quot;})
 &lt;/code&gt;&lt;/pre&gt;
@@ -2711,13 +2532,19 @@ public class UnPayState implements State{
 
 &lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(def a (atom {}))
 
-(add-watch a :watcher
-  (fn [key atom old-state new-state]
-    (prn &quot;-- Atom Changed --&quot;)
-    (prn &quot;key&quot; key)
-    (prn &quot;atom&quot; atom)
-    (prn &quot;old-state&quot; old-state)
-    (prn &quot;new-state&quot; new-state)))
+(defn func-a []
+   (println &quot;func-a invoke&quot;))
+
+(defn func-b []
+  (println &quot;func-b invoke&quot;))
+
+(add-watch a :watcherA
+           (fn [key atom old-state new-state]
+             (func-a)))
+
+(add-watch a :watcherB
+           (fn [key atom old-state new-state]
+             (func-b)))
 
 (reset! a {:foo &quot;bar&quot;})
 &lt;/code&gt;&lt;/pre&gt;
@@ -2822,7 +2649,9 @@ public class UnPayState implements State{
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
-&lt;p&gt;Clojure没有对象的概念，直接对数据进行操作！可以直接对数据进行保存与恢复，所以不需要此模式！&lt;/p&gt;
+&lt;p&gt;Clojure没有对象的概念，直接对数据进行操作！&lt;/p&gt;
+
+&lt;p&gt;想想如何保存数据到文件，或从文件恢复数据！需要模式吗？&lt;/p&gt;
 </content>
         <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
@@ -2917,7 +2746,9 @@ public class UnPayState implements State{
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
-&lt;p&gt;Clojure没有对象的概念，直接对数据进行操作！可以直接对数据进行保存与恢复，所以不需要此模式！&lt;/p&gt;
+&lt;p&gt;Clojure没有对象的概念，直接对数据进行操作！&lt;/p&gt;
+
+&lt;p&gt;想想如何保存数据到文件，或从文件恢复数据！需要模式吗？&lt;/p&gt;
 </summary>
     </entry>
     
@@ -3292,7 +3123,7 @@ layout.show();
 
 &lt;ul&gt;
 &lt;li&gt;你不希望在抽象和它的实现部分之间有一个固定的绑定关系。例如这种情况可能是因为，在程序运行时刻实现部分应可以被选择或者切换。&lt;/li&gt;
-&lt;li&gt;类的抽象以及它的实现都应该可以通过生成子类的方法加以扩充。这时B r i d g e 模式使你可以对不同的抽象接口和实现部分进行组合，并分别对它们进行扩充。&lt;/li&gt;
+&lt;li&gt;类的抽象以及它的实现都应该可以通过生成子类的方法加以扩充。这时Bridge模式使你可以对不同的抽象接口和实现部分进行组合，并分别对它们进行扩充。&lt;/li&gt;
 &lt;li&gt;对一个抽象的实现部分的修改应对客户不产生影响，即客户的代码不必重新编译。&lt;/li&gt;
 &lt;li&gt;（C++）你想对客户完全隐藏抽象的实现部分。在C++中，类的表示在类接口中是可见的。&lt;/li&gt;
 &lt;li&gt;有许多类要生成。这样一种类层次结构说明你必须将一个对象分解成两个部分。Rumbaugh称这种类层次结构为“嵌套的普化”（nested generalizations ）。&lt;/li&gt;
@@ -3402,6 +3233,63 @@ public class Main {
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
 &lt;p&gt;first-class function轻松解决！&lt;/p&gt;
+
+&lt;p&gt;三星命名空间:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns samsung)
+
+(defn on []
+  (println &quot;Samsung is turned on.&quot;))
+
+(defn off []
+  (println &quot;Samsung is turned off.&quot;))
+
+(defn switch-channel [channel]
+  (println &quot;Samsung: channel - &quot; + channel))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;索尼命名空间:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns sony)
+
+(defn on []
+  (println &quot;Sony is turned on.&quot;))
+
+(defn off []
+  (println &quot;Sony is turned off.&quot;))
+
+(defn switch-channel [channel]
+  (println &quot;Sony: channel - &quot; + channel))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;RemoteController:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns remotecontroller)
+
+(defn turn-on [f]
+   (f))
+
+(defn turn-off [f]
+   (f))
+
+(defn set-channel [f arg]
+   (f arg))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;直接调用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns client
+  (:require [sony :as tv]
+            [remotecontroller :as c]))
+
+(c/turn-on tv/on)
+(c/set-channel tv/switch-channel 3)
+(c/trun-off tv/off)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这么实现简直就是脱裤子放屁～～！&lt;/p&gt;
+
+&lt;p&gt;直接调用sony或samsung里的函数就行了！多此一举！&lt;/p&gt;
 </content>
         <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
@@ -3413,7 +3301,7 @@ public class Main {
 
 &lt;ul&gt;
 &lt;li&gt;你不希望在抽象和它的实现部分之间有一个固定的绑定关系。例如这种情况可能是因为，在程序运行时刻实现部分应可以被选择或者切换。&lt;/li&gt;
-&lt;li&gt;类的抽象以及它的实现都应该可以通过生成子类的方法加以扩充。这时B r i d g e 模式使你可以对不同的抽象接口和实现部分进行组合，并分别对它们进行扩充。&lt;/li&gt;
+&lt;li&gt;类的抽象以及它的实现都应该可以通过生成子类的方法加以扩充。这时Bridge模式使你可以对不同的抽象接口和实现部分进行组合，并分别对它们进行扩充。&lt;/li&gt;
 &lt;li&gt;对一个抽象的实现部分的修改应对客户不产生影响，即客户的代码不必重新编译。&lt;/li&gt;
 &lt;li&gt;（C++）你想对客户完全隐藏抽象的实现部分。在C++中，类的表示在类接口中是可见的。&lt;/li&gt;
 &lt;li&gt;有许多类要生成。这样一种类层次结构说明你必须将一个对象分解成两个部分。Rumbaugh称这种类层次结构为“嵌套的普化”（nested generalizations ）。&lt;/li&gt;
@@ -3523,6 +3411,63 @@ public class Main {
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
 &lt;p&gt;first-class function轻松解决！&lt;/p&gt;
+
+&lt;p&gt;三星命名空间:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns samsung)
+
+(defn on []
+  (println &quot;Samsung is turned on.&quot;))
+
+(defn off []
+  (println &quot;Samsung is turned off.&quot;))
+
+(defn switch-channel [channel]
+  (println &quot;Samsung: channel - &quot; + channel))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;索尼命名空间:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns sony)
+
+(defn on []
+  (println &quot;Sony is turned on.&quot;))
+
+(defn off []
+  (println &quot;Sony is turned off.&quot;))
+
+(defn switch-channel [channel]
+  (println &quot;Sony: channel - &quot; + channel))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;RemoteController:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns remotecontroller)
+
+(defn turn-on [f]
+   (f))
+
+(defn turn-off [f]
+   (f))
+
+(defn set-channel [f arg]
+   (f arg))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;直接调用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns client
+  (:require [sony :as tv]
+            [remotecontroller :as c]))
+
+(c/turn-on tv/on)
+(c/set-channel tv/switch-channel 3)
+(c/trun-off tv/off)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这么实现简直就是脱裤子放屁～～！&lt;/p&gt;
+
+&lt;p&gt;直接调用sony或samsung里的函数就行了！多此一举！&lt;/p&gt;
 </summary>
     </entry>
     
@@ -3578,7 +3523,7 @@ public class FileInputStream extends InputStream
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
-&lt;p&gt;不就是添加个方法吗？直接添加方法就可以了啊。还要搞个类出来！&lt;/p&gt;
+&lt;p&gt;笑而不语～&lt;/p&gt;
 </content>
         <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
@@ -3627,7 +3572,7 @@ public class FileInputStream extends InputStream
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
-&lt;p&gt;不就是添加个方法吗？直接添加方法就可以了啊。还要搞个类出来！&lt;/p&gt;
+&lt;p&gt;笑而不语～&lt;/p&gt;
 </summary>
     </entry>
     
@@ -3715,6 +3660,8 @@ public class FileInputStream extends InputStream
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
 &lt;p&gt;实际上就是对树的操作！Clojure提供了clojure.zip,clojure.walk或者tree-seq来进行对树的操作！&lt;/p&gt;
+
+&lt;p&gt;操作起来也不是很方便就是了！&lt;/p&gt;
 </content>
         <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
@@ -3795,6 +3742,8 @@ public class FileInputStream extends InputStream
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
 &lt;p&gt;实际上就是对树的操作！Clojure提供了clojure.zip,clojure.walk或者tree-seq来进行对树的操作！&lt;/p&gt;
+
+&lt;p&gt;操作起来也不是很方便就是了！&lt;/p&gt;
 </summary>
     </entry>
     
@@ -4048,7 +3997,9 @@ public class Main{
   (f))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;这叫模式吗？！只是Clojure的特性而已:first-class function!&lt;/p&gt;
+&lt;p&gt;说到底还是因为Java的粒度只能到类，而不能到方法(函数)。&lt;/p&gt;
+
+&lt;p&gt;简单的一个高阶函数就搞定了!&lt;/p&gt;
 </content>
         <summary type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
@@ -4118,7 +4069,9 @@ public class Main{
   (f))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;这叫模式吗？！只是Clojure的特性而已:first-class function!&lt;/p&gt;
+&lt;p&gt;说到底还是因为Java的粒度只能到类，而不能到方法(函数)。&lt;/p&gt;
+
+&lt;p&gt;简单的一个高阶函数就搞定了!&lt;/p&gt;
 </summary>
     </entry>
     
@@ -4232,7 +4185,7 @@ public class Main{
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
-&lt;p&gt;这不就是组合函数吗？&lt;/p&gt;
+&lt;p&gt;函数组合轻松搞定！&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;(defn turn-on-camara []
   (println &quot;开启摄像头&quot;))
@@ -4354,7 +4307,7 @@ public class Main{
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
-&lt;p&gt;这不就是组合函数吗？&lt;/p&gt;
+&lt;p&gt;函数组合轻松搞定！&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;(defn turn-on-camara []
   (println &quot;开启摄像头&quot;))
@@ -4502,7 +4455,9 @@ public class Customer {
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
-&lt;p&gt;在Clojure里也是个没必要的模式！可以使用multimethod,或者简单实现可以如下：&lt;/p&gt;
+&lt;p&gt;在Clojure里也是个没必要的模式！因为根本就不需要构建对象啊！&lt;/p&gt;
+
+&lt;p&gt;可以使用multimethod模拟,或者直接简单模拟如下：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;(defn type [d t]
   (assoc d :type t))
@@ -4639,7 +4594,9 @@ public class Customer {
 
 &lt;h1&gt;Clojure实现&lt;/h1&gt;
 
-&lt;p&gt;在Clojure里也是个没必要的模式！可以使用multimethod,或者简单实现可以如下：&lt;/p&gt;
+&lt;p&gt;在Clojure里也是个没必要的模式！因为根本就不需要构建对象啊！&lt;/p&gt;
+
+&lt;p&gt;可以使用multimethod模拟,或者直接简单模拟如下：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;(defn type [d t]
   (assoc d :type t))
@@ -5683,1895 +5640,6 @@ factory.getPig().run();
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;需要模式吗？&lt;/p&gt;
-</summary>
-    </entry>
-    
-    <entry>
-        <title>Java基础</title>
-        <link href="http://ivanpig.github.io/2014/11/29/javabasic.html"/>
-        <updated>2014-11-29T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/11/29/javabasic</id>
-        <content type="html">&lt;p&gt;一种记录、分析、总结、组织、讨论及解释信息的、有插图或无插图的、硬抄或平装的、加套或不加套的，包含有前言、介绍、目录表、索引的用以增长知识、加深理解、提升并教育人类大脑的装置，该装置需要视觉、有触碰的感官形式使用。 --- 《三傻大闹宝莱坞》&lt;/p&gt;
-
-&lt;h1&gt;抽象&lt;/h1&gt;
-
-&lt;p&gt;上面的长篇大论实际上是要解释什么是&quot;书&quot;！在电影中是男主角用来讽刺教授的死板的。实际上，仔细想来，我们所熟悉的任何东西都需要长篇大论来解释，而有些词甚至难以解释！比如说：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;人&lt;/li&gt;
-&lt;li&gt;1&lt;/li&gt;
-&lt;li&gt;美：难以解释，很感性的东西&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;我们不断的学习知识来认知这个世界。而我们所学习的知识实际上是对这个世界的抽象！&lt;/p&gt;
-
-&lt;p&gt;和自然语言一样，编程语言也是对现实世界的抽象。自然语言是抽象给我们来认知，而编程语言则是抽象给计算机来认知。计算机擅长高频次简单计算，所以针对计算机的抽象与数学更接近。&lt;/p&gt;
-
-&lt;p&gt;所以我们从多项式开始，来引出编程语言！首先看如下一组多项式：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;1
-1 + 1
-(1 + 1) * 3 + (1 + 1)
-(1 + 1) * 3 + (1 + 2)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;请找出如上多项式的共同点？&lt;/li&gt;
-&lt;li&gt;数学上如何处理上面的问题呢？&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code&gt;令 a = 1 + 1,b = 1 + 2
-1       =&amp;gt;    (1 + 1) - 1  =&amp;gt;  a - 1  =&amp;gt; 1 * a + (-1)
-1 + 1   =&amp;gt;    a   =&amp;gt;  1 * a + (0 * a)
-(1 + 1) * 3 + (1 + 1)    =&amp;gt;   3 * a + a
-(1 + 1) * 3 + (1 + 2)    =&amp;gt;   3 * a + b
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看出:上面的多项式都可以表示为na+b的形式&lt;/p&gt;
-
-&lt;p&gt;那编程语言如何处理这些问题呢?&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;int a = 1 + 1;
-int b = 1 + 2;
-//a,b称为变量，类似自然语言中的代词。变量是编程语言中最基本的抽象
-//1称为字面量
-1       =&amp;gt;    (1 + 1) - 1  =&amp;gt;  a - 1  =&amp;gt; 1 * a + (-1)
-1 + 1   =&amp;gt;    a   =&amp;gt;  1 * a + (0 * a)
-(1 + 1) * 3 + (1 + 1)    =&amp;gt;   3 * a + a
-(1 + 1) * 3 + (1 + 2)    =&amp;gt;   3 * a + b
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看出，基本是没有区别的!&lt;/p&gt;
-
-&lt;p&gt;在我们动手运行代码前！我们先来搭建Java环境!&lt;/p&gt;
-
-&lt;h1&gt;Java环境搭建&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;到&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/index.html&quot;&gt;Oracle官方网站&lt;/a&gt;下载相应操作系统的JDK进行安装&lt;/li&gt;
-&lt;li&gt;打开命令行,输入&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code&gt;java -version
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;得到如下信息，则表示搭建成功!&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;java version &quot;1.8.0&quot;
-Java(TM) SE Runtime Environment (build 1.8.0-b132)
-Java HotSpot(TM) 64-Bit Server VM (build 25.0-b70, mixed mode)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Java中需要理解两个路径：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;path是系统查找程序的路径&lt;/li&gt;
-&lt;li&gt;classpath是Java查找类的路径&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;练习&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;请从服务器下载jdk,并进行安装&lt;/li&gt;
-&lt;li&gt;验证安装是否成功&lt;/li&gt;
-&lt;li&gt;修改path,理解path的作用&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;编辑器选择&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;文本编辑器&lt;/li&gt;
-&lt;li&gt;Notepad++&lt;/li&gt;
-&lt;li&gt;Editplus&lt;/li&gt;
-&lt;li&gt;UltraEdit&lt;/li&gt;
-&lt;li&gt;TextMate&lt;/li&gt;
-&lt;li&gt;Sublime Text&lt;/li&gt;
-&lt;li&gt;Vim&lt;/li&gt;
-&lt;li&gt;Emacs&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;学习曲线&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;../assets/javabasic/5.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2&gt;练习&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;下载Notepad++,并打开&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;IDE选择&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;eclipse&lt;/li&gt;
-&lt;li&gt;Netbeans&lt;/li&gt;
-&lt;li&gt;Intellij IDEA&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;第一个程序&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;创建文件Hello.java&lt;/li&gt;
-&lt;li&gt;输入如下代码&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-//例子代码
-public class Hello{
-    public static void main(String[] args){
-        int a = 1 + 1;
-        int b = 1 + 2;
-        System.out.println(&quot;(1 + 1) * 3 + (1 + 2) = &quot; + (a * 3 + b));
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;打开命令行,切换到文件所在路径&lt;/li&gt;
-&lt;li&gt;输入javac Hello.java&lt;/li&gt;
-&lt;li&gt;输入java Hello&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;课堂练习&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;请按步骤,新建Hello.java程序,并运行&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;运行机制&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;思考,Java如何做到跨平台?&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;#&lt;/h1&gt;
-
-&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1&gt;代码组成&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-//例子代码
-public class Hello{
-    public static void main(String[] args){
-        int a = 1 + 1;
-        int b = 1 + 2;
-        System.out.println(&quot;(1 + 1) * 3 + (1 + 2) = &quot; + (a * 3 + b));
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;注释&lt;/li&gt;
-&lt;li&gt;标识符(Hello,args)&lt;/li&gt;
-&lt;li&gt;关键字(public,class,static,void)&lt;/li&gt;
-&lt;li&gt;字面量(字符串) (&quot;(1 + 1) * 3 + (1 + 2) = &quot;)&lt;/li&gt;
-&lt;li&gt;变量(args,a,b)&lt;/li&gt;
-&lt;li&gt;类&lt;/li&gt;
-&lt;li&gt;方法&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;注释&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-//单行注释
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-/*
-多行注释
-*/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-/**
- * javadoc注释
- */
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;标识符&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;标识符由字母（A-Z或者a-z）,美元符（\$）、下划线（_）或数字组成&lt;/li&gt;
-&lt;li&gt;标识符都应该以字母（A-Z或者a-z）,美元符（\$）、或者下划线（_）开始&lt;/li&gt;
-&lt;li&gt;关键字不能用作标识符&lt;/li&gt;
-&lt;li&gt;标识符是大小写敏感的&lt;/li&gt;
-&lt;li&gt;合法标识符举例：age、\$salary、~value~、_~1value~&lt;/li&gt;
-&lt;li&gt;非法标识符举例：123abc、-salary&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;关键字&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2&gt;字面量&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;字符串:&quot;Hello&quot;&lt;/li&gt;
-&lt;li&gt;字符:'H','e','l','l','o'&lt;/li&gt;
-&lt;li&gt;布尔值:true,false&lt;/li&gt;
-&lt;li&gt;数值:1,2.4&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;变量&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;变量就是一个命名的内存块&lt;/li&gt;
-&lt;li&gt;变量只能存储一种具体类型的数据&lt;/li&gt;
-&lt;li&gt;使用变量之前必须声明(变量名和类型)&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;使用前需要初始化&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;局部变量:方法或语句块内部&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;成员变量:方法外,类内部&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;类和对象&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;类是对一个特定类型对象的描述,它定义了一种新的类型&lt;/li&gt;
-&lt;li&gt;类定义中的成员变量可以是任意类型&lt;/li&gt;
-&lt;li&gt;对象是类的实体,使用关键字new来创建&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;方法&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;实例方法&lt;/li&gt;
-&lt;li&gt;静态方法(static)&lt;/li&gt;
-&lt;li&gt;方法调用[递归调用]&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Hello{
-    public static void main(String[] args){
-        System.out.println(&quot;Hello&quot;);
-        Hello.main(null);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;基本类型&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/4.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2&gt;使用递归来计算基本类型的范围&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test{
-    public static long p(int num){
-        if(num == 0) return 1;
-        return 2 * p(--num);  //--num 与 num--
-    }
-
-    public static long caculateRange(int num){
-        if(num == 0) return 1;
-        return p(num) + caculateRange(--num);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;数组&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;数组是相同类型的,用一个标示符名称封装到一起的一个对象序列或基本类型数据序列&lt;/p&gt;
-
-&lt;h2&gt;一维数组&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-int[] arr;
-int arr[];
-//初始化
-arr = {1,2,3};
-arr = new int[3];  //默认初始化
-//使用,下标从0开始
-arr[0];
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;多维数组&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-int[][] arr = { {1,2,3},{4,5,6}};
-int[][][] arr = new int[2][3][4];
-//每一维长度可以不同
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;运算符(操作符)&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;运算符指明对操作数的运算方式&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;算术运算符&lt;/li&gt;
-&lt;li&gt;关系运算符&lt;/li&gt;
-&lt;li&gt;位运算符&lt;/li&gt;
-&lt;li&gt;逻辑运算符&lt;/li&gt;
-&lt;li&gt;赋值运算符&lt;/li&gt;
-&lt;li&gt;其他运算符&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;算术运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-+    加法 - 相加运算符两侧的值
--    减法 - 左操作数减去右操作数
-*    乘法 - 相乘操作符两侧的值
-/    除法 - 左操作数除以右操作数
-%    取模 - 右操作数除左操作数的余数
-++   自增 - 操作数的值增加1
--    自减 - 操作数的值减少1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-  public static void main(String args[]) {
-     int a = 10;
-     int b = 20;
-     int c = 25;
-     int d = 25;
-     System.out.println(&quot;a + b = &quot; + (a + b) );
-     System.out.println(&quot;a - b = &quot; + (a - b) );
-     System.out.println(&quot;a * b = &quot; + (a * b) );
-     System.out.println(&quot;b / a = &quot; + (b / a) );
-     System.out.println(&quot;b % a = &quot; + (b % a) );
-     System.out.println(&quot;c % a = &quot; + (c % a) );
-     System.out.println(&quot;a++   = &quot; +  (a++) );
-     System.out.println(&quot;b--   = &quot; +  (a--) );
-     System.out.println(&quot;d++   = &quot; +  (d++) );
-     System.out.println(&quot;++d   = &quot; +  (++d) );
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;关系运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-==   检查如果两个操作数的值是否相等，如果相等则条件为真
-=!   检查如果两个操作数的值是否相等，如果值不相等则条件为真
-&amp;gt;    检查左操作数的值是否大于右操作数的值，如果是那么条件为真
-&amp;lt;    检查左操作数的值是否小于右操作数的值，如果是那么条件为真
-&amp;gt;=   检查左操作数的值是否大于或等于右操作数的值，如果是那么条件为真
-&amp;lt;=   检查左操作数的值是否小于或等于右操作数的值，如果是那么条件为真
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-  public static void main(String args[]) {
-     int a = 10;
-     int b = 20;
-     System.out.println(&quot;a == b = &quot; + (a == b) );
-     System.out.println(&quot;a != b = &quot; + (a != b) );
-     System.out.println(&quot;a &amp;gt; b = &quot; + (a &amp;gt; b) );
-     System.out.println(&quot;a &amp;lt; b = &quot; + (a &amp;lt; b) );
-     System.out.println(&quot;b &amp;gt;= a = &quot; + (b &amp;gt;= a) );
-     System.out.println(&quot;b &amp;lt;= a = &quot; + (b &amp;lt;= a) );
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;位运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-&amp;amp;    按位与操作符，当且仅当两个操作数的某一位都非0时候结果的该位才为1
-|    按位或操作符，只要两个操作数的某一位有一个非0时候结果的该位就为1
-^    按位异或操作符，两个操作数的某一位不相同时候结果的该位就为1
-~    按位补运算符翻转操作数的每一位
-&amp;lt;&amp;lt;   按位左移运算符。左操作数按位左移右操作数指定的位数
-&amp;gt;&amp;gt;   按位右移运算符。左操作数按位右移右操作数指定的位数
-&amp;gt;&amp;gt;&amp;gt;      按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-  public static void main(String args[]) {
-     int a = 60; /* 60 = 0011 1100 */
-     int b = 13; /* 13 = 0000 1101 */
-     int c = 0;
-     c = a &amp;amp; b;       /* 12 = 0000 1100 */
-     System.out.println(&quot;a &amp;amp; b = &quot; + c );
-     c = a | b;       /* 61 = 0011 1101 */
-     System.out.println(&quot;a | b = &quot; + c );
-     c = a ^ b;       /* 49 = 0011 0001 */
-     System.out.println(&quot;a ^ b = &quot; + c );
-     c = ~a;          /*-61 = 1100 0011 */
-     System.out.println(&quot;~a = &quot; + c );
-     c = a &amp;lt;&amp;lt; 2;     /* 240 = 1111 0000 */
-     System.out.println(&quot;a &amp;lt;&amp;lt; 2 = &quot; + c );
-     c = a &amp;gt;&amp;gt; 2;     /* 215 = 1111 */
-     System.out.println(&quot;a &amp;gt;&amp;gt; 2  = &quot; + c );
-     c = a &amp;gt;&amp;gt;&amp;gt; 2;     /* 215 = 0000 1111 */
-     System.out.println(&quot;a &amp;gt;&amp;gt;&amp;gt; 2 = &quot; + c );
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;逻辑运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-&amp;amp;&amp;amp;   称为逻辑与运算符。当且仅当两个操作数都为真，条件才为真
-||   称为逻辑或操作符。如果任何两个操作数任何一个为真，条件为真
-!    称为逻辑非运算符。用来反转操作数的逻辑状态。如果条件为true，则逻辑非运算符将得到false。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-  public static void main(String args[]) {
-     boolean a = true;
-     boolean b = false;
-     System.out.println(&quot;a &amp;amp;&amp;amp; b = &quot; + (a&amp;amp;&amp;amp;b));
-     System.out.println(&quot;a || b = &quot; + (a||b) );
-     System.out.println(&quot;!(a &amp;amp;&amp;amp; b) = &quot; + !(a &amp;amp;&amp;amp; b));
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;赋值运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-=    简单的赋值运算符，将右操作数的值赋给左侧操作数
-+=   加和赋值操作符，它把左操作数和右操作数相加赋值给左操作数
--=   减和赋值操作符，它把左操作数和右操作数相减赋值给左操作数
-*=   乘和赋值操作符，它把左操作数和右操作数相乘赋值给左操作数
-/=   除和赋值操作符，它把左操作数和右操作数相除赋值给左操作数
-%=   取模和赋值操作符，它把左操作数和右操作数取模后赋值给左操作数
-&amp;lt;&amp;lt;=  左移位赋值运算符
-&amp;gt;&amp;gt;=  右移位赋值运算符
-&amp;amp;=   按位与赋值运算符
-^=   按位异或赋值操作符
-|=   按位或赋值操作符
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-  public static void main(String args[]) {
-     int a = 10; int b = 20; int c = 0; c = a + b;
-     System.out.println(&quot;c = a + b = &quot; + c );
-     c += a ;
-     System.out.println(&quot;c += a  = &quot; + c );
-     c -= a ;
-     System.out.println(&quot;c -= a = &quot; + c );
-     c *= a ;
-     System.out.println(&quot;c *= a = &quot; + c );
-     a = 10; c = 15; c /= a ;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;三目运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-variable x = (expression) ? value if true : value if false
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-        int a , b;
-        a = 10;
-        b = (a == 1) ? 20: 30;
-        System.out.println( &quot;Value of b is : &quot; +  b );
-        b = (a == 10) ? 20: 30;
-        System.out.println( &quot;Value of b is : &quot; + b );
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;instanceof&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-( Object reference variable ) instanceof  (class/interface type)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-&quot;James&quot; instanceof String;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;运算符优先级&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-后缀     () [] . (点操作符)
-一元   ++ - ！ ~
-乘性   * / %
-加性   + -
-移位   &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;  &amp;lt;&amp;lt;
-关系   &amp;gt;&amp;gt; = &amp;lt;&amp;lt; =
-相等   ==  !=
-按位与  &amp;amp;
-按位异或     ^
-按位或  |
-逻辑与  &amp;amp;&amp;amp;
-逻辑或  ||
-条件   ? ：
-赋值   = += -= *= /= %= &amp;gt;&amp;gt;= &amp;lt;&amp;lt;= ＆= ^= |=
-逗号   ,
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;控制执行流程&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-&lt;li&gt;if-else&lt;/li&gt;
-&lt;li&gt;switch&lt;/li&gt;
-&lt;li&gt;while&lt;/li&gt;
-&lt;li&gt;do-while&lt;/li&gt;
-&lt;li&gt;for&lt;/li&gt;
-&lt;li&gt;foreach&lt;/li&gt;
-&lt;li&gt;break&lt;/li&gt;
-&lt;li&gt;continue&lt;/li&gt;
-&lt;li&gt;return&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;if&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-if(布尔表达式) {
-   //如果布尔表达式为true将执行的语句
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int x = 10;
-      if( x &amp;lt; 20 ){
-         System.out.print(&quot;这是 if 语句&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;if...else&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-if(布尔表达式){
-   //如果布尔表达式的值为true
-}else{
-   //如果布尔表达式的值为false
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int x = 30;
-      if( x &amp;lt; 20 ){
-         System.out.print(&quot;这是 if 语句&quot;);
-      }else{
-         System.out.print(&quot;这是 else 语句&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;if...else if...else&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-if(布尔表达式 1){
-   //如果布尔表达式 1的值为true执行代码
-}else if(布尔表达式 2){
-   //如果布尔表达式 2的值为true执行代码
-}else if(布尔表达式 3){
-   //如果布尔表达式 3的值为true执行代码
-}else {
-   //如果以上布尔表达式都不为true执行代码
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int x = 30;
-      if( x == 10 ){
-         System.out.print(&quot;Value of X is 10&quot;);
-      }else if( x == 20 ){
-         System.out.print(&quot;Value of X is 20&quot;);
-      }else if( x == 30 ){
-         System.out.print(&quot;Value of X is 30&quot;);
-      }else{
-         System.out.print(&quot;This is else statement&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;if嵌套&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int x = 30;
-      int y = 10;
-      if( x == 30 ){
-         if( y == 10 ){
-             System.out.print(&quot;X = 30 and Y = 10&quot;);
-          }
-       }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;switch&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-switch(expression){
-    case value :
-       //语句
-       break; //可选
-    case value :
-       //语句
-       break; //可选
-    //你可以有任意数量的case语句
-    default : //可选
-       //语句
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;注意点&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;switch语句中的变量类型只能为byte、short、int或者char,enum.
-&lt;strong&gt;JDK7开始支持String&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;switch语句可以拥有多个case语句。每个case后面跟一个要比较的值和冒号。&lt;/li&gt;
-&lt;li&gt;case语句中的值的数据类型必须与变量的数据类型相同，而且只能是常量或者字面常量。&lt;/li&gt;
-&lt;li&gt;当变量的值与case语句的值相等时，那么case语句之后的语句开始执行，直到break语句出现才会跳出switch语句。&lt;/li&gt;
-&lt;li&gt;当遇到break语句时，switch语句终止。程序跳转到switch语句后面的语句执行。&lt;/li&gt;
-&lt;li&gt;switch语句可以包含一个default分支，该分支必须是switch语句的最后一个分支。default在没有case语句的值和变量值相等的时候执行。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      char grade = 'C';
-      switch(grade) {
-         case 'A' :
-            System.out.println(&quot;Excellent!&quot;);
-            break;
-         case 'B' :
-         case 'C' :
-            System.out.println(&quot;Well done&quot;);
-            break;
-         case 'D' :
-            System.out.println(&quot;You passed&quot;);
-         case 'F' :
-            System.out.println(&quot;Better try again&quot;);
-            break;
-         default :
-            System.out.println(&quot;Invalid grade&quot;);
-      }
-      System.out.println(&quot;Your grade is &quot; + grade);
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;while&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-while( 布尔表达式 ) {
-    //循环内容
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]) {
-      int x = 10;
-      while( x &amp;lt; 20 ) {
-         System.out.print(&quot;value of x : &quot; + x );
-         x++;
-         System.out.print(&quot;\n&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;do-while&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-do {
-       //代码语句
-}while(布尔表达式);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int x = 10;
-      do{
-         System.out.print(&quot;value of x : &quot; + x );
-         x++;
-         System.out.print(&quot;\n&quot;);
-      }while( x &amp;lt; 20 );
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;for&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-for(初始化; 布尔表达式; 更新) {
-    //代码语句
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;最先执行初始化步骤。可以声明并初始化一个或多个循环控制变量，也可以是空语句。&lt;/li&gt;
-&lt;li&gt;然后，检测布尔表达式的值。如果为true，循环体被执行。如果为false，循环终止，开始执行循环体后面的语句。&lt;/li&gt;
-&lt;li&gt;执行一次循环后，更新循环控制变量。&lt;/li&gt;
-&lt;li&gt;再次检测布尔表达式。循环执行上面的过程。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]) {
-      for(int x = 10; x &amp;lt; 20; x = x+1) {
-         System.out.print(&quot;value of x : &quot; + x );
-         System.out.print(&quot;\n&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;foreach&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-for(声明语句 : 表达式) {
-   //代码句子
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int[] numbers = {10, 20, 30, 40, 50};
-      for(int x : numbers){
-         System.out.print( x );
-         System.out.print(&quot;,&quot;);
-      }
-      System.out.print(&quot;\n&quot;);
-
-      String[] names ={&quot;James&quot;, &quot;Larry&quot;, &quot;Tom&quot;, &quot;Lacy&quot;};
-      for(String name : names) {
-         System.out.print( name );
-         System.out.print(&quot;,&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;break&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]) {
-      int [] numbers = {10, 20, 30, 40, 50};
-
-      for(int x : numbers) {
-         if(x == 30) {
-          break;
-         }
-         System.out.print(x);
-         System.out.print(&quot;\n&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;continue&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]) {
-      int [] numbers = {10, 20, 30, 40, 50};
-      for(int x : numbers) {
-         if(x == 30) {
-          continue;
-         }
-         System.out.print(x);
-         System.out.print(&quot;\n&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;labeled break与labeled continue&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]) {
-        int [] numbers = {10, 20, 30, 40, 50};
-        outer: for(int x : numbers) {
-            for(int i = 1;i &amp;lt; 3;i++) {
-                if (x == 30) {
-                    break outer;
-                }
-                System.out.print(x);
-                System.out.print(&quot;\n&quot;);
-            }
-            System.out.println(&quot;outer&quot; + x);
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;return&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;跳出当前方法,并返回方法所需要的值(如果有返回值的话)&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;课堂练习&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;使用数组计算矩阵乘法&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2&gt;答案&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test{
-    public static void main(String[] args){
-        int[][] a = { {1,0,2},{-1,3,1}};
-        int[][] b = { {3,1},{2,1},{1,0}};
-        int[][] c = new int[2][2];
-        for(int i = 0; i &amp;lt; 2;i++){
-            int tmp = 0;
-            int tmp2 = 0;
-            for(int j = 0;j &amp;lt; 3;j++){
-                tmp += a[i][j] * b[j][i];
-                tmp2 += a[i][j] * b[j][1-i];
-            }
-            c[i][i] = tmp;
-            c[i][1-i]=tmp2;
-        }
-        System.out.println(c[0][0]);
-        System.out.println(c[0][1]);
-        System.out.println(c[1][0]);
-        System.out.println(c[1][1]);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;课后作业&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;理解path与classpath&lt;/li&gt;
-&lt;li&gt;请任意修改hello world,并尝试编译运行!如报错,请尝试理解报错信息!&lt;/li&gt;
-&lt;li&gt;请编写程序,打印如下图形.你能想出几种方法?你认为最简单的方法是哪种?&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code&gt;
-  1
- 111
-11111
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;请使用循环和递归分别实现斐波那契数列&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code&gt;
-1 1 2 3 5 8 13 ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;本机安装eclipse,并在eclipse中运行hello world&lt;/li&gt;
-&lt;li&gt;请到网上搜索面向对象编程,尝试理解面向对象编程,及其与面向过程编程的区别&lt;/li&gt;
-&lt;/ul&gt;
-
-</content>
-        <summary type="html">&lt;p&gt;一种记录、分析、总结、组织、讨论及解释信息的、有插图或无插图的、硬抄或平装的、加套或不加套的，包含有前言、介绍、目录表、索引的用以增长知识、加深理解、提升并教育人类大脑的装置，该装置需要视觉、有触碰的感官形式使用。 --- 《三傻大闹宝莱坞》&lt;/p&gt;
-
-&lt;h1&gt;抽象&lt;/h1&gt;
-
-&lt;p&gt;上面的长篇大论实际上是要解释什么是&quot;书&quot;！在电影中是男主角用来讽刺教授的死板的。实际上，仔细想来，我们所熟悉的任何东西都需要长篇大论来解释，而有些词甚至难以解释！比如说：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;人&lt;/li&gt;
-&lt;li&gt;1&lt;/li&gt;
-&lt;li&gt;美：难以解释，很感性的东西&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;我们不断的学习知识来认知这个世界。而我们所学习的知识实际上是对这个世界的抽象！&lt;/p&gt;
-
-&lt;p&gt;和自然语言一样，编程语言也是对现实世界的抽象。自然语言是抽象给我们来认知，而编程语言则是抽象给计算机来认知。计算机擅长高频次简单计算，所以针对计算机的抽象与数学更接近。&lt;/p&gt;
-
-&lt;p&gt;所以我们从多项式开始，来引出编程语言！首先看如下一组多项式：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;1
-1 + 1
-(1 + 1) * 3 + (1 + 1)
-(1 + 1) * 3 + (1 + 2)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;请找出如上多项式的共同点？&lt;/li&gt;
-&lt;li&gt;数学上如何处理上面的问题呢？&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code&gt;令 a = 1 + 1,b = 1 + 2
-1       =&amp;gt;    (1 + 1) - 1  =&amp;gt;  a - 1  =&amp;gt; 1 * a + (-1)
-1 + 1   =&amp;gt;    a   =&amp;gt;  1 * a + (0 * a)
-(1 + 1) * 3 + (1 + 1)    =&amp;gt;   3 * a + a
-(1 + 1) * 3 + (1 + 2)    =&amp;gt;   3 * a + b
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看出:上面的多项式都可以表示为na+b的形式&lt;/p&gt;
-
-&lt;p&gt;那编程语言如何处理这些问题呢?&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;int a = 1 + 1;
-int b = 1 + 2;
-//a,b称为变量，类似自然语言中的代词。变量是编程语言中最基本的抽象
-//1称为字面量
-1       =&amp;gt;    (1 + 1) - 1  =&amp;gt;  a - 1  =&amp;gt; 1 * a + (-1)
-1 + 1   =&amp;gt;    a   =&amp;gt;  1 * a + (0 * a)
-(1 + 1) * 3 + (1 + 1)    =&amp;gt;   3 * a + a
-(1 + 1) * 3 + (1 + 2)    =&amp;gt;   3 * a + b
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看出，基本是没有区别的!&lt;/p&gt;
-
-&lt;p&gt;在我们动手运行代码前！我们先来搭建Java环境!&lt;/p&gt;
-
-&lt;h1&gt;Java环境搭建&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;到&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/index.html&quot;&gt;Oracle官方网站&lt;/a&gt;下载相应操作系统的JDK进行安装&lt;/li&gt;
-&lt;li&gt;打开命令行,输入&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code&gt;java -version
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;得到如下信息，则表示搭建成功!&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;java version &quot;1.8.0&quot;
-Java(TM) SE Runtime Environment (build 1.8.0-b132)
-Java HotSpot(TM) 64-Bit Server VM (build 25.0-b70, mixed mode)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Java中需要理解两个路径：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;path是系统查找程序的路径&lt;/li&gt;
-&lt;li&gt;classpath是Java查找类的路径&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;练习&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;请从服务器下载jdk,并进行安装&lt;/li&gt;
-&lt;li&gt;验证安装是否成功&lt;/li&gt;
-&lt;li&gt;修改path,理解path的作用&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;编辑器选择&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;文本编辑器&lt;/li&gt;
-&lt;li&gt;Notepad++&lt;/li&gt;
-&lt;li&gt;Editplus&lt;/li&gt;
-&lt;li&gt;UltraEdit&lt;/li&gt;
-&lt;li&gt;TextMate&lt;/li&gt;
-&lt;li&gt;Sublime Text&lt;/li&gt;
-&lt;li&gt;Vim&lt;/li&gt;
-&lt;li&gt;Emacs&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;学习曲线&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;../assets/javabasic/5.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2&gt;练习&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;下载Notepad++,并打开&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;IDE选择&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;eclipse&lt;/li&gt;
-&lt;li&gt;Netbeans&lt;/li&gt;
-&lt;li&gt;Intellij IDEA&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;第一个程序&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;创建文件Hello.java&lt;/li&gt;
-&lt;li&gt;输入如下代码&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-//例子代码
-public class Hello{
-    public static void main(String[] args){
-        int a = 1 + 1;
-        int b = 1 + 2;
-        System.out.println(&quot;(1 + 1) * 3 + (1 + 2) = &quot; + (a * 3 + b));
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;打开命令行,切换到文件所在路径&lt;/li&gt;
-&lt;li&gt;输入javac Hello.java&lt;/li&gt;
-&lt;li&gt;输入java Hello&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;课堂练习&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;请按步骤,新建Hello.java程序,并运行&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;运行机制&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;思考,Java如何做到跨平台?&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;#&lt;/h1&gt;
-
-&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1&gt;代码组成&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-//例子代码
-public class Hello{
-    public static void main(String[] args){
-        int a = 1 + 1;
-        int b = 1 + 2;
-        System.out.println(&quot;(1 + 1) * 3 + (1 + 2) = &quot; + (a * 3 + b));
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;注释&lt;/li&gt;
-&lt;li&gt;标识符(Hello,args)&lt;/li&gt;
-&lt;li&gt;关键字(public,class,static,void)&lt;/li&gt;
-&lt;li&gt;字面量(字符串) (&quot;(1 + 1) * 3 + (1 + 2) = &quot;)&lt;/li&gt;
-&lt;li&gt;变量(args,a,b)&lt;/li&gt;
-&lt;li&gt;类&lt;/li&gt;
-&lt;li&gt;方法&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;注释&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-//单行注释
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-/*
-多行注释
-*/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-/**
- * javadoc注释
- */
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;标识符&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;标识符由字母（A-Z或者a-z）,美元符（\$）、下划线（_）或数字组成&lt;/li&gt;
-&lt;li&gt;标识符都应该以字母（A-Z或者a-z）,美元符（\$）、或者下划线（_）开始&lt;/li&gt;
-&lt;li&gt;关键字不能用作标识符&lt;/li&gt;
-&lt;li&gt;标识符是大小写敏感的&lt;/li&gt;
-&lt;li&gt;合法标识符举例：age、\$salary、~value~、_~1value~&lt;/li&gt;
-&lt;li&gt;非法标识符举例：123abc、-salary&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;关键字&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2&gt;字面量&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;字符串:&quot;Hello&quot;&lt;/li&gt;
-&lt;li&gt;字符:'H','e','l','l','o'&lt;/li&gt;
-&lt;li&gt;布尔值:true,false&lt;/li&gt;
-&lt;li&gt;数值:1,2.4&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;变量&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;变量就是一个命名的内存块&lt;/li&gt;
-&lt;li&gt;变量只能存储一种具体类型的数据&lt;/li&gt;
-&lt;li&gt;使用变量之前必须声明(变量名和类型)&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;使用前需要初始化&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;局部变量:方法或语句块内部&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;成员变量:方法外,类内部&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;类和对象&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;类是对一个特定类型对象的描述,它定义了一种新的类型&lt;/li&gt;
-&lt;li&gt;类定义中的成员变量可以是任意类型&lt;/li&gt;
-&lt;li&gt;对象是类的实体,使用关键字new来创建&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;方法&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;实例方法&lt;/li&gt;
-&lt;li&gt;静态方法(static)&lt;/li&gt;
-&lt;li&gt;方法调用[递归调用]&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Hello{
-    public static void main(String[] args){
-        System.out.println(&quot;Hello&quot;);
-        Hello.main(null);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;基本类型&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/4.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2&gt;使用递归来计算基本类型的范围&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test{
-    public static long p(int num){
-        if(num == 0) return 1;
-        return 2 * p(--num);  //--num 与 num--
-    }
-
-    public static long caculateRange(int num){
-        if(num == 0) return 1;
-        return p(num) + caculateRange(--num);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;数组&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;数组是相同类型的,用一个标示符名称封装到一起的一个对象序列或基本类型数据序列&lt;/p&gt;
-
-&lt;h2&gt;一维数组&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-int[] arr;
-int arr[];
-//初始化
-arr = {1,2,3};
-arr = new int[3];  //默认初始化
-//使用,下标从0开始
-arr[0];
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;多维数组&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-int[][] arr = { {1,2,3},{4,5,6}};
-int[][][] arr = new int[2][3][4];
-//每一维长度可以不同
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;运算符(操作符)&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;运算符指明对操作数的运算方式&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;算术运算符&lt;/li&gt;
-&lt;li&gt;关系运算符&lt;/li&gt;
-&lt;li&gt;位运算符&lt;/li&gt;
-&lt;li&gt;逻辑运算符&lt;/li&gt;
-&lt;li&gt;赋值运算符&lt;/li&gt;
-&lt;li&gt;其他运算符&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;算术运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-+    加法 - 相加运算符两侧的值
--    减法 - 左操作数减去右操作数
-*    乘法 - 相乘操作符两侧的值
-/    除法 - 左操作数除以右操作数
-%    取模 - 右操作数除左操作数的余数
-++   自增 - 操作数的值增加1
--    自减 - 操作数的值减少1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-  public static void main(String args[]) {
-     int a = 10;
-     int b = 20;
-     int c = 25;
-     int d = 25;
-     System.out.println(&quot;a + b = &quot; + (a + b) );
-     System.out.println(&quot;a - b = &quot; + (a - b) );
-     System.out.println(&quot;a * b = &quot; + (a * b) );
-     System.out.println(&quot;b / a = &quot; + (b / a) );
-     System.out.println(&quot;b % a = &quot; + (b % a) );
-     System.out.println(&quot;c % a = &quot; + (c % a) );
-     System.out.println(&quot;a++   = &quot; +  (a++) );
-     System.out.println(&quot;b--   = &quot; +  (a--) );
-     System.out.println(&quot;d++   = &quot; +  (d++) );
-     System.out.println(&quot;++d   = &quot; +  (++d) );
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;关系运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-==   检查如果两个操作数的值是否相等，如果相等则条件为真
-=!   检查如果两个操作数的值是否相等，如果值不相等则条件为真
-&amp;gt;    检查左操作数的值是否大于右操作数的值，如果是那么条件为真
-&amp;lt;    检查左操作数的值是否小于右操作数的值，如果是那么条件为真
-&amp;gt;=   检查左操作数的值是否大于或等于右操作数的值，如果是那么条件为真
-&amp;lt;=   检查左操作数的值是否小于或等于右操作数的值，如果是那么条件为真
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-  public static void main(String args[]) {
-     int a = 10;
-     int b = 20;
-     System.out.println(&quot;a == b = &quot; + (a == b) );
-     System.out.println(&quot;a != b = &quot; + (a != b) );
-     System.out.println(&quot;a &amp;gt; b = &quot; + (a &amp;gt; b) );
-     System.out.println(&quot;a &amp;lt; b = &quot; + (a &amp;lt; b) );
-     System.out.println(&quot;b &amp;gt;= a = &quot; + (b &amp;gt;= a) );
-     System.out.println(&quot;b &amp;lt;= a = &quot; + (b &amp;lt;= a) );
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;位运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-&amp;amp;    按位与操作符，当且仅当两个操作数的某一位都非0时候结果的该位才为1
-|    按位或操作符，只要两个操作数的某一位有一个非0时候结果的该位就为1
-^    按位异或操作符，两个操作数的某一位不相同时候结果的该位就为1
-~    按位补运算符翻转操作数的每一位
-&amp;lt;&amp;lt;   按位左移运算符。左操作数按位左移右操作数指定的位数
-&amp;gt;&amp;gt;   按位右移运算符。左操作数按位右移右操作数指定的位数
-&amp;gt;&amp;gt;&amp;gt;      按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-  public static void main(String args[]) {
-     int a = 60; /* 60 = 0011 1100 */
-     int b = 13; /* 13 = 0000 1101 */
-     int c = 0;
-     c = a &amp;amp; b;       /* 12 = 0000 1100 */
-     System.out.println(&quot;a &amp;amp; b = &quot; + c );
-     c = a | b;       /* 61 = 0011 1101 */
-     System.out.println(&quot;a | b = &quot; + c );
-     c = a ^ b;       /* 49 = 0011 0001 */
-     System.out.println(&quot;a ^ b = &quot; + c );
-     c = ~a;          /*-61 = 1100 0011 */
-     System.out.println(&quot;~a = &quot; + c );
-     c = a &amp;lt;&amp;lt; 2;     /* 240 = 1111 0000 */
-     System.out.println(&quot;a &amp;lt;&amp;lt; 2 = &quot; + c );
-     c = a &amp;gt;&amp;gt; 2;     /* 215 = 1111 */
-     System.out.println(&quot;a &amp;gt;&amp;gt; 2  = &quot; + c );
-     c = a &amp;gt;&amp;gt;&amp;gt; 2;     /* 215 = 0000 1111 */
-     System.out.println(&quot;a &amp;gt;&amp;gt;&amp;gt; 2 = &quot; + c );
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;逻辑运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-&amp;amp;&amp;amp;   称为逻辑与运算符。当且仅当两个操作数都为真，条件才为真
-||   称为逻辑或操作符。如果任何两个操作数任何一个为真，条件为真
-!    称为逻辑非运算符。用来反转操作数的逻辑状态。如果条件为true，则逻辑非运算符将得到false。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-  public static void main(String args[]) {
-     boolean a = true;
-     boolean b = false;
-     System.out.println(&quot;a &amp;amp;&amp;amp; b = &quot; + (a&amp;amp;&amp;amp;b));
-     System.out.println(&quot;a || b = &quot; + (a||b) );
-     System.out.println(&quot;!(a &amp;amp;&amp;amp; b) = &quot; + !(a &amp;amp;&amp;amp; b));
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;赋值运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-=    简单的赋值运算符，将右操作数的值赋给左侧操作数
-+=   加和赋值操作符，它把左操作数和右操作数相加赋值给左操作数
--=   减和赋值操作符，它把左操作数和右操作数相减赋值给左操作数
-*=   乘和赋值操作符，它把左操作数和右操作数相乘赋值给左操作数
-/=   除和赋值操作符，它把左操作数和右操作数相除赋值给左操作数
-%=   取模和赋值操作符，它把左操作数和右操作数取模后赋值给左操作数
-&amp;lt;&amp;lt;=  左移位赋值运算符
-&amp;gt;&amp;gt;=  右移位赋值运算符
-&amp;amp;=   按位与赋值运算符
-^=   按位异或赋值操作符
-|=   按位或赋值操作符
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-  public static void main(String args[]) {
-     int a = 10; int b = 20; int c = 0; c = a + b;
-     System.out.println(&quot;c = a + b = &quot; + c );
-     c += a ;
-     System.out.println(&quot;c += a  = &quot; + c );
-     c -= a ;
-     System.out.println(&quot;c -= a = &quot; + c );
-     c *= a ;
-     System.out.println(&quot;c *= a = &quot; + c );
-     a = 10; c = 15; c /= a ;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;三目运算符&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-variable x = (expression) ? value if true : value if false
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-        int a , b;
-        a = 10;
-        b = (a == 1) ? 20: 30;
-        System.out.println( &quot;Value of b is : &quot; +  b );
-        b = (a == 10) ? 20: 30;
-        System.out.println( &quot;Value of b is : &quot; + b );
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;instanceof&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-( Object reference variable ) instanceof  (class/interface type)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-&quot;James&quot; instanceof String;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;运算符优先级&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.example}&quot;&gt;
-后缀     () [] . (点操作符)
-一元   ++ - ！ ~
-乘性   * / %
-加性   + -
-移位   &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;  &amp;lt;&amp;lt;
-关系   &amp;gt;&amp;gt; = &amp;lt;&amp;lt; =
-相等   ==  !=
-按位与  &amp;amp;
-按位异或     ^
-按位或  |
-逻辑与  &amp;amp;&amp;amp;
-逻辑或  ||
-条件   ? ：
-赋值   = += -= *= /= %= &amp;gt;&amp;gt;= &amp;lt;&amp;lt;= ＆= ^= |=
-逗号   ,
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;控制执行流程&lt;/h1&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-&lt;li&gt;if-else&lt;/li&gt;
-&lt;li&gt;switch&lt;/li&gt;
-&lt;li&gt;while&lt;/li&gt;
-&lt;li&gt;do-while&lt;/li&gt;
-&lt;li&gt;for&lt;/li&gt;
-&lt;li&gt;foreach&lt;/li&gt;
-&lt;li&gt;break&lt;/li&gt;
-&lt;li&gt;continue&lt;/li&gt;
-&lt;li&gt;return&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;if&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-if(布尔表达式) {
-   //如果布尔表达式为true将执行的语句
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int x = 10;
-      if( x &amp;lt; 20 ){
-         System.out.print(&quot;这是 if 语句&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;if...else&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-if(布尔表达式){
-   //如果布尔表达式的值为true
-}else{
-   //如果布尔表达式的值为false
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int x = 30;
-      if( x &amp;lt; 20 ){
-         System.out.print(&quot;这是 if 语句&quot;);
-      }else{
-         System.out.print(&quot;这是 else 语句&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;if...else if...else&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-if(布尔表达式 1){
-   //如果布尔表达式 1的值为true执行代码
-}else if(布尔表达式 2){
-   //如果布尔表达式 2的值为true执行代码
-}else if(布尔表达式 3){
-   //如果布尔表达式 3的值为true执行代码
-}else {
-   //如果以上布尔表达式都不为true执行代码
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int x = 30;
-      if( x == 10 ){
-         System.out.print(&quot;Value of X is 10&quot;);
-      }else if( x == 20 ){
-         System.out.print(&quot;Value of X is 20&quot;);
-      }else if( x == 30 ){
-         System.out.print(&quot;Value of X is 30&quot;);
-      }else{
-         System.out.print(&quot;This is else statement&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;if嵌套&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int x = 30;
-      int y = 10;
-      if( x == 30 ){
-         if( y == 10 ){
-             System.out.print(&quot;X = 30 and Y = 10&quot;);
-          }
-       }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;switch&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-switch(expression){
-    case value :
-       //语句
-       break; //可选
-    case value :
-       //语句
-       break; //可选
-    //你可以有任意数量的case语句
-    default : //可选
-       //语句
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;注意点&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;switch语句中的变量类型只能为byte、short、int或者char,enum.
-&lt;strong&gt;JDK7开始支持String&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;switch语句可以拥有多个case语句。每个case后面跟一个要比较的值和冒号。&lt;/li&gt;
-&lt;li&gt;case语句中的值的数据类型必须与变量的数据类型相同，而且只能是常量或者字面常量。&lt;/li&gt;
-&lt;li&gt;当变量的值与case语句的值相等时，那么case语句之后的语句开始执行，直到break语句出现才会跳出switch语句。&lt;/li&gt;
-&lt;li&gt;当遇到break语句时，switch语句终止。程序跳转到switch语句后面的语句执行。&lt;/li&gt;
-&lt;li&gt;switch语句可以包含一个default分支，该分支必须是switch语句的最后一个分支。default在没有case语句的值和变量值相等的时候执行。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      char grade = 'C';
-      switch(grade) {
-         case 'A' :
-            System.out.println(&quot;Excellent!&quot;);
-            break;
-         case 'B' :
-         case 'C' :
-            System.out.println(&quot;Well done&quot;);
-            break;
-         case 'D' :
-            System.out.println(&quot;You passed&quot;);
-         case 'F' :
-            System.out.println(&quot;Better try again&quot;);
-            break;
-         default :
-            System.out.println(&quot;Invalid grade&quot;);
-      }
-      System.out.println(&quot;Your grade is &quot; + grade);
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;while&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-while( 布尔表达式 ) {
-    //循环内容
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]) {
-      int x = 10;
-      while( x &amp;lt; 20 ) {
-         System.out.print(&quot;value of x : &quot; + x );
-         x++;
-         System.out.print(&quot;\n&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;do-while&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-do {
-       //代码语句
-}while(布尔表达式);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int x = 10;
-      do{
-         System.out.print(&quot;value of x : &quot; + x );
-         x++;
-         System.out.print(&quot;\n&quot;);
-      }while( x &amp;lt; 20 );
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;for&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-for(初始化; 布尔表达式; 更新) {
-    //代码语句
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;最先执行初始化步骤。可以声明并初始化一个或多个循环控制变量，也可以是空语句。&lt;/li&gt;
-&lt;li&gt;然后，检测布尔表达式的值。如果为true，循环体被执行。如果为false，循环终止，开始执行循环体后面的语句。&lt;/li&gt;
-&lt;li&gt;执行一次循环后，更新循环控制变量。&lt;/li&gt;
-&lt;li&gt;再次检测布尔表达式。循环执行上面的过程。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;实例&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]) {
-      for(int x = 10; x &amp;lt; 20; x = x+1) {
-         System.out.print(&quot;value of x : &quot; + x );
-         System.out.print(&quot;\n&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;foreach&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-for(声明语句 : 表达式) {
-   //代码句子
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]){
-      int[] numbers = {10, 20, 30, 40, 50};
-      for(int x : numbers){
-         System.out.print( x );
-         System.out.print(&quot;,&quot;);
-      }
-      System.out.print(&quot;\n&quot;);
-
-      String[] names ={&quot;James&quot;, &quot;Larry&quot;, &quot;Tom&quot;, &quot;Lacy&quot;};
-      for(String name : names) {
-         System.out.print( name );
-         System.out.print(&quot;,&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;break&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]) {
-      int [] numbers = {10, 20, 30, 40, 50};
-
-      for(int x : numbers) {
-         if(x == 30) {
-          break;
-         }
-         System.out.print(x);
-         System.out.print(&quot;\n&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;continue&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]) {
-      int [] numbers = {10, 20, 30, 40, 50};
-      for(int x : numbers) {
-         if(x == 30) {
-          continue;
-         }
-         System.out.print(x);
-         System.out.print(&quot;\n&quot;);
-      }
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;labeled break与labeled continue&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test {
-   public static void main(String args[]) {
-        int [] numbers = {10, 20, 30, 40, 50};
-        outer: for(int x : numbers) {
-            for(int i = 1;i &amp;lt; 3;i++) {
-                if (x == 30) {
-                    break outer;
-                }
-                System.out.print(x);
-                System.out.print(&quot;\n&quot;);
-            }
-            System.out.println(&quot;outer&quot; + x);
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;return&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;跳出当前方法,并返回方法所需要的值(如果有返回值的话)&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;课堂练习&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;使用数组计算矩阵乘法&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;&lt;img src=&quot;/home/ivan/my/teach/java/javase/01_basic/file/6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2&gt;答案&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&quot;{.java}&quot;&gt;
-public class Test{
-    public static void main(String[] args){
-        int[][] a = { {1,0,2},{-1,3,1}};
-        int[][] b = { {3,1},{2,1},{1,0}};
-        int[][] c = new int[2][2];
-        for(int i = 0; i &amp;lt; 2;i++){
-            int tmp = 0;
-            int tmp2 = 0;
-            for(int j = 0;j &amp;lt; 3;j++){
-                tmp += a[i][j] * b[j][i];
-                tmp2 += a[i][j] * b[j][1-i];
-            }
-            c[i][i] = tmp;
-            c[i][1-i]=tmp2;
-        }
-        System.out.println(c[0][0]);
-        System.out.println(c[0][1]);
-        System.out.println(c[1][0]);
-        System.out.println(c[1][1]);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;课后作业&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;理解path与classpath&lt;/li&gt;
-&lt;li&gt;请任意修改hello world,并尝试编译运行!如报错,请尝试理解报错信息!&lt;/li&gt;
-&lt;li&gt;请编写程序,打印如下图形.你能想出几种方法?你认为最简单的方法是哪种?&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code&gt;
-  1
- 111
-11111
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;请使用循环和递归分别实现斐波那契数列&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code&gt;
-1 1 2 3 5 8 13 ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;本机安装eclipse,并在eclipse中运行hello world&lt;/li&gt;
-&lt;li&gt;请到网上搜索面向对象编程,尝试理解面向对象编程,及其与面向过程编程的区别&lt;/li&gt;
-&lt;/ul&gt;
-
 </summary>
     </entry>
     

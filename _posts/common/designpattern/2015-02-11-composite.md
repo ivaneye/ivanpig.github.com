@@ -4,7 +4,6 @@ title: 语言与模式-09组合模式
 categories: [designpattern]
 tags: [designpattern,java,clojure]
 avatarimg: "/img/head.jpg"
-published: false
 
 ---
 # 意图
@@ -86,3 +85,5 @@ public class Main {
 # Clojure实现
 
 实际上就是对树的操作！Clojure提供了clojure.zip,clojure.walk或者tree-seq来进行对树的操作！
+
+操作起来也不是很方便就是了！

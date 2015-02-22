@@ -4,7 +4,6 @@ title: 语言与模式-12享元模式
 categories: [designpattern]
 tags: [designpattern,java,clojure]
 avatarimg: "/img/head.jpg"
-published: false
 
 ---
 # 意图

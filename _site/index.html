@@ -106,98 +106,6 @@
              src="/img/head.jpg">
         
 
-        <h2 class="post-title"><a href="/2015/02/26/start.html">语言和并发-01启动线程</a></h2>
-
-        <p class="post-meta">By 02月26日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#thread"><i class="fa fa-folder-open">thread (1)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">thread (1)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>概述</h1>
-
-<p>本系列文章意在比较Java与Clojure在线程实现上的区别！</p>
-
-<p>Java的线程主要基于锁机制，而Clojure主要模拟了数据库事务操作，所谓的STM(软事务模型)。主要从代码层面给出两者的区别，孰优孰劣请自行判断！</p>
-
-<h1>启动线程</h1>
-
-<h2>Java代码</h2>
-
-<ul>
-<li>Java实例中，两个线程类A和B，分别通过实现Runnable接口和继承Thread类来实现</li>
-<li>两各类启动线程的方式有差异，详见代码</li>
-<li>JDK5中提供了线程启动类Executors来执行</li>
-</ul>
-
-
-<pre><code class="java">package concurrent;
-
-import java.util.concurrent.*;
-
-/**
- * Created by ivan on 15-2-22.
- * Java启动线程
- */
-public class Start {
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        //实现Runnable接口，需要通过一个Thread实例来启动线程
-        new Thread(new A()).start();
-        //继承Thread类，直接通过自身来启动线程
-        new B().start();
-
-        //JDK1.5开始，可以通过Executor来执行线程.效果和上面没有区别
-        ExecutorService e = Executors.newCachedThreadPool();
-        e.execute(new A());
-        e.execute(new B());
-        //Callable需要submit,返回Future
-        Future&lt;String&gt; f = e.submit(new C());
-        //get方法是个阻塞方法
-        System.out.println("Future f = " + f.get());
-        e.shutdown();
-    }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/26/start.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
         <h2 class="post-title"><a href="/2015/02/25/iterator.html">语言与模式-23迭代器模式</a></h2>
 
         <p class="post-meta">By 02月25日  2015
@@ -205,9 +113,7 @@ public class Start {
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -216,11 +122,11 @@ public class Start {
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -280,19 +186,6 @@ public class Start {
 }
 </code></pre>
 
-<h1>Clojure实现</h1>
-
-<p>对于集合的操作都有相应的函数！一般不需要遍历就可以操作集合！比如map,reduce等函数！不需要此模式!</p>
-
-<h1>总结</h1>
-
-<p>可以看出，对于Clojure来说，绝大部分的设计模式都不是必须的！很多所谓的设计模式，在Clojure中使用语言特性就可以轻松解决！</p>
-
-<p>同时可以看出，Java之所以需要设计模式的一个原因就是它的最小单元是类！也同时引起另一个思考，面向对象语言有鼓吹的那么好吗？</p>
-
-<p>至少目前我的观点是：OO强项在建模，弱项是计算，而这正是函数式语言的强项！</p>
-
-<p>所以理想方案是：OO来建模，函数式语言来计算！好像是在说Scala,不过Scala太过于复杂！我的想法是Java来建模，Clojure来计算！</p>
 
 
 
@@ -317,9 +210,7 @@ public class Start {
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -328,11 +219,11 @@ public class Start {
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -406,9 +297,7 @@ public class VisitorA implements Visitor {
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -417,11 +306,11 @@ public class VisitorA implements Visitor {
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -494,9 +383,7 @@ public class VisitorA implements Visitor {
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -505,11 +392,11 @@ public class VisitorA implements Visitor {
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -592,9 +479,7 @@ public abstract class Person {
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -603,11 +488,11 @@ public abstract class Person {
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -678,9 +563,7 @@ public abstract class Person {
             
             
             
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">java (23)</i></a>
-            
-            <a class="post-categorybut " href="/type/#javaclojure"><i class="fa fa-folder-open">clojure (33)</i></a>
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
             
             
             
@@ -689,11 +572,11 @@ public abstract class Person {
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (40)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
             
         
@@ -749,6 +632,94 @@ public abstract class Person {
 
 
     <a href="/2015/02/20/state.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/02/19/command.html">语言与模式-17命令模式</a></h2>
+
+        <p class="post-meta">By 02月19日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可取消的操作</p>
+
+<p><img src="/assets/designpattern/command.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>像上面讨论的MenuItem对象那样，抽象出待执行的动作以参数化某对象。你可用过程语言中的回调（callback）函数表达这种参数化机制。所谓回调函数是指函数先在某处注册，而它将在稍后某个需要的时候被调用。Command模式是回调机制的一个面向对象的替代品。</li>
+<li>在不同的时刻指定、排列和执行请求。一个Command对象可以有一个与初始请求无关的生存期。如果一个请求的接收者可用一种与地址空间无关的方式表达，那么就可将负责该请求的命令对象传送给另一个不同的进程并在那儿实现该请求。</li>
+<li>支持取消操作。Command的Execute操作可在实施操作前将状态存储起来，在取消操作时这个状态用来消除该操作的影响。Command接口必须添加一个Execute操作，该操作取消上一次Execute调用的效果。执行的命令被存储在一个历史列表中。可通过向后和向前遍历这一列表并分别调用Unexecute和Execute来实现重数不限的“取消”和“重做”。</li>
+<li>支持修改日志，这样当系统崩溃时，这些修改可以被重做一遍。在Command接口中添加装载操作和存储操作，可以用来保持变动的一个一致的修改日志。从崩溃中恢复的过程包括从磁盘中重新读入记录下来的命令并用Execute操作重新执行它们。</li>
+<li>用构建在原语操作上的高层操作构造一个系统。这样一种结构在支持事务（Transaction）的信息系统中很常见。一个事务封装了对数据的一组变动。Command模式提供了对事务进行建模的方法。Command有一个公共的接口，使得你可以用同一种方式调用所有的事务。同时使用该模式也易于添加新事务以扩展系统。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<p>接收者角色类</p>
+
+<pre><code class="java">public class Receiver {
+    /**
+     * 真正执行命令相应的操作
+     */
+    public void action(){
+        System.out.println("执行操作");
+    }
+}
+</code></pre>
+
+<p>抽象命令角色类</p>
+
+<pre><code class="java">public interface Command {
+    /**
+     * 执行方法
+     */
+    void execute();
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/19/command.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

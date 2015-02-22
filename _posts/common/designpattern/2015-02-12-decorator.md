@@ -4,7 +4,6 @@ title: 语言与模式-10装饰模式
 categories: [designpattern]
 tags: [designpattern,java,clojure]
 avatarimg: "/img/head.jpg"
-published: false
 
 ---
 # 意图
@@ -52,4 +51,4 @@ BufferedInputStream继承了FilterInputStream，并添加了缓存的方法（�
 
 # Clojure实现
 
-不就是添加个方法吗？直接添加方法就可以了啊。还要搞个类出来！
+笑而不语～
