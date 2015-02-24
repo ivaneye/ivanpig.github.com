@@ -17,6 +17,8 @@ http://ivanpig.github.io/page/8/index.html
 http://ivanpig.github.io/page/9/index.html
 http://ivanpig.github.io/page/10/index.html
 
+http://ivanpig.github.io/2015/03/03/interface_field.html
+http://ivanpig.github.io/2015/03/02/interface_method.html
 http://ivanpig.github.io/2015/02/25/iterator.html
 http://ivanpig.github.io/2015/02/24/visitor.html
 http://ivanpig.github.io/2015/02/23/interpreter.html

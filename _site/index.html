@@ -106,6 +106,154 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/03/03/interface_field.html">刨根问底-02为什么Java接口中的成员变量被设计为必须是public static final的？</a></h2>
+
+        <p class="post-meta">By 03月03日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#why"><i class="fa fa-folder-open">why (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (39)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>概述</h1>
+
+<p>此为"刨根问底"系列文章的第二篇，接上篇，为什么Java接口中的成员变量被设计为必须是public static final的？</p>
+
+<h1>网络答案</h1>
+
+<p>在网络上搜索到了如下两篇还算靠谱的解答!</p>
+
+<p><a href="http://shaomeng95.iteye.com/blog/998820">网络解答1</a></p>
+
+<p><a href="http://www.xyzws.com/javafaq/why-do-we-have-only-public-static-final-variables-in-interfaces/129">网络解答2</a></p>
+
+<h1>解释</h1>
+
+<p>上篇我们用反证法来证明了接口方法设为public为最合适选择!</p>
+
+<p>这里我们依然可以使用反证法来解释!</p>
+
+<p>假设接口中的成员变量不是public static final的!</p>
+
+<p>先将属性设置为private的!</p>
+
+<pre><code class="java">public interface Person{
+  private int num;
+}
+</code></pre>
+
+<p>OK!private的属性，当然只能在接口内部使用了!但是在接口里面给谁使用呢？接口里的方法只有方法头可没方法体！所以设为private，那就永远都访问不到了！</p>
+
+<p>好，那我们改成protected!</p>
+
+<pre><code class="java">public interface Person{
+  protected int num;
+}
+</code></pre>
+
+<p>这样子类就能访问了！但是外部如何访问呢？方法是有的:</p>
+
+
+
+
+    <a href="/2015/03/03/interface_field.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="">
+        
+
+        <h2 class="post-title"><a href="/2015/03/02/interface_method.html">Interface_method</a></h2>
+
+        <p class="post-meta">By 03月02日  2015
+            
+
+            
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>概述</h1>
+
+<p>去年担任了公司Java培训班的培训讲师！由于时间关系，课堂上只是讲了How，而很少涉及到Why!</p>
+
+<p>故计划编写此"刨根问底"系列文章，主要解释Java中的Why!</p>
+
+<p>此为该系列文章的第一篇，为什么Java接口中的方法默认是public的？</p>
+
+<h1>解释</h1>
+
+<p>首先我们来看下接口的定义，在《Thinking in Java》中，对接口做了如下定义:</p>
+
+<pre><code class="example">An interface says, "All classes that implement this particular interface will look like this." Thus, any code that uses a particular interface knows what methods might be called for that interface, and that’s all. So the interface is used to establish a "protocol" between classes. (Some object-oriented programming languages have a keyword called protocol to do the
+same thing.)
+
+接口意味着："所有实现了这个特定接口的类都应该可以被当作这个接口来看待"。也就是说，所有使用此特定接口的代码都应该知道该接口有哪些方法可以被调用，而且仅此而已！所以接口被用来定义接口之间的协议！(有些语言使用protocol这个关键字来做Java中interface关键字所要做的事情，例如:Clojure)
+</code></pre>
+
+<p>简单说来，接口就是用来定义一个"协议"的！这么看来，protocol这个关键字应该比interface这个关键字更加的准确！</p>
+
+<pre><code class="java">//Java接口定义
+public interface Person{
+  void say();
+}
+
+//这样会不会更合理？
+public protocol Person{
+  void say();
+}
+
+//Clojure类似代码
+(defprotocol Person
+  (say [this]))
+</code></pre>
+
+<p>上面的接口就定义了一个"协议",这个协议就是:"所有遵循这个协议(实现此接口)的类，必然有一个叫做say()的方法"。</p>
+
+
+
+
+    <a href="/2015/03/02/interface_method.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/02/25/iterator.html">语言与模式-23迭代器模式</a></h2>
 
         <p class="post-meta">By 02月25日  2015
@@ -124,7 +272,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (39)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
@@ -221,7 +369,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (39)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
@@ -308,7 +456,7 @@ public class VisitorA implements Visitor {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (39)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
@@ -394,7 +542,7 @@ public class VisitorA implements Visitor {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (39)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
@@ -490,7 +638,7 @@ public abstract class Person {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (39)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
             
@@ -543,183 +691,6 @@ public abstract class Person {
 
 
     <a href="/2015/02/21/strategy.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/20/state.html">语言与模式-18状态模式</a></h2>
-
-        <p class="post-meta">By 02月20日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。</p>
-
-<p><img src="/assets/designpattern/state.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。</li>
-<li>一个操作中含有庞大的多分支的条件语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常, 有多个操作包含这一相同的条件结构。State模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<pre><code class="java">public class Order{
-     private State unPayState;
-     private State payedState;
-     private State sendState;
-     private State doneState;    //四种状态，四种类,对应的get,set方法省略
-
-     private State state = unPayState;     //当前状态
-
-     public Order(){
-        unPayState = new UnPayState(this);
-        payedState = new PayedState(this);            //传入Order对象，为了修改Order的状态
-        ...
-     }
-
-     public void pay(){
-          state.pay();
-     }
-
-     public void send(){
-          state.send();
-     }
-
-     ....
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/20/state.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/19/command.html">语言与模式-17命令模式</a></h2>
-
-        <p class="post-meta">By 02月19日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可取消的操作</p>
-
-<p><img src="/assets/designpattern/command.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>像上面讨论的MenuItem对象那样，抽象出待执行的动作以参数化某对象。你可用过程语言中的回调（callback）函数表达这种参数化机制。所谓回调函数是指函数先在某处注册，而它将在稍后某个需要的时候被调用。Command模式是回调机制的一个面向对象的替代品。</li>
-<li>在不同的时刻指定、排列和执行请求。一个Command对象可以有一个与初始请求无关的生存期。如果一个请求的接收者可用一种与地址空间无关的方式表达，那么就可将负责该请求的命令对象传送给另一个不同的进程并在那儿实现该请求。</li>
-<li>支持取消操作。Command的Execute操作可在实施操作前将状态存储起来，在取消操作时这个状态用来消除该操作的影响。Command接口必须添加一个Execute操作，该操作取消上一次Execute调用的效果。执行的命令被存储在一个历史列表中。可通过向后和向前遍历这一列表并分别调用Unexecute和Execute来实现重数不限的“取消”和“重做”。</li>
-<li>支持修改日志，这样当系统崩溃时，这些修改可以被重做一遍。在Command接口中添加装载操作和存储操作，可以用来保持变动的一个一致的修改日志。从崩溃中恢复的过程包括从磁盘中重新读入记录下来的命令并用Execute操作重新执行它们。</li>
-<li>用构建在原语操作上的高层操作构造一个系统。这样一种结构在支持事务（Transaction）的信息系统中很常见。一个事务封装了对数据的一组变动。Command模式提供了对事务进行建模的方法。Command有一个公共的接口，使得你可以用同一种方式调用所有的事务。同时使用该模式也易于添加新事务以扩展系统。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<p>接收者角色类</p>
-
-<pre><code class="java">public class Receiver {
-    /**
-     * 真正执行命令相应的操作
-     */
-    public void action(){
-        System.out.println("执行操作");
-    }
-}
-</code></pre>
-
-<p>抽象命令角色类</p>
-
-<pre><code class="java">public interface Command {
-    /**
-     * 执行方法
-     */
-    void execute();
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/19/command.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

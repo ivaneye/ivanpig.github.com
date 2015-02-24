@@ -121,7 +121,7 @@
         
         <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">designpattern (23)</i></a>
         
-        <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">java (38)</i></a>
+        <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">java (39)</i></a>
         
         <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">clojure (53)</i></a>
         
@@ -207,7 +207,27 @@ public class UnPayState implements State{
 
 <h1>Clojure实现</h1>
 
-<p>first-class function</p>
+<p>Clojure模拟实现！</p>
+
+<pre><code class="clojure">(def order (atom {:status :unPay}))
+
+(defmulti invoke (fn [ord] (:status @ord)))
+
+(defmethod invoke
+  :unPay
+  [ord]
+  (println "UnPay")
+  (swap! order assoc :status :send))
+
+(defmethod invoke
+  :send
+  [ord]
+  (println "Send")
+  (swap! order assoc :status :unPay))
+
+(invoke order)
+(invoke order)
+</code></pre>
 
 </div>
 

@@ -121,7 +121,7 @@
         
         <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">designpattern (23)</i></a>
         
-        <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">java (38)</i></a>
+        <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">java (39)</i></a>
         
         <a class="post-category " href="/tag/#designpattern"><i class="fa fa-tags">clojure (53)</i></a>
         
@@ -207,7 +207,20 @@
 
 <h1>Clojure实现</h1>
 
-<p>依然还是first-class function！</p>
+<p>高阶函数轻松搞定!</p>
+
+<pre><code class="clojure">(defn context [f]
+   (f))
+
+(defn strategy1 []
+  (println "Strategy1"))
+
+(defn strategy2 []
+  (println "Strategy2"))
+
+(context strategy1)
+(context strategy2)
+</code></pre>
 
 </div>
 

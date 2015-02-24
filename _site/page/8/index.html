@@ -106,6 +106,171 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/09/19/staticresource.html">Luminus手册-静态资源</a></h2>
+
+        <p class="post-meta">By 09月19日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Static resources</h1>
+
+<p>在noir.io下有多个访问静态资源的帮助方法。
+你可以通过调用resource-path来获取public目录的路径。</p>
+
+<h1>Handling file uploads</h1>
+
+<p>上传文件通过noir.io空间下的upload-file方法来实现，upload-file接受一个路径和文件的map。
+例如我们有一个upload.html文件:</p>
+
+<pre><code class="{.html}">    &lt;h2&gt;Upload a file&lt;/h2&gt;
+    &lt;form action="/upload" enctype="multipart/form-data" method="POST"&gt;
+        &lt;input id="file" name="file" type="file" /&gt;
+        &lt;input type="submit" value="upload" /&gt;
+    &lt;/form&gt;
+</code></pre>
+
+<p>我们可以这样来处理文件上传。</p>
+
+<pre><code class="{.clojure}">(ns myapp.upload
+  ...
+  (:require [upload-test.views.layout :as layout]
+            [noir.response :as response]
+            [noir.io :as io]))
+
+(defn upload-page []
+  (layout/render "upload.html"))
+
+(defn handle-upload [file]
+  (io/upload-file "/" file)
+  (response/redirect
+    (str "/" (:filename file))))
+
+(defroutes upload-routes
+  (GET "/upload" [] (upload-page))
+  (POST "/upload" [file] (handle-upload file)))
+</code></pre>
+
+
+
+
+    <a href="/2013/09/19/staticresource.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/18/defining_routes.html">Luminus手册-路由定义</a></h2>
+
+        <p class="post-meta">By 09月18日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Defining routes</h1>
+
+<p>Luminus使用Compojure来定义应用的路由.路由由HTTP请求方法和接受它的URI，
+参数和以及相应的处理程序组成。Compojure定义了所有标准HTTP请求的路由，
+比如ANY,DELETE,GET,HEAD,OPTIONS,PATCH,POST和PUT。</p>
+
+<p>例如：如果我们想定义一个应用，它指向/，/返回"Hello World!"字符串。我们
+可以这样写:</p>
+
+<pre><code class="{.clojure}">(defroutes app-routes
+  (GET "/" [] "Hello World!"))
+</code></pre>
+
+<p>如果你想构建一个路由来响应POST请求，我们可以这样写：</p>
+
+<pre><code class="{.clojure}">(POST "/hello" [id] (str "Welcome " id))
+</code></pre>
+
+<p>有些路由需要访问请求的map，我们只需要在路由上定义第二个参数就可以了。</p>
+
+<pre><code class="{.clojure}">(GET "/foo" request (interpose ", " (keys request)))
+</code></pre>
+
+<p>上面的路由读出请求map中所有的key并展示出来。结果如下:</p>
+
+<pre><code class="{.example}">:ssl-client-cert, :remote-addr, :scheme, :query-params, :session, :form-params,
+:multipart-params, :request-method, :query-string, :route-params, :content-type,
+:cookies, :uri, :server-name, :params, :headers, :content-length, :server-port,
+:character-encoding, :body, :flash
+</code></pre>
+
+<p>Compojure还提供了一些有用的函数来处理请求map和表单参数。例如，在
+guestbook应用的例子中，我们看到了如下的路由定义:</p>
+
+<pre><code class="{.clojure}">(POST "/"  [name message] (save-message name message))
+</code></pre>
+
+
+
+
+    <a href="/2013/09/18/defining_routes.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/09/17/clojurescript.html">Luminus手册-ClojureScript</a></h2>
 
         <p class="post-meta">By 09月17日  2013
@@ -469,7 +634,7 @@ Started server on port 3000
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (39)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -527,172 +692,6 @@ object Test extends App{
 
 
     <a href="/2013/03/17/scala_exercises_15.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/16/scala_exercises_14.html">快学Scala习题解答—第十四章 模式匹配和样例类</a></h2>
-
-        <p class="post-meta">By 03月16日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>模式匹配和样例类</h1>
-
-<h2>JDK发行包有一个src.zip文件包含了JDK的大多数源代码。解压并搜索样例标签(用正则表达式case [^:]+:)。然后查找以//开头并包含[Ff]alls?thr的注释，捕获类似// Falls through或// just fall thru这样的注释。假定JDK的程序员们遵守Java编码习惯，在该写注释的地方写下了这些注释，有多少百分比的样例是会掉入到下一个分支的？</h2>
-
-<p>没读懂题意。。。。</p>
-
-<h2>利用模式匹配，编写一个swap函数，接受一个整数的对偶，返回对偶的两个组成部件互换位置的新对偶</h2>
-
-<pre><code class="{.scala}">def swap[S,T](tup: (S,T)) = {
-    tup match {
-        case (a ,b) =&gt; (b,a)
-    }
-}
-
-println(swap[String,Int](("1",2)))
-</code></pre>
-
-<h2>利用模式匹配，编写一个swap函数，交换数组中的前两个元素的位置，前提条件是数组长度至少为2</h2>
-
-<pre><code class="{.scala}">def swap(arr: Array[String]) = {
-  arr match {
-    case Array(a,b, ar @ _*) =&gt; Array(b,a) ++ ar
-    case _ =&gt; arr
-  }
-}
-
-println(swap(Array("1","2","3","4")).mkString)
-</code></pre>
-
-
-
-
-    <a href="/2013/03/16/scala_exercises_14.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/15/scala_exercises_13.html">快学Scala习题解答—第十三章 集合</a></h2>
-
-        <p class="post-meta">By 03月15日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>集合</h1>
-
-<h2>编写一个函数，给定字符串，产出一个包含所有字符的下标的映射。举例来说：indexes("Mississippi")应返回一个映射，让'M'对应集{0}，'i'对应集{1,4,7,10}，依此类推。使用字符到可变集的映射。另外，你如何保证集是经过排序的？</h2>
-
-<p>更新scala到版本2.10.0。有可变的可排序的Set，实际上还是TreeSet</p>
-
-<pre><code class="{.scala}">import collection.mutable.{Map,HashMap,SortedSet}
-
-def indexs(str:String):Map[Char,SortedSet[Int]]={
-  var map = new HashMap[Char, SortedSet[Int]]();
-  var i = 0;
-  str.foreach{
-    c=&gt;
-      map.get(c) match{
-        case Some(result) =&gt; map(c) = result + i
-        case None =&gt; map += (c-&gt; SortedSet{i})
-      }
-      i += 1
-  }
-  map
-}
-
-println(indexs("Mississippi"))
-</code></pre>
-
-<h2>重复前一个练习，这次用字符到列表的不可变映射。</h2>
-
-<pre><code class="{.scala}">import collection.immutable.HashMap
-import collection.mutable.ListBuffer
-
-def indexs(str:String):Map[Char,ListBuffer[Int]]={
-  var map = new HashMap[Char, ListBuffer[Int]]()
-  var i = 0
-  str.foreach{
-    c=&gt;
-      map.get(c) match{
-        case Some(result) =&gt; result += i
-        case None =&gt; map += (c-&gt; ListBuffer{i})
-      }
-      i += 1
-  }
-  map
-}
-
-println(indexs("Mississippi"))
-</code></pre>
-
-
-
-
-    <a href="/2013/03/15/scala_exercises_13.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
