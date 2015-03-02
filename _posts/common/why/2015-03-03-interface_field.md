@@ -131,7 +131,7 @@ public class Test{
 
 所以只能加上final来限制修改!
 
-而对于之添加public final的效果，和只添加public的问题相同！不多说！
+而对于添加public final的效果，和只添加public的问题相同！不多说！
 
 从上面的修改可以看出，public static final修饰符，缺少任何之一都会导致"协议"的不公正!
 
