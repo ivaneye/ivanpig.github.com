@@ -4,7 +4,6 @@ title: 刨根问底-01为什么Java接口中的方法默认是public？
 categories: [why]
 tags: [why,java]
 avatarimg: "/img/head.jpg"
-published: false
 
 ---
 
