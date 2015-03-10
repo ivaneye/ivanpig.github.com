@@ -4,13 +4,830 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-02-24T19:37:36+08:00</updated>
+    <updated>2015-03-10T21:12:53+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
         <email>ivan.pig@foxmail.com</email>
     </author>
 
+    
+    <entry>
+        <title>一图胜千言:事务管理</title>
+        <link href="http://ivanpig.github.io/2015/03/10/transactional.html"/>
+        <updated>2015-03-10T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/03/10/transactional</id>
+        <content type="html">&lt;p&gt;&lt;img src=&quot;/mind/transaction.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/mind/transaction.xmind&quot;&gt;xmind文件下载&lt;/a&gt;&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;&lt;img src=&quot;/mind/transaction.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;/mind/transaction.xmind&quot;&gt;xmind文件下载&lt;/a&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>传统软件OR互联网软件?</title>
+        <link href="http://ivanpig.github.io/2015/03/08/soft.html"/>
+        <updated>2015-03-08T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/03/08/soft</id>
+        <content type="html">&lt;p&gt;人近而立之年，考虑以后的目标和发展。自身有4年的传统软件经验，3年多的互联网软件经验。&lt;/p&gt;
+
+&lt;p&gt;就个人经历来看，传统软件和互联网软件区别并没有想象中大，只是关注点有些区别!&lt;/p&gt;
+
+&lt;h1&gt;概念区分&lt;/h1&gt;
+
+&lt;p&gt;一般来说传统软件指的就是针对甲方用户定制的软件，此类软件安装在甲方内部服务器，一般不会接到互联网上。&lt;/p&gt;
+
+&lt;p&gt;互联网软件则是部署在互联网上供普通网民使用，给网民提供服务的软件。此类软件由开发方自主部署，维护，运营。&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;人近而立之年，考虑以后的目标和发展。自身有4年的传统软件经验，3年多的互联网软件经验。&lt;/p&gt;
+
+&lt;p&gt;就个人经历来看，传统软件和互联网软件区别并没有想象中大，只是关注点有些区别!&lt;/p&gt;
+
+&lt;h1&gt;概念区分&lt;/h1&gt;
+
+&lt;p&gt;一般来说传统软件指的就是针对甲方用户定制的软件，此类软件安装在甲方内部服务器，一般不会接到互联网上。&lt;/p&gt;
+
+&lt;p&gt;互联网软件则是部署在互联网上供普通网民使用，给网民提供服务的软件。此类软件由开发方自主部署，维护，运营。&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>刨根问底-02为什么Java接口中的成员变量被设计为必须是public static final的？</title>
+        <link href="http://ivanpig.github.io/2015/03/03/interface_field.html"/>
+        <updated>2015-03-03T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/03/03/interface_field</id>
+        <content type="html">&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;此为&quot;刨根问底&quot;系列文章的第二篇，接上篇，为什么Java接口中的成员变量被设计为必须是public static final的？&lt;/p&gt;
+
+&lt;h1&gt;网络答案&lt;/h1&gt;
+
+&lt;p&gt;在网络上搜索到了如下两篇还算靠谱的解答!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://shaomeng95.iteye.com/blog/998820&quot;&gt;网络解答1&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.xyzws.com/javafaq/why-do-we-have-only-public-static-final-variables-in-interfaces/129&quot;&gt;网络解答2&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;解释&lt;/h1&gt;
+
+&lt;p&gt;上篇我们用反证法来证明了接口方法设为public为最合适选择!&lt;/p&gt;
+
+&lt;p&gt;这里我们依然可以使用反证法来解释!&lt;/p&gt;
+
+&lt;p&gt;假设接口中的成员变量不是public static final的!&lt;/p&gt;
+
+&lt;p&gt;先将属性设置为private的!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  private int num;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;OK!private的属性，当然只能在接口内部使用了!但是在接口里面给谁使用呢？接口里的方法只有方法头可没方法体！所以设为private，那就永远都访问不到了！&lt;/p&gt;
+
+&lt;p&gt;好，那我们改成protected!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  protected int num;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样子类就能访问了！但是外部如何访问呢？方法是有的:&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  protected int num;
+
+  int getNum();
+  void setNum(int num);
+}
+
+class PersonA implements Person{
+  public int getNum(){
+    return num;
+  }
+  public void setNum(int num){
+    this.num = num;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果有100个类实现了Person接口！请问有多少重复代码?&lt;/p&gt;
+
+&lt;p&gt;接着是默认访问权限控制符:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  //非public static final
+  int num;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于包外的类来说，和protected一样的问题!这里不废话了！&lt;/p&gt;
+
+&lt;p&gt;最后就只剩下public了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  public int num;
+}
+
+public class PersonA implements Person{
+  public int num = 2;
+}
+
+public class Test{
+  public static void main(String[] args){
+    PersonA pa = new PersonA();
+    System.out.println(pa.num); //打印结果是？
+    Person p = pa;
+    System.out.println(p.num); //打印结果是？
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上代码你会发现，两者打印结果居然不相同！这就好像是，这个&quot;协议&quot;公开是一套，而如果你有关系，会给你另一套&quot;内部协议&quot;!&lt;/p&gt;
+
+&lt;p&gt;究其原因，就是这个成员变量是属于实现了这个接口的对象的，并不属于接口本身。因为你需要先实例化实现了此接口的类才可以操作这个成员变量，而接口本身并不能实例化！&lt;/p&gt;
+
+&lt;p&gt;所以如果想这个成员变量为接口所有，只能将其设为static!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  public static int num;
+}
+
+public class PersonA implements Person{}
+public class PersonB implements Person{}
+
+public class Test{
+  public static void main(String[] args){
+    System.out.println(Person.num); //结果？
+    PersonA.num = 2;
+    System.out.println(Person.num); //结果？
+    PersonB.num = 2;
+    System.out.println(Person.num); //结果？
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上代码的意思就是，A和B遵循了&quot;协议&quot;Person，但是只要A或B感觉不满意就可以随便改！那还叫&quot;协议&quot;吗?&lt;/p&gt;
+
+&lt;p&gt;所以只能加上final来限制修改!&lt;/p&gt;
+
+&lt;p&gt;而对于添加public final的效果，和只添加public的问题相同！不多说！&lt;/p&gt;
+
+&lt;p&gt;从上面的修改可以看出，public static final修饰符，缺少任何之一都会导致&quot;协议&quot;的不公正!&lt;/p&gt;
+
+&lt;p&gt;你可以把接口看作是合同!成员变量看作合同说明，确定后当然是不能变的!至于如何去执行这个合同，那就随便了！&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;此为&quot;刨根问底&quot;系列文章的第二篇，接上篇，为什么Java接口中的成员变量被设计为必须是public static final的？&lt;/p&gt;
+
+&lt;h1&gt;网络答案&lt;/h1&gt;
+
+&lt;p&gt;在网络上搜索到了如下两篇还算靠谱的解答!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://shaomeng95.iteye.com/blog/998820&quot;&gt;网络解答1&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.xyzws.com/javafaq/why-do-we-have-only-public-static-final-variables-in-interfaces/129&quot;&gt;网络解答2&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;解释&lt;/h1&gt;
+
+&lt;p&gt;上篇我们用反证法来证明了接口方法设为public为最合适选择!&lt;/p&gt;
+
+&lt;p&gt;这里我们依然可以使用反证法来解释!&lt;/p&gt;
+
+&lt;p&gt;假设接口中的成员变量不是public static final的!&lt;/p&gt;
+
+&lt;p&gt;先将属性设置为private的!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  private int num;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;OK!private的属性，当然只能在接口内部使用了!但是在接口里面给谁使用呢？接口里的方法只有方法头可没方法体！所以设为private，那就永远都访问不到了！&lt;/p&gt;
+
+&lt;p&gt;好，那我们改成protected!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  protected int num;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样子类就能访问了！但是外部如何访问呢？方法是有的:&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  protected int num;
+
+  int getNum();
+  void setNum(int num);
+}
+
+class PersonA implements Person{
+  public int getNum(){
+    return num;
+  }
+  public void setNum(int num){
+    this.num = num;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果有100个类实现了Person接口！请问有多少重复代码?&lt;/p&gt;
+
+&lt;p&gt;接着是默认访问权限控制符:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  //非public static final
+  int num;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于包外的类来说，和protected一样的问题!这里不废话了！&lt;/p&gt;
+
+&lt;p&gt;最后就只剩下public了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  public int num;
+}
+
+public class PersonA implements Person{
+  public int num = 2;
+}
+
+public class Test{
+  public static void main(String[] args){
+    PersonA pa = new PersonA();
+    System.out.println(pa.num); //打印结果是？
+    Person p = pa;
+    System.out.println(p.num); //打印结果是？
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上代码你会发现，两者打印结果居然不相同！这就好像是，这个&quot;协议&quot;公开是一套，而如果你有关系，会给你另一套&quot;内部协议&quot;!&lt;/p&gt;
+
+&lt;p&gt;究其原因，就是这个成员变量是属于实现了这个接口的对象的，并不属于接口本身。因为你需要先实例化实现了此接口的类才可以操作这个成员变量，而接口本身并不能实例化！&lt;/p&gt;
+
+&lt;p&gt;所以如果想这个成员变量为接口所有，只能将其设为static!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  public static int num;
+}
+
+public class PersonA implements Person{}
+public class PersonB implements Person{}
+
+public class Test{
+  public static void main(String[] args){
+    System.out.println(Person.num); //结果？
+    PersonA.num = 2;
+    System.out.println(Person.num); //结果？
+    PersonB.num = 2;
+    System.out.println(Person.num); //结果？
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上代码的意思就是，A和B遵循了&quot;协议&quot;Person，但是只要A或B感觉不满意就可以随便改！那还叫&quot;协议&quot;吗?&lt;/p&gt;
+
+&lt;p&gt;所以只能加上final来限制修改!&lt;/p&gt;
+
+&lt;p&gt;而对于添加public final的效果，和只添加public的问题相同！不多说！&lt;/p&gt;
+
+&lt;p&gt;从上面的修改可以看出，public static final修饰符，缺少任何之一都会导致&quot;协议&quot;的不公正!&lt;/p&gt;
+
+&lt;p&gt;你可以把接口看作是合同!成员变量看作合同说明，确定后当然是不能变的!至于如何去执行这个合同，那就随便了！&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>刨根问底-01为什么Java接口中的方法默认是public？</title>
+        <link href="http://ivanpig.github.io/2015/03/02/interface_method.html"/>
+        <updated>2015-03-02T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/03/02/interface_method</id>
+        <content type="html">&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;去年担任了公司Java培训班的培训讲师！由于时间关系，课堂上只是讲了How，而很少涉及到Why!&lt;/p&gt;
+
+&lt;p&gt;故计划编写此&quot;刨根问底&quot;系列文章，主要解释Java中的Why!&lt;/p&gt;
+
+&lt;p&gt;此为该系列文章的第一篇，为什么Java接口中的方法默认是public的？&lt;/p&gt;
+
+&lt;h1&gt;解释&lt;/h1&gt;
+
+&lt;p&gt;首先我们来看下接口的定义，在《Thinking in Java》中，对接口做了如下定义:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;example&quot;&gt;An interface says, &quot;All classes that implement this particular interface will look like this.&quot; Thus, any code that uses a particular interface knows what methods might be called for that interface, and that’s all. So the interface is used to establish a &quot;protocol&quot; between classes. (Some object-oriented programming languages have a keyword called protocol to do the
+same thing.)
+
+接口意味着：&quot;所有实现了这个特定接口的类都应该可以被当作这个接口来看待&quot;。也就是说，所有使用此特定接口的代码都应该知道该接口有哪些方法可以被调用，而且仅此而已！所以接口被用来定义接口之间的协议！(有些语言使用protocol这个关键字来做Java中interface关键字所要做的事情，例如:Clojure)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;简单说来，接口就是用来定义一个&quot;协议&quot;的！这么看来，protocol这个关键字应该比interface这个关键字更加的准确！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//Java接口定义
+public interface Person{
+  void say();
+}
+
+//这样会不会更合理？
+public protocol Person{
+  void say();
+}
+
+//Clojure类似代码
+(defprotocol Person
+  (say [this]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的接口就定义了一个&quot;协议&quot;,这个协议就是:&quot;所有遵循这个协议(实现此接口)的类，必然有一个叫做say()的方法&quot;。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class PersonA implements Person{
+  public void say(){
+    System.out.println(&quot;Hello PersonA&quot;);
+  }
+}
+
+public class PersonB implements Person{
+  public void say(){
+    System.out.println(&quot;Hello PersonB&quot;);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里PersonA遵循了这个协议，PersonB也遵循了这个协议。那在我们使用的时候，我们完全就没必要关心是PersonA还是PersonB，我们只关心它是不是一个Person就可以了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Test{
+  public static void main(String[] args){
+    //不管是PersonA还是PersonB，肯定是个Person
+    Person p = new PersonA(); //或 new PersonB();
+    //不管是PersonA还是PersonB，肯定有say()方法
+    p.say();
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们知道Java里面有四种访问权限控制符！private,protected,package(default),public!&lt;/p&gt;
+
+&lt;p&gt;那为什么接口的方法默认是public的呢？我们使用假设法来一个个的看！&lt;/p&gt;
+
+&lt;p&gt;假设接口的方法是private的！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  private void say();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;private的访问控制是只在类内部可见！这里就相当于说:&quot;所有遵循这个协议(实现此接口)的类，必然有一个方法，至于方法是什么，呵呵，你们猜！&quot;。这是作死的节奏！&lt;/p&gt;
+
+&lt;p&gt;假设接口的方法是protected的！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  protected void say();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;protected的访问控制是只在类或子类内部可见！这里就相当于说:&quot;所有遵循这个协议(实现此接口)的类，必然有一个方法，至于方法是什么，你来当我儿子啊，我再告诉你！&quot;。这个就更是作死了～&lt;/p&gt;
+
+&lt;p&gt;最后，假设接口的方法是默认修饰符！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+   //假设这里不会自动加public修饰符
+   void say();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;默认访问控制是只在相同的包下的类可见！这里就相当于说:&quot;所有遵循这个协议(实现此接口)的类，必然有一个方法，至于方法是什么，你到我包间来，我再告诉你！&quot;。这个好像还能接受！但是你进去你看，全是人，感觉像传销啊！原因是所有需要和此协议交互的类都必须要在协议所在的包内，导致此包过大，且杂乱！&lt;/p&gt;
+
+&lt;p&gt;最后看public修饰:&lt;/p&gt;
+
+&lt;p&gt;public访问控制是任何的类都可以访问！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;不像private,不告诉你方法是什么&lt;/li&gt;
+&lt;li&gt;不像protected，需要继承才告诉你&lt;/li&gt;
+&lt;li&gt;不像默认访问控制符，需要在相同的包下才告诉你&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;综上所述，接口方法设为public为最合适选择!&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;去年担任了公司Java培训班的培训讲师！由于时间关系，课堂上只是讲了How，而很少涉及到Why!&lt;/p&gt;
+
+&lt;p&gt;故计划编写此&quot;刨根问底&quot;系列文章，主要解释Java中的Why!&lt;/p&gt;
+
+&lt;p&gt;此为该系列文章的第一篇，为什么Java接口中的方法默认是public的？&lt;/p&gt;
+
+&lt;h1&gt;解释&lt;/h1&gt;
+
+&lt;p&gt;首先我们来看下接口的定义，在《Thinking in Java》中，对接口做了如下定义:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;example&quot;&gt;An interface says, &quot;All classes that implement this particular interface will look like this.&quot; Thus, any code that uses a particular interface knows what methods might be called for that interface, and that’s all. So the interface is used to establish a &quot;protocol&quot; between classes. (Some object-oriented programming languages have a keyword called protocol to do the
+same thing.)
+
+接口意味着：&quot;所有实现了这个特定接口的类都应该可以被当作这个接口来看待&quot;。也就是说，所有使用此特定接口的代码都应该知道该接口有哪些方法可以被调用，而且仅此而已！所以接口被用来定义接口之间的协议！(有些语言使用protocol这个关键字来做Java中interface关键字所要做的事情，例如:Clojure)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;简单说来，接口就是用来定义一个&quot;协议&quot;的！这么看来，protocol这个关键字应该比interface这个关键字更加的准确！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//Java接口定义
+public interface Person{
+  void say();
+}
+
+//这样会不会更合理？
+public protocol Person{
+  void say();
+}
+
+//Clojure类似代码
+(defprotocol Person
+  (say [this]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的接口就定义了一个&quot;协议&quot;,这个协议就是:&quot;所有遵循这个协议(实现此接口)的类，必然有一个叫做say()的方法&quot;。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class PersonA implements Person{
+  public void say(){
+    System.out.println(&quot;Hello PersonA&quot;);
+  }
+}
+
+public class PersonB implements Person{
+  public void say(){
+    System.out.println(&quot;Hello PersonB&quot;);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里PersonA遵循了这个协议，PersonB也遵循了这个协议。那在我们使用的时候，我们完全就没必要关心是PersonA还是PersonB，我们只关心它是不是一个Person就可以了！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Test{
+  public static void main(String[] args){
+    //不管是PersonA还是PersonB，肯定是个Person
+    Person p = new PersonA(); //或 new PersonB();
+    //不管是PersonA还是PersonB，肯定有say()方法
+    p.say();
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们知道Java里面有四种访问权限控制符！private,protected,package(default),public!&lt;/p&gt;
+
+&lt;p&gt;那为什么接口的方法默认是public的呢？我们使用假设法来一个个的看！&lt;/p&gt;
+
+&lt;p&gt;假设接口的方法是private的！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  private void say();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;private的访问控制是只在类内部可见！这里就相当于说:&quot;所有遵循这个协议(实现此接口)的类，必然有一个方法，至于方法是什么，呵呵，你们猜！&quot;。这是作死的节奏！&lt;/p&gt;
+
+&lt;p&gt;假设接口的方法是protected的！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+  protected void say();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;protected的访问控制是只在类或子类内部可见！这里就相当于说:&quot;所有遵循这个协议(实现此接口)的类，必然有一个方法，至于方法是什么，你来当我儿子啊，我再告诉你！&quot;。这个就更是作死了～&lt;/p&gt;
+
+&lt;p&gt;最后，假设接口的方法是默认修饰符！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public interface Person{
+   //假设这里不会自动加public修饰符
+   void say();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;默认访问控制是只在相同的包下的类可见！这里就相当于说:&quot;所有遵循这个协议(实现此接口)的类，必然有一个方法，至于方法是什么，你到我包间来，我再告诉你！&quot;。这个好像还能接受！但是你进去你看，全是人，感觉像传销啊！原因是所有需要和此协议交互的类都必须要在协议所在的包内，导致此包过大，且杂乱！&lt;/p&gt;
+
+&lt;p&gt;最后看public修饰:&lt;/p&gt;
+
+&lt;p&gt;public访问控制是任何的类都可以访问！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;不像private,不告诉你方法是什么&lt;/li&gt;
+&lt;li&gt;不像protected，需要继承才告诉你&lt;/li&gt;
+&lt;li&gt;不像默认访问控制符，需要在相同的包下才告诉你&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;综上所述，接口方法设为public为最合适选择!&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>语言和并发-01启动线程</title>
+        <link href="http://ivanpig.github.io/2015/03/01/start.html"/>
+        <updated>2015-03-01T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/03/01/start</id>
+        <content type="html">&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;本系列文章意在比较Java与Clojure在线程实现上的区别！&lt;/p&gt;
+
+&lt;p&gt;Java的线程主要基于锁机制，而Clojure主要模拟了数据库事务操作，所谓的STM(软事务模型)。主要从代码层面给出两者的区别，孰优孰劣请自行判断！&lt;/p&gt;
+
+&lt;h1&gt;启动线程&lt;/h1&gt;
+
+&lt;h2&gt;Java代码&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Java实例中，两个线程类A和B，分别通过实现Runnable接口和继承Thread类来实现&lt;/li&gt;
+&lt;li&gt;两各类启动线程的方式有差异，详见代码&lt;/li&gt;
+&lt;li&gt;JDK5中提供了线程启动类Executors来执行&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package concurrent;
+
+import java.util.concurrent.*;
+
+/**
+ * Created by ivan on 15-2-22.
+ * Java启动线程
+ */
+public class Start {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        //实现Runnable接口，需要通过一个Thread实例来启动线程
+        new Thread(new A()).start();
+        //继承Thread类，直接通过自身来启动线程
+        new B().start();
+
+        //JDK1.5开始，可以通过Executor来执行线程.效果和上面没有区别
+        ExecutorService e = Executors.newCachedThreadPool();
+        e.execute(new A());
+        e.execute(new B());
+        //Callable需要submit,返回Future
+        Future&amp;lt;String&amp;gt; f = e.submit(new C());
+        //get方法是个阻塞方法
+        System.out.println(&quot;Future f = &quot; + f.get());
+        e.shutdown();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 线程类可以实现Runnable接口
+ */
+class A implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 线程类也可以继承Thread类
+ */
+class B extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 如果想线程返回结果，则实现Callable接口
+ */
+class C implements Callable&amp;lt;String&amp;gt; {
+
+    @Override
+    public String call() throws Exception {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return &quot;End&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Clojure代码&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Clojure可以直接对函数进行多线程执行，因为它没有类的概念&lt;/li&gt;
+&lt;li&gt;Clojure可以直接通过Java的Thread类来启动多线程&lt;/li&gt;
+&lt;li&gt;也可以通过future来执行多线程&lt;/li&gt;
+&lt;li&gt;future可以返回值，可对其进行解引用，获得返回值，如果线程未执行完，则阻塞。&lt;/li&gt;
+&lt;li&gt;future实际上就是Java中Future实例，可以直接调用future的get方法获取返回值，效果和解引用相同&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns concurrent.start)
+
+;Clojure没有类的概念，直接给出函数
+(defn f []
+  (dotimes [i 9]
+    (println  &quot; | i = &quot; i)
+    (Thread/sleep 300))
+  :End)
+
+;可以通过Java的Thread来执行
+(.start (Thread. f))
+
+;Clojure提供了future宏，可以方便的在另一个线程内执行
+(def fu (future  (f)))
+
+;主线程结束
+(println &quot;End&quot;)
+
+;对future可以解引用，获取计算结果，如果解引用时，future没执行完，会阻塞
+(println &quot;fu result = &quot; @fu)
+
+;fu实际上就是Java中的Future,所以可以使用Future的get方法，效果和解引用相同
+(println &quot;Future.get = &quot; (.get fu))
+
+;调用此方法结束所有线程
+(shutdown-agents)
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;本系列文章意在比较Java与Clojure在线程实现上的区别！&lt;/p&gt;
+
+&lt;p&gt;Java的线程主要基于锁机制，而Clojure主要模拟了数据库事务操作，所谓的STM(软事务模型)。主要从代码层面给出两者的区别，孰优孰劣请自行判断！&lt;/p&gt;
+
+&lt;h1&gt;启动线程&lt;/h1&gt;
+
+&lt;h2&gt;Java代码&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Java实例中，两个线程类A和B，分别通过实现Runnable接口和继承Thread类来实现&lt;/li&gt;
+&lt;li&gt;两各类启动线程的方式有差异，详见代码&lt;/li&gt;
+&lt;li&gt;JDK5中提供了线程启动类Executors来执行&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package concurrent;
+
+import java.util.concurrent.*;
+
+/**
+ * Created by ivan on 15-2-22.
+ * Java启动线程
+ */
+public class Start {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        //实现Runnable接口，需要通过一个Thread实例来启动线程
+        new Thread(new A()).start();
+        //继承Thread类，直接通过自身来启动线程
+        new B().start();
+
+        //JDK1.5开始，可以通过Executor来执行线程.效果和上面没有区别
+        ExecutorService e = Executors.newCachedThreadPool();
+        e.execute(new A());
+        e.execute(new B());
+        //Callable需要submit,返回Future
+        Future&amp;lt;String&amp;gt; f = e.submit(new C());
+        //get方法是个阻塞方法
+        System.out.println(&quot;Future f = &quot; + f.get());
+        e.shutdown();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 线程类可以实现Runnable接口
+ */
+class A implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 线程类也可以继承Thread类
+ */
+class B extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;/**
+ * 如果想线程返回结果，则实现Callable接口
+ */
+class C implements Callable&amp;lt;String&amp;gt; {
+
+    @Override
+    public String call() throws Exception {
+        for (int i = 0; i &amp;lt; 9; i++) {
+            System.out.println(&quot;ThreadID:&quot; + Thread.currentThread().getId() + &quot; | i = &quot; + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return &quot;End&quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Clojure代码&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Clojure可以直接对函数进行多线程执行，因为它没有类的概念&lt;/li&gt;
+&lt;li&gt;Clojure可以直接通过Java的Thread类来启动多线程&lt;/li&gt;
+&lt;li&gt;也可以通过future来执行多线程&lt;/li&gt;
+&lt;li&gt;future可以返回值，可对其进行解引用，获得返回值，如果线程未执行完，则阻塞。&lt;/li&gt;
+&lt;li&gt;future实际上就是Java中Future实例，可以直接调用future的get方法获取返回值，效果和解引用相同&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns concurrent.start)
+
+;Clojure没有类的概念，直接给出函数
+(defn f []
+  (dotimes [i 9]
+    (println  &quot; | i = &quot; i)
+    (Thread/sleep 300))
+  :End)
+
+;可以通过Java的Thread来执行
+(.start (Thread. f))
+
+;Clojure提供了future宏，可以方便的在另一个线程内执行
+(def fu (future  (f)))
+
+;主线程结束
+(println &quot;End&quot;)
+
+;对future可以解引用，获取计算结果，如果解引用时，future没执行完，会阻塞
+(println &quot;fu result = &quot; @fu)
+
+;fu实际上就是Java中的Future,所以可以使用Future的get方法，效果和解引用相同
+(println &quot;Future.get = &quot; (.get fu))
+
+;调用此方法结束所有线程
+(shutdown-agents)
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
     
     <entry>
         <title>语言与模式-23迭代器模式</title>

@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://ivanpig.github.io/page/10/index.html">
         <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
-        <title>Less is more</title>
+        <title>Just Perfect</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
         <!--[if lte IE 8]>
 <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
-                    <h2 id="_tagline" class="brand-tagline">Thinking in Ivan</h2>
+                    <h2 id="_tagline" class="brand-tagline">三刀流</h2>
 <!--                     <br class="newline"/><br class="newline"/> -->
 
                     <nav class="nav">
@@ -106,6 +106,417 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/03/12/scala_exercises_10.html">快学Scala习题解答—第十章 特质</a></h2>
+
+        <p class="post-meta">By 03月12日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>特质</h1>
+
+<h2>java.awt.Rectangle类有两个很有用的方法translate和grow,但可惜的是像java.awt.geom.Ellipse2D这样的类没有。在Scala中，你可以解决掉这个问题。定义一个RenctangleLike特质,加入具体的translate和grow方法。提供任何你需要用来实现的抽象方法,以便你可以像如下代码这样混入该特质:</h2>
+
+<pre><code class="{.scala}">val egg = new java.awt.geom.Ellipse2D.Double(5,10,20,30) with RectangleLike
+egg.translate(10,-10)
+egg.grow(10,20)
+</code></pre>
+
+<p>使用自身类型使得trait可以操作x,y</p>
+
+<pre><code class="{.scala}">import java.awt.geom.Ellipse2D
+
+
+trait RectangleLike{
+  this:Ellipse2D.Double=&gt;
+  def translate(x:Double,y:Double){
+    this.x = x
+    this.y = y
+  }
+  def grow(x:Double,y:Double){
+    this.x += x
+    this.y += y
+  }
+}
+
+object Test extends App{
+  val egg = new Ellipse2D.Double(5,10,20,30) with RectangleLike
+  println("x = " + egg.getX + " y = " + egg.getY)
+  egg.translate(10,-10)
+  println("x = " + egg.getX + " y = " + egg.getY)
+  egg.grow(10,20)
+  println("x = " + egg.getX + " y = " + egg.getY)
+}
+</code></pre>
+
+
+
+
+    <a href="/2013/03/12/scala_exercises_10.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/11/scala_exercises_09.html">快学Scala习题解答—第九章 文件和正则表达式</a></h2>
+
+        <p class="post-meta">By 03月11日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>文件和正则表达式</h1>
+
+<h2>编写一小段Scala代码，将某个文件中的行倒转顺序(将最后一行作为第一行,依此类推)</h2>
+
+<pre><code class="{.scala}">import io.Source
+import java.io.PrintWriter
+
+val path = "test.txt"
+
+val reader = Source.fromFile(path).getLines()
+
+val result = reader.toArray.reverse
+
+val pw = new PrintWriter(path)
+
+result.foreach(line =&gt; pw.write(line + "\n"))
+
+pw.close()
+</code></pre>
+
+<h2>编写Scala程序,从一个带有制表符的文件读取内容,将每个制表符替换成一组空格,使得制表符隔开的n列仍然保持纵向对齐,并将结果写入同一个文件</h2>
+
+<pre><code class="{.scala}">import io.Source
+import java.io.PrintWriter
+
+val path = "test.txt"
+
+val reader = Source.fromFile(path).getLines()
+
+val result = for ( t &lt;- reader) yield t.replaceAll("\\t","    ")
+
+val pw = new PrintWriter(path)
+
+result.foreach(line =&gt; pw.write(line + "\n"))
+
+pw.close()
+</code></pre>
+
+
+
+
+    <a href="/2013/03/11/scala_exercises_09.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/10/scala_exercises_08.html">快学Scala习题解答—第八章 继承</a></h2>
+
+        <p class="post-meta">By 03月10日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>继承</h1>
+
+<h2>扩展如下的BankAccount类，新类CheckingAccount对每次存款和取款都收取1美元的手续费</h2>
+
+<pre><code class="{.scala}">class BankAccount(initialBalance:Double){
+    private var balance = initialBalance
+    def deposit(amount:Double) = { balance += amount; balance}
+    def withdraw(amount:Double) = {balance -= amount; balance}
+}
+</code></pre>
+
+<p>继承语法的使用。代码如下</p>
+
+<pre><code class="{.scala}">class CheckingAccount(initialBalance:Double) extends BankAccount(initialBalance){
+  override def deposit(amount: Double): Double = super.deposit(amount - 1)
+
+  override def withdraw(amount: Double): Double = super.withdraw(amount + 1)
+}
+</code></pre>
+
+<h2>扩展前一个练习的BankAccount类，新类SavingsAccount每个月都有利息产生(earnMonthlyInterest方法被调用)，并且有每月三次免手续费的存款或取款。在earnMonthlyInterest方法中重置交易计数。</h2>
+
+<pre><code class="{.scala}">class SavingsAccount(initialBalance:Double) extends BankAccount(initialBalance){
+  private var num:Int = _
+
+  def earnMonthlyInterest()={
+    num = 3
+    super.deposit(1)
+  }
+
+  override def deposit(amount: Double): Double = {
+    num -= 1
+    if(num &lt; 0) super.deposit(amount - 1) else super.deposit(amount)
+  }
+
+  override def withdraw(amount: Double): Double = {
+    num -= 1
+    if (num &lt; 0) super.withdraw(amount + 1) else super.withdraw(amount)
+  }
+}
+</code></pre>
+
+
+
+
+    <a href="/2013/03/10/scala_exercises_08.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/09/scala_exercises_07.html">快学Scala习题解答—第七章 包和引入</a></h2>
+
+        <p class="post-meta">By 03月09日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>包和引入</h1>
+
+<h2>编写示例程序，展示为什么</h2>
+
+<pre><code class="{.scala}">package com.horstmann.impatient
+</code></pre>
+
+<p>不同于</p>
+
+<pre><code class="{.scala}">package com
+package horstmann
+package impatient
+</code></pre>
+
+<p>分别使用package的效果如下</p>
+
+<pre><code class="{.scala}">package com {
+  class T1() {}
+
+  package horstmann {
+    class T2(t: T1) {}
+
+    package impatient {
+      class T3(t1: T1, t2: T2) {}
+    }
+  }
+}
+</code></pre>
+
+<p>子包里的类可以使用父包里的类。但是第一种方式不可以</p>
+
+<pre><code class="{.scala}">package com.horstmann.impatient{
+  class T4(t1:T1,t3:T3)      //无法找到T1
+}
+</code></pre>
+
+
+
+
+    <a href="/2013/03/09/scala_exercises_07.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/08/scala_exercises_06.html">快学Scala习题解答—第六章 对象</a></h2>
+
+        <p class="post-meta">By 03月08日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>对象</h1>
+
+<h2>编写一个Conversions对象，加入inchesToCentimeters,gallonsToLiters和milesToKilometers方法</h2>
+
+<pre><code class="{.scala}">object Conversions{
+    def inchesToCentimeters(){}
+    def gallonsToLiters(){}
+    def milesToKilometers(){}
+}
+</code></pre>
+
+<h2>前一个练习不是很面向对象。提供一个通用的超类UnitConversion并定义扩展该超类的InchesToCentimeters,GallonsToLiters和MilesToKilometers对象</h2>
+
+<pre><code class="{.scala}">abstract class UnitConversion{
+
+  def inchesToCentimeters(){}
+  def gallonsToLiters(){}
+  def milesToKilometers(){}
+
+}
+
+object InchesToCentimeters extends UnitConversion{
+  override def inchesToCentimeters() {}
+}
+
+object GallonsToLiters extends UnitConversion{
+  override def gallonsToLiters() {}
+}
+
+object MilesToKilometers extends UnitConversion{
+  override def milesToKilometers() {}
+}
+</code></pre>
+
+
+
+
+    <a href="/2013/03/08/scala_exercises_06.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/03/07/scala_exercises_05.html">快学Scala习题解答—第五章 类</a></h2>
 
         <p class="post-meta">By 03月07日  2013
@@ -122,7 +533,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -202,7 +613,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -267,244 +678,6 @@ println(map.mkString(","))
 </section>
 
 
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/05/scala_exercises_03.html">快学Scala习题解答—第三章 数组相关操作</a></h2>
-
-        <p class="post-meta">By 03月05日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>数组相关操作</h1>
-
-<h2>编写一段代码，将a设置为一个n个随机整数的数组，要求随机数介于0(包含)和n(不包含)之间</h2>
-
-<p>random和yield的使用</p>
-
-<pre><code class="{.scala}">import scala.math.random
-
-def randomArray(n:Int)={
-  for(i &lt;- 0 until n) yield (random * n).toInt
-}
-
-println(randomArray(10).mkString(","))
-</code></pre>
-
-<h2>编写一个循环，将整数数组中相邻的元素置换。例如,Array(1,2,3,4,5)经过置换后变为Array(2,1,4,3,5)</h2>
-
-<p>对数组方法的使用</p>
-
-<pre><code class="{.scala}">def reorderArray(arr:Array[Int]):Array[Int]={
-  val t = arr.toBuffer
-  for(i &lt;- 1 until (t.length,2);tmp = t(i);j &lt;- i - 1 until i){
-    t(i) = t(j)
-    t(j) = tmp
-  }
-  t.toArray
-}
-
-println(reorderArray(Array(1,2,3,4,5)).mkString(","))
-</code></pre>
-
-
-
-
-    <a href="/2013/03/05/scala_exercises_03.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/04/scala_exercises_02.html">快学Scala习题解答—第二章 控制结构和函数</a></h2>
-
-        <p class="post-meta">By 03月04日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>控制结构和函数</h1>
-
-<h2>一个数字如果为正数，则它的signum为1;如果是负数,则signum为-1;如果为0,则signum为0.编写一个函数来计算这个值</h2>
-
-<p>简单的逻辑判断</p>
-
-<pre><code class="{.scala}">def signum(num:Int){if(num&gt;0)print(1)else if(num&lt;0)print(-1)else print(0)}
-</code></pre>
-
-<p>Scala中已经有此方法了，刚才查找API的时候，应该能看到</p>
-
-<pre><code class="{.scala}">BigInt(10).signum
-</code></pre>
-
-<h2>一个空的快表达式{}的值是什么？类型是什么？</h2>
-
-<p>在REPL中就能看出来了</p>
-
-<pre><code class="{.example}">scala&gt; val t = {}
-t: Unit = ()
-</code></pre>
-
-<p>可以看出，它的值是()类型是Unit</p>
-
-<h2>指出在Scala中何种情况下赋值语句x=y=1是合法的。(提示：给x找个合适的类型定义)</h2>
-
-<p>题目已经给了明确的提示了。本章节中已经说过了，在scala中的赋值语句是Unit类型。所以只要x为Unit类型就可以了。</p>
-
-<pre><code class="{.example}">scala&gt; var y=4;
-y: Int = 4
-
-scala&gt; var x={}
-x: Unit = ()
-
-scala&gt; x=y=7
-x: Unit = ()
-</code></pre>
-
-<p>这也再次证明了{}是Unit类型</p>
-
-
-
-
-    <a href="/2013/03/04/scala_exercises_02.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/03/scala_exercises_01.html">快学Scala习题解答—第一章 基础</a></h2>
-
-        <p class="post-meta">By 03月03日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>基础</h1>
-
-<h2>在Scala REPL中键入3,然后按Tab键。有哪些方法可以被应用?</h2>
-
-<p>这个。。。。直接操作一遍就有结果了.此题不知是翻译的问题，还是原题的问题，在Scala
-REPL中需要按3. 然后按Tab才会提示。 直接按3加Tab是没有提示的。下面是结果</p>
-
-<pre><code class="{.example}">!=             ##             %              &amp;              *              +
--              /              &lt;              &lt;&lt;             &lt;=             ==
-&gt;              &gt;=             &gt;&gt;             &gt;&gt;&gt;            ^              asInstanceOf
-equals         getClass       hashCode       isInstanceOf   toByte         toChar
-toDouble       toFloat        toInt          toLong         toShort        toString
-unary_+        unary_-        unary_~        |
-</code></pre>
-
-<p>列出的方法并不全，需要查询全部方法还是需要到Scaladoc中的Int,Double,RichInt,RichDouble等类中去查看。</p>
-
-<h2>在Scala REPL中，计算3的平方根,然后再对该值求平方。现在，这个结果与3相差多少？(提示:res变量是你的朋友)</h2>
-
-<p>依次进行计算即可</p>
-
-<pre><code class="{.example}">scala&gt; scala.math.sqrt(3)
-warning: there were 1 deprecation warnings; re-run with -deprecation for details
-res5: Double = 1.7320508075688772
-
-scala&gt; res5*res5
-res6: Double = 2.9999999999999996
-
-scala&gt; 3 - res6
-res7: Double = 4.440892098500626E-16
-</code></pre>
-
-
-
-
-    <a href="/2013/03/03/scala_exercises_01.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
 <div class="pure-g pagination">
     
     
@@ -514,7 +687,7 @@ res7: Double = 4.440892098500626E-16
 
 
     
-    <span class=" pure-u-1-2 pagination-item"><p>Older →</p></span>
+    <a class=" pure-u-1-2 pagination-item" href="/page/11"><p>Older →</p></a>
     
 </div>
 

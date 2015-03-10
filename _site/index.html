@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://ivanpig.github.io/index.html">
         <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
-        <title>Less is more</title>
+        <title>Just Perfect</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
         <!--[if lte IE 8]>
 <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
-                    <h2 id="_tagline" class="brand-tagline">Thinking in Ivan</h2>
+                    <h2 id="_tagline" class="brand-tagline">三刀流</h2>
 <!--                     <br class="newline"/><br class="newline"/> -->
 
                     <nav class="nav">
@@ -106,6 +106,365 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/03/10/transactional.html">一图胜千言:事务管理</a></h2>
+
+        <p class="post-meta">By 03月10日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#xmind"><i class="fa fa-folder-open">xmind (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">xmind (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">transactional (1)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p><img src="/mind/transaction.png" alt="" /></p>
+
+<p><a href="/mind/transaction.xmind">xmind文件下载</a></p>
+
+
+
+    <a href="/2015/03/10/transactional.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/03/08/soft.html">传统软件OR互联网软件?</a></h2>
+
+        <p class="post-meta">By 03月08日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#work"><i class="fa fa-folder-open">work (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">work (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">software (1)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>人近而立之年，考虑以后的目标和发展。自身有4年的传统软件经验，3年多的互联网软件经验。</p>
+
+<p>就个人经历来看，传统软件和互联网软件区别并没有想象中大，只是关注点有些区别!</p>
+
+<h1>概念区分</h1>
+
+<p>一般来说传统软件指的就是针对甲方用户定制的软件，此类软件安装在甲方内部服务器，一般不会接到互联网上。</p>
+
+<p>互联网软件则是部署在互联网上供普通网民使用，给网民提供服务的软件。此类软件由开发方自主部署，维护，运营。</p>
+
+
+
+    <a href="/2015/03/08/soft.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/03/03/interface_field.html">刨根问底-02为什么Java接口中的成员变量被设计为必须是public static final的？</a></h2>
+
+        <p class="post-meta">By 03月03日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#why"><i class="fa fa-folder-open">why (2)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (2)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>概述</h1>
+
+<p>此为"刨根问底"系列文章的第二篇，接上篇，为什么Java接口中的成员变量被设计为必须是public static final的？</p>
+
+<h1>网络答案</h1>
+
+<p>在网络上搜索到了如下两篇还算靠谱的解答!</p>
+
+<p><a href="http://shaomeng95.iteye.com/blog/998820">网络解答1</a></p>
+
+<p><a href="http://www.xyzws.com/javafaq/why-do-we-have-only-public-static-final-variables-in-interfaces/129">网络解答2</a></p>
+
+<h1>解释</h1>
+
+<p>上篇我们用反证法来证明了接口方法设为public为最合适选择!</p>
+
+<p>这里我们依然可以使用反证法来解释!</p>
+
+<p>假设接口中的成员变量不是public static final的!</p>
+
+<p>先将属性设置为private的!</p>
+
+<pre><code class="java">public interface Person{
+  private int num;
+}
+</code></pre>
+
+<p>OK!private的属性，当然只能在接口内部使用了!但是在接口里面给谁使用呢？接口里的方法只有方法头可没方法体！所以设为private，那就永远都访问不到了！</p>
+
+<p>好，那我们改成protected!</p>
+
+<pre><code class="java">public interface Person{
+  protected int num;
+}
+</code></pre>
+
+<p>这样子类就能访问了！但是外部如何访问呢？方法是有的:</p>
+
+
+
+
+    <a href="/2015/03/03/interface_field.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/03/02/interface_method.html">刨根问底-01为什么Java接口中的方法默认是public？</a></h2>
+
+        <p class="post-meta">By 03月02日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#why"><i class="fa fa-folder-open">why (2)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (2)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>概述</h1>
+
+<p>去年担任了公司Java培训班的培训讲师！由于时间关系，课堂上只是讲了How，而很少涉及到Why!</p>
+
+<p>故计划编写此"刨根问底"系列文章，主要解释Java中的Why!</p>
+
+<p>此为该系列文章的第一篇，为什么Java接口中的方法默认是public的？</p>
+
+<h1>解释</h1>
+
+<p>首先我们来看下接口的定义，在《Thinking in Java》中，对接口做了如下定义:</p>
+
+<pre><code class="example">An interface says, "All classes that implement this particular interface will look like this." Thus, any code that uses a particular interface knows what methods might be called for that interface, and that’s all. So the interface is used to establish a "protocol" between classes. (Some object-oriented programming languages have a keyword called protocol to do the
+same thing.)
+
+接口意味着："所有实现了这个特定接口的类都应该可以被当作这个接口来看待"。也就是说，所有使用此特定接口的代码都应该知道该接口有哪些方法可以被调用，而且仅此而已！所以接口被用来定义接口之间的协议！(有些语言使用protocol这个关键字来做Java中interface关键字所要做的事情，例如:Clojure)
+</code></pre>
+
+<p>简单说来，接口就是用来定义一个"协议"的！这么看来，protocol这个关键字应该比interface这个关键字更加的准确！</p>
+
+<pre><code class="java">//Java接口定义
+public interface Person{
+  void say();
+}
+
+//这样会不会更合理？
+public protocol Person{
+  void say();
+}
+
+//Clojure类似代码
+(defprotocol Person
+  (say [this]))
+</code></pre>
+
+<p>上面的接口就定义了一个"协议",这个协议就是:"所有遵循这个协议(实现此接口)的类，必然有一个叫做say()的方法"。</p>
+
+
+
+
+    <a href="/2015/03/02/interface_method.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/03/01/start.html">语言和并发-01启动线程</a></h2>
+
+        <p class="post-meta">By 03月01日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#thread"><i class="fa fa-folder-open">thread (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">thread (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>概述</h1>
+
+<p>本系列文章意在比较Java与Clojure在线程实现上的区别！</p>
+
+<p>Java的线程主要基于锁机制，而Clojure主要模拟了数据库事务操作，所谓的STM(软事务模型)。主要从代码层面给出两者的区别，孰优孰劣请自行判断！</p>
+
+<h1>启动线程</h1>
+
+<h2>Java代码</h2>
+
+<ul>
+<li>Java实例中，两个线程类A和B，分别通过实现Runnable接口和继承Thread类来实现</li>
+<li>两各类启动线程的方式有差异，详见代码</li>
+<li>JDK5中提供了线程启动类Executors来执行</li>
+</ul>
+
+
+<pre><code class="java">package concurrent;
+
+import java.util.concurrent.*;
+
+/**
+ * Created by ivan on 15-2-22.
+ * Java启动线程
+ */
+public class Start {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        //实现Runnable接口，需要通过一个Thread实例来启动线程
+        new Thread(new A()).start();
+        //继承Thread类，直接通过自身来启动线程
+        new B().start();
+
+        //JDK1.5开始，可以通过Executor来执行线程.效果和上面没有区别
+        ExecutorService e = Executors.newCachedThreadPool();
+        e.execute(new A());
+        e.execute(new B());
+        //Callable需要submit,返回Future
+        Future&lt;String&gt; f = e.submit(new C());
+        //get方法是个阻塞方法
+        System.out.println("Future f = " + f.get());
+        e.shutdown();
+    }
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/03/01/start.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/02/25/iterator.html">语言与模式-23迭代器模式</a></h2>
 
         <p class="post-meta">By 02月25日  2015
@@ -124,9 +483,9 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
             
         
@@ -221,9 +580,9 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
             
         
@@ -277,449 +636,6 @@ public class VisitorA implements Visitor {
 
 
     <a href="/2015/02/24/visitor.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/23/interpreter.html">语言与模式-21解释器模式</a></h2>
-
-        <p class="post-meta">By 02月23日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>给定一个语言，定义它的文法的一种表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子。</p>
-
-<p><img src="/assets/designpattern/interpreter.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>当有一个语言需要解释执行, 并且你可将该语言中的句子表示为一个抽象语法树时，可使用解释器模式。而当存在以下情况时该模式效果最好：</li>
-<li>该文法简单对于复杂的文法, 文法的类层次变得庞大而无法管理。此时语法分析程序生成器这样的工具是更好的选择。它们无需构建抽象语法树即可解释表达式, 这样可以节省空间而且还可能节省时间。</li>
-<li>效率不是一个关键问题最高效的解释器通常不是通过直接解释语法分析树实现的, 而是首先将它们转换成另一种形式。例如，正则表达式通常被转换成状态机。但即使在这种情况下, 转换器仍可用解释器模式实现, 该模式仍是有用的。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<p>抽象表达式角色</p>
-
-<pre><code class="java">public abstract class Expression {
-    /**
-     * 以环境为准，本方法解释给定的任何一个表达式
-     */
-    public abstract boolean interpret(Context ctx);
-    /**
-     * 检验两个表达式在结构上是否相同
-     */
-    public abstract boolean equals(Object obj);
-    /**
-     * 返回表达式的hash code
-     */
-    public abstract int hashCode();
-    /**
-     * 将表达式转换成字符串
-     */
-    public abstract String toString();
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/23/interpreter.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/22/mediator.html">语言与模式-20中介者模式</a></h2>
-
-        <p class="post-meta">By 02月22日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
-
-<p><img src="/assets/designpattern/mediator.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>一组对象以定义良好但是复杂的方式进行通信。产生的相互依赖关系结构混乱且难以理解。</li>
-<li>一个对象引用其他很多对象并且直接与这些对象通信,导致难以复用该对象。</li>
-<li>想定制一个分布在多个类中的行为，而又不想生成太多的子类。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<pre><code class="java">//抽象同事类
-public abstract class Person {
-    // 维持一个抽象中介者的引用
-    protected Mediator mediator;
-
-    protected String name;
-
-    public Person(String name, Mediator mediator){
-        this.mediator = mediator;
-        this.name = name;
-    }
-
-    /**
-     * 设置中介者对象
-     * @param mediator
-     */
-    public void setMediator(Mediator mediator){
-        this.mediator = mediator;
-    }
-
-    /**
-     * 向中介 发送消息
-     */
-    protected abstract void sendMessage(String msg);
-
-    /**
-     * 从中介 获取消息
-     */
-    protected abstract void getMessage(String msg);
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/22/mediator.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/21/strategy.html">语言与模式-19策略模式</a></h2>
-
-        <p class="post-meta">By 02月21日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。</p>
-
-<p><img src="/assets/designpattern/strategy.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>许多相关的类仅仅是行为有异。“策略”提供了一种用多个行为中的一个行为来配置一个类的方法。</li>
-<li>需要使用一个算法的不同变体。例如，你可能会定义一些反映不同的空间/时间权衡的算法。当这些变体实现为一个算法的类层次时，可以使用策略模式。</li>
-<li>算法使用客户不应该知道的数据。可使用策略模式以避免暴露复杂的、与算法相关的数据结构。</li>
-<li>一个类定义了多种行为, 并且这些行为在这个类的操作中以多个条件语句的形式出现。将相关的条件分支移入它们各自的Strategy类中以代替这些条件语句。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<pre><code class="java">public class Context {
-    //持有一个具体策略的对象
-    private Strategy strategy;
-    /**
-     * 构造函数，传入一个具体策略对象
-     * @param strategy    具体策略对象
-     */
-    public Context(Strategy strategy){
-        this.strategy = strategy;
-    }
-    /**
-     * 策略方法
-     */
-    public void contextInterface(){
-        strategy.strategyInterface();
-    }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/21/strategy.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/20/state.html">语言与模式-18状态模式</a></h2>
-
-        <p class="post-meta">By 02月20日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。</p>
-
-<p><img src="/assets/designpattern/state.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。</li>
-<li>一个操作中含有庞大的多分支的条件语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常, 有多个操作包含这一相同的条件结构。State模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<pre><code class="java">public class Order{
-     private State unPayState;
-     private State payedState;
-     private State sendState;
-     private State doneState;    //四种状态，四种类,对应的get,set方法省略
-
-     private State state = unPayState;     //当前状态
-
-     public Order(){
-        unPayState = new UnPayState(this);
-        payedState = new PayedState(this);            //传入Order对象，为了修改Order的状态
-        ...
-     }
-
-     public void pay(){
-          state.pay();
-     }
-
-     public void send(){
-          state.send();
-     }
-
-     ....
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/20/state.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/19/command.html">语言与模式-17命令模式</a></h2>
-
-        <p class="post-meta">By 02月19日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (38)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可取消的操作</p>
-
-<p><img src="/assets/designpattern/command.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>像上面讨论的MenuItem对象那样，抽象出待执行的动作以参数化某对象。你可用过程语言中的回调（callback）函数表达这种参数化机制。所谓回调函数是指函数先在某处注册，而它将在稍后某个需要的时候被调用。Command模式是回调机制的一个面向对象的替代品。</li>
-<li>在不同的时刻指定、排列和执行请求。一个Command对象可以有一个与初始请求无关的生存期。如果一个请求的接收者可用一种与地址空间无关的方式表达，那么就可将负责该请求的命令对象传送给另一个不同的进程并在那儿实现该请求。</li>
-<li>支持取消操作。Command的Execute操作可在实施操作前将状态存储起来，在取消操作时这个状态用来消除该操作的影响。Command接口必须添加一个Execute操作，该操作取消上一次Execute调用的效果。执行的命令被存储在一个历史列表中。可通过向后和向前遍历这一列表并分别调用Unexecute和Execute来实现重数不限的“取消”和“重做”。</li>
-<li>支持修改日志，这样当系统崩溃时，这些修改可以被重做一遍。在Command接口中添加装载操作和存储操作，可以用来保持变动的一个一致的修改日志。从崩溃中恢复的过程包括从磁盘中重新读入记录下来的命令并用Execute操作重新执行它们。</li>
-<li>用构建在原语操作上的高层操作构造一个系统。这样一种结构在支持事务（Transaction）的信息系统中很常见。一个事务封装了对数据的一组变动。Command模式提供了对事务进行建模的方法。Command有一个公共的接口，使得你可以用同一种方式调用所有的事务。同时使用该模式也易于添加新事务以扩展系统。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<p>接收者角色类</p>
-
-<pre><code class="java">public class Receiver {
-    /**
-     * 真正执行命令相应的操作
-     */
-    public void action(){
-        System.out.println("执行操作");
-    }
-}
-</code></pre>
-
-<p>抽象命令角色类</p>
-
-<pre><code class="java">public interface Command {
-    /**
-     * 执行方法
-     */
-    void execute();
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/19/command.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

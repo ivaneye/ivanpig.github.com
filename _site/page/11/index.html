@@ -1,0 +1,379 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content=""/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/page/11/index.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>Just Perfect</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">三刀流</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+							<div id="qrcode">
+							<img src="/img/qrcode.jpg" width="170"/>
+							</div>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/05/scala_exercises_03.html">快学Scala习题解答—第三章 数组相关操作</a></h2>
+
+        <p class="post-meta">By 03月05日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>数组相关操作</h1>
+
+<h2>编写一段代码，将a设置为一个n个随机整数的数组，要求随机数介于0(包含)和n(不包含)之间</h2>
+
+<p>random和yield的使用</p>
+
+<pre><code class="{.scala}">import scala.math.random
+
+def randomArray(n:Int)={
+  for(i &lt;- 0 until n) yield (random * n).toInt
+}
+
+println(randomArray(10).mkString(","))
+</code></pre>
+
+<h2>编写一个循环，将整数数组中相邻的元素置换。例如,Array(1,2,3,4,5)经过置换后变为Array(2,1,4,3,5)</h2>
+
+<p>对数组方法的使用</p>
+
+<pre><code class="{.scala}">def reorderArray(arr:Array[Int]):Array[Int]={
+  val t = arr.toBuffer
+  for(i &lt;- 1 until (t.length,2);tmp = t(i);j &lt;- i - 1 until i){
+    t(i) = t(j)
+    t(j) = tmp
+  }
+  t.toArray
+}
+
+println(reorderArray(Array(1,2,3,4,5)).mkString(","))
+</code></pre>
+
+
+
+
+    <a href="/2013/03/05/scala_exercises_03.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/04/scala_exercises_02.html">快学Scala习题解答—第二章 控制结构和函数</a></h2>
+
+        <p class="post-meta">By 03月04日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>控制结构和函数</h1>
+
+<h2>一个数字如果为正数，则它的signum为1;如果是负数,则signum为-1;如果为0,则signum为0.编写一个函数来计算这个值</h2>
+
+<p>简单的逻辑判断</p>
+
+<pre><code class="{.scala}">def signum(num:Int){if(num&gt;0)print(1)else if(num&lt;0)print(-1)else print(0)}
+</code></pre>
+
+<p>Scala中已经有此方法了，刚才查找API的时候，应该能看到</p>
+
+<pre><code class="{.scala}">BigInt(10).signum
+</code></pre>
+
+<h2>一个空的快表达式{}的值是什么？类型是什么？</h2>
+
+<p>在REPL中就能看出来了</p>
+
+<pre><code class="{.example}">scala&gt; val t = {}
+t: Unit = ()
+</code></pre>
+
+<p>可以看出，它的值是()类型是Unit</p>
+
+<h2>指出在Scala中何种情况下赋值语句x=y=1是合法的。(提示：给x找个合适的类型定义)</h2>
+
+<p>题目已经给了明确的提示了。本章节中已经说过了，在scala中的赋值语句是Unit类型。所以只要x为Unit类型就可以了。</p>
+
+<pre><code class="{.example}">scala&gt; var y=4;
+y: Int = 4
+
+scala&gt; var x={}
+x: Unit = ()
+
+scala&gt; x=y=7
+x: Unit = ()
+</code></pre>
+
+<p>这也再次证明了{}是Unit类型</p>
+
+
+
+
+    <a href="/2013/03/04/scala_exercises_02.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/03/scala_exercises_01.html">快学Scala习题解答—第一章 基础</a></h2>
+
+        <p class="post-meta">By 03月03日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>基础</h1>
+
+<h2>在Scala REPL中键入3,然后按Tab键。有哪些方法可以被应用?</h2>
+
+<p>这个。。。。直接操作一遍就有结果了.此题不知是翻译的问题，还是原题的问题，在Scala
+REPL中需要按3. 然后按Tab才会提示。 直接按3加Tab是没有提示的。下面是结果</p>
+
+<pre><code class="{.example}">!=             ##             %              &amp;              *              +
+-              /              &lt;              &lt;&lt;             &lt;=             ==
+&gt;              &gt;=             &gt;&gt;             &gt;&gt;&gt;            ^              asInstanceOf
+equals         getClass       hashCode       isInstanceOf   toByte         toChar
+toDouble       toFloat        toInt          toLong         toShort        toString
+unary_+        unary_-        unary_~        |
+</code></pre>
+
+<p>列出的方法并不全，需要查询全部方法还是需要到Scaladoc中的Int,Double,RichInt,RichDouble等类中去查看。</p>
+
+<h2>在Scala REPL中，计算3的平方根,然后再对该值求平方。现在，这个结果与3相差多少？(提示:res变量是你的朋友)</h2>
+
+<p>依次进行计算即可</p>
+
+<pre><code class="{.example}">scala&gt; scala.math.sqrt(3)
+warning: there were 1 deprecation warnings; re-run with -deprecation for details
+res5: Double = 1.7320508075688772
+
+scala&gt; res5*res5
+res6: Double = 2.9999999999999996
+
+scala&gt; 3 - res6
+res7: Double = 4.440892098500626E-16
+</code></pre>
+
+
+
+
+    <a href="/2013/03/03/scala_exercises_01.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+<div class="pure-g pagination">
+    
+    
+    <a class=" pure-u-1-2 pagination-item" href="/page/10"><p>← Newer</p></a>
+    
+    
+
+
+    
+    <span class=" pure-u-1-2 pagination-item"><p>Older →</p></span>
+    
+</div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/about.html">About</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

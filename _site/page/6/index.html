@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://ivanpig.github.io/page/6/index.html">
         <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
-        <title>Less is more</title>
+        <title>Just Perfect</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
         <!--[if lte IE 8]>
 <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
-                    <h2 id="_tagline" class="brand-tagline">Thinking in Ivan</h2>
+                    <h2 id="_tagline" class="brand-tagline">三刀流</h2>
 <!--                     <br class="newline"/><br class="newline"/> -->
 
                     <nav class="nav">
@@ -106,6 +106,471 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2014/02/08/file.html">Clojure教程-文件处理</a></h2>
+
+        <p class="post-meta">By 02月08日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>本文翻译自<a href="http://clojure-doc.org/articles/cookbooks/files_and_directories.html">Working with Files and Directories in Clojure</a></p>
+
+<p>本文介绍使用Clojure的clojure.java.io命名空间下的函数以及JDK相关方法来操作文件和目录.</p>
+
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
+
+<h1>准备</h1>
+
+<p>请注意,在下面的例子中,"io"是clojure.java.io命名空间的简写引用.请确保你的ns宏包含如下代码:</p>
+
+<pre><code class="{.clojure}">(:require [clojure.java.io :as io])
+</code></pre>
+
+<p>或者在REPL中加载了:</p>
+
+<pre><code class="{.clojure}">(require '[clojure.java.io :as io])
+</code></pre>
+
+<h1>方法</h1>
+
+<h2>将文件读到字符串中</h2>
+
+<pre><code class="{.clojure}">(def a-long-string (slurp "foo.txt"))
+</code></pre>
+
+<p>注意,你可以给slurp函数传递url.请看<a href="http://clojuredocs.org/clojure_core/clojure.core/slurp">slurp文档</a></p>
+
+<h2>一行一行的读取文件</h2>
+
+<p>假设你想针对文件的每行内容调用my-func函数,并返回结果序列:</p>
+
+<pre><code class="{.clojure}">(with-open [rdr (io/reader "foo.txt")]
+  (doall (map my-func (line-seq rdr))))
+</code></pre>
+
+<p>doall函数是必须的,因为map函数返回的是个lazy序列.line-seq返回的每行内容没有是去除了末尾的回车标记的,且空行将返回空字符串.</p>
+
+
+
+
+    <a href="/2014/02/08/file.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/02/05/string.html">Clojure教程-字符串处理</a></h2>
+
+        <p class="post-meta">By 02月05日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>本文翻译自<a href="http://clojure-doc.org/articles/cookbooks/strings.html">Strings</a></p>
+
+<p>本文内容包括使用Clojure内建的函数和标准库来操作字符串,以及JDK中的相关操作.</p>
+
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets).</p>
+
+<p>源代码在<a href="https://github.com/clojuredocs/guides">Github</a>上.</p>
+
+<h1>概述</h1>
+
+<ul>
+<li>Clojure中的字符串就是Java字符串.你可以使用Java中的相应方法来对其进行处理.</li>
+<li>Java字符串是不可变的,所以能很方便的在Clojure中使用</li>
+<li>你不能给Java字符串添加元数据</li>
+<li>Clojure提供一些方便的符号</li>
+</ul>
+
+
+<pre><code class="{.example}">    "foo"    java.lang.String
+    #"\d"    java.util.regex.Pattern (正则表达式,匹配一个数字)
+    \f       java.lang.Character (表示'f')
+</code></pre>
+
+<ul>
+<li><strong>注意</strong>:
+人类的大脑和计算机之间还是有很大的差异的.所以Java的字符串(UTF-16编码)并不能像人们所认为的那样很好的和字符一一对应.比如说,一个Unicode的位和我们所认为的字符的一位是无法对应的(像韩国韩语尊宝,这些词由多个字符组成.)同样的,一个Unicode位可能是由2个UTF-16字符组成.</li>
+</ul>
+
+
+<h1>预备知识</h1>
+
+<p>一些例子用到了clojure.string,clojure.edn和clojure.pprint.我们假设你的ns宏里面已经包含了如下内容:</p>
+
+<pre><code class="{.clojure}">(:require [clojure.string :as str]
+          [clojure.edn :as edn]
+          [clojure.pprint :as pp])
+</code></pre>
+
+<p>或者在REPL里面,你需要载入:</p>
+
+<pre><code class="{.clojure}">(require '[clojure.string :as str])
+(require '[clojure.edn :as edn])
+(require '[clojure.pprint :as pp])
+</code></pre>
+
+
+
+
+    <a href="/2014/02/05/string.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/02/02/basic.html">Clojure教程-基本语法</a></h2>
+
+        <p class="post-meta">By 02月02日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>简介</h1>
+
+<p>学习一门语言最好的方法就是去使用它。我们就从一个小例子来学习Clojure语法.</p>
+
+<h1>核心语法</h1>
+
+<p>首先先来看一下Clojure的核心语法。</p>
+
+<p>Clojure的使用的是Lisp语法,又叫S表达式。核心语法非常的简单。但是对于熟悉c系语法(c,c++,java)的朋友来说，第一次接触会非常的不习惯。</p>
+
+<ul>
+<li>所有代码以"("开始,")"结束。即所有的代码都被()包裹</li>
+<li>"("后的第一个数据被当作函数或者宏来调用</li>
+<li>接着的数据被当作参数传递</li>
+<li>如果想原样返回数据，在"("前面添加"'"。此写法是(quote (...))的简写</li>
+</ul>
+
+
+<p>以前面的hello world程序为例。</p>
+
+<pre><code class="{.clojure}">(println "Hello World")
+</code></pre>
+
+<p>它以"("开始，后面跟的是函数println，接着空格跟的是参数"HelloWorld"，最后")"结尾。</p>
+
+<p>了解了如上规则，你就基本学会了Clojure的大部分语法。</p>
+
+<p>下面比较一下Clojure,Java,Python,Ruby的一些语法.</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;"> Clojure 表达式</th>
+<th style="text-align:left;"> 对应的 Java 语法   </th>
+<th style="text-align:left;"> 对应的 Python 语法 </th>
+<th style="text-align:left;">对应的 Ruby 语法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"> (not k)                        </td>
+<td style="text-align:left;"> !k                           </td>
+<td style="text-align:left;"> not k                   </td>
+<td style="text-align:left;"> not k or !k                                       </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (inc a)                        </td>
+<td style="text-align:left;"> a++、++a、a += 1、a + 1<sup>a</sup>    </td>
+<td style="text-align:left;"> a += 1、a + 1           </td>
+<td style="text-align:left;"> a += 1                                              </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (/ (+ x y) 2)                  </td>
+<td style="text-align:left;"> (x + y) / 2                  </td>
+<td style="text-align:left;"> (x + y) / 2             </td>
+<td style="text-align:left;"> (x + y) / 2                                       </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (instance? java. util.List al) </td>
+<td style="text-align:left;"> al instanceof java.util.List </td>
+<td style="text-align:left;"> isinstance(al,list)     </td>
+<td style="text-align:left;"> al.is_a? Array                                    </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (if (not a) (inc b) (dec b))   </td>
+<td style="text-align:left;"> !a ? b + 1 : b - 1           </td>
+<td style="text-align:left;"> b + 1 if not a else b-1 </td>
+<td style="text-align:left;"> !a ? b + 1 : b - 1                                </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (Math/pow 2 10)<sup>c</sup>              </td>
+<td style="text-align:left;"> Math.pow(2, 10)              </td>
+<td style="text-align:left;"> pow(2, 10)              </td>
+<td style="text-align:left;"> 2 ** 10                                           </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (.someMethod someObj "foo" (.otherMethod otherObj 0)) </td>
+<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
+<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
+<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
+</tr>
+</tbody>
+</table>
+
+
+<p>可以看出Clojure的语法有高度的一致性，即使你不熟悉S表达式，但是依据上面的原则，可以看懂它想表达的是一个什么意思。</p>
+
+<p>而对于其他三门语言，如果你没有一个个的学习相应的语法，你还是比较难理解它的意思的。</p>
+
+<h1>代码功能</h1>
+
+<p>了解了核心语法，我们就可以来编写代码了。我们要编写的代码功能很简单，进行简繁翻译，其中过滤不需要翻译以及需要特殊翻译的文字。我们将分几步来完成:</p>
+
+<ul>
+<li>读取简繁字典</li>
+<li>进行简繁翻译</li>
+<li>读取不需要翻译的文字</li>
+<li>过滤不翻译的文字</li>
+<li>提供给Java调用</li>
+<li>打包</li>
+</ul>
+
+
+
+
+
+    <a href="/2014/02/02/basic.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/02/01/first_step.html">Clojure教程-环境搭建与Hello World</a></h2>
+
+        <p class="post-meta">By 02月01日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>环境搭建</h1>
+
+<p>Clojure是JVM上的一种语言，其语法是Lisp格式，所以称为是JVM上的Lisp方言。</p>
+
+<p>Clojure依赖于JDK。请确保你的机器上安装了JDK6+。Clojure的安装非常的简单。
+可以分为两种方式:</p>
+
+<ul>
+<li>通过Leiningen安装</li>
+<li>手动安装</li>
+</ul>
+
+
+<p>通过Leiningen是比较普遍也很方便的方式。我们先通过Leiningen来安装。</p>
+
+<h2>通过Leiningen安装</h2>
+
+<p>Leiningen和Maven比较类似，是Clojure语言的管理工具。其实它就是基于Maven
+构建的。我们先来安装Leiningen</p>
+
+<ul>
+<li>首先下载<a href="https://raw.github.com/technomancy/leiningen/stable/bin/lein">lein
+script</a></li>
+<li>将lein script放置到你的path下(linux下直接放到用户目录下即可)，保存文
+件名叫lein。</li>
+<li>将其权限设置为可执行(chmod a+x lein)</li>
+<li>打开shell，输入lein即可</li>
+</ul>
+
+
+<p>leiningen会自动下载需要的依赖。运行完成后,Clojure开发环境即安装完成。</p>
+
+<h2>手动安装</h2>
+
+<p>leiningen需要以项目为单位才能运行。比如你想运行一个hello.clj程序，如果
+你通过leiningen来运行，则hello.clj需要在lein项目内，且设置为core，才能
+运行,比较麻烦(这个问题在Maven中同样存在)。</p>
+
+<p>而通过手动安装可以解决这个问题。</p>
+
+<ul>
+<li>首先下载<a href="http://repo1.maven.org/maven2/org/clojure/clojure/1.5.1/clojure-1.5.1.zip">Clojure</a>,
+目前稳定版本是1.5.1</li>
+<li>解压到任意位置，其中最主要的文件就是clojure-1.5.1.jar</li>
+<li>在path下编写脚本clj,输入如下内容</li>
+</ul>
+
+
+<pre><code class="{.bash}">java -jar /home/ivan/soft/clojure-1.5.1/clojure-1.5.1.jar $1
+ #clojure.jar请输入你本机的路径
+</code></pre>
+
+<p>这样就可以执行单个的Clojure文件了</p>
+
+
+
+
+    <a href="/2014/02/01/first_step.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/10/02/upgrading.html">Luminus手册-升级</a></h2>
+
+        <p class="post-meta">By 10月02日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Upgrading to the Latest Version</h1>
+
+<p>不幸的是，框架无法自动从老版本升级到新版本。主要原因是新版本的依赖可能会有接口方面的修改，导致老代码无法正常运行。</p>
+
+<p>最好的方法是使用<a href="https://github.com/xsc/lein-ancient">lein-ancient</a>插件来保持你的依赖包时刻为最新。这将会帮你很容易的发现哪些插件有了新的版本。</p>
+
+
+
+    <a href="/2013/10/02/upgrading.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/10/01/useful_libraries.html">Luminus手册-实用库</a></h2>
 
         <p class="post-meta">By 10月01日  2013
@@ -122,7 +587,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -175,7 +640,7 @@ Tower提供国际化等等其他包。</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -231,419 +696,6 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
 
 
     <a href="/2013/09/30/deployment.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/29/internationalization.html">Luminus手册-国际化</a></h2>
-
-        <p class="post-meta">By 09月29日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Internationalization</h1>
-
-<p>Luminius模板包含了<a href="https://github.com/ptaoussanis/tower">Tower</a>依赖，Tower提供了函数式的国际化和翻译。</p>
-
-<p>首先，我们需要创建一个字典map：</p>
-
-<pre><code class="clojure">(def tconfig
-  {:fallback-locale :en-US
-   :dictionary
-   {:en-US   {:page {:title "Here is a title"
-                     :content "Time to start building your site."}
-              :missing  "&lt;Missing translation: [%1$s %2$s %3$s]&gt;"}
-    :fr-FR {:page {:title "Voici un titre"
-                   :content "Il est temps de commencer votre site."}}
-    }})
-</code></pre>
-
-<p>然后添加Tower中间件来包装我们的配置:</p>
-
-<pre><code>(def app
- (app-handler
-   [routes]
-   :middleware
-   [#(taoensso.tower.ring/wrap-tower-middleware % {:tconfig tconfig})]))
-</code></pre>
-
-<p>中间件将会通过accept-language头来确定相应的语言。中间件将会添加两个key到请求中。地一个key是:t,它的值是翻译函数。第二个key是:locale，它的值是中间件提供的语言类型。</p>
-
-<p>你可以提供一个自定义的locale-selector函数给中间件。</p>
-
-<pre><code class="clojure">(defn my-selector [req]
-  (when (= (:remote-addr req) "127.0.0.1") :en))
-
-(def app
-  (app-handler
-    [routes]
-    :middleware
-    [#(wrap-tower-middleware % {:tconfig tconfig
-                                :locale-selector my-selector})]))
-</code></pre>
-
-
-
-
-    <a href="/2013/09/29/internationalization.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/28/logging.html">Luminus手册-日志</a></h2>
-
-        <p class="post-meta">By 09月28日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Logging</h1>
-
-<p>Luminus模板中包括<a href="https://github.com/ptaoussanis/timbre">Timbre</a>和<a href="https://bitbucket.org/postspectacular/rotor">Rotor</a>。</p>
-
-<p>日志通过在handler/init函数中进行如下的设置进行初始化:</p>
-
-<pre><code class="{.clojure}">  (timbre/set-config!
-    [:appenders :rotor]
-    {:min-level :info
-     :enabled? true
-     :async? false ; should be always false for rotor
-     :max-message-per-msecs nil
-     :fn rotor/append})
-
-  (timbre/set-config!
-    [:shared-appender-config :rotor]
-    {:path ".log" :max-size 10000 :backlog 10})
-</code></pre>
-
-<p>Timbre可以记录Clojure的所有日志.</p>
-
-<pre><code class="{.clojure}">(ns example
- (:use [taoensso.timbre :only [trace debug info warn error fatal]]))
-
-(info "Hello")
-
-=&gt;2012-Dec-24 09:03:09 -0500 Helios.local INFO [timbretest] - Hello
-
-(info {:user {:id "Anonymous"}})
-
-=&gt;2012-Dec-24 09:02:44 -0500 Helios.local INFO [timbretest] - {:user {:id "Anonymous"}}
-</code></pre>
-
-<p>更多信息请见<a href="https://github.com/ptaoussanis/timbre">Github</a></p>
-
-
-
-    <a href="/2013/09/28/logging.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/27/database_migrations.html">Luminus手册-数据迁移</a></h2>
-
-        <p class="post-meta">By 09月27日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Migrations</h1>
-
-<p>默认情况下Luminus使用Ragtime来进行数据迁移。当你在创建Luminus项目时添加了+mysql或+postgres选项时，Ragtime会自动被添加进来。</p>
-
-<h1>Migrations with Ragtime</h1>
-
-<p>Ragtime通过Leiningen插件来执行。此插件需要配置project.clj的:plugins中。</p>
-
-<pre><code class="clojure">:plugins [... [ragtime/ragtime.lein "0.3.4"]]
-</code></pre>
-
-<p>实际的迁移动作是由ragtime.sql.files这个适配器来执行。此适配器需要配置在依赖列表中，同时配置相关数据库配置。</p>
-
-<pre><code class="clojure">:dependencies [... [ragtime/ragtime.sql.files "0.3.4"]]
-:ragtime {:migrations ragtime.sql.files/migrations
-          :database "jdbc:mysql://localhost:3306/example_db?user=root"}
-</code></pre>
-
-<p>ragtime.sql.files适配器会从项目根目录下的指定目录查找sql脚本。我们只需要将脚本添加到对应目录下即可。</p>
-
-<p>脚本按字母顺序排序。我们来创建两个脚本。</p>
-
-<pre><code>migrations/2014-13-57-30-create-tables.up.sql
-
-CREATE TABLE users (id INT, name VARCHAR(25));
-
-migrations/2014-13-57-30-create-tables.down.sql
-
-DROP TABLE users;
-</code></pre>
-
-<p>通过如下命令执行：</p>
-
-<pre><code>lein ragtime migrate
-</code></pre>
-
-<p>通过如下命令回滚:</p>
-
-<pre><code>lein ragtime rollback
-</code></pre>
-
-
-
-
-    <a href="/2013/09/27/database_migrations.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/26/database_access.html">Luminus手册-访问数据库</a></h2>
-
-        <p class="post-meta">By 09月26日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Configuring the Database</h1>
-
-<p>当你使用数据库参数来创建Luminus工程时，比如+postgress，那么Luminus会使用Korma来处理数据库操作.</p>
-
-<p>Korma是一个基于Clojure的数据库操作DSL。Korma提供了一套简单的接口，方便你来处理复杂的数据。</p>
-
-<p>给一个现有的项目添加数据库支持，非常的简单。首先，你需要在project.clj文件中添加Korma依赖。</p>
-
-<pre><code class="{.clojure}">[korma "0.4.0"]
-</code></pre>
-
-<p>另外还需要相应数据库的驱动，所以你还需要在project.clj中添加相关的数据库驱动。比如说，你要连接PostreSQL数据库，你需要添加如下的依赖.</p>
-
-<pre><code class="{.clojure}">[postgresql/postgresql "9.3-1102-jdbc41"]
-</code></pre>
-
-<p>添加完依赖后，你可以创建一个新的namespace来管理你的model,这个namespace建议叫db.core。你需要在里面引入korma.db。</p>
-
-<pre><code class="clojure">(ns myapp.db.core
-  (:use korma.core
-        [korma.db :only (defdb)]))
-</code></pre>
-
-<h2>Setting up the database connection</h2>
-
-<p>配置完依赖后，我们要做的事情就是定义数据库连接。我们只需要提供一个包含连接信息的map。</p>
-
-<pre><code class="{.clojure}">(def db-spec {:subprotocol "postgresql"
-         :subname "//localhost/my_website"
-         :user "admin"
-         :password "admin"})
-</code></pre>
-
-<p>或者也可以配置服务器提供的JNDI名称来创建连接。</p>
-
-<pre><code class="{.clojure}">(def db-spec {:name "jdbc/myDatasource"})
-</code></pre>
-
-
-
-
-    <a href="/2013/09/26/database_access.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/25/security.html">Luminus手册-安全</a></h2>
-
-        <p class="post-meta">By 09月25日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (53)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Security</h1>
-
-<p>密码的散列和对比由noir.util.crypt提供。</p>
-
-<p>他提供了两个函数$encrypt$,$compare$.其中第一个函数加密密码，而第二个则是对比密码。实际上加密是通过BCrypt来处理的。</p>
-
-<p>对比代码的函数看起来像这样:</p>
-
-<pre><code class="{.clojure}">(compare raw encrypted)
-</code></pre>
-
-<p>加密函数可以自定义salt，或者就不使用salt加密。</p>
-
-<pre><code class="{.clojure}">(encrypt salt raw)
-(encrypt raw)
-</code></pre>
-
-<p>想了解Secutiry库的更多内容，<a href="https://github.com/cemerick/friend">请点击这里</a></p>
-
-<h1>LDAP Authentication</h1>
-
-<p>下面的列子演示了如何通过clj-ldap来验证sAMAccountName</p>
-
-<p>首先，我们先添加依赖</p>
-
-<pre><code class="clojure">[org.clojars.pntblnk/clj-ldap "0.0.9"]
-</code></pre>
-
-<p>接下来，我们需要引入authentication命名空间</p>
-
-<pre><code class="clojure">(ns ldap-auth
-  (:require [clj-ldap.client :as client]))
-</code></pre>
-
-
-
-
-    <a href="/2013/09/25/security.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
