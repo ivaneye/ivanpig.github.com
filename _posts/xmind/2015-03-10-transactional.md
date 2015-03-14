@@ -7,7 +7,9 @@ avatarimg: "/img/head.jpg"
 
 ---
 
-![](/mind/transaction.png)
-
-
 [xmind文件下载](/mind/transaction.xmind)
+
+
+<!-- more -->
+
+![](/mind/transaction.png)
