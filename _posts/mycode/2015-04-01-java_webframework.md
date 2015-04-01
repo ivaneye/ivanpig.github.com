@@ -7,7 +7,7 @@ avatarimg: "/img/head.jpg"
 
 ---
 
-自用Java框架
+框架结构图
 
 ![](/mind/framework.png)
 
