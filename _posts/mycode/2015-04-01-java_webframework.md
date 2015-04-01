@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 语言与模式-01单例模式
+title: 自用Java开发框架
 categories: [mycode]
 tags: [java,framework]
 avatarimg: "/img/head.jpg"
