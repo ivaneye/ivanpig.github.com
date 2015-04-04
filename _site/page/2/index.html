@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://ivanpig.github.io/page/2/index.html">
         <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
-        <title>Just Perfect</title>
+        <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
         <!--[if lte IE 8]>
 <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
-                    <h2 id="_tagline" class="brand-tagline">三刀流</h2>
+                    <h2 id="_tagline" class="brand-tagline">Just Perfect</h2>
 <!--                     <br class="newline"/><br class="newline"/> -->
 
                     <nav class="nav">
@@ -106,6 +106,93 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/02/24/visitor.html">语言与模式-22访问者模式</a></h2>
+
+        <p class="post-meta">By 02月24日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>表示一个作用于某对象结构中的各元素的操作。它使你可以在不改变各元素的类的前提下定义作用于这些元素的新操作。</p>
+
+<p><img src="/assets/designpattern/visitor.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>一个对象结构包含很多类对象，它们有不同的接口，而你想对这些对象实施一些依赖于其具体类的操作。</li>
+<li>需要对一个对象结构中的对象进行很多不同的并且不相关的操作，而你想避免让这些操作“污染”这些对象的类。Visitor使得你可以将相关的操作集中起来定义在一个类中。当该对象结构被很多应用共享时，用Visitor模式让每个应用仅包含需要用到的操作。</li>
+<li>定义对象结构的类很少改变，但经常需要在此结构上定义新的操作。改变对象结构类需要重定义对所有访问者的接口，这可能需要很大的代价。如果对象结构类经常改变，那么可能还是在这些类中定义这些操作较好。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="java">//访问者
+public interface Visitor {
+    public void visit(Park park);
+    public void visit(ParkA parkA);
+    public void visit(ParkB parkB);
+}
+</code></pre>
+
+<pre><code class="java">//清洁工A,负责parkA的卫生情况
+public class VisitorA implements Visitor {
+
+    public void visit(Park park) {
+    }
+
+    public void visit(ParkA parkA) {
+        System.out.println("清洁工A:完成公园" + parkA.getName()+ "的卫生");
+    }
+
+    public void visit(ParkB parkB) {
+    }
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/24/visitor.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/02/23/interpreter.html">语言与模式-21解释器模式</a></h2>
 
         <p class="post-meta">By 02月23日  2015
@@ -124,7 +211,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -210,7 +297,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -306,7 +393,7 @@ public abstract class Person {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -390,7 +477,7 @@ public abstract class Person {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -479,7 +566,7 @@ public abstract class Person {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -567,7 +654,7 @@ public abstract class Person {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -615,104 +702,6 @@ public abstract class Person {
 
 
     <a href="/2015/02/18/chain_of_responsibility.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/17/observer.html">语言与模式-15观察者模式</a></h2>
-
-        <p class="post-meta">By 02月17日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>定义对象间的一种一对多的依赖关系,当一个对象的状态发生改变时, 所有依赖于它的对象都得到通知并被自动更新。</p>
-
-<p><img src="/assets/designpattern/observer.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>当一个抽象模型有两个方面, 其中一个方面依赖于另一方面。将这二者封装在独立的对象中以使它们可以各自独立地改变和复用。</li>
-<li>当对一个对象的改变需要同时改变其它对象, 而不知道具体有多少对象有待改变。</li>
-<li>当一个对象必须通知其它对象，而它又不能假定其它对象是谁。换言之，你不希望这些对象是紧密耦合的。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<pre><code class="java">public abstract class Subject {
-    /**
-     * 用来保存注册的观察者对象
-     */
-    private    List&lt;Observer&gt; list = new ArrayList&lt;Observer&gt;();
-    /**
-     * 注册观察者对象
-     * @param observer    观察者对象
-     */
-    public void attach(Observer observer){
-
-        list.add(observer);
-        System.out.println("Attached an observer");
-    }
-    /**
-     * 删除观察者对象
-     * @param observer    观察者对象
-     */
-    public void detach(Observer observer){
-
-        list.remove(observer);
-    }
-    /**
-     * 通知所有注册的观察者对象
-     */
-    public void nodifyObservers(String newState){
-
-        for(Observer observer : list){
-            observer.update(newState);
-        }
-    }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/17/observer.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

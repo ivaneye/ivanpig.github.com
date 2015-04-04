@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://ivanpig.github.io/page/11/index.html">
         <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
-        <title>Just Perfect</title>
+        <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
         <!--[if lte IE 8]>
 <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
-                    <h2 id="_tagline" class="brand-tagline">三刀流</h2>
+                    <h2 id="_tagline" class="brand-tagline">Just Perfect</h2>
 <!--                     <br class="newline"/><br class="newline"/> -->
 
                     <nav class="nav">
@@ -106,6 +106,96 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/03/06/scala_exercises_04.html">快学Scala习题解答—第四章 映射和元组</a></h2>
+
+        <p class="post-meta">By 03月06日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>映射和元组</h1>
+
+<h2>设置一个映射,其中包含你想要的一些装备，以及它们的价格。然后构建另一个映射，采用同一组键，但是价格上打9折</h2>
+
+<p>映射的简单操作</p>
+
+<pre><code class="{.example}">scala&gt; val map = Map("book"-&gt;10,"gun"-&gt;18,"ipad"-&gt;1000)
+map: scala.collection.immutable.Map[java.lang.String,Int] = Map(book -&gt; 10, gun -&gt; 18, ipad -&gt; 1000)
+
+scala&gt; for((k,v) &lt;- map) yield (k,v * 0.9)
+res3: scala.collection.immutable.Map[java.lang.String,Double] = Map(book -&gt; 9.0, gun -&gt; 16.2, ipad -&gt; 900.0)
+</code></pre>
+
+<h2>编写一段程序，从文件中读取单词。用一个可变映射来清点每个单词出现的频率。读取这些单词的操作可以使用java.util.Scanner:</h2>
+
+<p>val in = new java.util.Scanner(new java.io.File("myfile.txt"))
+while(in.hasNext()) 处理 in.next() 或者翻到第9章看看更Scala的做法。
+最后，打印出所有单词和它们出现的次数。
+@\&lt;p>当然使用Scala的方法啦。参考第9章@\&lt;/p>
+首先，创建一个文件myfile.txt。输入如下内容</p>
+
+<pre><code class="{.example}">test test ttt test ttt t test sss s
+</code></pre>
+
+<p>Scala代码如下</p>
+
+<pre><code class="{.scala}">import scala.io.Source
+import scala.collection.mutable.HashMap
+
+//val source = Source.fromFile("myfile.txt")
+//val tokens = source.mkString.split("\\s+")  //此写法tokens为空，不知为何
+
+val source = Source.fromFile("myfile.txt").mkString
+
+val tokens = source.split("\\s+")
+
+val map = new HashMap[String,Int]
+
+for(key &lt;- tokens){
+    map(key) = map.getOrElse(key,0) + 1
+}
+
+println(map.mkString(","))
+</code></pre>
+
+
+
+
+    <a href="/2013/03/06/scala_exercises_04.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/03/05/scala_exercises_03.html">快学Scala习题解答—第三章 数组相关操作</a></h2>
 
         <p class="post-meta">By 03月05日  2013
@@ -122,7 +212,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -198,7 +288,7 @@ println(reorderArray(Array(1,2,3,4,5)).mkString(","))
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -283,7 +373,7 @@ x: Unit = ()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (41)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
