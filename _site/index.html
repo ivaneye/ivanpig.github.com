@@ -106,6 +106,821 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/04/16/use.html">读源码-JUnit4使用</a></h2>
+
+        <p class="post-meta">By 04月16日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#junit4"><i class="fa fa-folder-open">junit4 (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (4)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit4 (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (46)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p><em>Level :</em> &hearts;</p>
+
+<h1>JUnit4简介</h1>
+
+<p>之前梳理了JUnit3，此篇将梳理JUnit4。</p>
+
+<p>JUnit4主要引入了注解。我们依然使用之前的例子来进行测试</p>
+
+<h1>场景</h1>
+
+<p>假设，我们有一个Person类</p>
+
+<ul>
+<li>包含两个方法say和sayHi</li>
+<li>两个方法都接收一个String类型的参数</li>
+<li>say返回"Hello,"+arg</li>
+<li>sayHi返回"Hi,"+arg</li>
+</ul>
+
+
+<p>代码如下:</p>
+
+<pre><code class="java">package org.ivan;
+
+public class Person {
+
+    public String say(String name) {
+        return "Hello," + name;
+    }
+
+    public String sayHi(String name) {
+        return "Hi," + name;
+    }
+}
+</code></pre>
+
+<p>在JUnit4中如何进行测试呢?</p>
+
+<h1>引入JUnit</h1>
+
+<p>首先还是引入JUnit4</p>
+
+<pre><code class="xml">&lt;dependency&gt;
+  &lt;groupId&gt;junit&lt;/groupId&gt;
+  &lt;artifactId&gt;junit&lt;/artifactId&gt;
+  &lt;version&gt;4.12&lt;/version&gt;
+  &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h1>编写测试类</h1>
+
+<pre><code class="java">package org.ivan;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class PersonTest {
+
+    private Person person;
+
+    @Before
+    public void setUp() throws Exception {
+        System.out.println("setUp invoke");
+        person = new Person();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        System.out.println("tearDown invoke");
+    }
+
+    @Test
+    public void testSay() throws Exception {
+        assertEquals("Hello,Ivan", person.say("Ivan"));
+    }
+
+    @Test
+    public void testSayHi() throws Exception {
+        assertEquals("Hi,Ivan", person.sayHi("Ivan"));
+    }
+}
+</code></pre>
+
+<ul>
+<li>在JUnit4中，测试类不再需要继承TestCase和Assert了</li>
+<li>测试方法也不需要以test开头，只需要添加@Test注解</li>
+<li>assertEquals用来比较，方法调用结果是否与期望相同。其通过静态导入来引入。</li>
+<li>setUp()和tearDown()方法名也不再必须，可以使用任意名字。只需要分别添加@Before和@After注解即可</li>
+</ul>
+
+
+<h1>运行测试</h1>
+
+<ul>
+<li>如果使用IDE则可以直接在测试类上，右击来运行测试，如果测试成功会出现绿条</li>
+<li>通过mvn test来运行测试，输出的是文字测试结果</li>
+<li>通过java org.junit.runner.JUnitCore org.ivan.PersonTest来运行</li>
+</ul>
+
+
+<p>Intellij IDEA运行结果显示:</p>
+
+<p><img src="/assets/opensource/junit3/ide.jpg" alt="" /></p>
+
+<p>Maven运行结果:</p>
+
+<pre><code>Running org.ivan.PersonTest
+setUp invoke
+tearDown invoke
+setUp invoke
+tearDown invoke
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+</code></pre>
+
+<p>命令行输出结果:</p>
+
+<pre><code>JUnit version 4.12
+.setUp invoke
+tearDown invoke
+.setUp invoke
+tearDown invoke
+
+Time: 0.014
+
+OK (2 tests)
+</code></pre>
+
+<h1>运行多个测试类</h1>
+
+<p>假设我们新增一个类Animal:</p>
+
+<pre><code class="java">package org.ivan;
+
+public class Animal {
+
+    public String say(String name) {
+        return "momo," + name;
+    }
+
+    public String sayHi(String name) {
+        return "gigi," + name;
+    }
+}
+</code></pre>
+
+<p>以及对应的测试类:</p>
+
+<pre><code class="java">package org.ivan;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+public class AnimalTest {
+
+    private Animal animal;
+
+    @Before
+    public void setUp() throws Exception {
+        System.out.println("setUp invoke");
+        animal = new Animal();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        System.out.println("tearDown invoke");
+    }
+
+    @Test
+    public void testSay() throws Exception {
+        assertEquals("momo,Ivan", animal.say("Ivan"));
+    }
+
+    @Test
+    public void testSayHi() throws Exception {
+        assertEquals("gigi,Ivan", animal.sayHi("Ivan"));
+    }
+}
+</code></pre>
+
+<p>如果我们想同时运行PersonTest和AnimalTest，该如何做?</p>
+
+<ul>
+<li>对于IDE，直接在测试包上右击，运行测试即可</li>
+<li>对于Maven，依然使用mvn test命令</li>
+<li>对于命令行来说，则需要新建一个类</li>
+</ul>
+
+
+<pre><code class="java">package org.ivan;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        PersonTest.class,
+        AnimalTest.class
+})
+public class TestAll {
+}
+</code></pre>
+
+<ul>
+<li>完全使用注解来进行处理</li>
+<li>需要执行的测试类添加到SuiteClasses内即可</li>
+<li>命令行执行时，通过java org.junit.runner.JUnitCore org.ivan.TestAll来运行</li>
+</ul>
+
+
+<h1>BeforeClass,AfterClass</h1>
+
+<p>上面提到的setUp()和tearDown()方法是在每次测试方法前后被调用，假如你希望：</p>
+
+<ul>
+<li>运行setUp()方法</li>
+<li>测试所有方法</li>
+<li>运行tearDown()方法</li>
+</ul>
+
+
+<p>该怎么办?</p>
+
+<p>JUnit3提供了TestSetup,JUnit4提供了@BeforeClass和@AfterClass注解</p>
+
+<pre><code class="java">public class PersonTest {
+
+    ...
+
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        System.out.println("BeforeClass");
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception {
+        System.out.println("AfterClass");
+    }
+    ...
+}
+</code></pre>
+
+<ul>
+<li>注意这里的方法是static的</li>
+</ul>
+
+
+<h1>重复测试</h1>
+
+<p>假设需要对某个测试进行多次测试，该怎么办?</p>
+
+<p>JUnit3中提供了RepeatedTest。很遗憾，JUnit4没有提供类似的功能。</p>
+
+<p>不过我们可以通过扩展JUnit4提供的Rule来自己实现。我们先来看下Rule.</p>
+
+<h2>Rule</h2>
+
+<p>此部分内容取自此<a href="http://haibin369.iteye.com/blog/2088541">博客</a></p>
+
+<p>Rule是JUnit4中的新特性，它让我们可以扩展JUnit的功能，灵活地改变测试方法的行为。JUnit中用@Rule和@ClassRule两个注解来实现Rule扩展，这两个注解需要放在实现了TestRule接口的成员变量（@Rule）或者静态变量（@ClassRule）上。@Rule和@ClassRule的不同点是，@Rule是方法级别的，每个测试方法执行时都会调用被注解的Rule，而@ClassRule是类级别的，在执行一个测试类的时候只会调用一次被注解的Rule</p>
+
+<h2>内置Rule</h2>
+
+<ul>
+<li>TemporaryFolder Rule:使用这个Rule可以创建一些临时目录或者文件，在一个测试方法结束之后，系统会自动清空他们。</li>
+</ul>
+
+
+<pre><code class="java">@Rule
+public TemporaryFolder tempFolder = new TemporaryFolder();
+
+@Test
+public void testTempFolderRule() throws IOException {
+   tempFolder.newFile("test.txt");
+   tempFolder.newFolder("test");
+}
+</code></pre>
+
+<ul>
+<li>ExternalResource Rule:ExternalResource 是TemporaryFolder的父类，主要用于在测试之前创建资源，并在测试完成后销毁。</li>
+</ul>
+
+
+<pre><code class="java">File tempFile;
+
+@Rule
+public ExternalResource extResource = new ExternalResource() {
+    //每个测试执行之前都会调用该方法创建一个临时文件
+    @Override
+    protected void before() throws Throwable {
+        tempFile = File.createTempFile("test", ".txt");
+    }
+
+    //每个测试执行之后都会调用该方法删除临时文件
+    @Override
+    protected void after() {
+        tempFile.delete();
+    }
+};
+
+@Test
+public void testExtResource() throws IOException {
+    System.out.println(tempFile.getCanonicalPath());
+}
+</code></pre>
+
+<ul>
+<li>ErrorCollector Rule:ErrorCollector允许我们收集多个错误，并在测试执行完后一次过显示出来</li>
+</ul>
+
+
+<pre><code class="java">@Rule
+public ErrorCollector errorCollector = new ErrorCollector();
+
+@Test
+public void testErrorCollector() {
+    errorCollector.addError(new Exception("Test Fail 1"));
+    errorCollector.addError(new Throwable("fff"));
+}
+</code></pre>
+
+<ul>
+<li>Verifier Rule:Verifier是ErrorCollector的父类，可以在测试执行完成之后做一些校验，以验证测试结果是不是正确</li>
+</ul>
+
+
+<pre><code class="java">String result;
+
+@Rule
+public Verifier verifier = new Verifier() {
+    //当测试执行完之后会调用verify方法验证结果，抛出异常表明测试失败
+    @Override
+    protected void verify() throws Throwable {
+        if (!"Success".equals(result)) {
+            throw new Exception("Test Fail.");
+        }
+    }
+};
+
+@Test
+public void testVerifier() {
+    result = "Fail";
+}
+</code></pre>
+
+<ul>
+<li>TestWatcher Rule:TestWatcher 定义了五个触发点，分别是测试成功，测试失败，测试开始，测试完成，测试跳过，能让我们在每个触发点执行自定义的逻辑。</li>
+</ul>
+
+
+<pre><code class="java">@Rule
+public TestWatcher testWatcher = new TestWatcher() {
+    @Override
+    protected void succeeded(Description description) {
+        System.out.println(description.getDisplayName() + " Succeed");
+    }
+
+    @Override
+    protected void failed(Throwable e, Description description) {
+        System.out.println(description.getDisplayName() + " Fail");
+    }
+
+    @Override
+    protected void skipped(AssumptionViolatedException e, Description description) {
+        System.out.println(description.getDisplayName() + " Skipped");
+    }
+
+    @Override
+    protected void starting(Description description) {
+        System.out.println(description.getDisplayName() + " Started");
+    }
+
+    @Override
+    protected void finished(Description description) {
+        System.out.println(description.getDisplayName() + " finished");
+    }
+};
+
+@Test
+public void testTestWatcher() {
+    /*
+        测试执行后会有以下输出：
+        testTestWatcher(org.haibin369.test.RulesTest) Started
+        Test invoked
+        testTestWatcher(org.haibin369.test.RulesTest) Succeed
+        testTestWatcher(org.haibin369.test.RulesTest) finished
+     */
+    System.out.println("Test invoked");
+}
+</code></pre>
+
+<ul>
+<li>TestName Rule:TestName能让我们在测试中获取目前测试方法的名字。</li>
+</ul>
+
+
+<pre><code class="java">@Rule
+public TestName testName = new TestName();
+
+@Test
+public void testTestName() {
+    //打印出测试方法的名字testTestName
+    System.out.println(testName.getMethodName());
+}
+</code></pre>
+
+<h2>使用Rule来实现重复执行测试</h2>
+
+<p>首先实现一个Rule,这里叫RepeatRule</p>
+
+<pre><code class="java">package org.ivan;
+
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+public class RepeatRule implements TestRule {
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({
+            java.lang.annotation.ElementType.METHOD
+    })
+    public @interface Repeat {
+        public abstract int times();
+    }
+
+    private static class RepeatStatement extends Statement {
+
+        private final int times;
+        private final Statement statement;
+
+        private RepeatStatement(int times, Statement statement) {
+            this.times = times;
+            this.statement = statement;
+        }
+
+        @Override
+        public void evaluate() throws Throwable {
+            for (int i = 0; i &lt; times; i++) {
+                statement.evaluate();
+            }
+        }
+    }
+
+    public Statement apply(
+            Statement statement, Description description) {
+        Statement result = statement;
+        Repeat repeat = description.getAnnotation(Repeat.class);
+        if (repeat != null) {
+            int times = repeat.times();
+            result = new RepeatStatement(times, statement);
+        }
+        return result;
+    }
+}
+</code></pre>
+
+<p>编写测试</p>
+
+<pre><code class="java">@Rule
+public RepeatRule repeatRule = new RepeatRule();
+
+@Test
+@RepeatRule.Repeat( times = 10 )
+public void testTempFolderRule() throws IOException {
+  System.out.println("Times");
+}
+</code></pre>
+
+<ul>
+<li>如上代码表示执行10次</li>
+</ul>
+
+
+<h1>UML</h1>
+
+<p><img src="/assets/opensource/junit4/diagram.png" alt="" /></p>
+
+<p>与JUnit3相比，没有了相应的继承关系，由注解进行了处理 ！</p>
+
+
+
+    <a href="/2015/04/16/use.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/04/08/why.html">读源码-JUnit3设计</a></h2>
+
+        <p class="post-meta">By 04月08日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#junit3"><i class="fa fa-folder-open">junit3 (3)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (4)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit3 (3)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (46)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p><em>Level :</em> &hearts;&hearts;&hearts;</p>
+
+<h1>内容回顾</h1>
+
+<ul>
+<li>主要梳理了JUnit3的源码</li>
+</ul>
+
+
+<p>本篇主要说明JUnit3的代码设计及为什么这样设计！</p>
+
+<h1>run方法</h1>
+
+<p>上篇提出了两个问题！第一个问题是:为什么Test中的run方法要传入一个TestResult，然后再将自身传递给TestResult去执行呢？</p>
+
+<p>首先从名字可以看出,TestResult类是用来保存测试结果的。实际上是对测试提供了一个统一的收集测试结果的对象。这实际上是个设计模式，叫Collecting Parameter模式。</p>
+
+<h2>Collecting Parameter模式定义</h2>
+
+<p>当你需要从几个方法中收集结果时，你应当给方法增加一个参数，并传递一个会替你收集参数的对象。</p>
+
+<p>TestResult就是这样一个对象，它收集的结果可以方便在各个终端显示。</p>
+
+<h1>runProtected方法</h1>
+
+<p>上篇第二个问题:</p>
+
+<p>为什么TestResult的run()方法中，要先实例化一个Protectable对象，而不直接调用test的runBare方法呢？</p>
+
+<p>实际上，这主要是为了规避代码重复!</p>
+
+<p>查看源码，我们可以看到TestSetup类中的run方法，也实例化一个Protectable对象，继而进行调用。</p>
+
+<pre><code class="java">public void run(final TestResult result) {
+  Protectable p= new Protectable() {
+    public void protect() throws Exception {
+      setUp();
+      basicRun(result);
+      tearDown();
+    }
+  };
+  result.runProtected(this, p);
+}
+</code></pre>
+
+<p>在这里，Protectable中封装了不同的执行逻辑，然后传递给runProtected方法来执行。</p>
+
+
+
+
+    <a href="/2015/04/08/why.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/04/07/implements.html">读源码-JUnit3实现</a></h2>
+
+        <p class="post-meta">By 04月07日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#junit3"><i class="fa fa-folder-open">junit3 (3)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (4)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit3 (3)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (46)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p><em>Level :</em> &hearts;&hearts;</p>
+
+<h1>内容回顾</h1>
+
+<ul>
+<li>上篇内容主要介绍了JUnit3的使用</li>
+<li>如何编写测试类</li>
+<li>如何运行单个测试类</li>
+<li>如何运行多个测试类</li>
+<li>如何设置Class级别的setUp()和tearDown()方法</li>
+<li>如何多次运行测试</li>
+</ul>
+
+
+<p>本篇文章将梳理JUnit3源码</p>
+
+<h1>代码结构</h1>
+
+<p>上篇最后给出了测试UML图</p>
+
+<p><img src="/assets/opensource/junit3/diagram2.png" alt="" /></p>
+
+<p>我们可以看出</p>
+
+<ul>
+<li>所有的测试类都继承了TestCase这个类</li>
+<li>TestCase这个类继承了Assert类，实现了Test接口</li>
+</ul>
+
+
+<h1>Assert类</h1>
+
+<p>我们先看Assert这个类，你会发现这个类很简单，提供了各种静态的assert*()方法来进行比较。</p>
+
+<h1>Test接口</h1>
+
+<pre><code class="java">package junit.framework;
+
+public interface Test {
+    public abstract int countTestCases();
+    public abstract void run(TestResult result);
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/04/07/implements.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/04/06/use.html">读源码-JUnit3使用</a></h2>
+
+        <p class="post-meta">By 04月06日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#junit3"><i class="fa fa-folder-open">junit3 (3)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (4)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit3 (3)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (46)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p><em>Level :</em> &hearts;</p>
+
+<h1>JUnit简介</h1>
+
+<p>JUnit是一个Java语言的单元测试框架。它由Kent Beck和Erich Gamma建立，逐渐成为源于Kent Beck的sUnit的xUnit家族中最为成功的一个。</p>
+
+<p>JUnit测试是程序员测试，即所谓白盒测试，因为程序员知道被测试的软件如何（How）完成功能和完成什么样（What）的功能。</p>
+
+<h1>场景</h1>
+
+<p>假设，我们有一个Person类</p>
+
+<ul>
+<li>包含两个方法say和sayHi</li>
+<li>两个方法都接收一个String类型的参数</li>
+<li>say返回"Hello,"+arg</li>
+<li>sayHi返回"Hi,"+arg</li>
+</ul>
+
+
+<p>代码如下:</p>
+
+<pre><code class="java">package org.ivan;
+
+public class Person {
+
+    public String say(String name) {
+        return "Hello," + name;
+    }
+
+    public String sayHi(String name) {
+        return "Hi," + name;
+    }
+}
+</code></pre>
+
+<p>如何保证方法返回了正确的值？</p>
+
+<p>当然，你可以使用main方法，代码如下:</p>
+
+<pre><code class="java">public static void main(String[] args){
+  Person p = new Person();
+  System.out.println("test Person.say" + ("Hello,Ivan".equals(p.say("Ivan"))));
+  System.out.println("test Person.sayHi" + ("Hi,Ivan".equals(p.sayHi("Ivan"))));
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/04/06/use.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/04/01/java_webframework.html">自用Java开发框架</a></h2>
 
         <p class="post-meta">By 04月01日  2015
@@ -122,7 +937,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (46)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">framework (1)</i></a>
             
@@ -174,7 +989,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">xmind (2)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">transactional (2)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">jvm (1)</i></a>
             
             
         
@@ -221,7 +1036,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">xmind (2)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">transactional (2)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">transactional (1)</i></a>
             
             
         
@@ -237,360 +1052,6 @@
 
 
     <a href="/2015/03/10/transactional.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/03/03/interface_field.html">刨根问底-02为什么Java接口中的成员变量被设计为必须是public static final的？</a></h2>
-
-        <p class="post-meta">By 03月03日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#why"><i class="fa fa-folder-open">why (2)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (2)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>概述</h1>
-
-<p>此为"刨根问底"系列文章的第二篇，接上篇，为什么Java接口中的成员变量被设计为必须是public static final的？</p>
-
-<h1>网络答案</h1>
-
-<p>在网络上搜索到了如下两篇还算靠谱的解答!</p>
-
-<p><a href="http://shaomeng95.iteye.com/blog/998820">网络解答1</a></p>
-
-<p><a href="http://www.xyzws.com/javafaq/why-do-we-have-only-public-static-final-variables-in-interfaces/129">网络解答2</a></p>
-
-<h1>解释</h1>
-
-<p>上篇我们用反证法来证明了接口方法设为public为最合适选择!</p>
-
-<p>这里我们依然可以使用反证法来解释!</p>
-
-<p>假设接口中的成员变量不是public static final的!</p>
-
-<p>先将属性设置为private的!</p>
-
-<pre><code class="java">public interface Person{
-  private int num;
-}
-</code></pre>
-
-<p>OK!private的属性，当然只能在接口内部使用了!但是在接口里面给谁使用呢？接口里的方法只有方法头可没方法体！所以设为private，那就永远都访问不到了！</p>
-
-<p>好，那我们改成protected!</p>
-
-<pre><code class="java">public interface Person{
-  protected int num;
-}
-</code></pre>
-
-<p>这样子类就能访问了！但是外部如何访问呢？方法是有的:</p>
-
-
-
-
-    <a href="/2015/03/03/interface_field.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/03/02/interface_method.html">刨根问底-01为什么Java接口中的方法默认是public？</a></h2>
-
-        <p class="post-meta">By 03月02日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#why"><i class="fa fa-folder-open">why (2)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (2)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>概述</h1>
-
-<p>去年担任了公司Java培训班的培训讲师！由于时间关系，课堂上只是讲了How，而很少涉及到Why!</p>
-
-<p>故计划编写此"刨根问底"系列文章，主要解释Java中的Why!</p>
-
-<p>此为该系列文章的第一篇，为什么Java接口中的方法默认是public的？</p>
-
-<h1>解释</h1>
-
-<p>首先我们来看下接口的定义，在《Thinking in Java》中，对接口做了如下定义:</p>
-
-<pre><code class="example">An interface says, "All classes that implement this particular interface will look like this." Thus, any code that uses a particular interface knows what methods might be called for that interface, and that’s all. So the interface is used to establish a "protocol" between classes. (Some object-oriented programming languages have a keyword called protocol to do the
-same thing.)
-
-接口意味着："所有实现了这个特定接口的类都应该可以被当作这个接口来看待"。也就是说，所有使用此特定接口的代码都应该知道该接口有哪些方法可以被调用，而且仅此而已！所以接口被用来定义接口之间的协议！(有些语言使用protocol这个关键字来做Java中interface关键字所要做的事情，例如:Clojure)
-</code></pre>
-
-<p>简单说来，接口就是用来定义一个"协议"的！这么看来，protocol这个关键字应该比interface这个关键字更加的准确！</p>
-
-<pre><code class="java">//Java接口定义
-public interface Person{
-  void say();
-}
-
-//这样会不会更合理？
-public protocol Person{
-  void say();
-}
-
-//Clojure类似代码
-(defprotocol Person
-  (say [this]))
-</code></pre>
-
-<p>上面的接口就定义了一个"协议",这个协议就是:"所有遵循这个协议(实现此接口)的类，必然有一个叫做say()的方法"。</p>
-
-
-
-
-    <a href="/2015/03/02/interface_method.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/03/01/start.html">语言和并发-01启动线程</a></h2>
-
-        <p class="post-meta">By 03月01日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#thread"><i class="fa fa-folder-open">thread (1)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">thread (1)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>概述</h1>
-
-<p>本系列文章意在比较Java与Clojure在线程实现上的区别！</p>
-
-<p>Java的线程主要基于锁机制，而Clojure主要模拟了数据库事务操作，所谓的STM(软事务模型)。主要从代码层面给出两者的区别，孰优孰劣请自行判断！</p>
-
-<h1>启动线程</h1>
-
-<h2>Java代码</h2>
-
-<ul>
-<li>Java实例中，两个线程类A和B，分别通过实现Runnable接口和继承Thread类来实现</li>
-<li>两各类启动线程的方式有差异，详见代码</li>
-<li>JDK5中提供了线程启动类Executors来执行</li>
-</ul>
-
-
-<pre><code class="java">package concurrent;
-
-import java.util.concurrent.*;
-
-/**
- * Created by ivan on 15-2-22.
- * Java启动线程
- */
-public class Start {
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        //实现Runnable接口，需要通过一个Thread实例来启动线程
-        new Thread(new A()).start();
-        //继承Thread类，直接通过自身来启动线程
-        new B().start();
-
-        //JDK1.5开始，可以通过Executor来执行线程.效果和上面没有区别
-        ExecutorService e = Executors.newCachedThreadPool();
-        e.execute(new A());
-        e.execute(new B());
-        //Callable需要submit,返回Future
-        Future&lt;String&gt; f = e.submit(new C());
-        //get方法是个阻塞方法
-        System.out.println("Future f = " + f.get());
-        e.shutdown();
-    }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/03/01/start.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/25/iterator.html">语言与模式-23迭代器模式</a></h2>
-
-        <p class="post-meta">By 02月25日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (42)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>提供一种方法顺序访问一个聚合对象中各个元素, 而又不需暴露该对象的内部表示。</p>
-
-<p><img src="/assets/designpattern/iterator.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>访问一个聚合对象的内容而无需暴露它的内部表示。</li>
-<li>支持对聚合对象的多种遍历。</li>
-<li>为遍历不同的聚合结构提供一个统一的接口（即, 支持多态迭代）。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<p>Java提供了Iterable接口，直接实现此接口即可!</p>
-
-<pre><code class="java">public class AList implements Iterable{
-    ...
-    private int idx;
-
-    public static void main(String[] args) {
-        AList list = new AList();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        for(Object o : list){
-            System.out.println(o);
-        }
-    }
-
-    @Override
-    public Iterator iterator() {
-        return new Iterator() {
-            @Override
-            public boolean hasNext() {
-                return idx &lt; length;
-            }
-
-            @Override
-            public Object next() {
-                return arr[idx++];
-            }
-        };
-    }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/25/iterator.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

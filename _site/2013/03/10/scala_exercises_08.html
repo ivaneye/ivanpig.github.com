@@ -1,0 +1,377 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="java, scala"/>
+        <meta name="author" content="ivanpig.github.io"> 
+        <link rel="canonical" href="http://ivanpig.github.io/2013/03/10/scala_exercises_08.html">
+        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <title>快学Scala习题解答—第八章 继承 - 不懂管理的开发不是好架构</title>
+        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
+<![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="/css/JekyllPure.css">
+        <!--<![endif]-->
+
+        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
+<![endif]-->
+        <script src="/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="/css/themes/my.css"/>
+        <script src="/js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body>
+
+        <div id="layout" class="pure-g">
+            <div class="sidebar pure-u-1 pure-u-md-1-4">
+                <div class="header">
+                    <div class="headerpic">
+                        <a href="/">
+                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                        </a>
+                    </div>
+                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
+                    <h2 id="_tagline" class="brand-tagline">Just Perfect</h2>
+<!--                     <br class="newline"/><br class="newline"/> -->
+
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="/Timing">时间轴</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/tag">标签库</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="/type">分类库</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="search">
+                        <form action="/search">
+                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
+                        </form>
+                    </div>
+
+                    <div id="toc"></div>
+                    <div id="toc1"></div>
+                    <nav id="nav">
+                        <ul class="nav-list">
+                            <li class="nav-link">
+                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
+                            </li>
+                            <li class="nav-link">
+                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+							<div id="qrcode">
+							<img src="/img/qrcode.jpg" width="170"/>
+							</div>
+                </div>
+            </div>
+
+            <div class="content pure-u-1 pure-u-md-3-4">
+                <!--[if lt IE 8]>
+<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+<![endif]-->
+                <div>
+                    <div class="posts">
+
+                        <div class="qrcodeTable"></div>
+<header class="post-header">
+    
+    <img class="post-avatar" height="48" width="48"
+         src="/img/head.jpg">
+    
+
+    <h2 class="post-title">快学Scala习题解答—第八章 继承</h2>
+
+    <p class="post-meta">By 03月10日  2013
+        
+        
+        
+        
+        <a class="post-categorybut " href="/type/#"><i class="fa fa-folder-open">scala (15)</i></a>
+        
+        
+        
+
+        
+        
+        
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (46)</i></a>
+        
+        <a class="post-category " href="/tag/#java"><i class="fa fa-tags">scala (15)</i></a>
+        
+        
+    
+    
+</header>
+<div class="article pure-u-22-24">
+    <h1>继承</h1>
+
+<h2>扩展如下的BankAccount类，新类CheckingAccount对每次存款和取款都收取1美元的手续费</h2>
+
+<pre><code class="{.scala}">class BankAccount(initialBalance:Double){
+    private var balance = initialBalance
+    def deposit(amount:Double) = { balance += amount; balance}
+    def withdraw(amount:Double) = {balance -= amount; balance}
+}
+</code></pre>
+
+<p>继承语法的使用。代码如下</p>
+
+<pre><code class="{.scala}">class CheckingAccount(initialBalance:Double) extends BankAccount(initialBalance){
+  override def deposit(amount: Double): Double = super.deposit(amount - 1)
+
+  override def withdraw(amount: Double): Double = super.withdraw(amount + 1)
+}
+</code></pre>
+
+<h2>扩展前一个练习的BankAccount类，新类SavingsAccount每个月都有利息产生(earnMonthlyInterest方法被调用)，并且有每月三次免手续费的存款或取款。在earnMonthlyInterest方法中重置交易计数。</h2>
+
+<pre><code class="{.scala}">class SavingsAccount(initialBalance:Double) extends BankAccount(initialBalance){
+  private var num:Int = _
+
+  def earnMonthlyInterest()={
+    num = 3
+    super.deposit(1)
+  }
+
+  override def deposit(amount: Double): Double = {
+    num -= 1
+    if(num &lt; 0) super.deposit(amount - 1) else super.deposit(amount)
+  }
+
+  override def withdraw(amount: Double): Double = {
+    num -= 1
+    if (num &lt; 0) super.withdraw(amount + 1) else super.withdraw(amount)
+  }
+}
+</code></pre>
+
+<!-- more -->
+
+
+<h2>翻开你喜欢的Java或C++教科书，一定会找到用来讲解继承层级的实例，可能是员工，宠物，图形或类似的东西。用Scala来实现这个示例。</h2>
+
+<p>Thinking in Java中的代码</p>
+
+<pre><code class="{.java}">class Art{
+    Art(){System.out.println("Art constructor");}
+}
+
+class Drawing extends Art{
+    Drawing() {System.out.println("Drawing constructor");}
+}
+
+public class Cartoon extends Drawing{
+    public Cartoon() { System.out.println("Cartoon constructor");}
+}
+</code></pre>
+
+<p>使用Scala改写如下</p>
+
+<pre><code class="{.scala}">class Art{
+  println("Art constructor")
+}
+
+class Drawing extends Art{
+  println("Drawing constructor")
+}
+
+class Cartoon extends Drawing{
+  println("Cartoon constructor")
+}
+</code></pre>
+
+<h2>定义一个抽象类Item,加入方法price和description。SimpleItem是一个在构造器中给出价格和描述的物件。利用val可以重写def这个事实。Bundle是一个可以包含其他物件的物件。其价格是打包中所有物件的价格之和。同时提供一个将物件添加到打包当中的机制，以及一个适合的description方法</h2>
+
+<pre><code class="{.scala}">import collection.mutable.ArrayBuffer
+
+
+abstract class Item{
+  def price():Double
+  def description():String
+
+  override def toString():String={
+    "description:" + description() + "  price:" + price()
+  }
+}
+
+class SimpleItem(val price:Double,val description:String) extends Item{
+
+}
+
+class Bundle extends Item{
+
+  val items = new ArrayBuffer[Item]()
+
+  def addItem(item:Item){
+    items += item
+  }
+
+  def price(): Double = {
+    var total = 0d
+    items.foreach(total += _.price())
+    total
+  }
+
+  def description(): String = {
+    items.mkString(" ")
+  }
+}
+</code></pre>
+
+<h2>设计一个Point类，其x和y坐标可以通过构造器提供。提供一个子类LabeledPoint，其构造器接受一个标签值和x,y坐标,比如:new LabeledPoint("Black Thursday",1929,230.07)</h2>
+
+<pre><code class="{.scala}">class Point(x:Int,y:Int){
+}
+
+class LabeledPoint(label:String,x:Int,y:Int) extends Point(x,y){
+}
+</code></pre>
+
+<h2>定义一个抽象类Shape，一个抽象方法centerPoint，以及该抽象类的子类Rectangle和Circle。为子类提供合适的构造器，并重写centerPoint方法</h2>
+
+<pre><code class="{.scala}">abstract class Shape{
+  def centerPoint()
+}
+
+class Rectangle(startX:Int,startY:Int,endX:Int,endY:Int) extends Shape{
+  def centerPoint() {}
+}
+
+class Circle(x:Int,y:Int,radius:Double) extends Shape{
+  def centerPoint() {}
+}
+</code></pre>
+
+<h2>提供一个Square类，扩展自java.awt.Rectangle并且是三个构造器：一个以给定的端点和宽度构造正方形，一个以(0,0)为端点和给定的宽度构造正方形，一个以(0,0)为端点,0为宽度构造正方形</h2>
+
+<pre><code class="{.scala}">import java.awt.{Point, Rectangle}
+
+
+class Square(point:Point,width:Int) extends Rectangle(point.x,point.y,width,width){
+
+  def this(){
+    this(new Point(0,0),0)
+  }
+
+  def this(width:Int){
+    this(new Point(0,0),width)
+  }
+}
+</code></pre>
+
+<h2>编译8.6节中的Person和SecretAgent类并使用javap分析类文件。总共有多少name的getter方法？它们分别取什么值？(提示：可以使用-c和-private选项)</h2>
+
+<p>总共两个。Person中取得的是传入的name,而SecretAgent中取得的是默认的"secret"</p>
+
+<h2>在8.10节的Creature类中，将val range替换成一个def。如果你在Ant子类中也用def的话会有什么效果？如果在子类中使用val又会有什么效果？为什么？</h2>
+
+<p>在Ant中使用def没有问题。但是如果使用val则无法编译。因为val只能重写不带参数的def。这里的def是带参数的</p>
+
+<h2>文件scala/collection/immutable/Stack.scala包含如下定义:</h2>
+
+<pre><code class="{.scala}">class Stack[A] protected (protected val elems: List[A])
+</code></pre>
+
+<p>请解释protected关键字的含义。(提示：回顾我们在第5章中关于私有构造器的讨论)
+此构造方法只能被其子类来调用,而不能被外界直接调用</p>
+
+</div>
+
+<div class="pure-g pagination">
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/03/09/scala_exercises_07.html" title="快学Scala习题解答—第七章 包和引入 "><p> <i class="fa fa-mail-reply"></i>&nbsp;快学Scala习题解答—第七章 包和引入</p></a>
+    
+    
+    <a class="pure-u-1-2 pagination-item " href="/2013/03/11/scala_exercises_09.html" title="快学Scala习题解答—第九章 文件和正则表达式"><p>快学Scala习题解答—第九章 文件和正则表达式&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    
+</div>
+<link href="/css/code.css" rel="stylesheet">
+<link href="/css/min/fancybox.css" rel="stylesheet">
+<script src="/js/min/jquery.toc.min.js" ></script>
+<script src="/js/min/jquery.qrcode.min.js" ></script>
+<script src="/js/min/jquery.fancybox.pack.js" ></script>
+<script src="/js/page.js" ></script>
+
+
+<!--多说分享-->
+<div class="ds-share" data-thread-key="/2013/03/10/scala_exercises_08" data-title="快学Scala习题解答—第八章 继承" data-images="/img/head.jpg" data-url="http://ivanpig.github.io/2013/03/10/scala_exercises_08.html">
+    <div class="ds-share-aside-right">
+      <div class="ds-share-aside-inner">
+      </div>
+      <div class="ds-share-aside-toggle">分享到</div>
+    </div>
+</div>
+
+
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="/2013/03/10/scala_exercises_08" data-title="快学Scala习题解答—第八章 继承" data-url="/2013/03/10/scala_exercises_08.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"ivanpig"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    <a href="/about.html">About</a>
+                    <a href="tencent://message/?uin=561802774">QQ</a>
+                    <a href="https://github.com/ivanpig">GitHub</a>
+                    <script src="/js/min/nprogress.min.js"></script>
+                    <script src="/js/index.js"></script>
+                </div>
+                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+            </div>
+
+        </div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </body>
+
+</html>

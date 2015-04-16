@@ -106,6 +106,366 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2014/10/01/dsl.html">Clojure进阶:使用Clojure构建DSL</a></h2>
+
+        <p class="post-meta">By 10月01日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>翻译自<a href="http://clojure-doc.org/articles/tutorials/growing_a_dsl_with_clojure.html">Growing a DSL with Clojure</a>.主要讲解如何使用</p>
+
+<p>Clojure来创建一个简单的DSL.包括如下知识点:</p>
+
+<ul>
+<li>多重方法(Multimethods)</li>
+<li>继承(Hierarchies)</li>
+<li>元编程及"代码即数据"哲学(Metaprogramming and the "Code as data" philosophy)</li>
+</ul>
+
+
+<p>Lisp及其方言(比如Clojure)可以很方便的创建DSL并能和源语言无缝的集成.</p>
+
+<p>Lisp界鼓吹的优点中，提到最多的可能就是:数据即代码，代码即数据了。在此文中我们将依此特性来定义一个DSL。</p>
+
+<p>我们将渐进式的开发这个DSL，不断的加入Clojure的特性和抽象。</p>
+
+<h1>任务</h1>
+
+<p>我们的目标是定义一个可以生成各种脚本语言的DSL.而且DSL代码看起来和普通的Clojure代码没有区别。</p>
+
+<p>例如,我们使用Clojure形式(form)来生成Bash脚本或者Windows批处理脚本:</p>
+
+<p>输入(Clojure形式):</p>
+
+<pre><code class="{.clojure}">(if (= 1 2)
+  (println "a")
+  (println "b"))
+</code></pre>
+
+<p>输出(Bash脚本):</p>
+
+<pre><code class="{.bash}">if [ 1 -eq 2 ]; then
+  echo "a"
+else
+  echo "b"
+fi
+</code></pre>
+
+<p>输出(Windows批处理):</p>
+
+<pre><code class="{.bash}">IF 1==2 (
+  ECHO a
+) ELSE (
+  ECHO b
+)
+</code></pre>
+
+
+
+
+    <a href="/2014/10/01/dsl.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/08/29/namespace.html">Clojure教程-命名空间</a></h2>
+
+        <p class="post-meta">By 08月29日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>版本</h1>
+
+<p>本文翻译自<a href="http://clojure-doc.org/articles/language/namespaces.html">Clojure Namespaces and Vars</a></p>
+
+<p>本文涵盖如下内容:</p>
+
+<ul>
+<li>Clojure命名空间和var概述</li>
+<li>如何定义命名空间</li>
+<li>如何使用其它命名空间里的函数</li>
+<li>require,refer和use</li>
+<li>常见错误和典型错误,以及导致这些错误的原因</li>
+<li>命名空间和代码管理</li>
+</ul>
+
+
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
+
+<p>涵盖Clojure版本:Clojure 1.5</p>
+
+<h1>概述</h1>
+
+<p>Clojure的函数通过命名空间来组织.Clojure命名空间和Java的包或者Python的模块很类似.命名空间实际上就是个map,将名字映射到了var上.在大部分情况下,这些var持有这些函数.</p>
+
+<h1>定义一个命名空间</h1>
+
+<p>一般情况下使用clojure.core/ns宏来定义命名空间.最基本的形式下,它将名字作为符号.</p>
+
+<pre><code class="clojure">(ns superlib.core)
+</code></pre>
+
+<p>命名空间可以由点号切割的好多段组成</p>
+
+<pre><code class="clojure">(ns megacorp.service.core)
+</code></pre>
+
+<p>需要注意的是,请尽量避免使用单段的命名空间,以免与其它开发人员的命名空间相冲突.如果库或者应用属于某个组织,那么建议以如下形式作为命名空间.[组织名称].[包名|应用名].[函数组名]
+例如</p>
+
+<pre><code class="clojure">(ns clojurewerkz.welle.kv)
+
+(ns megacorp.search.indexer.core)
+</code></pre>
+
+
+
+
+    <a href="/2014/08/29/namespace.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/05/11/record_protocol.html">Clojure教程-Record和Protocol</a></h2>
+
+        <p class="post-meta">By 05月11日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>本文翻译自:<a href="http://www.jayway.com/2013/02/05/learn-clojure-using-records-and-protocols/">Learn Clojure using records and protocols</a></p>
+
+<p>当我对Clojure的括号不再疑惑后,另一个让我质疑为何要学习Clojure的问题是使用REPL很爽,但是我怎么来构建大型项目?".</p>
+
+<p>实际上,由于我的面向对象编程经验,我其实要问的是"我怎么才能将函数封装到类似class的东西里面去?".</p>
+
+<p>在本文中,我将会介绍一种类似于Java的方式来构建大型的Clojure项目.</p>
+
+<p>通过这种方式,希望你在学习Clojure的时候不会有太大的差异感!</p>
+
+<p>在Java中,我们出于各种目的而使用类.例如典型的使用Spring的web应用,你会看到类似下面的结构:</p>
+
+<ul>
+<li>Data transfer objects(DTO)</li>
+<li>Services(REST API,controllers,DAO)</li>
+<li>Rich object</li>
+</ul>
+
+
+<p>DTO实际上就是个结构体,他没有任何的行为(即方法).为了最小化样板代码,我趋向于使用pulibc final属性去实现DTO.我认为DTO就是个模板(schema),它就像一个REST服务输出的文件.但是我发现很多客户端开发人员可不关注这个,而只关注代码形式.有时你会看到DTO被作为数据库访问的一部分.这些DTO被称为贫血模型.(译者注:猜测作者的意思是,有些开发人员不管类是DTO还是DAO,只要结构相同就随便用!)</p>
+
+<p>Service实际上是包含了方法和注入了辅助Service的单例对象.不同的辅助Service提供了不同的服务.除了实现了接口外,Service只是包含了方法,和占位符很类似.单例模式导致的一个问题就是,新手无法预见到多线程里共享相同的实例出现意外的结果.他们将状态保存到私有属性里,而不需要从一个对象传递到另一个对象.很方便,但是是错误的做法.</p>
+
+<p>Rich object是面向对象语言中的思想.即将数据及和数据相关的操作封装到一个类里面.我可没说getter和setter是相关操作!但是,rich object类在项目中用得较少.取而代之的是使用DTO作为Service的输入和输出.使用DAO来访问数据库,然后返回DTO.我没说这种方法是错误的,我好奇的是,既然对于目前的Java架构是好是坏我们都无法确认,那为什么还要强求使用Clojure去实现类似的东西呢?</p>
+
+
+
+
+    <a href="/2014/05/11/record_protocol.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/03/15/function.html">Clojure教程-函数</a></h2>
+
+        <p class="post-meta">By 03月15日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>本文翻译自<a href="http://clojure-doc.org/articles/language/functions.html">Functions in Clojure</a></p>
+
+<p>本文包括如下内容:</p>
+
+<ul>
+<li>如何定义函数</li>
+<li>如何执行函数</li>
+<li>多元数函数(Multi-arity Functions)</li>
+<li>不定参函数(Variadic Functions)</li>
+<li>高阶函数</li>
+<li>其它函数相关内容</li>
+</ul>
+
+
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
+
+<h1>针对Clojure版本</h1>
+
+<p>Clojure 1.5</p>
+
+<h1>简介</h1>
+
+<p>Clojure是函数式编程语言.自然的,函数是Clojure非常重要的一部分.</p>
+
+<h1>如何定义函数</h1>
+
+<p>函数定义一般使用defn宏:</p>
+
+<pre><code class="{.clojure}">(defn round
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>类型提示有时能避免编译器使用反射,从而能生成更高效的字节码.但是,基本上你没必要使用类型提示.后期优化时再考虑.</p>
+
+<p>函数可以添加注释文档,给API添加文档说明是个好习惯:</p>
+
+<pre><code class="{.clojure}">(defn round
+  "Round down a double to the given precision (number of significant digits)"
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>在Clojure中函数参数可以有类型提示,不过是可选的.</p>
+
+<pre><code class="{.clojure}">(defn round
+  [^double d ^long precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>函数还可以定义前置和后置条件来限制函数的参数和返回值.</p>
+
+<pre><code class="{.clojure}">(defn round
+  "Round down a double to the given precision (number of significant digits)"
+  [^double d ^long precision]
+  {:pre [(not-nil? d) (not-nil? precision)]}
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre>
+
+<p>在上面的例子中,我们使用了前置条件来检查两个参数是否为nil.</p>
+
+<p>not-nil?宏(或函数),没有在该例子中展示,我们假设它已经在其它地方实现了.</p>
+
+
+
+
+    <a href="/2014/03/15/function.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2014/02/19/math.html">Clojure教程-数学计算</a></h2>
 
         <p class="post-meta">By 02月19日  2014
@@ -365,352 +725,6 @@ Github.</p>
 
 
     <a href="/2014/02/05/string.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2014/02/02/basic.html">Clojure教程-基本语法</a></h2>
-
-        <p class="post-meta">By 02月02日  2014
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>简介</h1>
-
-<p>学习一门语言最好的方法就是去使用它。我们就从一个小例子来学习Clojure语法.</p>
-
-<h1>核心语法</h1>
-
-<p>首先先来看一下Clojure的核心语法。</p>
-
-<p>Clojure的使用的是Lisp语法,又叫S表达式。核心语法非常的简单。但是对于熟悉c系语法(c,c++,java)的朋友来说，第一次接触会非常的不习惯。</p>
-
-<ul>
-<li>所有代码以"("开始,")"结束。即所有的代码都被()包裹</li>
-<li>"("后的第一个数据被当作函数或者宏来调用</li>
-<li>接着的数据被当作参数传递</li>
-<li>如果想原样返回数据，在"("前面添加"'"。此写法是(quote (...))的简写</li>
-</ul>
-
-
-<p>以前面的hello world程序为例。</p>
-
-<pre><code class="{.clojure}">(println "Hello World")
-</code></pre>
-
-<p>它以"("开始，后面跟的是函数println，接着空格跟的是参数"HelloWorld"，最后")"结尾。</p>
-
-<p>了解了如上规则，你就基本学会了Clojure的大部分语法。</p>
-
-<p>下面比较一下Clojure,Java,Python,Ruby的一些语法.</p>
-
-<table>
-<thead>
-<tr>
-<th style="text-align:left;"> Clojure 表达式</th>
-<th style="text-align:left;"> 对应的 Java 语法   </th>
-<th style="text-align:left;"> 对应的 Python 语法 </th>
-<th style="text-align:left;">对应的 Ruby 语法</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;"> (not k)                        </td>
-<td style="text-align:left;"> !k                           </td>
-<td style="text-align:left;"> not k                   </td>
-<td style="text-align:left;"> not k or !k                                       </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (inc a)                        </td>
-<td style="text-align:left;"> a++、++a、a += 1、a + 1<sup>a</sup>    </td>
-<td style="text-align:left;"> a += 1、a + 1           </td>
-<td style="text-align:left;"> a += 1                                              </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (/ (+ x y) 2)                  </td>
-<td style="text-align:left;"> (x + y) / 2                  </td>
-<td style="text-align:left;"> (x + y) / 2             </td>
-<td style="text-align:left;"> (x + y) / 2                                       </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (instance? java. util.List al) </td>
-<td style="text-align:left;"> al instanceof java.util.List </td>
-<td style="text-align:left;"> isinstance(al,list)     </td>
-<td style="text-align:left;"> al.is_a? Array                                    </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (if (not a) (inc b) (dec b))   </td>
-<td style="text-align:left;"> !a ? b + 1 : b - 1           </td>
-<td style="text-align:left;"> b + 1 if not a else b-1 </td>
-<td style="text-align:left;"> !a ? b + 1 : b - 1                                </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (Math/pow 2 10)<sup>c</sup>              </td>
-<td style="text-align:left;"> Math.pow(2, 10)              </td>
-<td style="text-align:left;"> pow(2, 10)              </td>
-<td style="text-align:left;"> 2 ** 10                                           </td>
-</tr>
-<tr>
-<td style="text-align:left;"> (.someMethod someObj "foo" (.otherMethod otherObj 0)) </td>
-<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
-<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
-<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
-</tr>
-</tbody>
-</table>
-
-
-<p>可以看出Clojure的语法有高度的一致性，即使你不熟悉S表达式，但是依据上面的原则，可以看懂它想表达的是一个什么意思。</p>
-
-<p>而对于其他三门语言，如果你没有一个个的学习相应的语法，你还是比较难理解它的意思的。</p>
-
-<h1>代码功能</h1>
-
-<p>了解了核心语法，我们就可以来编写代码了。我们要编写的代码功能很简单，进行简繁翻译，其中过滤不需要翻译以及需要特殊翻译的文字。我们将分几步来完成:</p>
-
-<ul>
-<li>读取简繁字典</li>
-<li>进行简繁翻译</li>
-<li>读取不需要翻译的文字</li>
-<li>过滤不翻译的文字</li>
-<li>提供给Java调用</li>
-<li>打包</li>
-</ul>
-
-
-
-
-
-    <a href="/2014/02/02/basic.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2014/02/01/first_step.html">Clojure教程-环境搭建与Hello World</a></h2>
-
-        <p class="post-meta">By 02月01日  2014
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>环境搭建</h1>
-
-<p>Clojure是JVM上的一种语言，其语法是Lisp格式，所以称为是JVM上的Lisp方言。</p>
-
-<p>Clojure依赖于JDK。请确保你的机器上安装了JDK6+。Clojure的安装非常的简单。
-可以分为两种方式:</p>
-
-<ul>
-<li>通过Leiningen安装</li>
-<li>手动安装</li>
-</ul>
-
-
-<p>通过Leiningen是比较普遍也很方便的方式。我们先通过Leiningen来安装。</p>
-
-<h2>通过Leiningen安装</h2>
-
-<p>Leiningen和Maven比较类似，是Clojure语言的管理工具。其实它就是基于Maven
-构建的。我们先来安装Leiningen</p>
-
-<ul>
-<li>首先下载<a href="https://raw.github.com/technomancy/leiningen/stable/bin/lein">lein
-script</a></li>
-<li>将lein script放置到你的path下(linux下直接放到用户目录下即可)，保存文
-件名叫lein。</li>
-<li>将其权限设置为可执行(chmod a+x lein)</li>
-<li>打开shell，输入lein即可</li>
-</ul>
-
-
-<p>leiningen会自动下载需要的依赖。运行完成后,Clojure开发环境即安装完成。</p>
-
-<h2>手动安装</h2>
-
-<p>leiningen需要以项目为单位才能运行。比如你想运行一个hello.clj程序，如果
-你通过leiningen来运行，则hello.clj需要在lein项目内，且设置为core，才能
-运行,比较麻烦(这个问题在Maven中同样存在)。</p>
-
-<p>而通过手动安装可以解决这个问题。</p>
-
-<ul>
-<li>首先下载<a href="http://repo1.maven.org/maven2/org/clojure/clojure/1.5.1/clojure-1.5.1.zip">Clojure</a>,
-目前稳定版本是1.5.1</li>
-<li>解压到任意位置，其中最主要的文件就是clojure-1.5.1.jar</li>
-<li>在path下编写脚本clj,输入如下内容</li>
-</ul>
-
-
-<pre><code class="{.bash}">java -jar /home/ivan/soft/clojure-1.5.1/clojure-1.5.1.jar $1
- #clojure.jar请输入你本机的路径
-</code></pre>
-
-<p>这样就可以执行单个的Clojure文件了</p>
-
-
-
-
-    <a href="/2014/02/01/first_step.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/10/02/upgrading.html">Luminus手册-升级</a></h2>
-
-        <p class="post-meta">By 10月02日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Upgrading to the Latest Version</h1>
-
-<p>不幸的是，框架无法自动从老版本升级到新版本。主要原因是新版本的依赖可能会有接口方面的修改，导致老代码无法正常运行。</p>
-
-<p>最好的方法是使用<a href="https://github.com/xsc/lein-ancient">lein-ancient</a>插件来保持你的依赖包时刻为最新。这将会帮你很容易的发现哪些插件有了新的版本。</p>
-
-
-
-    <a href="/2013/10/02/upgrading.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/10/01/useful_libraries.html">Luminus手册-实用库</a></h2>
-
-        <p class="post-meta">By 10月01日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p>Luminus的目标是从细粒度来方便你开发web应用。所以它默认包含了很多库包。</p>
-
-<p>包括lib-noir提供一般工具，Selmer/Hiccup提供HTML模板,Timbre提供日志功能，
-Tower提供国际化等等其他包。</p>
-
-<p>当然，还有很多的包能给web开发带来便利。</p>
-
-<p>具体请见<a href="http://www.luminusweb.net/docs/useful_libraries.md">此处</a></p>
-
-
-
-    <a href="/2013/10/01/useful_libraries.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
