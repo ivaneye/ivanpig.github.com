@@ -1,6 +1,6 @@
 ---
 layout: post
-title: zookeeper入门指南
+title: zookeeper鍏ラ棬鎸囧崡
 categories: zookeeper
 tags: [java,zookeeper]
 avatarimg: "/img/head.jpg"
@@ -8,5 +8,5 @@ published: false
 
 ---
 
-本文翻译自[ZooKeeper Getting Started Guide](http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html)
+鏈枃缈昏瘧鑷猍ZooKeeper Getting Started Guide](http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html)
 
