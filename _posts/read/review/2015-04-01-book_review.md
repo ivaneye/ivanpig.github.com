@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 《杠杆阅读术》书评
+title:  如何读书相关书籍书评
 categories: [book]
 tags: [book,review]
 avatarimg: "/img/head.jpg"
@@ -8,7 +8,7 @@ published: false
 
 ---
 
-推荐度:&hearts;&hearts;
+# 《杠杆阅读术》
 
 讲述读书的方法:
 
@@ -23,3 +23,7 @@ published: false
 *看一类书，如果多本书中都提到了类似的观点，则需要注意。*
 
 *对书中的知识要进行实践。*
+
+# 《书都不会读，你还想成功》
+
+和《杠杆阅读术》类似,如果读过上一本，此本可忽略！

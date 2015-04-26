@@ -45,15 +45,33 @@ layout: blog
 </div>
 
 <div class="pure-g pagination">
-    {% if page.previous %}
-    <a class="pure-u-1-2 pagination-item " href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }} "><p> <i class="fa fa-mail-reply"></i>&nbsp;{{ page.previous.title }}</p></a>
+    {% if page.istop %}
+        <span class="pure-u-1-2 pagination-item "><p>上一篇&nbsp;<i class="fa fa-chain-broken"></i></p></span>
+        {% assign _post = page %}
+        {% for post in paginator.posts %}
+            {% assign _post = post %}
+            {% break %}
+        {% endfor %}
+        <a class="pure-u-1-2 pagination-item " href="{{ BASE_PATH }}{{ _post.next.url }}" title="{{ _post.next.title }}"><p>{{ _post.next.title }}&nbsp;<i class="fa fa-mail-forward"></i></p></a>
     {% else %}
-    <span class="pure-u-1-2 pagination-item "><p>上一篇&nbsp;<i class="fa fa-chain-broken"></i></p></span>
-    {% endif %}
-    {% if page.next %}
-    <a class="pure-u-1-2 pagination-item " href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}"><p>{{ page.next.title }}&nbsp;<i class="fa fa-mail-forward"></i></p></a>
-    {% else %}
-    <span class="pure-u-1-2 pagination-item "><p>下一篇&nbsp;<i class="fa fa-chain-broken"></i></p></span>
+        {% if page.previous %}
+        {% assign _pre = page.previous %}
+        {% if page.previous.istop %}
+        {% assign _pre = page.previous.previous %}
+        {% endif%}
+        <a class="pure-u-1-2 pagination-item " href="{{ BASE_PATH }}{{ _pre.url }}" title="{{ _pre.title }} "><p> <i class="fa fa-mail-reply"></i>&nbsp;{{ _pre.title }}</p></a>
+        {% else %}
+        <span class="pure-u-1-2 pagination-item "><p>上一篇&nbsp;<i class="fa fa-chain-broken"></i></p></span>
+        {% endif %}
+        {% if page.next %}
+        {% assign _next = page.next %}
+        {% if page.next.istop %}
+        {% assign _next = page.next.next %}
+        {% endif%}
+        <a class="pure-u-1-2 pagination-item " href="{{ BASE_PATH }}{{ _next.url }}" title="{{ _next.title }}"><p>{{ _next.title }}&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+        {% else %}
+            <span class="pure-u-1-2 pagination-item "><p>下一篇&nbsp;<i class="fa fa-chain-broken"></i></p></span>
+        {% endif %}
     {% endif %}
 </div>
 <link href="/css/code.css" rel="stylesheet">

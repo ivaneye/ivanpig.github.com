@@ -99,167 +99,28 @@
                         
 
 
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/29/internationalization.html">Luminus手册-国际化</a></h2>
-
-        <p class="post-meta">By 09月29日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Internationalization</h1>
-
-<p>Luminius模板包含了<a href="https://github.com/ptaoussanis/tower">Tower</a>依赖，Tower提供了函数式的国际化和翻译。</p>
-
-<p>首先，我们需要创建一个字典map：</p>
-
-<pre><code class="clojure">(def tconfig
-  {:fallback-locale :en-US
-   :dictionary
-   {:en-US   {:page {:title "Here is a title"
-                     :content "Time to start building your site."}
-              :missing  "&lt;Missing translation: [%1$s %2$s %3$s]&gt;"}
-    :fr-FR {:page {:title "Voici un titre"
-                   :content "Il est temps de commencer votre site."}}
-    }})
-</code></pre>
-
-<p>然后添加Tower中间件来包装我们的配置:</p>
-
-<pre><code>(def app
- (app-handler
-   [routes]
-   :middleware
-   [#(taoensso.tower.ring/wrap-tower-middleware % {:tconfig tconfig})]))
-</code></pre>
-
-<p>中间件将会通过accept-language头来确定相应的语言。中间件将会添加两个key到请求中。地一个key是:t,它的值是翻译函数。第二个key是:locale，它的值是中间件提供的语言类型。</p>
-
-<p>你可以提供一个自定义的locale-selector函数给中间件。</p>
-
-<pre><code class="clojure">(defn my-selector [req]
-  (when (= (:remote-addr req) "127.0.0.1") :en))
-
-(def app
-  (app-handler
-    [routes]
-    :middleware
-    [#(wrap-tower-middleware % {:tconfig tconfig
-                                :locale-selector my-selector})]))
-</code></pre>
 
 
 
 
-    <a href="/2013/09/29/internationalization.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
 
 
 
 
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/28/logging.html">Luminus手册-日志</a></h2>
-
-        <p class="post-meta">By 09月28日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Logging</h1>
-
-<p>Luminus模板中包括<a href="https://github.com/ptaoussanis/timbre">Timbre</a>和<a href="https://bitbucket.org/postspectacular/rotor">Rotor</a>。</p>
-
-<p>日志通过在handler/init函数中进行如下的设置进行初始化:</p>
-
-<pre><code class="{.clojure}">  (timbre/set-config!
-    [:appenders :rotor]
-    {:min-level :info
-     :enabled? true
-     :async? false ; should be always false for rotor
-     :max-message-per-msecs nil
-     :fn rotor/append})
-
-  (timbre/set-config!
-    [:shared-appender-config :rotor]
-    {:path ".log" :max-size 10000 :backlog 10})
-</code></pre>
-
-<p>Timbre可以记录Clojure的所有日志.</p>
-
-<pre><code class="{.clojure}">(ns example
- (:use [taoensso.timbre :only [trace debug info warn error fatal]]))
-
-(info "Hello")
-
-=&gt;2012-Dec-24 09:03:09 -0500 Helios.local INFO [timbretest] - Hello
-
-(info {:user {:id "Anonymous"}})
-
-=&gt;2012-Dec-24 09:02:44 -0500 Helios.local INFO [timbretest] - {:user {:id "Anonymous"}}
-</code></pre>
-
-<p>更多信息请见<a href="https://github.com/ptaoussanis/timbre">Github</a></p>
 
 
 
-    <a href="/2013/09/28/logging.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -350,6 +211,8 @@ DROP TABLE users;
 
 
 
+
+
 <section class="post">
     <header class="post-header">
         
@@ -433,6 +296,8 @@ DROP TABLE users;
 
 
 
+
+
 <section class="post">
     <header class="post-header">
         
@@ -508,6 +373,8 @@ DROP TABLE users;
     <a href="/2013/09/25/security.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
+
+
 
 
 
@@ -593,6 +460,8 @@ equal-to? args: [v n] - returns true if the string represents a number = given
     <a href="/2013/09/24/input_validation.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
+
+
 
 
 
@@ -688,6 +557,172 @@ equal-to? args: [v n] - returns true if the string represents a number = given
 
 
     <a href="/2013/09/23/sessions_cookies.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/22/custom_middleware.html">Luminus手册-自定义中间件</a></h2>
+
+        <p class="post-meta">By 09月22日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Adding custom middleware</h1>
+
+<p>Luminus使用Ring来路由应用的处理程序，你也可以添加一些中间件。</p>
+
+<p>中间件可以给处理程序添加一些额外的功能。中间件函数主要被用来扩展Ring的基本处理函数。</p>
+
+<p>中间件其实就是个简单的函数，它接受现有的处理程序和一些可选参数作为函数参数并返回一个新的处理程序。</p>
+
+<pre><code class="{.clojure}">(defn wrap-nocache [handler]
+  (fn [request]
+     (let [response (handler request)]
+        (assoc-in response [:headers  "Pragma"] "no-cache"))))
+
+(def app (wrap-nocache handler))
+</code></pre>
+
+<p>可以看到，上面的函数接受一个处理函数并返回一个新的函数，这个函数接受request作为参数。返回的函数只在handler所在的范围内有效。当调用这个函数时，它将会给响应map添加Pragma:no-cache键值对。</p>
+
+<p>你可以添加自定义的中间件，只需要使用:middleware关键字就可以了:</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler
+          all-routes
+          ;;put any custom middleware
+          ;;in the middleware vector
+          :middleware [wrap-nocache]))
+</code></pre>
+
+<p>具体内容可参见Ring官方文档。</p>
+
+
+
+
+    <a href="/2013/09/22/custom_middleware.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/21/response_types.html">Luminus手册-响应</a></h2>
+
+        <p class="post-meta">By 09月21日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Responses</h1>
+
+<p>noir.response提供了很多辅助函数来处理响应.</p>
+
+<h1>Setting headers</h1>
+
+<p>可以使用set-header来设置响应头，使用一个map作为参数。这里需要注意的是,map的key必须是字符串。</p>
+
+<pre><code class="{.clojure}">(set-headers {"x-csrf" csrf}
+    (common/layout [:p "hi there"]))
+</code></pre>
+
+<h1>Setting content type</h1>
+
+<p>你可以使用content-type函数来设置响应的类型:</p>
+
+<pre><code class="{.clojure}">(GET "/project" []
+       (noir.response/content-type
+       "application/pdf"
+       (clojure.java.io/input-stream "report.pdf")))
+</code></pre>
+
+<p>下面是有效的响应类型设置:</p>
+
+<ul>
+<li>XML - Wraps the response with the content type for xml and sets the body to the content.</li>
+<li>JSON- Wraps the response in the json content type and generates JSON from the content</li>
+<li>JSONP - Generates JSON for the given content and creates a javascript response for calling func-name with it.</li>
+<li>edn - Wraps the response in the application/edn content-type and calls pr-str on the Clojure data stuctures passed in.</li>
+</ul>
+
+
+<pre><code class="{.clojure}">(GET "/xml" [] (xml "&lt;foo&gt;&lt;/foo&gt;"))
+(GET "/json" [] (json {:response "ok"}))
+(GET "/jsonp" [] (jsonp  "showUsers" [{:name "John"} {:name "Jane"}]))
+(GET "/edn" [] (edn {:foo 1 :bar 2}))
+</code></pre>
+
+<p>为了设置响应类型，你还需要设置noir.util.middleware/app-handler中间件。和上一节的请求一样，你只需要配置:formats键就可以了</p>
+
+<pre><code class="{.clojure}">(app-handler routes :formats [:json])
+</code></pre>
+
+
+
+
+    <a href="/2013/09/21/response_types.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

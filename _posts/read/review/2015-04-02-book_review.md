@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 《找对英语学习方法的第一本书》书评
+title:  英语口语相关书籍书评
 categories: [book]
 tags: [book,review]
 avatarimg: "/img/head.jpg"
@@ -8,7 +8,7 @@ published: false
 
 ---
 
-推荐度:&hearts;&hearts;&hearts;
+# 《找对英语学习方法的第一本书》
 
 讲述语言学习的方法，可以尝试！
 
