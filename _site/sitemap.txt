@@ -23,7 +23,9 @@ http://ivanpig.github.io/2015/04/23/proxy.html
 http://ivanpig.github.io/2015/04/08/why.html
 http://ivanpig.github.io/2015/04/07/implements.html
 http://ivanpig.github.io/2015/04/06/use.html
+http://ivanpig.github.io/2015/04/02/book_review.html
 http://ivanpig.github.io/2015/04/01/java_webframework.html
+http://ivanpig.github.io/2015/04/01/book_review.html
 http://ivanpig.github.io/2015/03/16/jvm.html
 http://ivanpig.github.io/2015/03/10/transactional.html
 http://ivanpig.github.io/2015/03/03/interface_field.html

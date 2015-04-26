@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-04-26T14:57:32+08:00</updated>
+    <updated>2015-04-26T17:43:28+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -2221,6 +2221,35 @@ public class TestAll {
     </entry>
     
     <entry>
+        <title>《找对英语学习方法的第一本书》书评</title>
+        <link href="http://ivanpig.github.io/2015/04/02/book_review.html"/>
+        <updated>2015-04-02T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/04/02/book_review</id>
+        <content type="html">&lt;p&gt;推荐度:&amp;hearts;&amp;hearts;&amp;hearts;&lt;/p&gt;
+
+&lt;p&gt;讲述语言学习的方法，可以尝试！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;早期：看图辩音&lt;/li&gt;
+&lt;li&gt;提高期：短句，可理解输入，只听，猜意思&lt;/li&gt;
+&lt;li&gt;增长期：还是听，提高难度和量，可以适当的说。主要要找出适合自己的方法，看电影？听歌曲？&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+        <summary type="html">&lt;p&gt;推荐度:&amp;hearts;&amp;hearts;&amp;hearts;&lt;/p&gt;
+
+&lt;p&gt;讲述语言学习的方法，可以尝试！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;早期：看图辩音&lt;/li&gt;
+&lt;li&gt;提高期：短句，可理解输入，只听，猜意思&lt;/li&gt;
+&lt;li&gt;增长期：还是听，提高难度和量，可以适当的说。主要要找出适合自己的方法，看电影？听歌曲？&lt;/li&gt;
+&lt;/ul&gt;
+
+</summary>
+    </entry>
+    
+    <entry>
         <title>自用Java开发框架</title>
         <link href="http://ivanpig.github.io/2015/04/01/java_webframework.html"/>
         <updated>2015-04-01T00:00:00+08:00</updated>
@@ -2236,6 +2265,51 @@ public class TestAll {
 &lt;p&gt;&lt;img src=&quot;/mind/framework.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/ivanpig/pig-template&quot;&gt;源码下载&lt;/a&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>《杠杆阅读术》书评</title>
+        <link href="http://ivanpig.github.io/2015/04/01/book_review.html"/>
+        <updated>2015-04-01T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/04/01/book_review</id>
+        <content type="html">&lt;p&gt;推荐度:&amp;hearts;&amp;hearts;&lt;/p&gt;
+
+&lt;p&gt;讲述读书的方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;主要针对商业书籍&lt;/li&gt;
+&lt;li&gt;一天一本(非技术性很强的书，一天一本难度不大)&lt;/li&gt;
+&lt;li&gt;先阅读序言，目录以及结尾，确认图书编写目的，带着目的去读&lt;/li&gt;
+&lt;li&gt;不要一页一页读，吸收20%即可，没读完也没关系(强迫症患者比较有难度)&lt;/li&gt;
+&lt;li&gt;重要的是实践&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;对个人而言，一是不要纠结于细节(当然是针对非技术性书籍)，不要强迫自己非要全部看完.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;看一类书，如果多本书中都提到了类似的观点，则需要注意。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;对书中的知识要进行实践。&lt;/em&gt;&lt;/p&gt;
+</content>
+        <summary type="html">&lt;p&gt;推荐度:&amp;hearts;&amp;hearts;&lt;/p&gt;
+
+&lt;p&gt;讲述读书的方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;主要针对商业书籍&lt;/li&gt;
+&lt;li&gt;一天一本(非技术性很强的书，一天一本难度不大)&lt;/li&gt;
+&lt;li&gt;先阅读序言，目录以及结尾，确认图书编写目的，带着目的去读&lt;/li&gt;
+&lt;li&gt;不要一页一页读，吸收20%即可，没读完也没关系(强迫症患者比较有难度)&lt;/li&gt;
+&lt;li&gt;重要的是实践&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;对个人而言，一是不要纠结于细节(当然是针对非技术性书籍)，不要强迫自己非要全部看完.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;看一类书，如果多本书中都提到了类似的观点，则需要注意。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;对书中的知识要进行实践。&lt;/em&gt;&lt;/p&gt;
 </summary>
     </entry>
     
