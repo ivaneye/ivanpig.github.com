@@ -119,7 +119,7 @@
         
         
         
-        <a class="post-category " href="/tag/#opensource"><i class="fa fa-tags">opensource (4)</i></a>
+        <a class="post-category " href="/tag/#opensource"><i class="fa fa-tags">opensource (3)</i></a>
         
         <a class="post-category " href="/tag/#opensource"><i class="fa fa-tags">junit3 (3)</i></a>
         
@@ -331,7 +331,47 @@ public void endTest(Test test) {
 </ul>
 
 
-<p>#</p>
+<h1>测试方法的执行</h1>
+
+<p>在执行测试方法时，在runTest()方法内，使用了反射，来执行test*()方法.</p>
+
+<pre><code class="java">protected void runTest() throws Throwable {
+    assertNotNull(fName); // Some VMs crash when calling getMethod(null,null);
+    Method runMethod= null;
+    try {
+        // use getMethod to get all public inherited
+        // methods. getDeclaredMethods returns all
+        // methods of this class but excludes the
+        // inherited ones.
+        runMethod= getClass().getMethod(fName, (Class[])null);
+    } catch (NoSuchMethodException e) {
+        fail("Method \""+fName+"\" not found");
+    }
+    if (!Modifier.isPublic(runMethod.getModifiers())) {
+        fail("Method \""+fName+"\" should be public");
+    }
+
+    try {
+        runMethod.invoke(this, (Object[])new Class[0]);
+    }
+    catch (InvocationTargetException e) {
+        e.fillInStackTrace();
+        throw e.getTargetException();
+    }
+    catch (IllegalAccessException e) {
+        e.fillInStackTrace();
+        throw e;
+    }
+}
+</code></pre>
+
+<p>这里网上不少文章分析这里是适配器模式，个人认为比较牵强。</p>
+
+<p><img src="/assets/designpattern/adapter.jpg" alt="" /></p>
+
+<p>从上图可以看出，标准适配器模式Adapter与Adaptee是两个不同的对象。这里是实际上是一个类，可能有人说这是适配器模式的变体，那照这么说，方法委托就是适配器模式咯？！</p>
+
+<p>其实这里就是通过反射进行的方法委托而已，没必要上升到设计模式的层面。</p>
 
 </div>
 
@@ -340,7 +380,7 @@ public void endTest(Test test) {
     <a class="pure-u-1-2 pagination-item " href="/2015/04/07/implements.html" title="读源码-JUnit3实现 "><p> <i class="fa fa-mail-reply"></i>&nbsp;读源码-JUnit3实现</p></a>
     
     
-    <a class="pure-u-1-2 pagination-item " href="/2015/04/16/use.html" title="读源码-JUnit4使用"><p>读源码-JUnit4使用&nbsp;<i class="fa fa-mail-forward"></i></p></a>
+    <a class="pure-u-1-2 pagination-item " href="/2015/04/23/proxy.html" title="Java Socket编程中加入代理"><p>Java Socket编程中加入代理&nbsp;<i class="fa fa-mail-forward"></i></p></a>
     
 </div>
 <link href="/css/code.css" rel="stylesheet">

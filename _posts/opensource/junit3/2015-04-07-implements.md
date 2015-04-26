@@ -4,7 +4,6 @@ title: 读源码-JUnit3实现
 categories: [junit3]
 tags: [opensource,junit3,java]
 avatarimg: "/img/head.jpg"
-published: false
 
 ---
 
@@ -362,7 +361,7 @@ private boolean isTestMethod(Method m) {
 
 # 时序图
 
-![](/assets/opensource/junit3/seq.png)
+![](/assets/opensource/junit3/junit_seq.png)
 
 
 # UML

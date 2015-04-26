@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-04-12T20:07:14+08:00</updated>
+    <updated>2015-04-26T14:57:32+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -13,989 +13,147 @@
 
     
     <entry>
-        <title>读源码-JUnit4使用</title>
-        <link href="http://ivanpig.github.io/2015/04/16/use.html"/>
-        <updated>2015-04-16T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/04/16/use</id>
-        <content type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&lt;/p&gt;
+        <title>Java Socket编程中加入代理</title>
+        <link href="http://ivanpig.github.io/2015/04/23/proxy.html"/>
+        <updated>2015-04-23T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/04/23/proxy</id>
+        <content type="html">&lt;h1&gt;方法一&lt;/h1&gt;
 
-&lt;h1&gt;JUnit4简介&lt;/h1&gt;
+&lt;p&gt;使用系统属性来完成代理设置, 这种方法比较简单, 但是不能对单独的连接来设置代理:&lt;/p&gt;
 
-&lt;p&gt;之前梳理了JUnit3，此篇将梳理JUnit4。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public static void main(String[] args) {
+    Properties prop = System.getProperties();
+    // 设置http访问要使用的代理服务器的地址
+    prop.setProperty(&quot;http.proxyHost&quot;, &quot;192.168.0.254&quot;);
+    // 设置http访问要使用的代理服务器的端口
+    prop.setProperty(&quot;http.proxyPort&quot;, &quot;8080&quot;);
+    // 设置不需要通过代理服务器访问的主机，可以使用*通配符，多个地址用|分隔
+    prop.setProperty(&quot;http.nonProxyHosts&quot;, &quot;localhost|192.168.0.*&quot;);
+    // 设置安全访问使用的代理服务器地址与端口
+    // 它没有https.nonProxyHosts属性，它按照http.nonProxyHosts 中设置的规则访问
+    prop.setProperty(&quot;https.proxyHost&quot;, &quot;192.168.0.254&quot;);
+    prop.setProperty(&quot;https.proxyPort&quot;, &quot;443&quot;);
+    // 使用ftp代理服务器的主机、端口以及不需要使用ftp代理服务器的主机
+    prop.setProperty(&quot;ftp.proxyHost&quot;, &quot;192.168.0.254&quot;);
+    prop.setProperty(&quot;ftp.proxyPort&quot;, &quot;2121&quot;);
+    prop.setProperty(&quot;ftp.nonProxyHosts&quot;, &quot;localhost|192.168.0.*&quot;);
+    // socks代理服务器的地址与端口
+    prop.setProperty(&quot;socksProxyHost&quot;, &quot;192.168.0.254&quot;);
+    prop.setProperty(&quot;socksProxyPort&quot;, &quot;8000&quot;);
+    // 设置登陆到代理服务器的用户名和密码
+    Authenticator.setDefault(new MyAuthenticator(&quot;userName&quot;, &quot;Password&quot;));
+}
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;JUnit4主要引入了注解。我们依然使用之前的例子来进行测试&lt;/p&gt;
-
-&lt;h1&gt;场景&lt;/h1&gt;
-
-&lt;p&gt;假设，我们有一个Person类&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;包含两个方法say和sayHi&lt;/li&gt;
-&lt;li&gt;两个方法都接收一个String类型的参数&lt;/li&gt;
-&lt;li&gt;say返回&quot;Hello,&quot;+arg&lt;/li&gt;
-&lt;li&gt;sayHi返回&quot;Hi,&quot;+arg&lt;/li&gt;
-&lt;/ul&gt;
+&lt;!-- more --&gt;
 
 
-&lt;p&gt;代码如下:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-public class Person {
-
-    public String say(String name) {
-        return &quot;Hello,&quot; + name;
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;static class MyAuthenticator extends Authenticator {
+    private String user = &quot;&quot;;
+    private String password = &quot;&quot;;
+    public MyAuthenticator(String user, String password) {
+        this.user = user;
+        this.password = password;
     }
-
-    public String sayHi(String name) {
-        return &quot;Hi,&quot; + name;
+    protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(user, password.toCharArray());
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;在JUnit4中如何进行测试呢?&lt;/p&gt;
+&lt;h1&gt;方法二&lt;/h1&gt;
 
-&lt;h1&gt;引入JUnit&lt;/h1&gt;
+&lt;p&gt;使用Proxy来对每个连接实现代理, 这种方法只能在jdk 1.5以上的版本使用(包含jdk1.5), 优点是可以单独的设置每个连接的代理, 缺点是设置比较麻烦:&lt;/p&gt;
 
-&lt;p&gt;首先还是引入JUnit4&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;xml&quot;&gt;&amp;lt;dependency&amp;gt;
-  &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt;
-  &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt;
-  &amp;lt;version&amp;gt;4.12&amp;lt;/version&amp;gt;
-  &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt;
-&amp;lt;/dependency&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;编写测试类&lt;/h1&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-public class PersonTest {
-
-    private Person person;
-
-    @Before
-    public void setUp() throws Exception {
-        System.out.println(&quot;setUp invoke&quot;);
-        person = new Person();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        System.out.println(&quot;tearDown invoke&quot;);
-    }
-
-    @Test
-    public void testSay() throws Exception {
-        assertEquals(&quot;Hello,Ivan&quot;, person.say(&quot;Ivan&quot;));
-    }
-
-    @Test
-    public void testSayHi() throws Exception {
-        assertEquals(&quot;Hi,Ivan&quot;, person.sayHi(&quot;Ivan&quot;));
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public static void main(String[] args) {
+    try {
+        URL url = new URL(&quot;http://www.baidu.com&quot;);
+        // 创建代理服务器
+        InetSocketAddress addr = new InetSocketAddress(&quot;192.168.0.254&quot;,
+                8080);
+        // Proxy proxy = new Proxy(Proxy.Type.SOCKS, addr); // Socket 代理
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, addr); // http 代理
+        // 如果我们知道代理server的名字, 可以直接使用
+        // 结束
+        URLConnection conn = url.openConnection(proxy);
+        InputStream in = conn.getInputStream();
+        // InputStream in = url.openStream();
+        String s = IOUtils.toString(in);
+        System.out.println(s);
+    } catch (Exception e) {
+        e.printStackTrace();
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;在JUnit4中，测试类不再需要继承TestCase和Assert了&lt;/li&gt;
-&lt;li&gt;测试方法也不需要以test开头，只需要添加@Test注解&lt;/li&gt;
-&lt;li&gt;assertEquals用来比较，方法调用结果是否与期望相同。其通过静态导入来引入。&lt;/li&gt;
-&lt;li&gt;setUp()和tearDown()方法名也不再必须，可以使用任意名字。只需要分别添加@Before和@After注解即可&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;运行测试&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;如果使用IDE则可以直接在测试类上，右击来运行测试，如果测试成功会出现绿条&lt;/li&gt;
-&lt;li&gt;通过mvn test来运行测试，输出的是文字测试结果&lt;/li&gt;
-&lt;li&gt;通过java org.junit.runner.JUnitCore org.ivan.PersonTest来运行&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;Intellij IDEA运行结果显示:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/opensource/junit3/ide.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Maven运行结果:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Running org.ivan.PersonTest
-setUp invoke
-tearDown invoke
-setUp invoke
-tearDown invoke
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;命令行输出结果:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;JUnit version 4.12
-.setUp invoke
-tearDown invoke
-.setUp invoke
-tearDown invoke
-
-Time: 0.014
-
-OK (2 tests)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;运行多个测试类&lt;/h1&gt;
-
-&lt;p&gt;假设我们新增一个类Animal:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-public class Animal {
-
-    public String say(String name) {
-        return &quot;momo,&quot; + name;
-    }
-
-    public String sayHi(String name) {
-        return &quot;gigi,&quot; + name;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;以及对应的测试类:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-
-public class AnimalTest {
-
-    private Animal animal;
-
-    @Before
-    public void setUp() throws Exception {
-        System.out.println(&quot;setUp invoke&quot;);
-        animal = new Animal();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        System.out.println(&quot;tearDown invoke&quot;);
-    }
-
-    @Test
-    public void testSay() throws Exception {
-        assertEquals(&quot;momo,Ivan&quot;, animal.say(&quot;Ivan&quot;));
-    }
-
-    @Test
-    public void testSayHi() throws Exception {
-        assertEquals(&quot;gigi,Ivan&quot;, animal.sayHi(&quot;Ivan&quot;));
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;如果我们想同时运行PersonTest和AnimalTest，该如何做?&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;对于IDE，直接在测试包上右击，运行测试即可&lt;/li&gt;
-&lt;li&gt;对于Maven，依然使用mvn test命令&lt;/li&gt;
-&lt;li&gt;对于命令行来说，则需要新建一个类&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        PersonTest.class,
-        AnimalTest.class
-})
-public class TestAll {
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;完全使用注解来进行处理&lt;/li&gt;
-&lt;li&gt;需要执行的测试类添加到SuiteClasses内即可&lt;/li&gt;
-&lt;li&gt;命令行执行时，通过java org.junit.runner.JUnitCore org.ivan.TestAll来运行&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;BeforeClass,AfterClass&lt;/h1&gt;
-
-&lt;p&gt;上面提到的setUp()和tearDown()方法是在每次测试方法前后被调用，假如你希望：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;运行setUp()方法&lt;/li&gt;
-&lt;li&gt;测试所有方法&lt;/li&gt;
-&lt;li&gt;运行tearDown()方法&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;该怎么办?&lt;/p&gt;
-
-&lt;p&gt;JUnit3提供了TestSetup,JUnit4提供了@BeforeClass和@AfterClass注解&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class PersonTest {
-
-    ...
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        System.out.println(&quot;BeforeClass&quot;);
-    }
-
-    @AfterClass
-    public static void afterClass() throws Exception {
-        System.out.println(&quot;AfterClass&quot;);
-    }
-    ...
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;注意这里的方法是static的&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;重复测试&lt;/h1&gt;
-
-&lt;p&gt;假设需要对某个测试进行多次测试，该怎么办?&lt;/p&gt;
-
-&lt;p&gt;JUnit3中提供了RepeatedTest。很遗憾，JUnit4没有提供类似的功能。&lt;/p&gt;
-
-&lt;p&gt;不过我们可以通过扩展JUnit4提供的Rule来自己实现。我们先来看下Rule.&lt;/p&gt;
-
-&lt;h2&gt;Rule&lt;/h2&gt;
-
-&lt;p&gt;此部分内容取自此&lt;a href=&quot;http://haibin369.iteye.com/blog/2088541&quot;&gt;博客&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Rule是JUnit4中的新特性，它让我们可以扩展JUnit的功能，灵活地改变测试方法的行为。JUnit中用@Rule和@ClassRule两个注解来实现Rule扩展，这两个注解需要放在实现了TestRule接口的成员变量（@Rule）或者静态变量（@ClassRule）上。@Rule和@ClassRule的不同点是，@Rule是方法级别的，每个测试方法执行时都会调用被注解的Rule，而@ClassRule是类级别的，在执行一个测试类的时候只会调用一次被注解的Rule&lt;/p&gt;
-
-&lt;h2&gt;内置Rule&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;TemporaryFolder Rule:使用这个Rule可以创建一些临时目录或者文件，在一个测试方法结束之后，系统会自动清空他们。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;@Rule
-public TemporaryFolder tempFolder = new TemporaryFolder();
-
-@Test
-public void testTempFolderRule() throws IOException {
-   tempFolder.newFile(&quot;test.txt&quot;);
-   tempFolder.newFolder(&quot;test&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ExternalResource Rule:ExternalResource 是TemporaryFolder的父类，主要用于在测试之前创建资源，并在测试完成后销毁。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;File tempFile;
-
-@Rule
-public ExternalResource extResource = new ExternalResource() {
-    //每个测试执行之前都会调用该方法创建一个临时文件
-    @Override
-    protected void before() throws Throwable {
-        tempFile = File.createTempFile(&quot;test&quot;, &quot;.txt&quot;);
-    }
-
-    //每个测试执行之后都会调用该方法删除临时文件
-    @Override
-    protected void after() {
-        tempFile.delete();
-    }
-};
-
-@Test
-public void testExtResource() throws IOException {
-    System.out.println(tempFile.getCanonicalPath());
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ErrorCollector Rule:ErrorCollector允许我们收集多个错误，并在测试执行完后一次过显示出来&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;@Rule
-public ErrorCollector errorCollector = new ErrorCollector();
-
-@Test
-public void testErrorCollector() {
-    errorCollector.addError(new Exception(&quot;Test Fail 1&quot;));
-    errorCollector.addError(new Throwable(&quot;fff&quot;));
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Verifier Rule:Verifier是ErrorCollector的父类，可以在测试执行完成之后做一些校验，以验证测试结果是不是正确&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;String result;
-
-@Rule
-public Verifier verifier = new Verifier() {
-    //当测试执行完之后会调用verify方法验证结果，抛出异常表明测试失败
-    @Override
-    protected void verify() throws Throwable {
-        if (!&quot;Success&quot;.equals(result)) {
-            throw new Exception(&quot;Test Fail.&quot;);
-        }
-    }
-};
-
-@Test
-public void testVerifier() {
-    result = &quot;Fail&quot;;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;TestWatcher Rule:TestWatcher 定义了五个触发点，分别是测试成功，测试失败，测试开始，测试完成，测试跳过，能让我们在每个触发点执行自定义的逻辑。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;@Rule
-public TestWatcher testWatcher = new TestWatcher() {
-    @Override
-    protected void succeeded(Description description) {
-        System.out.println(description.getDisplayName() + &quot; Succeed&quot;);
-    }
-
-    @Override
-    protected void failed(Throwable e, Description description) {
-        System.out.println(description.getDisplayName() + &quot; Fail&quot;);
-    }
-
-    @Override
-    protected void skipped(AssumptionViolatedException e, Description description) {
-        System.out.println(description.getDisplayName() + &quot; Skipped&quot;);
-    }
-
-    @Override
-    protected void starting(Description description) {
-        System.out.println(description.getDisplayName() + &quot; Started&quot;);
-    }
-
-    @Override
-    protected void finished(Description description) {
-        System.out.println(description.getDisplayName() + &quot; finished&quot;);
-    }
-};
-
-@Test
-public void testTestWatcher() {
-    /*
-        测试执行后会有以下输出：
-        testTestWatcher(org.haibin369.test.RulesTest) Started
-        Test invoked
-        testTestWatcher(org.haibin369.test.RulesTest) Succeed
-        testTestWatcher(org.haibin369.test.RulesTest) finished
-     */
-    System.out.println(&quot;Test invoked&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;TestName Rule:TestName能让我们在测试中获取目前测试方法的名字。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;@Rule
-public TestName testName = new TestName();
-
-@Test
-public void testTestName() {
-    //打印出测试方法的名字testTestName
-    System.out.println(testName.getMethodName());
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;使用Rule来实现重复执行测试&lt;/h2&gt;
-
-&lt;p&gt;首先实现一个Rule,这里叫RepeatRule&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-public class RepeatRule implements TestRule {
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({
-            java.lang.annotation.ElementType.METHOD
-    })
-    public @interface Repeat {
-        public abstract int times();
-    }
-
-    private static class RepeatStatement extends Statement {
-
-        private final int times;
-        private final Statement statement;
-
-        private RepeatStatement(int times, Statement statement) {
-            this.times = times;
-            this.statement = statement;
-        }
-
-        @Override
-        public void evaluate() throws Throwable {
-            for (int i = 0; i &amp;lt; times; i++) {
-                statement.evaluate();
-            }
-        }
-    }
-
-    public Statement apply(
-            Statement statement, Description description) {
-        Statement result = statement;
-        Repeat repeat = description.getAnnotation(Repeat.class);
-        if (repeat != null) {
-            int times = repeat.times();
-            result = new RepeatStatement(times, statement);
-        }
-        return result;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;编写测试&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;@Rule
-public RepeatRule repeatRule = new RepeatRule();
-
-@Test
-@RepeatRule.Repeat( times = 10 )
-public void testTempFolderRule() throws IOException {
-  System.out.println(&quot;Times&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;如上代码表示执行10次&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;UML&lt;/h1&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/opensource/junit4/diagram.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;与JUnit3相比，没有了相应的继承关系，由注解进行了处理 ！&lt;/p&gt;
 </content>
-        <summary type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&lt;/p&gt;
+        <summary type="html">&lt;h1&gt;方法一&lt;/h1&gt;
 
-&lt;h1&gt;JUnit4简介&lt;/h1&gt;
+&lt;p&gt;使用系统属性来完成代理设置, 这种方法比较简单, 但是不能对单独的连接来设置代理:&lt;/p&gt;
 
-&lt;p&gt;之前梳理了JUnit3，此篇将梳理JUnit4。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public static void main(String[] args) {
+    Properties prop = System.getProperties();
+    // 设置http访问要使用的代理服务器的地址
+    prop.setProperty(&quot;http.proxyHost&quot;, &quot;192.168.0.254&quot;);
+    // 设置http访问要使用的代理服务器的端口
+    prop.setProperty(&quot;http.proxyPort&quot;, &quot;8080&quot;);
+    // 设置不需要通过代理服务器访问的主机，可以使用*通配符，多个地址用|分隔
+    prop.setProperty(&quot;http.nonProxyHosts&quot;, &quot;localhost|192.168.0.*&quot;);
+    // 设置安全访问使用的代理服务器地址与端口
+    // 它没有https.nonProxyHosts属性，它按照http.nonProxyHosts 中设置的规则访问
+    prop.setProperty(&quot;https.proxyHost&quot;, &quot;192.168.0.254&quot;);
+    prop.setProperty(&quot;https.proxyPort&quot;, &quot;443&quot;);
+    // 使用ftp代理服务器的主机、端口以及不需要使用ftp代理服务器的主机
+    prop.setProperty(&quot;ftp.proxyHost&quot;, &quot;192.168.0.254&quot;);
+    prop.setProperty(&quot;ftp.proxyPort&quot;, &quot;2121&quot;);
+    prop.setProperty(&quot;ftp.nonProxyHosts&quot;, &quot;localhost|192.168.0.*&quot;);
+    // socks代理服务器的地址与端口
+    prop.setProperty(&quot;socksProxyHost&quot;, &quot;192.168.0.254&quot;);
+    prop.setProperty(&quot;socksProxyPort&quot;, &quot;8000&quot;);
+    // 设置登陆到代理服务器的用户名和密码
+    Authenticator.setDefault(new MyAuthenticator(&quot;userName&quot;, &quot;Password&quot;));
+}
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;JUnit4主要引入了注解。我们依然使用之前的例子来进行测试&lt;/p&gt;
-
-&lt;h1&gt;场景&lt;/h1&gt;
-
-&lt;p&gt;假设，我们有一个Person类&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;包含两个方法say和sayHi&lt;/li&gt;
-&lt;li&gt;两个方法都接收一个String类型的参数&lt;/li&gt;
-&lt;li&gt;say返回&quot;Hello,&quot;+arg&lt;/li&gt;
-&lt;li&gt;sayHi返回&quot;Hi,&quot;+arg&lt;/li&gt;
-&lt;/ul&gt;
+&lt;!-- more --&gt;
 
 
-&lt;p&gt;代码如下:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-public class Person {
-
-    public String say(String name) {
-        return &quot;Hello,&quot; + name;
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;static class MyAuthenticator extends Authenticator {
+    private String user = &quot;&quot;;
+    private String password = &quot;&quot;;
+    public MyAuthenticator(String user, String password) {
+        this.user = user;
+        this.password = password;
     }
-
-    public String sayHi(String name) {
-        return &quot;Hi,&quot; + name;
+    protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(user, password.toCharArray());
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;在JUnit4中如何进行测试呢?&lt;/p&gt;
+&lt;h1&gt;方法二&lt;/h1&gt;
 
-&lt;h1&gt;引入JUnit&lt;/h1&gt;
+&lt;p&gt;使用Proxy来对每个连接实现代理, 这种方法只能在jdk 1.5以上的版本使用(包含jdk1.5), 优点是可以单独的设置每个连接的代理, 缺点是设置比较麻烦:&lt;/p&gt;
 
-&lt;p&gt;首先还是引入JUnit4&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;xml&quot;&gt;&amp;lt;dependency&amp;gt;
-  &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt;
-  &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt;
-  &amp;lt;version&amp;gt;4.12&amp;lt;/version&amp;gt;
-  &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt;
-&amp;lt;/dependency&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;编写测试类&lt;/h1&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-public class PersonTest {
-
-    private Person person;
-
-    @Before
-    public void setUp() throws Exception {
-        System.out.println(&quot;setUp invoke&quot;);
-        person = new Person();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        System.out.println(&quot;tearDown invoke&quot;);
-    }
-
-    @Test
-    public void testSay() throws Exception {
-        assertEquals(&quot;Hello,Ivan&quot;, person.say(&quot;Ivan&quot;));
-    }
-
-    @Test
-    public void testSayHi() throws Exception {
-        assertEquals(&quot;Hi,Ivan&quot;, person.sayHi(&quot;Ivan&quot;));
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public static void main(String[] args) {
+    try {
+        URL url = new URL(&quot;http://www.baidu.com&quot;);
+        // 创建代理服务器
+        InetSocketAddress addr = new InetSocketAddress(&quot;192.168.0.254&quot;,
+                8080);
+        // Proxy proxy = new Proxy(Proxy.Type.SOCKS, addr); // Socket 代理
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, addr); // http 代理
+        // 如果我们知道代理server的名字, 可以直接使用
+        // 结束
+        URLConnection conn = url.openConnection(proxy);
+        InputStream in = conn.getInputStream();
+        // InputStream in = url.openStream();
+        String s = IOUtils.toString(in);
+        System.out.println(s);
+    } catch (Exception e) {
+        e.printStackTrace();
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;在JUnit4中，测试类不再需要继承TestCase和Assert了&lt;/li&gt;
-&lt;li&gt;测试方法也不需要以test开头，只需要添加@Test注解&lt;/li&gt;
-&lt;li&gt;assertEquals用来比较，方法调用结果是否与期望相同。其通过静态导入来引入。&lt;/li&gt;
-&lt;li&gt;setUp()和tearDown()方法名也不再必须，可以使用任意名字。只需要分别添加@Before和@After注解即可&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;运行测试&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;如果使用IDE则可以直接在测试类上，右击来运行测试，如果测试成功会出现绿条&lt;/li&gt;
-&lt;li&gt;通过mvn test来运行测试，输出的是文字测试结果&lt;/li&gt;
-&lt;li&gt;通过java org.junit.runner.JUnitCore org.ivan.PersonTest来运行&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;Intellij IDEA运行结果显示:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/opensource/junit3/ide.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Maven运行结果:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Running org.ivan.PersonTest
-setUp invoke
-tearDown invoke
-setUp invoke
-tearDown invoke
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;命令行输出结果:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;JUnit version 4.12
-.setUp invoke
-tearDown invoke
-.setUp invoke
-tearDown invoke
-
-Time: 0.014
-
-OK (2 tests)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1&gt;运行多个测试类&lt;/h1&gt;
-
-&lt;p&gt;假设我们新增一个类Animal:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-public class Animal {
-
-    public String say(String name) {
-        return &quot;momo,&quot; + name;
-    }
-
-    public String sayHi(String name) {
-        return &quot;gigi,&quot; + name;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;以及对应的测试类:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-
-public class AnimalTest {
-
-    private Animal animal;
-
-    @Before
-    public void setUp() throws Exception {
-        System.out.println(&quot;setUp invoke&quot;);
-        animal = new Animal();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        System.out.println(&quot;tearDown invoke&quot;);
-    }
-
-    @Test
-    public void testSay() throws Exception {
-        assertEquals(&quot;momo,Ivan&quot;, animal.say(&quot;Ivan&quot;));
-    }
-
-    @Test
-    public void testSayHi() throws Exception {
-        assertEquals(&quot;gigi,Ivan&quot;, animal.sayHi(&quot;Ivan&quot;));
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;如果我们想同时运行PersonTest和AnimalTest，该如何做?&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;对于IDE，直接在测试包上右击，运行测试即可&lt;/li&gt;
-&lt;li&gt;对于Maven，依然使用mvn test命令&lt;/li&gt;
-&lt;li&gt;对于命令行来说，则需要新建一个类&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        PersonTest.class,
-        AnimalTest.class
-})
-public class TestAll {
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;完全使用注解来进行处理&lt;/li&gt;
-&lt;li&gt;需要执行的测试类添加到SuiteClasses内即可&lt;/li&gt;
-&lt;li&gt;命令行执行时，通过java org.junit.runner.JUnitCore org.ivan.TestAll来运行&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;BeforeClass,AfterClass&lt;/h1&gt;
-
-&lt;p&gt;上面提到的setUp()和tearDown()方法是在每次测试方法前后被调用，假如你希望：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;运行setUp()方法&lt;/li&gt;
-&lt;li&gt;测试所有方法&lt;/li&gt;
-&lt;li&gt;运行tearDown()方法&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;该怎么办?&lt;/p&gt;
-
-&lt;p&gt;JUnit3提供了TestSetup,JUnit4提供了@BeforeClass和@AfterClass注解&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class PersonTest {
-
-    ...
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        System.out.println(&quot;BeforeClass&quot;);
-    }
-
-    @AfterClass
-    public static void afterClass() throws Exception {
-        System.out.println(&quot;AfterClass&quot;);
-    }
-    ...
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;注意这里的方法是static的&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;重复测试&lt;/h1&gt;
-
-&lt;p&gt;假设需要对某个测试进行多次测试，该怎么办?&lt;/p&gt;
-
-&lt;p&gt;JUnit3中提供了RepeatedTest。很遗憾，JUnit4没有提供类似的功能。&lt;/p&gt;
-
-&lt;p&gt;不过我们可以通过扩展JUnit4提供的Rule来自己实现。我们先来看下Rule.&lt;/p&gt;
-
-&lt;h2&gt;Rule&lt;/h2&gt;
-
-&lt;p&gt;此部分内容取自此&lt;a href=&quot;http://haibin369.iteye.com/blog/2088541&quot;&gt;博客&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Rule是JUnit4中的新特性，它让我们可以扩展JUnit的功能，灵活地改变测试方法的行为。JUnit中用@Rule和@ClassRule两个注解来实现Rule扩展，这两个注解需要放在实现了TestRule接口的成员变量（@Rule）或者静态变量（@ClassRule）上。@Rule和@ClassRule的不同点是，@Rule是方法级别的，每个测试方法执行时都会调用被注解的Rule，而@ClassRule是类级别的，在执行一个测试类的时候只会调用一次被注解的Rule&lt;/p&gt;
-
-&lt;h2&gt;内置Rule&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;TemporaryFolder Rule:使用这个Rule可以创建一些临时目录或者文件，在一个测试方法结束之后，系统会自动清空他们。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;@Rule
-public TemporaryFolder tempFolder = new TemporaryFolder();
-
-@Test
-public void testTempFolderRule() throws IOException {
-   tempFolder.newFile(&quot;test.txt&quot;);
-   tempFolder.newFolder(&quot;test&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ExternalResource Rule:ExternalResource 是TemporaryFolder的父类，主要用于在测试之前创建资源，并在测试完成后销毁。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;File tempFile;
-
-@Rule
-public ExternalResource extResource = new ExternalResource() {
-    //每个测试执行之前都会调用该方法创建一个临时文件
-    @Override
-    protected void before() throws Throwable {
-        tempFile = File.createTempFile(&quot;test&quot;, &quot;.txt&quot;);
-    }
-
-    //每个测试执行之后都会调用该方法删除临时文件
-    @Override
-    protected void after() {
-        tempFile.delete();
-    }
-};
-
-@Test
-public void testExtResource() throws IOException {
-    System.out.println(tempFile.getCanonicalPath());
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ErrorCollector Rule:ErrorCollector允许我们收集多个错误，并在测试执行完后一次过显示出来&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;@Rule
-public ErrorCollector errorCollector = new ErrorCollector();
-
-@Test
-public void testErrorCollector() {
-    errorCollector.addError(new Exception(&quot;Test Fail 1&quot;));
-    errorCollector.addError(new Throwable(&quot;fff&quot;));
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Verifier Rule:Verifier是ErrorCollector的父类，可以在测试执行完成之后做一些校验，以验证测试结果是不是正确&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;String result;
-
-@Rule
-public Verifier verifier = new Verifier() {
-    //当测试执行完之后会调用verify方法验证结果，抛出异常表明测试失败
-    @Override
-    protected void verify() throws Throwable {
-        if (!&quot;Success&quot;.equals(result)) {
-            throw new Exception(&quot;Test Fail.&quot;);
-        }
-    }
-};
-
-@Test
-public void testVerifier() {
-    result = &quot;Fail&quot;;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;TestWatcher Rule:TestWatcher 定义了五个触发点，分别是测试成功，测试失败，测试开始，测试完成，测试跳过，能让我们在每个触发点执行自定义的逻辑。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;@Rule
-public TestWatcher testWatcher = new TestWatcher() {
-    @Override
-    protected void succeeded(Description description) {
-        System.out.println(description.getDisplayName() + &quot; Succeed&quot;);
-    }
-
-    @Override
-    protected void failed(Throwable e, Description description) {
-        System.out.println(description.getDisplayName() + &quot; Fail&quot;);
-    }
-
-    @Override
-    protected void skipped(AssumptionViolatedException e, Description description) {
-        System.out.println(description.getDisplayName() + &quot; Skipped&quot;);
-    }
-
-    @Override
-    protected void starting(Description description) {
-        System.out.println(description.getDisplayName() + &quot; Started&quot;);
-    }
-
-    @Override
-    protected void finished(Description description) {
-        System.out.println(description.getDisplayName() + &quot; finished&quot;);
-    }
-};
-
-@Test
-public void testTestWatcher() {
-    /*
-        测试执行后会有以下输出：
-        testTestWatcher(org.haibin369.test.RulesTest) Started
-        Test invoked
-        testTestWatcher(org.haibin369.test.RulesTest) Succeed
-        testTestWatcher(org.haibin369.test.RulesTest) finished
-     */
-    System.out.println(&quot;Test invoked&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;TestName Rule:TestName能让我们在测试中获取目前测试方法的名字。&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;@Rule
-public TestName testName = new TestName();
-
-@Test
-public void testTestName() {
-    //打印出测试方法的名字testTestName
-    System.out.println(testName.getMethodName());
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;使用Rule来实现重复执行测试&lt;/h2&gt;
-
-&lt;p&gt;首先实现一个Rule,这里叫RepeatRule&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
-
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-public class RepeatRule implements TestRule {
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({
-            java.lang.annotation.ElementType.METHOD
-    })
-    public @interface Repeat {
-        public abstract int times();
-    }
-
-    private static class RepeatStatement extends Statement {
-
-        private final int times;
-        private final Statement statement;
-
-        private RepeatStatement(int times, Statement statement) {
-            this.times = times;
-            this.statement = statement;
-        }
-
-        @Override
-        public void evaluate() throws Throwable {
-            for (int i = 0; i &amp;lt; times; i++) {
-                statement.evaluate();
-            }
-        }
-    }
-
-    public Statement apply(
-            Statement statement, Description description) {
-        Statement result = statement;
-        Repeat repeat = description.getAnnotation(Repeat.class);
-        if (repeat != null) {
-            int times = repeat.times();
-            result = new RepeatStatement(times, statement);
-        }
-        return result;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;编写测试&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;@Rule
-public RepeatRule repeatRule = new RepeatRule();
-
-@Test
-@RepeatRule.Repeat( times = 10 )
-public void testTempFolderRule() throws IOException {
-  System.out.println(&quot;Times&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;如上代码表示执行10次&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;UML&lt;/h1&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/opensource/junit4/diagram.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;与JUnit3相比，没有了相应的继承关系，由注解进行了处理 ！&lt;/p&gt;
 </summary>
     </entry>
     
@@ -1205,7 +363,47 @@ public void endTest(Test test) {
 &lt;/ul&gt;
 
 
-&lt;p&gt;#&lt;/p&gt;
+&lt;h1&gt;测试方法的执行&lt;/h1&gt;
+
+&lt;p&gt;在执行测试方法时，在runTest()方法内，使用了反射，来执行test*()方法.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;protected void runTest() throws Throwable {
+    assertNotNull(fName); // Some VMs crash when calling getMethod(null,null);
+    Method runMethod= null;
+    try {
+        // use getMethod to get all public inherited
+        // methods. getDeclaredMethods returns all
+        // methods of this class but excludes the
+        // inherited ones.
+        runMethod= getClass().getMethod(fName, (Class[])null);
+    } catch (NoSuchMethodException e) {
+        fail(&quot;Method \&quot;&quot;+fName+&quot;\&quot; not found&quot;);
+    }
+    if (!Modifier.isPublic(runMethod.getModifiers())) {
+        fail(&quot;Method \&quot;&quot;+fName+&quot;\&quot; should be public&quot;);
+    }
+
+    try {
+        runMethod.invoke(this, (Object[])new Class[0]);
+    }
+    catch (InvocationTargetException e) {
+        e.fillInStackTrace();
+        throw e.getTargetException();
+    }
+    catch (IllegalAccessException e) {
+        e.fillInStackTrace();
+        throw e;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里网上不少文章分析这里是适配器模式，个人认为比较牵强。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/adapter.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从上图可以看出，标准适配器模式Adapter与Adaptee是两个不同的对象。这里是实际上是一个类，可能有人说这是适配器模式的变体，那照这么说，方法委托就是适配器模式咯？！&lt;/p&gt;
+
+&lt;p&gt;其实这里就是通过反射进行的方法委托而已，没必要上升到设计模式的层面。&lt;/p&gt;
 </content>
         <summary type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&amp;hearts;&amp;hearts;&lt;/p&gt;
 
@@ -1408,7 +606,47 @@ public void endTest(Test test) {
 &lt;/ul&gt;
 
 
-&lt;p&gt;#&lt;/p&gt;
+&lt;h1&gt;测试方法的执行&lt;/h1&gt;
+
+&lt;p&gt;在执行测试方法时，在runTest()方法内，使用了反射，来执行test*()方法.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;protected void runTest() throws Throwable {
+    assertNotNull(fName); // Some VMs crash when calling getMethod(null,null);
+    Method runMethod= null;
+    try {
+        // use getMethod to get all public inherited
+        // methods. getDeclaredMethods returns all
+        // methods of this class but excludes the
+        // inherited ones.
+        runMethod= getClass().getMethod(fName, (Class[])null);
+    } catch (NoSuchMethodException e) {
+        fail(&quot;Method \&quot;&quot;+fName+&quot;\&quot; not found&quot;);
+    }
+    if (!Modifier.isPublic(runMethod.getModifiers())) {
+        fail(&quot;Method \&quot;&quot;+fName+&quot;\&quot; should be public&quot;);
+    }
+
+    try {
+        runMethod.invoke(this, (Object[])new Class[0]);
+    }
+    catch (InvocationTargetException e) {
+        e.fillInStackTrace();
+        throw e.getTargetException();
+    }
+    catch (IllegalAccessException e) {
+        e.fillInStackTrace();
+        throw e;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里网上不少文章分析这里是适配器模式，个人认为比较牵强。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/adapter.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从上图可以看出，标准适配器模式Adapter与Adaptee是两个不同的对象。这里是实际上是一个类，可能有人说这是适配器模式的变体，那照这么说，方法委托就是适配器模式咯？！&lt;/p&gt;
+
+&lt;p&gt;其实这里就是通过反射进行的方法委托而已，没必要上升到设计模式的层面。&lt;/p&gt;
 </summary>
     </entry>
     
@@ -1801,7 +1039,7 @@ private boolean isTestMethod(Method m) {
 
 &lt;h1&gt;时序图&lt;/h1&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/opensource/junit3/seq.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/opensource/junit3/junit_seq.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h1&gt;UML&lt;/h1&gt;
 
@@ -2191,7 +1429,7 @@ private boolean isTestMethod(Method m) {
 
 &lt;h1&gt;时序图&lt;/h1&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/opensource/junit3/seq.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/opensource/junit3/junit_seq.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h1&gt;UML&lt;/h1&gt;
 
