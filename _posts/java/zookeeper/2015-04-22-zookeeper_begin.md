@@ -1,19 +1,145 @@
 ---
 layout: post
-title: zookeeper入门指南
+title: ZooKeeper安装与Java调用
 categories: zookeeper
 tags: [java,zookeeper]
 avatarimg: "/img/head.jpg"
-published: false
 
 ---
 
-本文翻译自[ZooKeeper Getting Started Guide](http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html)
+# 下载
 
-# 入门：使用ZooKeeper协调分布式应用
+ZooKeeper目前是Apache顶级项目，可从[此处下载](http://zookeeper.apache.org/releases.html)
 
-本文是ZooKeeper的快速入门。主要包括节点的ZooKeeper服务安装，一些操作命令和一个简单的例子程序。最后
- Finally, as a convenience, there are a few sections 
-regarding more complicated installations, for example running replicated deployments, 
-and optimizing the transaction log. However for the complete instructions for commercial deployments, 
-please refer to the ZooKeeper Administrator's Guide.
+# 安装
+
+- 将下载的压缩包，解压缩到任意路径下.(例如:d:/soft)
+- 至ZooKeeper目录/conf下，会发现有一个zoo_sample.cfg，在当前目录拷贝一份，并重命名为zoo.cfg
+- 进入ZooKeeper目录/bin下，通过zkServer.cmd或zkServer.sh启动ZooKeeper
+
+# 客户端操作
+
+- 在ZooKeeper目录/bin下，使用命令行启动zkCli.cmd或者zkCli.sh即可启动ZooKeeper客户端
+- 在客户端可以执行: ls,get,set等命令，来展示，获取或设置值
+
+```
+ls /                        //列出/下的内容
+set /test test              //给/test目录设值
+get /test                   //获取/test目录的值
+```
+
+<!-- more -->
+
+# Java操作
+
+- 新建一个Maven项目
+- 在pom.xml中添加ZooKeeper依赖
+- 新建一个类，这里叫ZookeeperTest，编写如下代码
+
+pom.xml添加依赖:
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.apache.zookeeper</groupId>
+        <artifactId>zookeeper</artifactId>
+        <version>3.4.5</version>
+    </dependency>
+</dependencies>
+```
+
+ZookeeperTest代码:
+
+```java
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooDefs.Ids;
+import org.apache.zookeeper.ZooKeeper;
+
+/**
+ * Created by wangyifan on 2015/4/22.
+ */
+public class ZookeeperTest {
+    private ZooKeeper zk = null;
+
+    public ZookeeperTest() {
+        try {
+            zk = new ZooKeeper("127.0.0.1:2181", 500000, new Watcher() {
+                // 监控所有被触发的事件
+                public void process(WatchedEvent event) {
+                    System.out.println(event.getPath());
+                    System.out.println(event.getType().name());
+                    //System.out.println(event.getState().getIntValue());
+                }
+            });
+            zk.exists("/root/childone", true);//观察这个节点发生的事件
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void createNodes() {
+        try {
+            //创建一个节点root，数据是mydata,不进行ACL权限控制，节点为永久性的(即客户端shutdown了也不会消失)
+            zk.create("/root", "mydata".getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            //在root下面创建一个childone znode,数据为childone,不进行ACL权限控制，节点为永久性的
+            zk.create("/root/childone", "childone".getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateNodes() {
+        try {
+            //取得/root/childone节点下的数据,返回byte[]
+            System.out.println(new String(zk.getData("/root/childone", true, null)));
+
+            //修改节点/root/childone下的数据，第三个参数为版本，如果是-1，那会无视被修改的数据版本，直接改掉
+            zk.setData("/root/childone", "childonemodify2".getBytes(), -1);
+
+            System.out.println(new String(zk.getData("/root/childone", true, null)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteNodes() {
+        try {
+            //第二个参数为版本，－1的话直接删除，无视版本
+            zk.delete("/root/childone", -1);
+            zk.delete("/root", -1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getNodes() {
+        try {
+            //第二个参数为版本，－1的话直接删除，无视版本
+            byte[] bytes = zk.getData("/zk_test",true,null);
+            System.out.println("data is " + new String(bytes));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            ZookeeperTest zkTest = new ZookeeperTest();
+            //zkTest.createNodes();
+//            zkTest.updateNodes();
+            //zkTest.deleteNodes();
+            zkTest.getNodes();
+
+            while (true) {
+                Thread.sleep(1000);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
