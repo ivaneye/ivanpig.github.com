@@ -143,3 +143,100 @@ public class ZookeeperTest {
     }
 }
 ```
+
+# 基于Curator的操作
+
+- ZooKeeper默认的Watcher是一次性的，即当触发了一次监听后，即失效，需重新注册
+- 使用Curator可以简化此操作
+
+添加pom依赖：
+
+```xml
+<dependency>
+    <groupId>org.apache.curator</groupId>
+    <artifactId>curator-framework</artifactId>
+    <version>2.7.1</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.curator</groupId>
+    <artifactId>curator-recipes</artifactId>
+    <version>2.7.1</version>
+</dependency>
+```
+
+```java
+import org.apache.curator.RetryPolicy;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
+import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.curator.utils.ZKPaths;
+
+/**
+ * Created by wangyifan on 2015/4/28.
+ */
+public class ZooKeeperWatcher {
+    static CuratorFramework zkclient = null;
+    static String nameSpace = "root";// 根节点
+
+    static {
+        String zkhost = "127.0.0.1:2181";// zk的host
+        RetryPolicy rp = new ExponentialBackoffRetry(1000, 3);// 重试机制
+        CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder().connectString(zkhost).connectionTimeoutMs(5000).sessionTimeoutMs(5000).retryPolicy(rp);
+        builder.namespace(nameSpace);
+        CuratorFramework zclient = builder.build();
+        zkclient = zclient;
+        zkclient.start();// 放在这前面执行
+        zkclient.newNamespaceAwareEnsurePath("/" + nameSpace);
+    }
+
+    public static void watch() throws Exception {
+        PathChildrenCache cache = new PathChildrenCache(zkclient, "/", false);
+        cache.start();
+
+        System.out.println("监听开始/zk........");
+        PathChildrenCacheListener plis = new PathChildrenCacheListener() {
+            public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
+                System.out.println("Event here " + event.getType());
+                switch (event.getType()) {
+                    case CHILD_ADDED: {
+                        System.out.println("Data: " + new String(zkclient.getData().forPath(event.getData().getPath())));
+                        System.out.println("Node added: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        break;
+                    }
+                    case CHILD_UPDATED: {
+                        System.out.println("Data: " + new String(zkclient.getData().forPath(event.getData().getPath())));
+                        System.out.println("Node changed: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        break;
+                    }
+                    case CHILD_REMOVED: {
+                        System.out.println("Data: " + new String(zkclient.getData().forPath(event.getData().getPath())));
+                        System.out.println("Node removed: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        break;
+                    }
+                }
+
+            }
+        };
+        // 注册监听
+        cache.getListenable().addListener(plis);
+    }
+
+    public static void main(String[] args) {
+        try {
+            ZooKeeperWatcher.watch();
+
+            while (true) {
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+```
+
+如上代码，当对/root目录进行操作时，即可监控到！
