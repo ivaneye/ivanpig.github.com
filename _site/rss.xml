@@ -4,7 +4,7 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-04-26T21:43:38+08:00</updated>
+    <updated>2015-04-29T21:14:12+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
@@ -154,6 +154,497 @@
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>ZooKeeper安装与Java调用</title>
+        <link href="http://ivanpig.github.io/2015/04/22/zookeeper_begin.html"/>
+        <updated>2015-04-22T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/04/22/zookeeper_begin</id>
+        <content type="html">&lt;h1&gt;下载&lt;/h1&gt;
+
+&lt;p&gt;ZooKeeper目前是Apache顶级项目，可从&lt;a href=&quot;http://zookeeper.apache.org/releases.html&quot;&gt;此处下载&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;安装&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;将下载的压缩包，解压缩到任意路径下.(例如:d:/soft)&lt;/li&gt;
+&lt;li&gt;至ZooKeeper目录/conf下，会发现有一个zoo_sample.cfg，在当前目录拷贝一份，并重命名为zoo.cfg&lt;/li&gt;
+&lt;li&gt;进入ZooKeeper目录/bin下，通过zkServer.cmd或zkServer.sh启动ZooKeeper&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;客户端操作&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在ZooKeeper目录/bin下，使用命令行启动zkCli.cmd或者zkCli.sh即可启动ZooKeeper客户端&lt;/li&gt;
+&lt;li&gt;在客户端可以执行: ls,get,set等命令，来展示，获取或设置值&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;ls /                        //列出/下的内容
+set /test test              //给/test目录设值
+get /test                   //获取/test目录的值
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Java操作&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;新建一个Maven项目&lt;/li&gt;
+&lt;li&gt;在pom.xml中添加ZooKeeper依赖&lt;/li&gt;
+&lt;li&gt;新建一个类，这里叫ZookeeperTest，编写如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;pom.xml添加依赖:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;xml&quot;&gt;&amp;lt;dependencies&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.apache.zookeeper&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;zookeeper&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;3.4.5&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+&amp;lt;/dependencies&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ZookeeperTest代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooDefs.Ids;
+import org.apache.zookeeper.ZooKeeper;
+
+/**
+ * Created by wangyifan on 2015/4/22.
+ */
+public class ZookeeperTest {
+    private ZooKeeper zk = null;
+
+    public ZookeeperTest() {
+        try {
+            zk = new ZooKeeper(&quot;127.0.0.1:2181&quot;, 500000, new Watcher() {
+                // 监控所有被触发的事件
+                public void process(WatchedEvent event) {
+                    System.out.println(event.getPath());
+                    System.out.println(event.getType().name());
+                    //System.out.println(event.getState().getIntValue());
+                }
+            });
+            zk.exists(&quot;/root/childone&quot;, true);//观察这个节点发生的事件
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void createNodes() {
+        try {
+            //创建一个节点root，数据是mydata,不进行ACL权限控制，节点为永久性的(即客户端shutdown了也不会消失)
+            zk.create(&quot;/root&quot;, &quot;mydata&quot;.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            //在root下面创建一个childone znode,数据为childone,不进行ACL权限控制，节点为永久性的
+            zk.create(&quot;/root/childone&quot;, &quot;childone&quot;.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateNodes() {
+        try {
+            //取得/root/childone节点下的数据,返回byte[]
+            System.out.println(new String(zk.getData(&quot;/root/childone&quot;, true, null)));
+
+            //修改节点/root/childone下的数据，第三个参数为版本，如果是-1，那会无视被修改的数据版本，直接改掉
+            zk.setData(&quot;/root/childone&quot;, &quot;childonemodify2&quot;.getBytes(), -1);
+
+            System.out.println(new String(zk.getData(&quot;/root/childone&quot;, true, null)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteNodes() {
+        try {
+            //第二个参数为版本，－1的话直接删除，无视版本
+            zk.delete(&quot;/root/childone&quot;, -1);
+            zk.delete(&quot;/root&quot;, -1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getNodes() {
+        try {
+            //第二个参数为版本，－1的话直接删除，无视版本
+            byte[] bytes = zk.getData(&quot;/zk_test&quot;,true,null);
+            System.out.println(&quot;data is &quot; + new String(bytes));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            ZookeeperTest zkTest = new ZookeeperTest();
+            //zkTest.createNodes();
+//            zkTest.updateNodes();
+            //zkTest.deleteNodes();
+            zkTest.getNodes();
+
+            while (true) {
+                Thread.sleep(1000);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;基于Curator的操作&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ZooKeeper默认的Watcher是一次性的，即当触发了一次监听后，即失效，需重新注册&lt;/li&gt;
+&lt;li&gt;使用Curator可以简化此操作&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;添加pom依赖：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;xml&quot;&gt;&amp;lt;dependency&amp;gt;
+    &amp;lt;groupId&amp;gt;org.apache.curator&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;curator-framework&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;2.7.1&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&amp;lt;dependency&amp;gt;
+    &amp;lt;groupId&amp;gt;org.apache.curator&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;curator-recipes&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;2.7.1&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;import org.apache.curator.RetryPolicy;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
+import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.curator.utils.ZKPaths;
+
+/**
+ * Created by wangyifan on 2015/4/28.
+ */
+public class ZooKeeperWatcher {
+    static CuratorFramework zkclient = null;
+    static String nameSpace = &quot;root&quot;;// 根节点
+
+    static {
+        String zkhost = &quot;127.0.0.1:2181&quot;;// zk的host
+        RetryPolicy rp = new ExponentialBackoffRetry(1000, 3);// 重试机制
+        CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder().connectString(zkhost).connectionTimeoutMs(5000).sessionTimeoutMs(5000).retryPolicy(rp);
+        builder.namespace(nameSpace);
+        CuratorFramework zclient = builder.build();
+        zkclient = zclient;
+        zkclient.start();// 放在这前面执行
+        zkclient.newNamespaceAwareEnsurePath(&quot;/&quot; + nameSpace);
+    }
+
+    public static void watch() throws Exception {
+        PathChildrenCache cache = new PathChildrenCache(zkclient, &quot;/&quot;, false);
+        cache.start();
+
+        System.out.println(&quot;监听开始/zk........&quot;);
+        PathChildrenCacheListener plis = new PathChildrenCacheListener() {
+            public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
+                System.out.println(&quot;Event here &quot; + event.getType());
+                switch (event.getType()) {
+                    case CHILD_ADDED: {
+                        System.out.println(&quot;Data: &quot; + new String(zkclient.getData().forPath(event.getData().getPath())));
+                        System.out.println(&quot;Node added: &quot; + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        break;
+                    }
+                    case CHILD_UPDATED: {
+                        System.out.println(&quot;Data: &quot; + new String(zkclient.getData().forPath(event.getData().getPath())));
+                        System.out.println(&quot;Node changed: &quot; + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        break;
+                    }
+                    case CHILD_REMOVED: {
+                        System.out.println(&quot;Data: &quot; + new String(zkclient.getData().forPath(event.getData().getPath())));
+                        System.out.println(&quot;Node removed: &quot; + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        break;
+                    }
+                }
+
+            }
+        };
+        // 注册监听
+        cache.getListenable().addListener(plis);
+    }
+
+    public static void main(String[] args) {
+        try {
+            ZooKeeperWatcher.watch();
+
+            while (true) {
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上代码，当对/root目录进行操作时，即可监控到！&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;下载&lt;/h1&gt;
+
+&lt;p&gt;ZooKeeper目前是Apache顶级项目，可从&lt;a href=&quot;http://zookeeper.apache.org/releases.html&quot;&gt;此处下载&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1&gt;安装&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;将下载的压缩包，解压缩到任意路径下.(例如:d:/soft)&lt;/li&gt;
+&lt;li&gt;至ZooKeeper目录/conf下，会发现有一个zoo_sample.cfg，在当前目录拷贝一份，并重命名为zoo.cfg&lt;/li&gt;
+&lt;li&gt;进入ZooKeeper目录/bin下，通过zkServer.cmd或zkServer.sh启动ZooKeeper&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;客户端操作&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在ZooKeeper目录/bin下，使用命令行启动zkCli.cmd或者zkCli.sh即可启动ZooKeeper客户端&lt;/li&gt;
+&lt;li&gt;在客户端可以执行: ls,get,set等命令，来展示，获取或设置值&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;ls /                        //列出/下的内容
+set /test test              //给/test目录设值
+get /test                   //获取/test目录的值
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;Java操作&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;新建一个Maven项目&lt;/li&gt;
+&lt;li&gt;在pom.xml中添加ZooKeeper依赖&lt;/li&gt;
+&lt;li&gt;新建一个类，这里叫ZookeeperTest，编写如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;pom.xml添加依赖:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;xml&quot;&gt;&amp;lt;dependencies&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.apache.zookeeper&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;zookeeper&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;3.4.5&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+&amp;lt;/dependencies&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ZookeeperTest代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooDefs.Ids;
+import org.apache.zookeeper.ZooKeeper;
+
+/**
+ * Created by wangyifan on 2015/4/22.
+ */
+public class ZookeeperTest {
+    private ZooKeeper zk = null;
+
+    public ZookeeperTest() {
+        try {
+            zk = new ZooKeeper(&quot;127.0.0.1:2181&quot;, 500000, new Watcher() {
+                // 监控所有被触发的事件
+                public void process(WatchedEvent event) {
+                    System.out.println(event.getPath());
+                    System.out.println(event.getType().name());
+                    //System.out.println(event.getState().getIntValue());
+                }
+            });
+            zk.exists(&quot;/root/childone&quot;, true);//观察这个节点发生的事件
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void createNodes() {
+        try {
+            //创建一个节点root，数据是mydata,不进行ACL权限控制，节点为永久性的(即客户端shutdown了也不会消失)
+            zk.create(&quot;/root&quot;, &quot;mydata&quot;.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            //在root下面创建一个childone znode,数据为childone,不进行ACL权限控制，节点为永久性的
+            zk.create(&quot;/root/childone&quot;, &quot;childone&quot;.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateNodes() {
+        try {
+            //取得/root/childone节点下的数据,返回byte[]
+            System.out.println(new String(zk.getData(&quot;/root/childone&quot;, true, null)));
+
+            //修改节点/root/childone下的数据，第三个参数为版本，如果是-1，那会无视被修改的数据版本，直接改掉
+            zk.setData(&quot;/root/childone&quot;, &quot;childonemodify2&quot;.getBytes(), -1);
+
+            System.out.println(new String(zk.getData(&quot;/root/childone&quot;, true, null)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteNodes() {
+        try {
+            //第二个参数为版本，－1的话直接删除，无视版本
+            zk.delete(&quot;/root/childone&quot;, -1);
+            zk.delete(&quot;/root&quot;, -1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getNodes() {
+        try {
+            //第二个参数为版本，－1的话直接删除，无视版本
+            byte[] bytes = zk.getData(&quot;/zk_test&quot;,true,null);
+            System.out.println(&quot;data is &quot; + new String(bytes));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            ZookeeperTest zkTest = new ZookeeperTest();
+            //zkTest.createNodes();
+//            zkTest.updateNodes();
+            //zkTest.deleteNodes();
+            zkTest.getNodes();
+
+            while (true) {
+                Thread.sleep(1000);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;基于Curator的操作&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ZooKeeper默认的Watcher是一次性的，即当触发了一次监听后，即失效，需重新注册&lt;/li&gt;
+&lt;li&gt;使用Curator可以简化此操作&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;添加pom依赖：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;xml&quot;&gt;&amp;lt;dependency&amp;gt;
+    &amp;lt;groupId&amp;gt;org.apache.curator&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;curator-framework&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;2.7.1&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&amp;lt;dependency&amp;gt;
+    &amp;lt;groupId&amp;gt;org.apache.curator&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;curator-recipes&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;2.7.1&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;import org.apache.curator.RetryPolicy;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
+import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.curator.utils.ZKPaths;
+
+/**
+ * Created by wangyifan on 2015/4/28.
+ */
+public class ZooKeeperWatcher {
+    static CuratorFramework zkclient = null;
+    static String nameSpace = &quot;root&quot;;// 根节点
+
+    static {
+        String zkhost = &quot;127.0.0.1:2181&quot;;// zk的host
+        RetryPolicy rp = new ExponentialBackoffRetry(1000, 3);// 重试机制
+        CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder().connectString(zkhost).connectionTimeoutMs(5000).sessionTimeoutMs(5000).retryPolicy(rp);
+        builder.namespace(nameSpace);
+        CuratorFramework zclient = builder.build();
+        zkclient = zclient;
+        zkclient.start();// 放在这前面执行
+        zkclient.newNamespaceAwareEnsurePath(&quot;/&quot; + nameSpace);
+    }
+
+    public static void watch() throws Exception {
+        PathChildrenCache cache = new PathChildrenCache(zkclient, &quot;/&quot;, false);
+        cache.start();
+
+        System.out.println(&quot;监听开始/zk........&quot;);
+        PathChildrenCacheListener plis = new PathChildrenCacheListener() {
+            public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
+                System.out.println(&quot;Event here &quot; + event.getType());
+                switch (event.getType()) {
+                    case CHILD_ADDED: {
+                        System.out.println(&quot;Data: &quot; + new String(zkclient.getData().forPath(event.getData().getPath())));
+                        System.out.println(&quot;Node added: &quot; + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        break;
+                    }
+                    case CHILD_UPDATED: {
+                        System.out.println(&quot;Data: &quot; + new String(zkclient.getData().forPath(event.getData().getPath())));
+                        System.out.println(&quot;Node changed: &quot; + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        break;
+                    }
+                    case CHILD_REMOVED: {
+                        System.out.println(&quot;Data: &quot; + new String(zkclient.getData().forPath(event.getData().getPath())));
+                        System.out.println(&quot;Node removed: &quot; + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        break;
+                    }
+                }
+
+            }
+        };
+        // 注册监听
+        cache.getListenable().addListener(plis);
+    }
+
+    public static void main(String[] args) {
+        try {
+            ZooKeeperWatcher.watch();
+
+            while (true) {
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上代码，当对/root目录进行操作时，即可监控到！&lt;/p&gt;
 </summary>
     </entry>
     

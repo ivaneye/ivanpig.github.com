@@ -132,6 +132,94 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/02/08/facade.html">语言与模式-06门面模式</a></h2>
+
+        <p class="post-meta">By 02月08日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
+
+<p><img src="/assets/designpattern/facade.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>当你要为一个复杂子系统提供一个简单接口时。子系统往往因为不断演化而变得越来越复杂。大多数模式使用时都会产生更多更小的类。这使得子系统更具可重用性，也更容易对子系统进行定制，但这也给那些不需要定制子系统的用户带来一些使用上的困难。Facade可以提供一个简单的缺省视图，这一视图对大多数用户来说已经足够，而那些需要更多的可定制性的用户可以越过Facade层。</li>
+<li>客户程序与抽象类的实现部分之间存在着很大的依赖性。引入Facade将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性和可移植性。</li>
+<li>当你需要构建一个层次结构的子系统时，使用门面模式定义子系统中每层的入口点。如果子系统之间是相互依赖的，你可以让它们仅通过Facade进行通讯，从而简化了它们之间的依赖关系。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code>public class Camara {
+    public void turnOn(){
+        System.out.println("开启摄像头！");
+    }
+
+    public void turnOff(){
+        System.out.println("关闭摄像头！");
+    }
+}
+</code></pre>
+
+<pre><code>public class Light {
+    public void turnOn(){
+        System.out.println("开灯！");
+    }
+
+    public void turnOff(){
+        System.out.println("关灯！");
+    }
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/08/facade.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/02/07/builder.html">语言与模式-05生成器模式</a></h2>
 
         <p class="post-meta">By 02月07日  2015
@@ -150,7 +238,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (46)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -248,7 +336,7 @@ abstract class StarbucksBuilder {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (46)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -372,7 +460,7 @@ public class A implements Cloneable{
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (46)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -454,7 +542,7 @@ public class A implements Cloneable{
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (46)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -555,7 +643,7 @@ public class GreenPigFactory implements PigFactory{
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (46)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
             
@@ -676,86 +764,6 @@ public class GreenPigFactory implements PigFactory{
 
 
     <a href="/2014/11/28/pigtheme.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2014/10/02/clojure_spels.html">Clojure进阶:使用Clojure编写文字冒险游戏</a></h2>
-
-        <p class="post-meta">By 10月02日  2014
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p>本文翻译自:<a href="http://www.lisperati.com/clojure-spels/casting.html">Casting SPELs in Clojure</a></p>
-
-<p><img src="/assets/clojure/cs_01.jpg" alt="" /></p>
-
-<h1>准备</h1>
-
-<p>任何学过Lisp的人都会说List和其它语言有很大的不同.它有很多不可思议的地方.本文将告诉你它有哪些独特之处!</p>
-
-<p>本文适用于Clojure,它是一个运行在JVM上的Lisp方言.Clojure的API和语法和
-Common Lisp很类似,但是还是有足够多的区别,需要单独为其写个教程.</p>
-
-<p>在大部分情况下,我们会说Lisp而不是Clojure,因为大部分的概念在Lisp中是通用的.我们会指出Clojure特有的内容.</p>
-
-<p><img src="/assets/clojure/cs_02.jpg" alt="" /></p>
-
-<p>Clojure是运行在JVM之上的,所以你需要先安装JVM.如果你是MAC机,那么Java已经被安装过了.如果是Linux或者Windows系统,你需要到<a href="http://java.sun.com/javase/downloads/index.jsp">Oracle Java官网</a>下载对应版本的Java.</p>
-
-<p>而Clojure,你可以从它的<a href="http://clojure.org/">官网</a>获得最新版本.下载完成后,你只需要解压缩,打开命令行,切换到解压缩目录,输入:</p>
-
-<pre><code class="{.bash}">java -jar clojure.jar
-</code></pre>
-
-<p>如果没有问题,那么你将会看到Clojure输出提示</p>
-
-<pre><code class="{.bash}">Clojure 1.6.0
-user=&gt;
-</code></pre>
-
-<p>教程中有很多Clojure代码片段,类似下面的样子:</p>
-
-<pre><code class="{.clojure}">'(these kinds of boxes)
-</code></pre>
-
-<p>你只需要将这些代码片段拷贝到Clojure REPL中运行就可以了!当你学习完此教程,你将会有一个你自己的文字冒险游戏了!</p>
-
-
-
-
-    <a href="/2014/10/02/clojure_spels.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
