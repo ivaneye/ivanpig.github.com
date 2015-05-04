@@ -132,6 +132,82 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/09/22/custom_middleware.html">Luminus手册-自定义中间件</a></h2>
+
+        <p class="post-meta">By 09月22日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Adding custom middleware</h1>
+
+<p>Luminus使用Ring来路由应用的处理程序，你也可以添加一些中间件。</p>
+
+<p>中间件可以给处理程序添加一些额外的功能。中间件函数主要被用来扩展Ring的基本处理函数。</p>
+
+<p>中间件其实就是个简单的函数，它接受现有的处理程序和一些可选参数作为函数参数并返回一个新的处理程序。</p>
+
+<pre><code class="{.clojure}">(defn wrap-nocache [handler]
+  (fn [request]
+     (let [response (handler request)]
+        (assoc-in response [:headers  "Pragma"] "no-cache"))))
+
+(def app (wrap-nocache handler))
+</code></pre>
+
+<p>可以看到，上面的函数接受一个处理函数并返回一个新的函数，这个函数接受request作为参数。返回的函数只在handler所在的范围内有效。当调用这个函数时，它将会给响应map添加Pragma:no-cache键值对。</p>
+
+<p>你可以添加自定义的中间件，只需要使用:middleware关键字就可以了:</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler
+          all-routes
+          ;;put any custom middleware
+          ;;in the middleware vector
+          :middleware [wrap-nocache]))
+</code></pre>
+
+<p>具体内容可参见Ring官方文档。</p>
+
+
+
+
+    <a href="/2013/09/22/custom_middleware.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/09/21/response_types.html">Luminus手册-响应</a></h2>
 
         <p class="post-meta">By 09月21日  2013
@@ -626,86 +702,6 @@ name的变量的值。
 
 
     <a href="/2013/09/16/html_templating.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/15/application_profile.html">Luminus手册-应用配置</a></h2>
-
-        <p class="post-meta">By 09月15日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Profiles</h1>
-
-<p>使用lein new luminus myapp命令会创建一个新的luminus应用，它使用的是默认的配置。如果你想使用其他的特性，你可以修改相应的配置参数。</p>
-
-<p>下面就是各个配置：</p>
-
-<ul>
-<li>+cljs - 添加ClojureScript支持</li>
-<li>+cucumber - 提供通过clj-webdriver配置cucumber</li>
-<li>+h2 - 添加models.db并提供H2数据库依赖</li>
-<li>+postgres - 添加models.db并提供PostreSQL数据库依赖</li>
-<li>+mysql - 添加models.db并提供mysql依赖</li>
-<li>+mongodb - 添加db.core并提供MongoDB依赖</li>
-<li>+site - 创建一个包含注册和验证框架的应用。使用bootstrap和h2</li>
-<li>+dailycred -
-添加dailycred支持，当和+site参数配合使用时，它使用dailycred作为验证框架</li>
-<li>+http-kit - 添加HTTP Kit支持</li>
-</ul>
-
-
-<p>要添加配置，只需要简单的添加到你的应用的名字后面，比如:</p>
-
-<pre><code class="{.bash}">lein new luminus myapp +cljs
-</code></pre>
-
-<p>可以多个参数一起使用:</p>
-
-<pre><code class="{.bash}">lein new luminus myapp +site +postgres
-</code></pre>
-
-<p>如果两个参数会生成相同的文件，则后面参数所生成的文件会覆盖前面参数所生
-成的文件。</p>
-
-
-
-
-    <a href="/2013/09/15/application_profile.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

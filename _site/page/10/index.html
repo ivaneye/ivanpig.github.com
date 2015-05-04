@@ -132,6 +132,86 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/09/15/application_profile.html">Luminus手册-应用配置</a></h2>
+
+        <p class="post-meta">By 09月15日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Profiles</h1>
+
+<p>使用lein new luminus myapp命令会创建一个新的luminus应用，它使用的是默认的配置。如果你想使用其他的特性，你可以修改相应的配置参数。</p>
+
+<p>下面就是各个配置：</p>
+
+<ul>
+<li>+cljs - 添加ClojureScript支持</li>
+<li>+cucumber - 提供通过clj-webdriver配置cucumber</li>
+<li>+h2 - 添加models.db并提供H2数据库依赖</li>
+<li>+postgres - 添加models.db并提供PostreSQL数据库依赖</li>
+<li>+mysql - 添加models.db并提供mysql依赖</li>
+<li>+mongodb - 添加db.core并提供MongoDB依赖</li>
+<li>+site - 创建一个包含注册和验证框架的应用。使用bootstrap和h2</li>
+<li>+dailycred -
+添加dailycred支持，当和+site参数配合使用时，它使用dailycred作为验证框架</li>
+<li>+http-kit - 添加HTTP Kit支持</li>
+</ul>
+
+
+<p>要添加配置，只需要简单的添加到你的应用的名字后面，比如:</p>
+
+<pre><code class="{.bash}">lein new luminus myapp +cljs
+</code></pre>
+
+<p>可以多个参数一起使用:</p>
+
+<pre><code class="{.bash}">lein new luminus myapp +site +postgres
+</code></pre>
+
+<p>如果两个参数会生成相同的文件，则后面参数所生成的文件会覆盖前面参数所生
+成的文件。</p>
+
+
+
+
+    <a href="/2013/09/15/application_profile.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/09/14/your_first_application.html">Luminus手册-第一个应用</a></h2>
 
         <p class="post-meta">By 09月14日  2013
@@ -227,7 +307,7 @@ cd guestbook
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -316,7 +396,7 @@ object Test extends App{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -392,7 +472,7 @@ println(swap(Array("1","2","3","4")).mkString)
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -486,7 +566,7 @@ println(indexs("Mississippi"))
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -569,7 +649,7 @@ println(indexs("Mississippi"))
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -610,89 +690,6 @@ println(indexs("Mississippi"))
 
 
     <a href="/2013/03/13/scala_exercises_11.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/12/scala_exercises_10.html">快学Scala习题解答—第十章 特质</a></h2>
-
-        <p class="post-meta">By 03月12日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>特质</h1>
-
-<h2>java.awt.Rectangle类有两个很有用的方法translate和grow,但可惜的是像java.awt.geom.Ellipse2D这样的类没有。在Scala中，你可以解决掉这个问题。定义一个RenctangleLike特质,加入具体的translate和grow方法。提供任何你需要用来实现的抽象方法,以便你可以像如下代码这样混入该特质:</h2>
-
-<pre><code class="{.scala}">val egg = new java.awt.geom.Ellipse2D.Double(5,10,20,30) with RectangleLike
-egg.translate(10,-10)
-egg.grow(10,20)
-</code></pre>
-
-<p>使用自身类型使得trait可以操作x,y</p>
-
-<pre><code class="{.scala}">import java.awt.geom.Ellipse2D
-
-
-trait RectangleLike{
-  this:Ellipse2D.Double=&gt;
-  def translate(x:Double,y:Double){
-    this.x = x
-    this.y = y
-  }
-  def grow(x:Double,y:Double){
-    this.x += x
-    this.y += y
-  }
-}
-
-object Test extends App{
-  val egg = new Ellipse2D.Double(5,10,20,30) with RectangleLike
-  println("x = " + egg.getX + " y = " + egg.getY)
-  egg.translate(10,-10)
-  println("x = " + egg.getX + " y = " + egg.getY)
-  egg.grow(10,20)
-  println("x = " + egg.getX + " y = " + egg.getY)
-}
-</code></pre>
-
-
-
-
-    <a href="/2013/03/12/scala_exercises_10.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

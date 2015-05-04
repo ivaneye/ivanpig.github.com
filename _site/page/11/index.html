@@ -132,6 +132,89 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/03/12/scala_exercises_10.html">快学Scala习题解答—第十章 特质</a></h2>
+
+        <p class="post-meta">By 03月12日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>特质</h1>
+
+<h2>java.awt.Rectangle类有两个很有用的方法translate和grow,但可惜的是像java.awt.geom.Ellipse2D这样的类没有。在Scala中，你可以解决掉这个问题。定义一个RenctangleLike特质,加入具体的translate和grow方法。提供任何你需要用来实现的抽象方法,以便你可以像如下代码这样混入该特质:</h2>
+
+<pre><code class="{.scala}">val egg = new java.awt.geom.Ellipse2D.Double(5,10,20,30) with RectangleLike
+egg.translate(10,-10)
+egg.grow(10,20)
+</code></pre>
+
+<p>使用自身类型使得trait可以操作x,y</p>
+
+<pre><code class="{.scala}">import java.awt.geom.Ellipse2D
+
+
+trait RectangleLike{
+  this:Ellipse2D.Double=&gt;
+  def translate(x:Double,y:Double){
+    this.x = x
+    this.y = y
+  }
+  def grow(x:Double,y:Double){
+    this.x += x
+    this.y += y
+  }
+}
+
+object Test extends App{
+  val egg = new Ellipse2D.Double(5,10,20,30) with RectangleLike
+  println("x = " + egg.getX + " y = " + egg.getY)
+  egg.translate(10,-10)
+  println("x = " + egg.getX + " y = " + egg.getY)
+  egg.grow(10,20)
+  println("x = " + egg.getX + " y = " + egg.getY)
+}
+</code></pre>
+
+
+
+
+    <a href="/2013/03/12/scala_exercises_10.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/03/11/scala_exercises_09.html">快学Scala习题解答—第九章 文件和正则表达式</a></h2>
 
         <p class="post-meta">By 03月11日  2013
@@ -148,7 +231,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -233,7 +316,7 @@ pw.close()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -322,7 +405,7 @@ pw.close()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -405,7 +488,7 @@ package impatient
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -486,7 +569,7 @@ object MilesToKilometers extends UnitConversion{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -568,7 +651,7 @@ object MilesToKilometers extends UnitConversion{
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -629,84 +712,6 @@ println(map.mkString(","))
 
 
     <a href="/2013/03/06/scala_exercises_04.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/05/scala_exercises_03.html">快学Scala习题解答—第三章 数组相关操作</a></h2>
-
-        <p class="post-meta">By 03月05日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>数组相关操作</h1>
-
-<h2>编写一段代码，将a设置为一个n个随机整数的数组，要求随机数介于0(包含)和n(不包含)之间</h2>
-
-<p>random和yield的使用</p>
-
-<pre><code class="{.scala}">import scala.math.random
-
-def randomArray(n:Int)={
-  for(i &lt;- 0 until n) yield (random * n).toInt
-}
-
-println(randomArray(10).mkString(","))
-</code></pre>
-
-<h2>编写一个循环，将整数数组中相邻的元素置换。例如,Array(1,2,3,4,5)经过置换后变为Array(2,1,4,3,5)</h2>
-
-<p>对数组方法的使用</p>
-
-<pre><code class="{.scala}">def reorderArray(arr:Array[Int]):Array[Int]={
-  val t = arr.toBuffer
-  for(i &lt;- 1 until (t.length,2);tmp = t(i);j &lt;- i - 1 until i){
-    t(i) = t(j)
-    t(j) = tmp
-  }
-  t.toArray
-}
-
-println(reorderArray(Array(1,2,3,4,5)).mkString(","))
-</code></pre>
-
-
-
-
-    <a href="/2013/03/05/scala_exercises_03.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

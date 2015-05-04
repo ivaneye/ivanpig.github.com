@@ -132,6 +132,96 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/05/04/string.html">读源码-String</a></h2>
+
+        <p class="post-meta">By 05月04日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#jdk"><i class="fa fa-folder-open">jdk (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (4)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">jdk (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p><em>Level :</em> &hearts;&hearts;</p>
+
+<h1>String操作</h1>
+
+<pre><code class="java">public class Test {
+    public static void main(String[] args) {
+        String str = "abCb";
+        System.out.println(str.length());
+        System.out.println(str.charAt(2));
+        System.out.println(str.getBytes());
+        System.out.println(str.equals("abc"));
+        System.out.println(str.equalsIgnoreCase("aBc"));
+        System.out.println(str.compareTo("bbb"));
+        System.out.println(str.contains("b"));
+        System.out.println(str.startsWith("a"));
+        System.out.println(str.endsWith("c"));
+        System.out.println(str.indexOf(0));
+        System.out.println(str.lastIndexOf(0));
+        System.out.println(str.substring(1));
+        System.out.println(str.concat("d"));
+        System.out.println(str.replace("b", "B"));
+        System.out.println(str.replaceAll("b", "B"));
+        System.out.println(str.toLowerCase());
+        System.out.println(str.toUpperCase());
+        System.out.println(str.trim());
+        System.out.println(str.split("b"));
+    }
+}
+</code></pre>
+
+<h1>String实现</h1>
+
+<p>String是不可变的，其是一个final类</p>
+
+<pre><code class="java">public final class String
+</code></pre>
+
+<p>其实现了java.io.Serializable, Comparable<String>, CharSequence三个接口</p>
+
+<p><img src="/assets/opensource/jdk/string.png" alt="" /></p>
+
+
+
+
+    <a href="/2015/05/04/string.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/04/23/proxy.html">Java Socket编程中加入代理</a></h2>
 
         <p class="post-meta">By 04月23日  2015
@@ -148,7 +238,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">proxy (1)</i></a>
             
@@ -223,7 +313,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">zookeeper (1)</i></a>
             
@@ -296,11 +386,11 @@ get /test                   //获取/test目录的值
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (3)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (4)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit3 (3)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             
         
@@ -392,11 +482,11 @@ get /test                   //获取/test目录的值
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (3)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (4)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit3 (3)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             
         
@@ -485,11 +575,11 @@ public interface Test {
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (3)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (4)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit3 (3)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             
         
@@ -581,7 +671,7 @@ public class Person {
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">framework (1)</i></a>
             
@@ -602,55 +692,6 @@ public class Person {
 
 
     <a href="/2015/04/01/java_webframework.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/03/16/jvm.html">一图胜千言:JVM</a></h2>
-
-        <p class="post-meta">By 03月16日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#xmind"><i class="fa fa-folder-open">xmind (2)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">xmind (2)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">jvm (1)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p><a href="/mind/jvm.xmind">xmind文件下载</a></p>
-
-
-
-
-    <a href="/2015/03/16/jvm.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

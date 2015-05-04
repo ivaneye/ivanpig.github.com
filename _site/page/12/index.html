@@ -110,6 +110,87 @@
 
 
 
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/05/scala_exercises_03.html">快学Scala习题解答—第三章 数组相关操作</a></h2>
+
+        <p class="post-meta">By 03月05日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>数组相关操作</h1>
+
+<h2>编写一段代码，将a设置为一个n个随机整数的数组，要求随机数介于0(包含)和n(不包含)之间</h2>
+
+<p>random和yield的使用</p>
+
+<pre><code class="{.scala}">import scala.math.random
+
+def randomArray(n:Int)={
+  for(i &lt;- 0 until n) yield (random * n).toInt
+}
+
+println(randomArray(10).mkString(","))
+</code></pre>
+
+<h2>编写一个循环，将整数数组中相邻的元素置换。例如,Array(1,2,3,4,5)经过置换后变为Array(2,1,4,3,5)</h2>
+
+<p>对数组方法的使用</p>
+
+<pre><code class="{.scala}">def reorderArray(arr:Array[Int]):Array[Int]={
+  val t = arr.toBuffer
+  for(i &lt;- 1 until (t.length,2);tmp = t(i);j &lt;- i - 1 until i){
+    t(i) = t(j)
+    t(j) = tmp
+  }
+  t.toArray
+}
+
+println(reorderArray(Array(1,2,3,4,5)).mkString(","))
+</code></pre>
+
+
+
+
+    <a href="/2013/03/05/scala_exercises_03.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
 <section class="post">
     <header class="post-header">
         
@@ -133,7 +214,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             
@@ -220,7 +301,7 @@ x: Unit = ()
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (47)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
             

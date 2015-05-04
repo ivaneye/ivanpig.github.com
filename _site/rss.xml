@@ -4,13 +4,744 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-04-29T21:14:12+08:00</updated>
+    <updated>2015-05-04T22:12:37+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
         <email>ivan.pig@foxmail.com</email>
     </author>
 
+    
+    <entry>
+        <title>读源码-String</title>
+        <link href="http://ivanpig.github.io/2015/05/04/string.html"/>
+        <updated>2015-05-04T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/05/04/string</id>
+        <content type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&amp;hearts;&lt;/p&gt;
+
+&lt;h1&gt;String操作&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Test {
+    public static void main(String[] args) {
+        String str = &quot;abCb&quot;;
+        System.out.println(str.length());
+        System.out.println(str.charAt(2));
+        System.out.println(str.getBytes());
+        System.out.println(str.equals(&quot;abc&quot;));
+        System.out.println(str.equalsIgnoreCase(&quot;aBc&quot;));
+        System.out.println(str.compareTo(&quot;bbb&quot;));
+        System.out.println(str.contains(&quot;b&quot;));
+        System.out.println(str.startsWith(&quot;a&quot;));
+        System.out.println(str.endsWith(&quot;c&quot;));
+        System.out.println(str.indexOf(0));
+        System.out.println(str.lastIndexOf(0));
+        System.out.println(str.substring(1));
+        System.out.println(str.concat(&quot;d&quot;));
+        System.out.println(str.replace(&quot;b&quot;, &quot;B&quot;));
+        System.out.println(str.replaceAll(&quot;b&quot;, &quot;B&quot;));
+        System.out.println(str.toLowerCase());
+        System.out.println(str.toUpperCase());
+        System.out.println(str.trim());
+        System.out.println(str.split(&quot;b&quot;));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;String实现&lt;/h1&gt;
+
+&lt;p&gt;String是不可变的，其是一个final类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public final class String
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其实现了java.io.Serializable, Comparable&lt;String&gt;, CharSequence三个接口&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/opensource/jdk/string.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;String是围绕char数组来实现和操作&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;private final char value[];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;length()方法及获取字符数组的长度&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public int length() {
+    return value.length;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;charAt()方法，即是获取字符数组对应下标的值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public char charAt(int index) {
+    if ((index &amp;lt; 0) || (index &amp;gt;= value.length)) {
+        throw new StringIndexOutOfBoundsException(index);
+    }
+    return value[index];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;getBytes()方法，通过StringCoding实现&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public byte[] getBytes() {
+    return StringCoding.encode(value, 0, value.length);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;equals()方法，比较两个字符串对应的char数组是否相同&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public boolean equals(Object anObject) {
+    if (this == anObject) {
+        return true;
+    }
+    if (anObject instanceof String) {
+        String anotherString = (String) anObject;
+        int n = value.length;
+        if (n == anotherString.value.length) {
+            char v1[] = value;
+            char v2[] = anotherString.value;
+            int i = 0;
+            while (n-- != 0) {
+                if (v1[i] != v2[i])
+                        return false;
+                i++;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;equalsIgnoreCase()方法，与equals()方法类似，只不过对每个char都调用了toUpperCase()方法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//核心方法在regionMatches中
+public boolean equalsIgnoreCase(String anotherString) {
+    return (this == anotherString) ? true
+            : (anotherString != null)
+            &amp;amp;&amp;amp; (anotherString.value.length == value.length)
+            &amp;amp;&amp;amp; regionMatches(true, 0, anotherString, 0, value.length);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;compareTo()方法是Comparable接口中的方法，String中的实现如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//遍历每个char，根据对应的整形进行比较
+public int compareTo(String anotherString) {
+    int len1 = value.length;
+    int len2 = anotherString.value.length;
+    int lim = Math.min(len1, len2);
+    char v1[] = value;
+    char v2[] = anotherString.value;
+
+    int k = 0;
+    while (k &amp;lt; lim) {
+        char c1 = v1[k];
+        char c2 = v2[k];
+        if (c1 != c2) {
+            return c1 - c2;
+        }
+        k++;
+    }
+    return len1 - len2;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;contains()方法实际上根据indexOf方法来进行判断:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;static int indexOf(char[] source, int sourceOffset, int sourceCount,
+        char[] target, int targetOffset, int targetCount,
+        int fromIndex) {
+    if (fromIndex &amp;gt;= sourceCount) {
+        return (targetCount == 0 ? sourceCount : -1);
+    }
+    if (fromIndex &amp;lt; 0) {
+        fromIndex = 0;
+    }
+    if (targetCount == 0) {
+        return fromIndex;
+    }
+
+    char first = target[targetOffset];
+    int max = sourceOffset + (sourceCount - targetCount);
+
+    for (int i = sourceOffset + fromIndex; i &amp;lt;= max; i++) {
+        /* Look for first character. */
+        if (source[i] != first) {
+            while (++i &amp;lt;= max &amp;amp;&amp;amp; source[i] != first);
+        }
+
+        /* Found first character, now look at the rest of v2 */
+        if (i &amp;lt;= max) {
+            int j = i + 1;
+            int end = j + targetCount - 1;
+            for (int k = targetOffset + 1; j &amp;lt; end &amp;amp;&amp;amp; source[j]
+                    == target[k]; j++, k++);
+
+            if (j == end) {
+                /* Found whole string. */
+                return i - sourceOffset;
+            }
+        }
+    }
+    return -1;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;startsWith()&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public boolean startsWith(String prefix, int toffset) {
+    char ta[] = value;
+    int to = toffset;
+    char pa[] = prefix.value;
+    int po = 0;
+    int pc = prefix.value.length;
+    // Note: toffset might be near -1&amp;gt;&amp;gt;&amp;gt;1.
+    if ((toffset &amp;lt; 0) || (toffset &amp;gt; value.length - pc)) {
+        return false;
+    }
+    while (--pc &amp;gt;= 0) {
+        if (ta[to++] != pa[po++]) {
+            return false;
+        }
+    }
+    return true;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;endsWith()是对startsWith()方法的委托调用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public boolean endsWith(String suffix) {
+    return startsWith(suffix, value.length - suffix.value.length);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;indexOf()简单的遍历比较&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public int indexOf(int ch, int fromIndex) {
+    final int max = value.length;
+    if (fromIndex &amp;lt; 0) {
+        fromIndex = 0;
+    } else if (fromIndex &amp;gt;= max) {
+        // Note: fromIndex might be near -1&amp;gt;&amp;gt;&amp;gt;1.
+        return -1;
+    }
+
+    if (ch &amp;lt; Character.MIN_SUPPLEMENTARY_CODE_POINT) {
+        // handle most cases here (ch is a BMP code point or a
+        // negative value (invalid code point))
+        final char[] value = this.value;
+        for (int i = fromIndex; i &amp;lt; max; i++) {
+            if (value[i] == ch) {
+                return i;
+            }
+        }
+        return -1;
+    } else {
+        return indexOfSupplementary(ch, fromIndex);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;lastIndexOf()与indexOf()类似&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public int lastIndexOf(int ch, int fromIndex) {
+    if (ch &amp;lt; Character.MIN_SUPPLEMENTARY_CODE_POINT) {
+        // handle most cases here (ch is a BMP code point or a
+        // negative value (invalid code point))
+        final char[] value = this.value;
+        int i = Math.min(fromIndex, value.length - 1);
+        for (; i &amp;gt;= 0; i--) {
+            if (value[i] == ch) {
+                return i;
+            }
+        }
+        return -1;
+    } else {
+        return lastIndexOfSupplementary(ch, fromIndex);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;substring()通过截取对应长度的char数组，根据截取后的char数组构建一个新的String实现&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public String substring(int beginIndex) {
+    if (beginIndex &amp;lt; 0) {
+        throw new StringIndexOutOfBoundsException(beginIndex);
+    }
+    int subLen = value.length - beginIndex;
+    if (subLen &amp;lt; 0) {
+        throw new StringIndexOutOfBoundsException(subLen);
+    }
+    return (beginIndex == 0) ? this : new String(value, beginIndex, subLen);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;concat()构建一个长度为字符串总长度的字符数组，通过此数组构建一个新的字符串&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public String concat(String str) {
+    int otherLen = str.length();
+    if (otherLen == 0) {
+        return this;
+    }
+    int len = value.length;
+    char buf[] = Arrays.copyOf(value, len + otherLen);
+    str.getChars(buf, len);
+    return new String(buf, true);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;replace(),replaceAll()通过正则表达式实现&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public String replace(CharSequence target, CharSequence replacement) {
+    return Pattern.compile(target.toString(), Pattern.LITERAL).matcher(
+            this).replaceAll(Matcher.quoteReplacement(replacement.toString()));
+}
+
+public String replaceAll(String regex, String replacement) {
+    return Pattern.compile(regex).matcher(this).replaceAll(replacement);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;toLowerCase(),toUpperCase()主要通过Character类中的方法实现，代码过长，不列出。&lt;/p&gt;
+
+&lt;p&gt;trim()通过比较空格字符来处理&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public String trim() {
+    int len = value.length;
+    int st = 0;
+    char[] val = value;    /* avoid getfield opcode */
+
+    while ((st &amp;lt; len) &amp;amp;&amp;amp; (val[st] &amp;lt;= ' ')) {
+        st++;
+    }
+    while ((st &amp;lt; len) &amp;amp;&amp;amp; (val[len - 1] &amp;lt;= ' ')) {
+        len--;
+    }
+    return ((st &amp;gt; 0) || (len &amp;lt; value.length)) ? substring(st, len) : this;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;split()正则表达式实现&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public String[] split(String regex, int limit) {
+    /* fastpath if the regex is a
+     (1)one-char String and this character is not one of the
+        RegEx's meta characters &quot;.$|()[{^?*+\\&quot;, or
+     (2)two-char String and the first char is the backslash and
+        the second is not the ascii digit or ascii letter.
+     */
+    char ch = 0;
+    if (((regex.value.length == 1 &amp;amp;&amp;amp;
+         &quot;.$|()[{^?*+\\&quot;.indexOf(ch = regex.charAt(0)) == -1) ||
+         (regex.length() == 2 &amp;amp;&amp;amp;
+          regex.charAt(0) == '\\' &amp;amp;&amp;amp;
+          (((ch = regex.charAt(1))-'0')|('9'-ch)) &amp;lt; 0 &amp;amp;&amp;amp;
+          ((ch-'a')|('z'-ch)) &amp;lt; 0 &amp;amp;&amp;amp;
+          ((ch-'A')|('Z'-ch)) &amp;lt; 0)) &amp;amp;&amp;amp;
+        (ch &amp;lt; Character.MIN_HIGH_SURROGATE ||
+         ch &amp;gt; Character.MAX_LOW_SURROGATE))
+    {
+        int off = 0;
+        int next = 0;
+        boolean limited = limit &amp;gt; 0;
+        ArrayList&amp;lt;String&amp;gt; list = new ArrayList&amp;lt;&amp;gt;();
+        while ((next = indexOf(ch, off)) != -1) {
+            if (!limited || list.size() &amp;lt; limit - 1) {
+                list.add(substring(off, next));
+                off = next + 1;
+            } else {    // last one
+                //assert (list.size() == limit - 1);
+                list.add(substring(off, value.length));
+                off = value.length;
+                break;
+            }
+        }
+        // If no match was found, return this
+        if (off == 0)
+            return new String[]{this};
+
+        // Add remaining segment
+        if (!limited || list.size() &amp;lt; limit)
+            list.add(substring(off, value.length));
+
+        // Construct result
+        int resultSize = list.size();
+        if (limit == 0)
+            while (resultSize &amp;gt; 0 &amp;amp;&amp;amp; list.get(resultSize - 1).length() == 0)
+                resultSize--;
+        String[] result = new String[resultSize];
+        return list.subList(0, resultSize).toArray(result);
+    }
+    return Pattern.compile(regex).split(this, limit);
+}
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&amp;hearts;&lt;/p&gt;
+
+&lt;h1&gt;String操作&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public class Test {
+    public static void main(String[] args) {
+        String str = &quot;abCb&quot;;
+        System.out.println(str.length());
+        System.out.println(str.charAt(2));
+        System.out.println(str.getBytes());
+        System.out.println(str.equals(&quot;abc&quot;));
+        System.out.println(str.equalsIgnoreCase(&quot;aBc&quot;));
+        System.out.println(str.compareTo(&quot;bbb&quot;));
+        System.out.println(str.contains(&quot;b&quot;));
+        System.out.println(str.startsWith(&quot;a&quot;));
+        System.out.println(str.endsWith(&quot;c&quot;));
+        System.out.println(str.indexOf(0));
+        System.out.println(str.lastIndexOf(0));
+        System.out.println(str.substring(1));
+        System.out.println(str.concat(&quot;d&quot;));
+        System.out.println(str.replace(&quot;b&quot;, &quot;B&quot;));
+        System.out.println(str.replaceAll(&quot;b&quot;, &quot;B&quot;));
+        System.out.println(str.toLowerCase());
+        System.out.println(str.toUpperCase());
+        System.out.println(str.trim());
+        System.out.println(str.split(&quot;b&quot;));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;String实现&lt;/h1&gt;
+
+&lt;p&gt;String是不可变的，其是一个final类&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public final class String
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其实现了java.io.Serializable, Comparable&lt;String&gt;, CharSequence三个接口&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/opensource/jdk/string.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;p&gt;String是围绕char数组来实现和操作&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;private final char value[];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;length()方法及获取字符数组的长度&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public int length() {
+    return value.length;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;charAt()方法，即是获取字符数组对应下标的值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public char charAt(int index) {
+    if ((index &amp;lt; 0) || (index &amp;gt;= value.length)) {
+        throw new StringIndexOutOfBoundsException(index);
+    }
+    return value[index];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;getBytes()方法，通过StringCoding实现&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public byte[] getBytes() {
+    return StringCoding.encode(value, 0, value.length);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;equals()方法，比较两个字符串对应的char数组是否相同&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public boolean equals(Object anObject) {
+    if (this == anObject) {
+        return true;
+    }
+    if (anObject instanceof String) {
+        String anotherString = (String) anObject;
+        int n = value.length;
+        if (n == anotherString.value.length) {
+            char v1[] = value;
+            char v2[] = anotherString.value;
+            int i = 0;
+            while (n-- != 0) {
+                if (v1[i] != v2[i])
+                        return false;
+                i++;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;equalsIgnoreCase()方法，与equals()方法类似，只不过对每个char都调用了toUpperCase()方法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//核心方法在regionMatches中
+public boolean equalsIgnoreCase(String anotherString) {
+    return (this == anotherString) ? true
+            : (anotherString != null)
+            &amp;amp;&amp;amp; (anotherString.value.length == value.length)
+            &amp;amp;&amp;amp; regionMatches(true, 0, anotherString, 0, value.length);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;compareTo()方法是Comparable接口中的方法，String中的实现如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;//遍历每个char，根据对应的整形进行比较
+public int compareTo(String anotherString) {
+    int len1 = value.length;
+    int len2 = anotherString.value.length;
+    int lim = Math.min(len1, len2);
+    char v1[] = value;
+    char v2[] = anotherString.value;
+
+    int k = 0;
+    while (k &amp;lt; lim) {
+        char c1 = v1[k];
+        char c2 = v2[k];
+        if (c1 != c2) {
+            return c1 - c2;
+        }
+        k++;
+    }
+    return len1 - len2;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;contains()方法实际上根据indexOf方法来进行判断:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;static int indexOf(char[] source, int sourceOffset, int sourceCount,
+        char[] target, int targetOffset, int targetCount,
+        int fromIndex) {
+    if (fromIndex &amp;gt;= sourceCount) {
+        return (targetCount == 0 ? sourceCount : -1);
+    }
+    if (fromIndex &amp;lt; 0) {
+        fromIndex = 0;
+    }
+    if (targetCount == 0) {
+        return fromIndex;
+    }
+
+    char first = target[targetOffset];
+    int max = sourceOffset + (sourceCount - targetCount);
+
+    for (int i = sourceOffset + fromIndex; i &amp;lt;= max; i++) {
+        /* Look for first character. */
+        if (source[i] != first) {
+            while (++i &amp;lt;= max &amp;amp;&amp;amp; source[i] != first);
+        }
+
+        /* Found first character, now look at the rest of v2 */
+        if (i &amp;lt;= max) {
+            int j = i + 1;
+            int end = j + targetCount - 1;
+            for (int k = targetOffset + 1; j &amp;lt; end &amp;amp;&amp;amp; source[j]
+                    == target[k]; j++, k++);
+
+            if (j == end) {
+                /* Found whole string. */
+                return i - sourceOffset;
+            }
+        }
+    }
+    return -1;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;startsWith()&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public boolean startsWith(String prefix, int toffset) {
+    char ta[] = value;
+    int to = toffset;
+    char pa[] = prefix.value;
+    int po = 0;
+    int pc = prefix.value.length;
+    // Note: toffset might be near -1&amp;gt;&amp;gt;&amp;gt;1.
+    if ((toffset &amp;lt; 0) || (toffset &amp;gt; value.length - pc)) {
+        return false;
+    }
+    while (--pc &amp;gt;= 0) {
+        if (ta[to++] != pa[po++]) {
+            return false;
+        }
+    }
+    return true;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;endsWith()是对startsWith()方法的委托调用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public boolean endsWith(String suffix) {
+    return startsWith(suffix, value.length - suffix.value.length);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;indexOf()简单的遍历比较&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public int indexOf(int ch, int fromIndex) {
+    final int max = value.length;
+    if (fromIndex &amp;lt; 0) {
+        fromIndex = 0;
+    } else if (fromIndex &amp;gt;= max) {
+        // Note: fromIndex might be near -1&amp;gt;&amp;gt;&amp;gt;1.
+        return -1;
+    }
+
+    if (ch &amp;lt; Character.MIN_SUPPLEMENTARY_CODE_POINT) {
+        // handle most cases here (ch is a BMP code point or a
+        // negative value (invalid code point))
+        final char[] value = this.value;
+        for (int i = fromIndex; i &amp;lt; max; i++) {
+            if (value[i] == ch) {
+                return i;
+            }
+        }
+        return -1;
+    } else {
+        return indexOfSupplementary(ch, fromIndex);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;lastIndexOf()与indexOf()类似&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public int lastIndexOf(int ch, int fromIndex) {
+    if (ch &amp;lt; Character.MIN_SUPPLEMENTARY_CODE_POINT) {
+        // handle most cases here (ch is a BMP code point or a
+        // negative value (invalid code point))
+        final char[] value = this.value;
+        int i = Math.min(fromIndex, value.length - 1);
+        for (; i &amp;gt;= 0; i--) {
+            if (value[i] == ch) {
+                return i;
+            }
+        }
+        return -1;
+    } else {
+        return lastIndexOfSupplementary(ch, fromIndex);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;substring()通过截取对应长度的char数组，根据截取后的char数组构建一个新的String实现&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public String substring(int beginIndex) {
+    if (beginIndex &amp;lt; 0) {
+        throw new StringIndexOutOfBoundsException(beginIndex);
+    }
+    int subLen = value.length - beginIndex;
+    if (subLen &amp;lt; 0) {
+        throw new StringIndexOutOfBoundsException(subLen);
+    }
+    return (beginIndex == 0) ? this : new String(value, beginIndex, subLen);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;concat()构建一个长度为字符串总长度的字符数组，通过此数组构建一个新的字符串&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public String concat(String str) {
+    int otherLen = str.length();
+    if (otherLen == 0) {
+        return this;
+    }
+    int len = value.length;
+    char buf[] = Arrays.copyOf(value, len + otherLen);
+    str.getChars(buf, len);
+    return new String(buf, true);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;replace(),replaceAll()通过正则表达式实现&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public String replace(CharSequence target, CharSequence replacement) {
+    return Pattern.compile(target.toString(), Pattern.LITERAL).matcher(
+            this).replaceAll(Matcher.quoteReplacement(replacement.toString()));
+}
+
+public String replaceAll(String regex, String replacement) {
+    return Pattern.compile(regex).matcher(this).replaceAll(replacement);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;toLowerCase(),toUpperCase()主要通过Character类中的方法实现，代码过长，不列出。&lt;/p&gt;
+
+&lt;p&gt;trim()通过比较空格字符来处理&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public String trim() {
+    int len = value.length;
+    int st = 0;
+    char[] val = value;    /* avoid getfield opcode */
+
+    while ((st &amp;lt; len) &amp;amp;&amp;amp; (val[st] &amp;lt;= ' ')) {
+        st++;
+    }
+    while ((st &amp;lt; len) &amp;amp;&amp;amp; (val[len - 1] &amp;lt;= ' ')) {
+        len--;
+    }
+    return ((st &amp;gt; 0) || (len &amp;lt; value.length)) ? substring(st, len) : this;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;split()正则表达式实现&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public String[] split(String regex, int limit) {
+    /* fastpath if the regex is a
+     (1)one-char String and this character is not one of the
+        RegEx's meta characters &quot;.$|()[{^?*+\\&quot;, or
+     (2)two-char String and the first char is the backslash and
+        the second is not the ascii digit or ascii letter.
+     */
+    char ch = 0;
+    if (((regex.value.length == 1 &amp;amp;&amp;amp;
+         &quot;.$|()[{^?*+\\&quot;.indexOf(ch = regex.charAt(0)) == -1) ||
+         (regex.length() == 2 &amp;amp;&amp;amp;
+          regex.charAt(0) == '\\' &amp;amp;&amp;amp;
+          (((ch = regex.charAt(1))-'0')|('9'-ch)) &amp;lt; 0 &amp;amp;&amp;amp;
+          ((ch-'a')|('z'-ch)) &amp;lt; 0 &amp;amp;&amp;amp;
+          ((ch-'A')|('Z'-ch)) &amp;lt; 0)) &amp;amp;&amp;amp;
+        (ch &amp;lt; Character.MIN_HIGH_SURROGATE ||
+         ch &amp;gt; Character.MAX_LOW_SURROGATE))
+    {
+        int off = 0;
+        int next = 0;
+        boolean limited = limit &amp;gt; 0;
+        ArrayList&amp;lt;String&amp;gt; list = new ArrayList&amp;lt;&amp;gt;();
+        while ((next = indexOf(ch, off)) != -1) {
+            if (!limited || list.size() &amp;lt; limit - 1) {
+                list.add(substring(off, next));
+                off = next + 1;
+            } else {    // last one
+                //assert (list.size() == limit - 1);
+                list.add(substring(off, value.length));
+                off = value.length;
+                break;
+            }
+        }
+        // If no match was found, return this
+        if (off == 0)
+            return new String[]{this};
+
+        // Add remaining segment
+        if (!limited || list.size() &amp;lt; limit)
+            list.add(substring(off, value.length));
+
+        // Construct result
+        int resultSize = list.size();
+        if (limit == 0)
+            while (resultSize &amp;gt; 0 &amp;amp;&amp;amp; list.get(resultSize - 1).length() == 0)
+                resultSize--;
+        String[] result = new String[resultSize];
+        return list.subList(0, resultSize).toArray(result);
+    }
+    return Pattern.compile(regex).split(this, limit);
+}
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
     
     <entry>
         <title>Java Socket编程中加入代理</title>
