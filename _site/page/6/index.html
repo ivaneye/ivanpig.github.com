@@ -132,6 +132,202 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/02/04/factory.html">语言与模式-02工厂模式</a></h2>
+
+        <p class="post-meta">By 02月04日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method使一个类的实例化延迟到其子类。</p>
+
+<p><img src="/assets/designpattern/factory.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>当一个类不知道它所必须创建的对象的类的时候。</li>
+<li>当一个类希望由它的子类来指定它所创建的对象的时候。</li>
+<li>当类将创建对象的职责委托给多个帮助子类中的某一个，并且你希望将哪一个帮助子类是代理者这一信息局部化的时候。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="{.java}">public interface Pig{
+     public void run();
+}
+
+public interface PigFactory{
+     public Pig getPig();
+}
+</code></pre>
+
+<pre><code class="{.java}">public class RedPig{
+     public void run(){
+       System.out.println("RedPig run");
+     }
+}
+
+public class RedPigFactory implements PigFactory{
+     public Pig getPig(){
+          return new RedPig();
+     }
+}
+</code></pre>
+
+<pre><code class="{.java}">public class GreenPig{
+     public void run(){
+       System.out.println("GreenPig run");
+     }
+}
+
+public class GreenPigFactory implements PigFactory{
+     public Pig getPig(){
+          return new GreenPig();
+     }
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/04/factory.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/02/03/singleton.html">语言与模式-01单例模式</a></h2>
+
+        <p class="post-meta">By 02月03日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>概述</h1>
+
+<p>设计模式是什么？如果要我现在来回答，那我的答案是：<strong>设计模式是对于语言本身缺陷的一种补充！</strong></p>
+
+<p>本系列文章通过对各个设计模式在Java与Clojure之间的实现比较来说明这一点！</p>
+
+<p>关于Clojure相关内容，可以查看<a href="/tag/#clojure">这里</a>!</p>
+
+<p>其实使用Clojure来实现设计模式并不合适！因为Clojure是函数式语言，而设计模式是针对面向对象语言的。但是Clojure能提供近似的解决方案或者根本不需要此设计模式，且Clojure的解决方案更简单！简单到都不好意思叫做模式！</p>
+
+<p>当然我也不是要黑Java，毕竟还要靠Java吃饭！Java作为工业化标准开发还是很不错的，只是表现力不足，模板代码较多而已！但是足够简单，易标准化。这就够了！</p>
+
+<p>废话不多说，开始第一个设计模式！单例模式！</p>
+
+<h1>意图</h1>
+
+<p>保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p>
+
+<p><img src="/assets/designpattern/singleton.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>当类只能有一个实例而且客户可以从一个众所周知的访问点访问它时。</li>
+<li>当这个唯一实例应该是通过子类化可扩展的，并且客户应该无需更改代码就能使用一个扩展的实例时。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<p>懒汉式：</p>
+
+<pre><code class="{.java}">public class Singleton{
+       private Singleton(){}
+
+       public synchronized static Singleton getInstance(){
+           if(single==null){
+                single=new Singleton();
+           }
+           return single;
+       }
+
+      private static Singleton single;
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/03/singleton.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2014/11/28/pigtheme.html">LightTable Theme</a></h2>
 
         <p class="post-meta">By 11月28日  2014
@@ -510,222 +706,6 @@ fi
 
 
     <a href="/2014/05/11/record_protocol.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2014/03/15/function.html">Clojure教程-函数</a></h2>
-
-        <p class="post-meta">By 03月15日  2014
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p>本文翻译自<a href="http://clojure-doc.org/articles/language/functions.html">Functions in Clojure</a></p>
-
-<p>本文包括如下内容:</p>
-
-<ul>
-<li>如何定义函数</li>
-<li>如何执行函数</li>
-<li>多元数函数(Multi-arity Functions)</li>
-<li>不定参函数(Variadic Functions)</li>
-<li>高阶函数</li>
-<li>其它函数相关内容</li>
-</ul>
-
-
-<p>版权:</p>
-
-<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
-
-<h1>针对Clojure版本</h1>
-
-<p>Clojure 1.5</p>
-
-<h1>简介</h1>
-
-<p>Clojure是函数式编程语言.自然的,函数是Clojure非常重要的一部分.</p>
-
-<h1>如何定义函数</h1>
-
-<p>函数定义一般使用defn宏:</p>
-
-<pre><code class="{.clojure}">(defn round
-  [d precision]
-  (let [factor (Math/pow 10 precision)]
-    (/ (Math/floor (* d factor)) factor)))
-</code></pre>
-
-<p>类型提示有时能避免编译器使用反射,从而能生成更高效的字节码.但是,基本上你没必要使用类型提示.后期优化时再考虑.</p>
-
-<p>函数可以添加注释文档,给API添加文档说明是个好习惯:</p>
-
-<pre><code class="{.clojure}">(defn round
-  "Round down a double to the given precision (number of significant digits)"
-  [d precision]
-  (let [factor (Math/pow 10 precision)]
-    (/ (Math/floor (* d factor)) factor)))
-</code></pre>
-
-<p>在Clojure中函数参数可以有类型提示,不过是可选的.</p>
-
-<pre><code class="{.clojure}">(defn round
-  [^double d ^long precision]
-  (let [factor (Math/pow 10 precision)]
-    (/ (Math/floor (* d factor)) factor)))
-</code></pre>
-
-<p>函数还可以定义前置和后置条件来限制函数的参数和返回值.</p>
-
-<pre><code class="{.clojure}">(defn round
-  "Round down a double to the given precision (number of significant digits)"
-  [^double d ^long precision]
-  {:pre [(not-nil? d) (not-nil? precision)]}
-  (let [factor (Math/pow 10 precision)]
-    (/ (Math/floor (* d factor)) factor)))
-</code></pre>
-
-<p>在上面的例子中,我们使用了前置条件来检查两个参数是否为nil.</p>
-
-<p>not-nil?宏(或函数),没有在该例子中展示,我们假设它已经在其它地方实现了.</p>
-
-
-
-
-    <a href="/2014/03/15/function.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2014/02/19/math.html">Clojure教程-数学计算</a></h2>
-
-        <p class="post-meta">By 02月19日  2014
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p>本文翻译自<a href="http://clojure-doc.org/articles/cookbooks/math.html">Mathematics with Clojure</a></p>
-
-<p>本文包含了使用Clojure的内建函数,扩展包和部分JDK功能进行数学计算.</p>
-
-<p>版权:</p>
-
-<p>This work is licensed under a Creative Commons Attribution 3.0 Unported
-License (including images &amp; stylesheets). The source is available on
-Github.</p>
-
-<h1>准备</h1>
-
-<p>这里的一些例子使用了<a href="https://github.com/clojure/math.numeric-tower">math.numeric-tower</a>和<a href="https://github.com/clojure/math.combinatorics">math.combinatorics</a>库.所以需要
-你在代码的命名空间中包含如下代码:</p>
-
-<pre><code class="{.clojure}">(:require [clojure.math.numeric-tower :as math]
-          [clojure.math.combinatorics :as combo])
-</code></pre>
-
-<p>或者在REPL里载入:</p>
-
-<pre><code class="{.clojure}">(require '[clojure.math.numeric-tower :as math])
-(require '[clojure.math.combinatorics :as combo])
-</code></pre>
-
-<h1>方法</h1>
-
-<h2>简单计算</h2>
-
-<pre><code class="{.clojure}">(+ 3 4)    ;=&gt; 7
-(- 3 4)    ;=&gt; -1
-(* 3 4)    ;=&gt; 12
-(/ 3 4)    ;=&gt; 3/4  (an exact ratio)
-(/ 3.0 4)  ;=&gt; 0.75
-
-(inc 5)    ;=&gt; 6
-(dec 5)    ;=&gt; 4
-</code></pre>
-
-<p>想要计算整数的除法,取余和取模,请看<a href="http://clojuredocs.org/clojure_core/clojure.core/quot">quot</a>,<a href="http://clojuredocs.org/clojure_core/clojure.core/rem">rem</a>,<a href="http://clojuredocs.org/clojure_core/clojure.core/mod">mod</a>
-想计算指数的平方根,四舍五入,上下限,绝对值和最大公约数/最小公倍数,请看<a href="http://clojure.github.com/math.numeric-tower/">math.numeric-tower</a></p>
-
-<h2>三角函数</h2>
-
-<p>使用Java平台提供的函数:</p>
-
-<pre><code class="{.clojure}">Math/PI       ;=&gt; 3.14159...
-(Math/sin x)
-(Math/cos x)
-(Math/tan x)
-</code></pre>
-
-<p>还有很多的函数,你可以查看<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html">java.lang.Math</a></p>
-
-<h2>组合数学</h2>
-
-<p>对于组合数学相关函数(比如:combinations和permutations),请看<a href="http://clojure.github.com/math.combinatorics/">math.combinatorics</a></p>
-
-
-
-    <a href="/2014/02/19/math.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

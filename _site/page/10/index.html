@@ -132,6 +132,185 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/09/17/clojurescript.html">Luminus手册-ClojureScript</a></h2>
+
+        <p class="post-meta">By 09月17日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Summary</h1>
+
+<p>ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScript可以
+有如下有点：</p>
+
+<ul>
+<li>在客户端和服务端使用相同的语言</li>
+<li>在前后端共用相同的代码</li>
+<li>简介流畅的语言</li>
+<li>使用Leiningen管理依赖关系</li>
+<li>不可变数据</li>
+<li>功能强大的库</li>
+<li>Adding ClojureScript Support</li>
+</ul>
+
+
+<p>最简单的添加ClojureScript支持的方法就是在创建新项目的时候添加+cljs选项
+。不过在现有的项目中添加ClojureScript也同样的简单。你只需要在
+project.clj文件中添加如下内容即可。</p>
+
+<pre><code class="{.clojure}">:plugins [...
+          [lein-cljsbuild "0.3.0"]]
+
+:hooks [... leiningen.cljsbuild]
+
+:cljsbuild
+{:builds [{:source-paths ["src-cljs"]
+           :compiler {:output-to "resources/public/js/site.js"
+                      :optimizations :advanced}}]}
+</code></pre>
+
+<p>上面的代码将在项目中添加cljsbuild插件和一个钩子。
+所有的命名空间需要在项目根目录下的src-cljs目录内。注意，ClojureScript
+文件需要以.cljs结尾。如果文件以.clj结尾，它也会被编译，不过它就无法访
+问js命名空间。</p>
+
+<h1>Using Libraries</h1>
+
+<p>使用ClojureScript的一个好处就是你可以使用Leiningen来管理客户端的依赖。
+ClojureScript库和其他库一样都配置在project.clj文件中。</p>
+
+
+
+
+    <a href="/2013/09/17/clojurescript.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/16/html_templating.html">Luminus手册-HTML模板</a></h2>
+
+        <p class="post-meta">By 09月16日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Templating Options</h1>
+
+<p>Luminus包含了Hiccup的依赖.如果你熟悉Hiccup那么可以直接使用。
+Hiccup使用clojure数据结构来描述模板。并且,Hiccup提供了丰富的API来生成
+HTML元素。 Luminus也包含了Selmer，Selmer使用了普通的文本文件来描述模板。
+你可以使用它们中的任何一个模板，或者混合使用.抑或你可以选择任何你喜欢
+的模板框架，比如Enlive或者Stencil。</p>
+
+<h1>HTML Templating Using Selmer</h1>
+
+<p>Selmer是一个类似Django模板的框架。如果你熟悉Django或者其他类似的模板语
+言，那么你会感觉很熟悉.</p>
+
+<h2>Creating Templates</h2>
+
+<p>Selmer将展示逻辑和程序逻辑分开。实际上Selmer模板就是包含了动态元素的
+HTML文件。来看下面的例子。</p>
+
+<pre><code class="{.html}">&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;title&gt;My First Template&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h2&gt;Hello { {name}}&lt;/h2&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>模板使用了一个包含了键值对的上下文环境。上下文环境中包含了我们
+需要在运行时获得的变量的值。上面的代码中，我们从上下文环境中获取名字为
+name的变量的值。
+有两个函数可以渲染模板,render和render-file。render函数接收一个字符串来
+渲染模板。而render-file接收一个字符串作为路径来渲染模板。
+如果我们将上面的模板定义保存到index.html文件中。我们就可以这样来渲染:</p>
+
+<pre><code class="{.clojure}">(ns example.routes.home
+  (:use [selmer.parser :only [render-file]]))
+
+(defn index [request]
+  (render-file "example/views/templates/index.html"
+               {:name "John"}))
+</code></pre>
+
+
+
+
+    <a href="/2013/09/16/html_templating.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/09/15/application_profile.html">Luminus手册-应用配置</a></h2>
 
         <p class="post-meta">By 09月15日  2013
@@ -535,161 +714,6 @@ println(indexs("Mississippi"))
 
 
     <a href="/2013/03/15/scala_exercises_13.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/14/scala_exercises_12.html">快学Scala习题解答—第十二章 高阶函数</a></h2>
-
-        <p class="post-meta">By 03月14日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>高阶函数</h1>
-
-<h2>编写函数values(fun:(Int)=>Int,low:Int,high:Int),该函数输出一个集合，对应给定区间内给定函数的输入和输出。比如，values(x=>x*x,-5,5)应该产出一个对偶的集合(-5,25),(-4,16),(-3,9),...,(5,25)</h2>
-
-<pre><code class="{.scala}">object Test extends App {
-  def values(fun: (Int) =&gt; Int, low: Int, high: Int) = {
-    var arr = List[(Int,Int)]()
-    low to high foreach {
-      num =&gt;
-      arr = (num, fun(num)) :: arr
-    }
-    arr
-  }
-
-  println(values(x =&gt; x * x, -5, 5).mkString)
-}
-</code></pre>
-
-<h2>如何用reduceLeft得到数组中的最大元素?</h2>
-
-<pre><code class="{.scala}">object Test extends App {
-  val arr = Array(3,2,6,8,4,6,9,3,6,7,1,2)
-  print(arr.reduceLeft((a,b)=&gt;if (a&gt;b) a else b))
-}
-</code></pre>
-
-<h2>用to和reduceLeft实现阶乘函数,不得使用循环或递归</h2>
-
-<pre><code class="{.scala}">println(1 to 10 reduceLeft(_ * _))
-</code></pre>
-
-<h2>前一个实现需要处理一个特殊情况，即n\&lt;1的情况。展示如何用foldLeft来避免这个需要。</h2>
-
-<pre><code class="{.scala}">println((1 to -10).foldLeft(1)(_ * _))
-</code></pre>
-
-
-
-
-    <a href="/2013/03/14/scala_exercises_12.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/13/scala_exercises_11.html">快学Scala习题解答—第十一章 操作符</a></h2>
-
-        <p class="post-meta">By 03月13日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>操作符</h1>
-
-<h2>根据优先级规则,3 + 4 -> 5和3 -> 4 + 5是如何被求值的？</h2>
-
-<p>在REPL中执行即可得到结果。都是从左至右执行</p>
-
-<h2>BigInt类有一个pow方法,但没有用操作符字符。Scala类库的设计者为什么没有选用**(像Fortran那样)或者^(像Pascal那样)作为乘方操作符呢？</h2>
-
-<p>Scala中的操作符就是方法，其优先级是根据首字母来判断的，优先级如下</p>
-
-<pre><code class="{.example}">最高优先级:除以下字符外的操作符字符
- * / %
-+ -
-:
-= !
-&lt; &gt;
-&amp;
-ˆ
-|
-非操作符
-最低优先级:赋值操作符
-</code></pre>
-
-<p>一般乘方的操作符是优于乘法操作的，如果使用**作为乘方的话，那么其优先级则与*相同，而如果使用^<em>的</em>话，则优先级低于*操作。优先级都是有问题的。故没有使用这两种操作符</p>
-
-
-
-
-    <a href="/2013/03/13/scala_exercises_11.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

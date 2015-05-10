@@ -4,13 +4,172 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-05-04T22:12:37+08:00</updated>
+    <updated>2015-05-10T14:38:37+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
         <email>ivan.pig@foxmail.com</email>
     </author>
 
+    
+    <entry>
+        <title>课程登记系统设计</title>
+        <link href="http://ivanpig.github.io/2015/05/10/plantuml.html"/>
+        <updated>2015-05-10T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/05/10/plantuml</id>
+        <content type="html">&lt;h1&gt;简介&lt;/h1&gt;
+
+&lt;p&gt;本例子摘自《敏捷软件开发：原则，模式与实践》附录 A。&lt;/p&gt;
+
+&lt;h1&gt;问题描述&lt;/h1&gt;
+
+&lt;p&gt;用户应当能够查看所提供的可选课程清单，并且能够选择他们想要登记学习的课程。一旦进行选择，应当弹出一个窗体让用户输入如下信息:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;姓名&lt;/li&gt;
+&lt;li&gt;电话号码&lt;/li&gt;
+&lt;li&gt;传真号码&lt;/li&gt;
+&lt;li&gt;电子邮箱地址&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;还应该为用户提供一种选择付款的方式：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;支票&lt;/li&gt;
+&lt;li&gt;定课单&lt;/li&gt;
+&lt;li&gt;信用卡&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;如果用户使用支票支付，则应该提示输入支票号码。&lt;/p&gt;
+
+&lt;p&gt;如果用户希望信用卡支付，则提示输入信用卡号码，有效期限以及卡上显示的名字。&lt;/p&gt;
+
+&lt;p&gt;如果用户希望用定课单支付，则应该提示用户输入定课单号，公司名称及付款部门中某个人的名字和他的电话号码。&lt;/p&gt;
+
+&lt;p&gt;一旦填写完毕，用户点击提交按钮。屏幕显示汇总了用户输入的所有信息的页面。指示用户打印，在打印结果上签名并传真到登记中心。&lt;/p&gt;
+
+&lt;p&gt;它也应该把登记汇总通过电子邮件发送给我们的登记出工作人员和用户。&lt;/p&gt;
+
+&lt;p&gt;系统知道每个班级学生数目上限，一旦达到了这个限制，系统自动将这个班级标记上&quot;已满&quot;&lt;/p&gt;
+
+&lt;p&gt;通过调出一个特殊的窗体选择一门课程，登记处工作人员就可以通过电子邮件向所有登记课程的学生发送消息。
+该窗体允许工作人员键入一条消息，然后点击一个按钮，就可以把消息发送给当前所有登记学习所选择课程的学生。&lt;/p&gt;
+
+&lt;p&gt;登记处工作人员也可以调出一个窗体，上面显示了对于已教授过的班级，所有学生的状态。
+这个状态表明学生是否出席以及是否已经收到学生交付的学费。这个窗体可以以课程为基础被调出。
+或者登记处工作人员也可以要求看一下余额没有结清的所有学生的名单。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h2&gt;参与者&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;登记者&lt;/strong&gt;：把学生登记到一门课程中。它和系统交互以选择合适的课程，并输入关于学生的信息以及支付方式&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;登记处工作人员&lt;/strong&gt;：收到每个登记的电子邮件通知。还给学生发送电子邮件通知，并接收关于登记和支付的报告&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;学生&lt;/strong&gt;：收到登记的电子邮件确认以及来自登记处工作人员的电子邮件通知。学生参加它所登记的课程&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;用例&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;用例#1:查看课程清单&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt; &lt;a href=&quot;/assets/java/design/plantuml/case1.puml&quot;&gt;plantuml源码&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;img src=&quot;/assets/java/design/plantuml/case1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;用例#2:登记一门课程&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt; &lt;a href=&quot;/assets/java/design/plantuml/case2.puml&quot;&gt;plantuml源码&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;img src=&quot;/assets/java/design/plantuml/case2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;简介&lt;/h1&gt;
+
+&lt;p&gt;本例子摘自《敏捷软件开发：原则，模式与实践》附录 A。&lt;/p&gt;
+
+&lt;h1&gt;问题描述&lt;/h1&gt;
+
+&lt;p&gt;用户应当能够查看所提供的可选课程清单，并且能够选择他们想要登记学习的课程。一旦进行选择，应当弹出一个窗体让用户输入如下信息:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;姓名&lt;/li&gt;
+&lt;li&gt;电话号码&lt;/li&gt;
+&lt;li&gt;传真号码&lt;/li&gt;
+&lt;li&gt;电子邮箱地址&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;还应该为用户提供一种选择付款的方式：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;支票&lt;/li&gt;
+&lt;li&gt;定课单&lt;/li&gt;
+&lt;li&gt;信用卡&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;如果用户使用支票支付，则应该提示输入支票号码。&lt;/p&gt;
+
+&lt;p&gt;如果用户希望信用卡支付，则提示输入信用卡号码，有效期限以及卡上显示的名字。&lt;/p&gt;
+
+&lt;p&gt;如果用户希望用定课单支付，则应该提示用户输入定课单号，公司名称及付款部门中某个人的名字和他的电话号码。&lt;/p&gt;
+
+&lt;p&gt;一旦填写完毕，用户点击提交按钮。屏幕显示汇总了用户输入的所有信息的页面。指示用户打印，在打印结果上签名并传真到登记中心。&lt;/p&gt;
+
+&lt;p&gt;它也应该把登记汇总通过电子邮件发送给我们的登记出工作人员和用户。&lt;/p&gt;
+
+&lt;p&gt;系统知道每个班级学生数目上限，一旦达到了这个限制，系统自动将这个班级标记上&quot;已满&quot;&lt;/p&gt;
+
+&lt;p&gt;通过调出一个特殊的窗体选择一门课程，登记处工作人员就可以通过电子邮件向所有登记课程的学生发送消息。
+该窗体允许工作人员键入一条消息，然后点击一个按钮，就可以把消息发送给当前所有登记学习所选择课程的学生。&lt;/p&gt;
+
+&lt;p&gt;登记处工作人员也可以调出一个窗体，上面显示了对于已教授过的班级，所有学生的状态。
+这个状态表明学生是否出席以及是否已经收到学生交付的学费。这个窗体可以以课程为基础被调出。
+或者登记处工作人员也可以要求看一下余额没有结清的所有学生的名单。&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h2&gt;参与者&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;登记者&lt;/strong&gt;：把学生登记到一门课程中。它和系统交互以选择合适的课程，并输入关于学生的信息以及支付方式&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;登记处工作人员&lt;/strong&gt;：收到每个登记的电子邮件通知。还给学生发送电子邮件通知，并接收关于登记和支付的报告&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;学生&lt;/strong&gt;：收到登记的电子邮件确认以及来自登记处工作人员的电子邮件通知。学生参加它所登记的课程&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;用例&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;用例#1:查看课程清单&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt; &lt;a href=&quot;/assets/java/design/plantuml/case1.puml&quot;&gt;plantuml源码&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;img src=&quot;/assets/java/design/plantuml/case1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;用例#2:登记一门课程&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt; &lt;a href=&quot;/assets/java/design/plantuml/case2.puml&quot;&gt;plantuml源码&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;img src=&quot;/assets/java/design/plantuml/case2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</summary>
+    </entry>
     
     <entry>
         <title>读源码-String</title>
@@ -3458,6 +3617,59 @@ public class TestAll {
 &lt;p&gt;&lt;img src=&quot;/mind/framework.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/ivanpig/pig-template&quot;&gt;源码下载&lt;/a&gt;&lt;/p&gt;
+</summary>
+    </entry>
+    
+    <entry>
+        <title>如何读书相关书籍书评</title>
+        <link href="http://ivanpig.github.io/2015/04/01/book_review.html"/>
+        <updated>2015-04-01T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/04/01/book_review</id>
+        <content type="html">&lt;h1&gt;《杠杆阅读术》&lt;/h1&gt;
+
+&lt;p&gt;讲述读书的方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;主要针对商业书籍&lt;/li&gt;
+&lt;li&gt;一天一本(非技术性很强的书，一天一本难度不大)&lt;/li&gt;
+&lt;li&gt;先阅读序言，目录以及结尾，确认图书编写目的，带着目的去读&lt;/li&gt;
+&lt;li&gt;不要一页一页读，吸收20%即可，没读完也没关系(强迫症患者比较有难度)&lt;/li&gt;
+&lt;li&gt;重要的是实践&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;对个人而言，一是不要纠结于细节(当然是针对非技术性书籍)，不要强迫自己非要全部看完.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;看一类书，如果多本书中都提到了类似的观点，则需要注意。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;对书中的知识要进行实践。&lt;/em&gt;&lt;/p&gt;
+
+&lt;h1&gt;《书都不会读，你还想成功》&lt;/h1&gt;
+
+&lt;p&gt;和《杠杆阅读术》类似,如果读过上一本，此本可忽略！&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;《杠杆阅读术》&lt;/h1&gt;
+
+&lt;p&gt;讲述读书的方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;主要针对商业书籍&lt;/li&gt;
+&lt;li&gt;一天一本(非技术性很强的书，一天一本难度不大)&lt;/li&gt;
+&lt;li&gt;先阅读序言，目录以及结尾，确认图书编写目的，带着目的去读&lt;/li&gt;
+&lt;li&gt;不要一页一页读，吸收20%即可，没读完也没关系(强迫症患者比较有难度)&lt;/li&gt;
+&lt;li&gt;重要的是实践&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;对个人而言，一是不要纠结于细节(当然是针对非技术性书籍)，不要强迫自己非要全部看完.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;看一类书，如果多本书中都提到了类似的观点，则需要注意。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;对书中的知识要进行实践。&lt;/em&gt;&lt;/p&gt;
+
+&lt;h1&gt;《书都不会读，你还想成功》&lt;/h1&gt;
+
+&lt;p&gt;和《杠杆阅读术》类似,如果读过上一本，此本可忽略！&lt;/p&gt;
 </summary>
     </entry>
     

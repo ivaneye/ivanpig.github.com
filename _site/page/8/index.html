@@ -132,6 +132,148 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/10/01/useful_libraries.html">Luminus手册-实用库</a></h2>
+
+        <p class="post-meta">By 10月01日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>Luminus的目标是从细粒度来方便你开发web应用。所以它默认包含了很多库包。</p>
+
+<p>包括lib-noir提供一般工具，Selmer/Hiccup提供HTML模板,Timbre提供日志功能，
+Tower提供国际化等等其他包。</p>
+
+<p>当然，还有很多的包能给web开发带来便利。</p>
+
+<p>具体请见<a href="http://www.luminusweb.net/docs/useful_libraries.md">此处</a></p>
+
+
+
+    <a href="/2013/10/01/useful_libraries.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/30/deployment.html">Luminus手册-部署</a></h2>
+
+        <p class="post-meta">By 09月30日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Running Standalone</h1>
+
+<p>要创建一个可独立运行的包，只需要运行如下的命令:</p>
+
+<pre><code class="{.bash}">lein ring uberjar
+</code></pre>
+
+<p>打包完成的jar会出现在target目录下。可以通过下面的命令运行:</p>
+
+<pre><code class="{.clojure}">java -jar myapp-0.1.0-SNAPSHOT-standalone.jar
+</code></pre>
+
+<p>独立可运行的程序可以使用Jetty来运行。如果要设置端口号，你需要设置\$PORT
+环境变量:</p>
+
+<pre><code class="{.bash}">export PORT=8080
+java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
+</code></pre>
+
+<h1>Delpoying on Immutant</h1>
+
+<p>如果想部署应用到Immutant，请执行如下命令:</p>
+
+<pre><code class="{.bash}">lein immutant deploy
+</code></pre>
+
+<p>更多信息请访问<a href="http://immutant.org/tutorials/deploying/index.html">官网</a></p>
+
+<h1>Deploying to Tomcat</h1>
+
+<p>如果想打包应用为war包:</p>
+
+<pre><code class="{.bash}">lein ring uberwar
+</code></pre>
+
+<p>然后只需要将打好的包拷贝到tomcat的webapps目录下即可:</p>
+
+<pre><code class="{.bash}">cp target/myapp-0.1.0-SNAPSHOT-standalone.war ~/tomcat/webapps/myapp.war
+</code></pre>
+
+
+
+
+    <a href="/2013/09/30/deployment.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/09/29/internationalization.html">Luminus手册-国际化</a></h2>
 
         <p class="post-meta">By 09月29日  2013
@@ -540,192 +682,6 @@ DROP TABLE users;
 
 
     <a href="/2013/09/25/security.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/24/input_validation.html">Luminus手册-输入验证</a></h2>
-
-        <p class="post-meta">By 09月24日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Input Validation</h1>
-
-<p>验证相关助手方法在noir.validation命名空间中。如果我们要使用验证，我们需要先引入这个命名空间。</p>
-
-<pre><code class="clojure">(ns myapp.routes
-  (:require ... [noir.validation :as v]))
-</code></pre>
-
-<p>验证函数在当验证不通过时，将相应的错误设置到对应的字段上。验证函数接受一个条件函数和一个包含了需要验证的字段和错误信息的Vector.当验证函数验证通过时需要返回true否则返回false.</p>
-
-<p>下面是已经存在的验证函数:</p>
-
-<pre><code>has-value? args: [v] - returns true if v is truthy and not an empty string.
-has-values? args: [coll] - returns true if all members of the collection has-value? This works on maps as well.
-not-nil? args: [v] - returns true if v is not nil
-min-length? args: [v len] - returns true if v is greater than or equal to the given len
-max-length? args: [v len - returns true if v is less than or equal to the given len
-matches-regex? args: [v regex] - returns true if the string matches the given regular expression
-is-email? args: [v] - returns true if v is an email address
-valid-file? args: [m] - returns true if a valid file was supplied
-valid-number? args: [v] - returns true if the string can be parsed to a Long
-greater-than? args: [v n] - returns true if the string represents a number &gt; given
-less-than? args: [v n] - returns true if the string represents a number &lt; given
-equal-to? args: [v n] - returns true if the string represents a number = given
-</code></pre>
-
-<p>例如：如果我们想检查id和pass字段不能为空，则可以创建如下验证规则：</p>
-
-<p>````clojure
-(v/rule (has-value? id)
-        [:id "screen name is required"])</p>
-
-<p>(v/rule (has-value? pass)
-        [:pass "password is required"])
-```</p>
-
-<p>错误信息被保存在noir.validation/<em>errors</em>这个atom中，这个atom被绑定到了request上。每个error都包含一个key和一个对应的错误Vector.验证函数可以在同一字段上多次调用来设置多个错误。</p>
-
-<p>一旦验证规则被执行了，我们可以通过errors?这个函数来检查是否有错误。如果没有传递参数，则此函数会检查noir.validation/<em>error</em>是否为空，如果传递了参数，次函数根据传递的值来查询是否有错误。</p>
-
-
-
-
-    <a href="/2013/09/24/input_validation.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/23/sessions_cookies.html">Luminus手册-Session与Cookie</a></h2>
-
-        <p class="post-meta">By 09月23日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Sessions</h1>
-
-<p>Session管理相关功能由noir.session提供。默认提供的noir.util.middleware/app-handler函数默认将Session保存在内存里。</p>
-
-<p>当然你可以修改它，只需要给函数传递第二个参数，告诉它将Session保存在哪里就可
-以了。 下面的例子创建了一个保存在内存里的session.</p>
-
-<pre><code class="{.clojure}">(def app (middleware/app-handler [home-routes app-routes]))
-</code></pre>
-
-<p>下面，我们来重新定义session的保存位置。使用:session-options来替换掉默认的值就可以了。</p>
-
-<pre><code class="{.clojure}">(def app
-  (middleware/app-handler
-    [home-routes app-routes]
-    :session-options {:cookie-name "example-app-session"
-                      :store (cookie-store)}))
-</code></pre>
-
-<h1>Accessing the session</h1>
-
-<p>你可以在任意范围内的任何函数里访问并操作session。</p>
-
-<pre><code class="{.clojure}">(require '[noir.session :as session])
-
-(defn set-user [id]
-  (session/put! :user id)
-  (session/get :user))
-
-(defn remove-user []
-  (session/remove! :user)
-  (session/get :user))
-
-(defn set-user-if-nil [id]
-  (session/get :user id))
-
-(defn clear-session []
-  (session/clear!))
-
-(defroutes app-routes
-  (GET "/login/:id" [id] (set-user id))
-  (GET "/remove" [] (remove-user))
-  (GET "/set-if-nil/:id" [id] (set-user-if-nil id))
-  (GET "/logout" [] (clear-session)))
-</code></pre>
-
-<p>你还可以通过noir.session/flash-put!和noir.session/flash-get来创建flash变量.</p>
-
-<pre><code class="{.clojure}">(session/flash-put! :message "User added!")
-(session/flash-get :message)
-</code></pre>
-
-
-
-
-    <a href="/2013/09/23/sessions_cookies.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

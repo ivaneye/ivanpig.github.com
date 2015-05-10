@@ -132,6 +132,187 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/02/18/chain_of_responsibility.html">语言与模式-16责任链模式</a></h2>
+
+        <p class="post-meta">By 02月18日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。</p>
+
+<p><img src="/assets/designpattern/chain.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>有多个的对象可以处理一个请求，哪个对象处理该请求运行时刻自动确定。</li>
+<li>你想在不明确指定接收者的情况下，向多个对象中的一个提交一个请求。</li>
+<li>可处理一个请求的对象集合应被动态指定。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="java">public abstract class Handler {
+
+    protected Handler successor;
+
+    public abstract void handlerRequest(String condition);
+
+
+    public Handler getSuccessor() {
+        return successor;
+    }
+    public void setSuccessor(Handler successor) {
+        this.successor = successor;
+    }
+</code></pre>
+
+
+
+
+    <a href="/2015/02/18/chain_of_responsibility.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/02/17/observer.html">语言与模式-15观察者模式</a></h2>
+
+        <p class="post-meta">By 02月17日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>定义对象间的一种一对多的依赖关系,当一个对象的状态发生改变时, 所有依赖于它的对象都得到通知并被自动更新。</p>
+
+<p><img src="/assets/designpattern/observer.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>当一个抽象模型有两个方面, 其中一个方面依赖于另一方面。将这二者封装在独立的对象中以使它们可以各自独立地改变和复用。</li>
+<li>当对一个对象的改变需要同时改变其它对象, 而不知道具体有多少对象有待改变。</li>
+<li>当一个对象必须通知其它对象，而它又不能假定其它对象是谁。换言之，你不希望这些对象是紧密耦合的。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="java">public abstract class Subject {
+    /**
+     * 用来保存注册的观察者对象
+     */
+    private    List&lt;Observer&gt; list = new ArrayList&lt;Observer&gt;();
+    /**
+     * 注册观察者对象
+     * @param observer    观察者对象
+     */
+    public void attach(Observer observer){
+
+        list.add(observer);
+        System.out.println("Attached an observer");
+    }
+    /**
+     * 删除观察者对象
+     * @param observer    观察者对象
+     */
+    public void detach(Observer observer){
+
+        list.remove(observer);
+    }
+    /**
+     * 通知所有注册的观察者对象
+     */
+    public void nodifyObservers(String newState){
+
+        for(Observer observer : list){
+            observer.update(newState);
+        }
+    }
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/17/observer.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/02/16/memento.html">语言与模式-14备忘录模式</a></h2>
 
         <p class="post-meta">By 02月16日  2015
@@ -583,192 +764,6 @@ public class FileInputStream extends InputStream
 
 
     <a href="/2015/02/12/decorator.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/11/composite.html">语言与模式-09组合模式</a></h2>
-
-        <p class="post-meta">By 02月11日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>将对象组合成树形结构以表示“部分-整体”的层次结构。Composite使得用户对单个对象和组合对象的使用具有一致性。</p>
-
-<p><img src="/assets/designpattern/composite.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>你想表示对象的部分—整体层次结构。</li>
-<li>你希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<pre><code>public interface Node {
-    void check();
-    void add(Node node) throws Exception;
-    void remove(Node node) throws Exception;
-}
-</code></pre>
-
-<pre><code>public class ParentNode implements Node {
-    private List&lt;Node&gt; list = new ArrayList&lt;Node&gt;();
-
-    public void check() {
-        System.out.println("ParentNode is checked");
-        for(Node n : list){
-          n.check();
-        }
-    }
-
-    public void add(Node node) {
-        list.add(node);
-    }
-
-    public void remove(Node node) {
-        list.remove(node);
-    }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/11/composite.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/10/adapter.html">语言与模式-08适配器模式</a></h2>
-
-        <p class="post-meta">By 02月10日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>将一个类的接口转换成另外一个客户希望的接口。Adapter 模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。</p>
-
-<p><img src="/assets/designpattern/adapter.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>你想使用一个已经存在的类，而它的接口不符合你的需求。</li>
-<li>你想创建一个可以复用的类，该类可以与其他不相关的类或不可预见的类（即那些接口可能不一定兼容的类）协同工作。</li>
-<li>（仅适用于对象Adapter）你想使用一些已经存在的子类，但是不可能对每一个都进行子类化以匹配它们的接口。对象适配器可以适配它的父类接口。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<p>假设目前做一个新系统，有如下代码结构。</p>
-
-<pre><code class="{.java}">public interface Car{
-     public void drive();
-}
-
-public class Benz implements Car{
-     public void drive(){
-          System.out.println("Benz run");
-     }
-}
-
-public class Cruze implements Car{
-     public void drive(){
-          System.out.println("Cruze run");
-     }
-}
-</code></pre>
-
-<p>有一个老系统，里面有如下代码</p>
-
-<pre><code class="{.java}">public class Smart{
-     public void run(){
-         System.out.println("Smart run");
-     }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/10/adapter.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

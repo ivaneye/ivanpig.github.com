@@ -4,7 +4,6 @@ title:  如何读书相关书籍书评
 categories: [book]
 tags: [book,review]
 avatarimg: "/img/head.jpg"
-published: false
 
 ---
 
