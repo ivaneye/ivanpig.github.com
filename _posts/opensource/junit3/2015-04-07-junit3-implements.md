@@ -361,7 +361,7 @@ private boolean isTestMethod(Method m) {
 
 # 时序图
 
-![](/assets/opensource/junit3/junit_seq.png)
+![](/assets/opensource/junit3/seq.png)
 
 
 # UML
