@@ -1,5 +1,6 @@
 ---
 title: robots
+permalink: robots.txt
 ---
 User-agent: *
 Sitemap: <{{site.production_url}}/sitemap.xml>
