@@ -132,6 +132,102 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/04/06/use-junit3.html">读源码-JUnit3使用</a></h2>
+
+        <p class="post-meta">By 04月06日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#junit3"><i class="fa fa-folder-open">junit3 (3)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (6)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit3 (3)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p><em>Level :</em> &hearts;</p>
+
+<h1>JUnit简介</h1>
+
+<p>JUnit是一个Java语言的单元测试框架。它由Kent Beck和Erich Gamma建立，逐渐成为源于Kent Beck的sUnit的xUnit家族中最为成功的一个。</p>
+
+<p>JUnit测试是程序员测试，即所谓白盒测试，因为程序员知道被测试的软件如何（How）完成功能和完成什么样（What）的功能。</p>
+
+<h1>场景</h1>
+
+<p>假设，我们有一个Person类</p>
+
+<ul>
+<li>包含两个方法say和sayHi</li>
+<li>两个方法都接收一个String类型的参数</li>
+<li>say返回"Hello,"+arg</li>
+<li>sayHi返回"Hi,"+arg</li>
+</ul>
+
+
+<p>代码如下:</p>
+
+<pre><code class="java">package org.ivan;
+
+public class Person {
+
+    public String say(String name) {
+        return "Hello," + name;
+    }
+
+    public String sayHi(String name) {
+        return "Hi," + name;
+    }
+}
+</code></pre>
+
+<p>如何保证方法返回了正确的值？</p>
+
+<p>当然，你可以使用main方法，代码如下:</p>
+
+<pre><code class="java">public static void main(String[] args){
+  Person p = new Person();
+  System.out.println("test Person.say" + ("Hello,Ivan".equals(p.say("Ivan"))));
+  System.out.println("test Person.sayHi" + ("Hi,Ivan".equals(p.sayHi("Ivan"))));
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/04/06/use-junit3.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/04/01/java_webframework.html">自用Java开发框架</a></h2>
 
         <p class="post-meta">By 04月01日  2015
@@ -148,7 +244,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">framework (1)</i></a>
             
@@ -191,7 +287,7 @@
             
             
             
-            <a class="post-categorybut " href="/type/#book"><i class="fa fa-folder-open">book (2)</i></a>
+            <a class="post-categorybut " href="/type/#book"><i class="fa fa-folder-open">book (1)</i></a>
             
             
             
@@ -200,9 +296,9 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">book (2)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">book (1)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">review (2)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">review (1)</i></a>
             
             
         
@@ -369,7 +465,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (2)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
             
             
         
@@ -454,7 +550,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (2)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
             
             
         
@@ -505,100 +601,6 @@ public protocol Person{
 
 
     <a href="/2015/03/02/interface_method.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/03/01/start.html">语言和并发-01启动线程</a></h2>
-
-        <p class="post-meta">By 03月01日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#thread"><i class="fa fa-folder-open">thread (1)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">thread (1)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (48)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>概述</h1>
-
-<p>本系列文章意在比较Java与Clojure在线程实现上的区别！</p>
-
-<p>Java的线程主要基于锁机制，而Clojure主要模拟了数据库事务操作，所谓的STM(软事务模型)。主要从代码层面给出两者的区别，孰优孰劣请自行判断！</p>
-
-<h1>启动线程</h1>
-
-<h2>Java代码</h2>
-
-<ul>
-<li>Java实例中，两个线程类A和B，分别通过实现Runnable接口和继承Thread类来实现</li>
-<li>两各类启动线程的方式有差异，详见代码</li>
-<li>JDK5中提供了线程启动类Executors来执行</li>
-</ul>
-
-
-<pre><code class="java">package concurrent;
-
-import java.util.concurrent.*;
-
-/**
- * Created by ivan on 15-2-22.
- * Java启动线程
- */
-public class Start {
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        //实现Runnable接口，需要通过一个Thread实例来启动线程
-        new Thread(new A()).start();
-        //继承Thread类，直接通过自身来启动线程
-        new B().start();
-
-        //JDK1.5开始，可以通过Executor来执行线程.效果和上面没有区别
-        ExecutorService e = Executors.newCachedThreadPool();
-        e.execute(new A());
-        e.execute(new B());
-        //Callable需要submit,返回Future
-        Future&lt;String&gt; f = e.submit(new C());
-        //get方法是个阻塞方法
-        System.out.println("Future f = " + f.get());
-        e.shutdown();
-    }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/03/01/start.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

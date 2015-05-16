@@ -132,6 +132,76 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2014/05/11/record_protocol.html">Clojure教程-Record和Protocol</a></h2>
+
+        <p class="post-meta">By 05月11日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>本文翻译自:<a href="http://www.jayway.com/2013/02/05/learn-clojure-using-records-and-protocols/">Learn Clojure using records and protocols</a></p>
+
+<p>当我对Clojure的括号不再疑惑后,另一个让我质疑为何要学习Clojure的问题是使用REPL很爽,但是我怎么来构建大型项目?".</p>
+
+<p>实际上,由于我的面向对象编程经验,我其实要问的是"我怎么才能将函数封装到类似class的东西里面去?".</p>
+
+<p>在本文中,我将会介绍一种类似于Java的方式来构建大型的Clojure项目.</p>
+
+<p>通过这种方式,希望你在学习Clojure的时候不会有太大的差异感!</p>
+
+<p>在Java中,我们出于各种目的而使用类.例如典型的使用Spring的web应用,你会看到类似下面的结构:</p>
+
+<ul>
+<li>Data transfer objects(DTO)</li>
+<li>Services(REST API,controllers,DAO)</li>
+<li>Rich object</li>
+</ul>
+
+
+<p>DTO实际上就是个结构体,他没有任何的行为(即方法).为了最小化样板代码,我趋向于使用pulibc final属性去实现DTO.我认为DTO就是个模板(schema),它就像一个REST服务输出的文件.但是我发现很多客户端开发人员可不关注这个,而只关注代码形式.有时你会看到DTO被作为数据库访问的一部分.这些DTO被称为贫血模型.(译者注:猜测作者的意思是,有些开发人员不管类是DTO还是DAO,只要结构相同就随便用!)</p>
+
+<p>Service实际上是包含了方法和注入了辅助Service的单例对象.不同的辅助Service提供了不同的服务.除了实现了接口外,Service只是包含了方法,和占位符很类似.单例模式导致的一个问题就是,新手无法预见到多线程里共享相同的实例出现意外的结果.他们将状态保存到私有属性里,而不需要从一个对象传递到另一个对象.很方便,但是是错误的做法.</p>
+
+<p>Rich object是面向对象语言中的思想.即将数据及和数据相关的操作封装到一个类里面.我可没说getter和setter是相关操作!但是,rich object类在项目中用得较少.取而代之的是使用DTO作为Service的输入和输出.使用DAO来访问数据库,然后返回DTO.我没说这种方法是错误的,我好奇的是,既然对于目前的Java架构是好是坏我们都无法确认,那为什么还要强求使用Clojure去实现类似的东西呢?</p>
+
+
+
+
+    <a href="/2014/05/11/record_protocol.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2014/03/15/function.html">Clojure教程-函数</a></h2>
 
         <p class="post-meta">By 03月15日  2014
@@ -756,58 +826,6 @@ script</a></li>
 
 
     <a href="/2014/02/01/first_step.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/10/02/upgrading.html">Luminus手册-升级</a></h2>
-
-        <p class="post-meta">By 10月02日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Upgrading to the Latest Version</h1>
-
-<p>不幸的是，框架无法自动从老版本升级到新版本。主要原因是新版本的依赖可能会有接口方面的修改，导致老代码无法正常运行。</p>
-
-<p>最好的方法是使用<a href="https://github.com/xsc/lein-ancient">lein-ancient</a>插件来保持你的依赖包时刻为最新。这将会帮你很容易的发现哪些插件有了新的版本。</p>
-
-
-
-    <a href="/2013/10/02/upgrading.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
