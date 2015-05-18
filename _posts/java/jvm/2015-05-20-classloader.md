@@ -4,7 +4,6 @@ title: ClassLoader
 categories: jvm
 tags: [classloader,tomcat,osgi]
 avatarimg: "/img/head.jpg"
-published: false
 
 ---
 
@@ -109,9 +108,103 @@ Java中提供的默认ClassLoader，只加载指定目录下的jar和class，如
 
 对于以上几个问题，如果单独使用一个类加载器明显是达不到效果的，必须根据实际使用若干个自定义类加载器。
 
-下面以本书主要剖析的Tomcat7为例，看看它的类加载器是怎样定义的？如图2-4-3，启动类加载器、扩展类加载器、应用程序类加载器这三个类加载器数据JDK级别的加载器，
-他们是唯一的，我们一般不会对其做任何更改。接下来则是Tomcat的类加载器，在tomcat7中，最重要的一个类加载器是Common ClassLoader，
-它的父类加载器是ApplicationClassLoader，负责加载 $CATALINA_BASE/lib、  $CATALINA_HOME/lib两个目录下所有的.class跟.jar文件。
-而下面虚线框的两个类加载器有必要说明一下，如果在Tomcat5版本，这两个类加载器实例默认与Common ClassLoader实例不同，Common ClassLoader为他们的父类加载器。
-而在Tomcat7中，这两个实例变量也存在，只是catalina.properties配置文件没有对server.loader跟share.loader两项进行配置，所以在程序里，
-这两个类加载器实例就被赋值为CommonClassLoader实例，即一个tomcat实例其实就只有CommonClassLoader实例
+Tomcat5 ClassLoader:
+
+![](/assets/jvm/classloader/tomcat5.jpg)
+
+Tomcat6 ClassLoader:
+
+![](/assets/jvm/classloader/tomcat6.jpg)
+
+Tomcat7 ClassLoader:
+
+![](/assets/jvm/classloader/tomcat7.png)
+
+Tomcat5,6,7的ClassLoader结构略有不同。
+
+Tomcat6中将CommonClassLoader,CatalinaClassLoader,SharedClassLoader合并，就一个CommonClassLoader.
+
+Tomcat7中没有ExtensionClassLoader.
+
+首先看前三个问题:
+
+从上图可以看出，为了解决jar隔离和共享的问题。对于每个webapp,Tomcat都会创建一个WebAppClassLoader来加载应用，这样就保证了每个应用加载进来的class都是不同的(因为ClassLoader不同)!
+而共享的jar放在tomcat-home/lib目录下，由CommonClassLoader来加载。通过双亲委托模式，提供给其下的所有webapp共享
+
+**特别说明**
+
+<font color="red">
+对于WebAppClassLoader是违反双亲委托模型的。如果加载的是jre或者servlet api则依然是双亲委托模型。
+而如果不是的话，则会先尝试自行加载，如果找不到再委托父加载器加载。
+这个应该是可以理解的，因为应用的class是由WebAppClassLoader加载的，是项目私有的。
+</font>
+
+对于热部署功能，Tomcat只是提供了后台线程进行扫描，如果有修改即重新加载!
+
+```java
+public void backgroundProcess() {
+    if (reloadable && modified()) {
+        try {
+            Thread.currentThread().setContextClassLoader
+                (WebappLoader.class.getClassLoader());
+            if (container instanceof StandardContext) {
+                ((StandardContext) container).reload();
+            }
+        } finally {
+            if (container.getLoader() != null) {
+                Thread.currentThread().setContextClassLoader
+                    (container.getLoader().getClassLoader());
+            }
+        }
+    } else {
+        closeJARs(false);
+    }
+}
+
+public synchronized void reload() {
+
+    if (!started)
+        throw new IllegalStateException
+            (sm.getString("containerBase.notStarted", logName()));
+
+    if(log.isInfoEnabled())
+        log.info(sm.getString("standardContext.reloadingStarted",
+                getName()));
+
+    setPaused(true);
+
+    try {
+        stop();
+    } catch (LifecycleException e) {
+        log.error(sm.getString("standardContext.stoppingContext",
+                getName()), e);
+    }
+
+    try {
+        start();
+    } catch (LifecycleException e) {
+        log.error(sm.getString("standardContext.startingContext",
+                getName()), e);
+    }
+
+    setPaused(false);
+}
+```
+
+# OSGi ClassLoader
+
+对于Tomcat来说，其ClassLoader结构，大体上还是符合双亲委托模型的。
+
+而OSGi则完全打破了双亲委托模型，自行实现了一套网状模型。
+
+究其原因主要是为了实现模块化功能！
+
+- 目前JVM中没有模块化的概念，一个ClassLoader中的类，其访问控制权限由访问权限控制符来控制，是类级别的。OSGi通过自定义ClassLoader实现包级别的访问权限控制
+- 通过自定义ClassLoader实现多版本控制(一个bundle可以发布多个版本，而jar不能多版本共存)
+- 可独立部署和卸载
+
+![](/assets/jvm/classloader/osgi01.png)
+
+其Class加载流程如下:
+
+![](/assets/jvm/classloader/osgi02.gif)
