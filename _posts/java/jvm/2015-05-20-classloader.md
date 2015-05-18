@@ -208,3 +208,29 @@ public synchronized void reload() {
 其Class加载流程如下:
 
 ![](/assets/jvm/classloader/osgi02.gif)
+
+- Step 1: 检查是否java.*，或者在bootdelegation中定义
+        当bundle类加载器需要加载一个类时，首先检查包名是否以java.*开头，或者是否在一个特定的配置文件（org.osgi.framework.bootdelegation）中定义。
+        如果是，则bundle类加载器立即委托给父类加载器（通常是Application类加载器）。
+
+这么做有两个原因：
+
+1. 唯一能够定义java.*包的类加载器是bootstrap类加载器，这个规则是JVM要求的。如果OSGI bundle类加载器试图加载这种类，则会抛Security Exception。
+2. 一些JVM错误地假设父加载器委托永远会发生，内部VM类就能够通过任何类加载器找到特定的其他内部类。所以OSGi提供了org.osgi.framework.bootdelegation属性，允许对特定的包（即那些内部VM类）使用父加载器委托。
+
+- Step 2: 检查是否在Import-Package中声明
+        检查是否在Import-Package中声明。如果是，则找到导出包的bundle，将类加载请求委托给该bundle的类加载器。如此往复。
+
+- Step 3: 检查是否在Require-Bundle中声明
+        检查是否在Require-Bundle中声明。如果是，则将类加载请求委托给required bundle的类加载器。
+
+- Step 4: 检查是否bundle内部类 
+        检查是否是该bundle内部的类，即当前JAR文件中的类。
+
+- Step5:  检查fragment
+        搜索可能附加在当前bundle上的fragment中的内部类。
+
+什么是fragment？
+
+Fragment bundle是OSGi 4引入的概念，它是一种不完整的bundle，必须要附加到一个host bundle上才能工作；fragment能够为host bundle添加类或资源，
+在运行时，fragment中的类会合并到host bundle的内部classpath中。
