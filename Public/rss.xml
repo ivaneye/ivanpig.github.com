@@ -7,10 +7,10 @@ permalink: rss.xml
 <feed xmlns="http://www.w3.org/2005/Atom">
 
     <title>IvanPig's Blog</title>
-    <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
-    <link href="http://ivanpig.github.io/"/>
+    <link href="http://www.ivaneye.com/rss.xml" rel="self"/>
+    <link href="http://www.ivaneye.com/"/>
     <updated>{{ site.time | date_to_xmlschema }}</updated>
-    <id>http://ivanpig.github.io/</id>
+    <id>http://www.ivaneye.com/</id>
     <author>
         <name>Ivan</name>
         <email>ivan.pig@foxmail.com</email>
@@ -19,9 +19,9 @@ permalink: rss.xml
     {% for post in site.posts %}
     <entry>
         <title>{{ post.title | xml_escape }}</title>
-        <link href="http://ivanpig.github.io{{ post.url }}"/>
+        <link href="http://www.ivaneye.com{{ post.url }}"/>
         <updated>{{ post.date | date_to_xmlschema }}</updated>
-        <id>http://ivanpig.github.io/{{ post.id }}</id>
+        <id>http://www.ivaneye.com/{{ post.id }}</id>
         <content type="html">{{ post.content | xml_escape }}</content>
         <summary type="html">{{ post.content | xml_escape }}</summary>
     </entry>
