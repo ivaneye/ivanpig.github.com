@@ -6,7 +6,7 @@ permalink: rss.xml
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-    <title>IvanPig's Blog</title>
+    <title>IvanEye</title>
     <link href="http://www.ivaneye.com/rss.xml" rel="self"/>
     <link href="http://www.ivaneye.com/"/>
     <updated>{{ site.time | date_to_xmlschema }}</updated>
