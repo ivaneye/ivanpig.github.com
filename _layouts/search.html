@@ -5,9 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">{% capture description %}{% if page.description %}{{ page.description }}{% endif %}{% endcapture %}
         <meta name="description" content="{{ description }}">{% capture tags %}{% if page.tags %}{{ page.tags }}{% endif %}{% endcapture %}
         <meta name="keywords" content="{{ page.tags | join: ', ' }}"/>
-        <meta name="author" content="ivanpig.github.io"> {% capture canonical %}http://ivanpig.github.io{% if site.permalink contains '.html' %}{{ page.url }}{% else %}{{ page.url | remove:'index.html' }}{% endif %}{% endcapture %}
+        <meta name="author" content="ivanpig.github.io"> {% capture canonical %}http://www.ivaneye.com{% if site.permalink contains '.html' %}{{ page.url }}{% else %}{{ page.url | remove:'index.html' }}{% endif %}{% endcapture %}
         <link rel="canonical" href="{{ canonical }}">
-        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>{% if page.title %}{{ page.title }} - {% endif %}IvanPig's Blog</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
