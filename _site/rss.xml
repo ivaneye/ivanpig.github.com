@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-    <title>IvanPig's Blog</title>
-    <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
-    <link href="http://ivanpig.github.io/"/>
-    <updated>2015-06-07T17:08:04+08:00</updated>
-    <id>http://ivanpig.github.io/</id>
+    <title>IvanEye</title>
+    <link href="http://www.ivaneye.com/rss.xml" rel="self"/>
+    <link href="http://www.ivaneye.com/"/>
+    <updated>2015-06-07T17:23:56+08:00</updated>
+    <id>http://www.ivaneye.com/</id>
     <author>
         <name>Ivan</name>
-        <email>ivan.pig@foxmail.com</email>
+        <email>wangyifan@ivaneye.com</email>
     </author>
 
     
     <entry>
         <title>Clojure绘制UML</title>
-        <link href="http://ivanpig.github.io/2015/06/07/cdraw.html"/>
+        <link href="http://www.ivaneye.com/2015/06/07/cdraw.html"/>
         <updated>2015-06-07T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/06/07/cdraw</id>
+        <id>http://www.ivaneye.com/2015/06/07/cdraw</id>
         <content type="html">&lt;h1&gt;简介&lt;/h1&gt;
 
 &lt;p&gt;使用Clojure封装了Graphviz的使用，目前主要实现了UML的绘制&lt;/p&gt;
@@ -173,6 +173,11 @@
 
 (watch (to-file &quot;/t.dot&quot;) &quot;/t.png&quot;)
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;cdraw项目地址:&lt;a href=&quot;https://github.com/ivanpig/cdraw&quot;&gt;https://github.com/ivanpig/cdraw&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
 </content>
         <summary type="html">&lt;h1&gt;简介&lt;/h1&gt;
 
@@ -330,14 +335,510 @@
 
 (watch (to-file &quot;/t.dot&quot;) &quot;/t.png&quot;)
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;cdraw项目地址:&lt;a href=&quot;https://github.com/ivanpig/cdraw&quot;&gt;https://github.com/ivanpig/cdraw&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</summary>
+    </entry>
+    
+    <entry>
+        <title>ClassLoader</title>
+        <link href="http://www.ivaneye.com/2015/05/20/classloader.html"/>
+        <updated>2015-05-20T00:00:00+08:00</updated>
+        <id>http://www.ivaneye.com/2015/05/20/classloader</id>
+        <content type="html">&lt;h1&gt;什么是ClassLoader?&lt;/h1&gt;
+
+&lt;p&gt;Java程序都是由若干个.class文件组成，程序的运行过程即是对class文件的调用。
+程序在启动的时候，并不会一次性加载程序所要用的所有class文件，而是根据程序的需要，
+通过Java的类加载机制（ClassLoader）来动态加载某个class文件到内存当中的，
+只有class文件被载入到了内存之后，才能被其它class所引用。
+所以ClassLoader就是用来动态加载class文件到内存当中用的。&lt;/p&gt;
+
+&lt;h1&gt;Java默认提供的三个ClassLoader&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;BootStrap ClassLoader：称为启动类加载器，是Java类加载层次中最顶层的类加载器，负责加载JDK中的核心类库，如：rt.jar、resources.jar、charsets.jar等&lt;/li&gt;
+&lt;li&gt;Extension ClassLoader：称为扩展类加载器，负责加载Java的扩展类库，默认加载JAVA_HOME/jre/lib/ext/目下的所有jar。&lt;/li&gt;
+&lt;li&gt;App ClassLoader：称为系统类加载器，负责加载应用程序classpath目录下的所有jar和class文件。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/classloader.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;示例:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;import com.sun.nio.zipfs.ZipFileStore;
+
+public class Test {
+
+    public static void main(String[] args) {
+        System.out.println(&quot;1&quot;.getClass().getClassLoader());
+        System.out.println(ZipFileStore.class.getClassLoader());
+        System.out.println(A.class.getClassLoader());
+    }
+}
+
+class A{}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出结果:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;null                          //BootStrap ClassLoader输出为null
+sun.misc.Launcher$ExtClassLoader@3e10c986
+sun.misc.Launcher$AppClassLoader@610f7612
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;双亲委托模型&lt;/h1&gt;
+
+&lt;p&gt;ClassLoader使用的是双亲委托模型来搜索类的，每个ClassLoader实例都有一个父类加载器的引用（不是继承的关系，是一个包含的关系），
+虚拟机内置的类加载器（Bootstrap ClassLoader）本身没有父类加载器，但可以用作其它ClassLoader实例的的父类加载器。&lt;/p&gt;
+
+&lt;p&gt;当一个ClassLoader实例需要加载某个类时，它在试图亲自搜索某个类之前，先把这个任务委托给它的父类加载器，这个过程是由上至下依次检查的：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;首先由最顶层的类加载器Bootstrap ClassLoader试图加载，如果没加载到，&lt;/li&gt;
+&lt;li&gt;则把任务转交给Extension ClassLoader试图加载，如果也没加载到，&lt;/li&gt;
+&lt;li&gt;则转交给App ClassLoader 进行加载，如果它也没有加载得到的话，&lt;/li&gt;
+&lt;li&gt;则返回给委托的发起者，由它到指定的文件系统或网络等URL中加载该类。&lt;/li&gt;
+&lt;li&gt;如果它们都没有加载到这个类时，则抛出ClassNotFoundException异常。&lt;/li&gt;
+&lt;li&gt;否则将这个找到的类生成一个类的定义，并将它加载到内存当中，最后返回这个类在内存中的Class实例对象。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;使用双亲委托模型主要是为了安全性.&lt;/p&gt;
+
+&lt;p&gt;如果不使用这种委托模式，那我们就可以随时使用自定义的Object来动态替代java核心api中定义的类型，
+这样会存在非常大的安全隐患，而双亲委托的方式，就可以避免这种情况，因为Object已经在启动时就被引导类加载器（Bootstrcp ClassLoader）
+加载，所以用户自定义的ClassLoader永远也无法加载一个自己写的Object，除非你改变JDK中ClassLoader搜索类的默认算法。&lt;/p&gt;
+
+&lt;h1&gt;class的唯一性判断&lt;/h1&gt;
+
+&lt;p&gt;JVM在判定两个class是否相同时，不仅要判断两个类名是否相同，而且要判断是否由同一个类加载器实例加载的。
+只有两者同时满足的情况下，JVM才认为这两个class是相同的。就算两个class是同一份class字节码，
+如果被两个不同的ClassLoader实例所加载，JVM也会认为它们是两个不同class。
+比如网络上的一个Java类org.classloader.simple.NetClassLoaderSimple，
+javac编译之后生成字节码文件NetClassLoaderSimple.class，
+ClassLoaderA和ClassLoaderB这两个类加载器并读取了NetClassLoaderSimple.class文件，
+并分别定义出了java.lang.Class实例来表示这个类，对于JVM来说，它们是两个不同的实例对象，
+但它们确实是同一份字节码文件，如果试图将这个Class实例生成具体的对象进行转换时，
+就会抛运行时异常java.lang.ClassCaseException，提示这是两个不同的类型。&lt;/p&gt;
+
+&lt;h1&gt;自定义ClassLoader&lt;/h1&gt;
+
+&lt;p&gt;Java中提供的默认ClassLoader，只加载指定目录下的jar和class，如果我们想加载其它位置的类或jar时，
+比如：要加载网络上的一个class文件，通过动态加载到内存之后，要调用这个类中的方法实现业务逻辑。
+在这样的情况下，默认的ClassLoader就不能满足需求，所以需要定义自己的ClassLoader。&lt;/p&gt;
+
+&lt;p&gt;定义自已的类加载器：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;继承java.lang.ClassLoader&lt;/li&gt;
+&lt;li&gt;重写父类的findClass方法&lt;/li&gt;
+&lt;li&gt;如没有特殊的要求，一般不建议重写loadClass搜索类的算法&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Tomcat ClassLoader&lt;/h1&gt;
+
+&lt;p&gt;以Tomcat的ClassLoader为例，来说明自定义ClassLoader的应用&lt;/p&gt;
+
+&lt;p&gt;跟其他主流的Java Web服务器一样，Tomcat也拥有不同的自定义类加载器，达到对各种资源库的控制。一般来说，Java Web服务器需要解决以下四个问题：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;同一个Web服务器里，各个Web项目之间各自使用的Java类库要互相隔离。&lt;/li&gt;
+&lt;li&gt;同一个Web服务器里，各个Web项目之间可以提供共享的Java类库。&lt;/li&gt;
+&lt;li&gt;服务器为了不受Web项目的影响，应该使服务器的类库与应用程序的类库互相独立。&lt;/li&gt;
+&lt;li&gt;对于支持JSP的Web服务器，应该支持热插拔（hotswap）功能。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;对于以上几个问题，如果单独使用一个类加载器明显是达不到效果的，必须根据实际使用若干个自定义类加载器。&lt;/p&gt;
+
+&lt;p&gt;Tomcat5 ClassLoader:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/tomcat5.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Tomcat6 ClassLoader:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/tomcat6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Tomcat7 ClassLoader:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/tomcat7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Tomcat5,6,7的ClassLoader结构略有不同。&lt;/p&gt;
+
+&lt;p&gt;Tomcat6中将CommonClassLoader,CatalinaClassLoader,SharedClassLoader合并，就一个CommonClassLoader.&lt;/p&gt;
+
+&lt;p&gt;Tomcat7中没有ExtensionClassLoader.&lt;/p&gt;
+
+&lt;p&gt;首先看前三个问题:&lt;/p&gt;
+
+&lt;p&gt;从上图可以看出，为了解决jar隔离和共享的问题。对于每个webapp,Tomcat都会创建一个WebAppClassLoader来加载应用，这样就保证了每个应用加载进来的class都是不同的(因为ClassLoader不同)!
+而共享的jar放在tomcat-home/lib目录下，由CommonClassLoader来加载。通过双亲委托模式，提供给其下的所有webapp共享&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;特别说明&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;font color=&quot;red&quot;&gt;
+对于WebAppClassLoader是违反双亲委托模型的。如果加载的是jre或者servlet api则依然是双亲委托模型。
+而如果不是的话，则会先尝试自行加载，如果找不到再委托父加载器加载。
+这个应该是可以理解的，因为应用的class是由WebAppClassLoader加载的，是项目私有的。
+&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;对于热部署功能，Tomcat只是提供了后台线程进行扫描，如果有修改即重新加载!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public void backgroundProcess() {
+    if (reloadable &amp;amp;&amp;amp; modified()) {
+        try {
+            Thread.currentThread().setContextClassLoader
+                (WebappLoader.class.getClassLoader());
+            if (container instanceof StandardContext) {
+                ((StandardContext) container).reload();
+            }
+        } finally {
+            if (container.getLoader() != null) {
+                Thread.currentThread().setContextClassLoader
+                    (container.getLoader().getClassLoader());
+            }
+        }
+    } else {
+        closeJARs(false);
+    }
+}
+
+public synchronized void reload() {
+
+    if (!started)
+        throw new IllegalStateException
+            (sm.getString(&quot;containerBase.notStarted&quot;, logName()));
+
+    if(log.isInfoEnabled())
+        log.info(sm.getString(&quot;standardContext.reloadingStarted&quot;,
+                getName()));
+
+    setPaused(true);
+
+    try {
+        stop();
+    } catch (LifecycleException e) {
+        log.error(sm.getString(&quot;standardContext.stoppingContext&quot;,
+                getName()), e);
+    }
+
+    try {
+        start();
+    } catch (LifecycleException e) {
+        log.error(sm.getString(&quot;standardContext.startingContext&quot;,
+                getName()), e);
+    }
+
+    setPaused(false);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;OSGi ClassLoader&lt;/h1&gt;
+
+&lt;p&gt;对于Tomcat来说，其ClassLoader结构，大体上还是符合双亲委托模型的。&lt;/p&gt;
+
+&lt;p&gt;而OSGi则完全打破了双亲委托模型，自行实现了一套网状模型。&lt;/p&gt;
+
+&lt;p&gt;究其原因主要是为了实现模块化功能！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;目前JVM中没有模块化的概念，一个ClassLoader中的类，其访问控制权限由访问权限控制符来控制，是类级别的。OSGi通过自定义ClassLoader实现包级别的访问权限控制&lt;/li&gt;
+&lt;li&gt;通过自定义ClassLoader实现多版本控制(一个bundle可以发布多个版本，而jar不能多版本共存)&lt;/li&gt;
+&lt;li&gt;可独立部署和卸载&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/osgi01.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;其Class加载流程如下:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/osgi02.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Step 1: 检查是否java.&lt;em&gt;，或者在bootdelegation中定义
+      当bundle类加载器需要加载一个类时，首先检查包名是否以java.&lt;/em&gt;开头，或者是否在一个特定的配置文件（org.osgi.framework.bootdelegation）中定义。
+      如果是，则bundle类加载器立即委托给父类加载器（通常是Application类加载器）。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;这么做有两个原因：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;唯一能够定义java.*包的类加载器是bootstrap类加载器，这个规则是JVM要求的。如果OSGI bundle类加载器试图加载这种类，则会抛Security Exception。&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;一些JVM错误地假设父加载器委托永远会发生，内部VM类就能够通过任何类加载器找到特定的其他内部类。所以OSGi提供了org.osgi.framework.bootdelegation属性，允许对特定的包（即那些内部VM类）使用父加载器委托。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Step 2: 检查是否在Import-Package中声明
+      检查是否在Import-Package中声明。如果是，则找到导出包的bundle，将类加载请求委托给该bundle的类加载器。如此往复。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Step 3: 检查是否在Require-Bundle中声明
+      检查是否在Require-Bundle中声明。如果是，则将类加载请求委托给required bundle的类加载器。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Step 4: 检查是否bundle内部类
+      检查是否是该bundle内部的类，即当前JAR文件中的类。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Step5:  检查fragment
+      搜索可能附加在当前bundle上的fragment中的内部类。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;什么是fragment？&lt;/p&gt;
+
+&lt;p&gt;Fragment bundle是OSGi 4引入的概念，它是一种不完整的bundle，必须要附加到一个host bundle上才能工作；fragment能够为host bundle添加类或资源，
+在运行时，fragment中的类会合并到host bundle的内部classpath中。&lt;/p&gt;
+</content>
+        <summary type="html">&lt;h1&gt;什么是ClassLoader?&lt;/h1&gt;
+
+&lt;p&gt;Java程序都是由若干个.class文件组成，程序的运行过程即是对class文件的调用。
+程序在启动的时候，并不会一次性加载程序所要用的所有class文件，而是根据程序的需要，
+通过Java的类加载机制（ClassLoader）来动态加载某个class文件到内存当中的，
+只有class文件被载入到了内存之后，才能被其它class所引用。
+所以ClassLoader就是用来动态加载class文件到内存当中用的。&lt;/p&gt;
+
+&lt;h1&gt;Java默认提供的三个ClassLoader&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;BootStrap ClassLoader：称为启动类加载器，是Java类加载层次中最顶层的类加载器，负责加载JDK中的核心类库，如：rt.jar、resources.jar、charsets.jar等&lt;/li&gt;
+&lt;li&gt;Extension ClassLoader：称为扩展类加载器，负责加载Java的扩展类库，默认加载JAVA_HOME/jre/lib/ext/目下的所有jar。&lt;/li&gt;
+&lt;li&gt;App ClassLoader：称为系统类加载器，负责加载应用程序classpath目录下的所有jar和class文件。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/classloader.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;示例:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;import com.sun.nio.zipfs.ZipFileStore;
+
+public class Test {
+
+    public static void main(String[] args) {
+        System.out.println(&quot;1&quot;.getClass().getClassLoader());
+        System.out.println(ZipFileStore.class.getClassLoader());
+        System.out.println(A.class.getClassLoader());
+    }
+}
+
+class A{}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出结果:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;null                          //BootStrap ClassLoader输出为null
+sun.misc.Launcher$ExtClassLoader@3e10c986
+sun.misc.Launcher$AppClassLoader@610f7612
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h1&gt;双亲委托模型&lt;/h1&gt;
+
+&lt;p&gt;ClassLoader使用的是双亲委托模型来搜索类的，每个ClassLoader实例都有一个父类加载器的引用（不是继承的关系，是一个包含的关系），
+虚拟机内置的类加载器（Bootstrap ClassLoader）本身没有父类加载器，但可以用作其它ClassLoader实例的的父类加载器。&lt;/p&gt;
+
+&lt;p&gt;当一个ClassLoader实例需要加载某个类时，它在试图亲自搜索某个类之前，先把这个任务委托给它的父类加载器，这个过程是由上至下依次检查的：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;首先由最顶层的类加载器Bootstrap ClassLoader试图加载，如果没加载到，&lt;/li&gt;
+&lt;li&gt;则把任务转交给Extension ClassLoader试图加载，如果也没加载到，&lt;/li&gt;
+&lt;li&gt;则转交给App ClassLoader 进行加载，如果它也没有加载得到的话，&lt;/li&gt;
+&lt;li&gt;则返回给委托的发起者，由它到指定的文件系统或网络等URL中加载该类。&lt;/li&gt;
+&lt;li&gt;如果它们都没有加载到这个类时，则抛出ClassNotFoundException异常。&lt;/li&gt;
+&lt;li&gt;否则将这个找到的类生成一个类的定义，并将它加载到内存当中，最后返回这个类在内存中的Class实例对象。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;使用双亲委托模型主要是为了安全性.&lt;/p&gt;
+
+&lt;p&gt;如果不使用这种委托模式，那我们就可以随时使用自定义的Object来动态替代java核心api中定义的类型，
+这样会存在非常大的安全隐患，而双亲委托的方式，就可以避免这种情况，因为Object已经在启动时就被引导类加载器（Bootstrcp ClassLoader）
+加载，所以用户自定义的ClassLoader永远也无法加载一个自己写的Object，除非你改变JDK中ClassLoader搜索类的默认算法。&lt;/p&gt;
+
+&lt;h1&gt;class的唯一性判断&lt;/h1&gt;
+
+&lt;p&gt;JVM在判定两个class是否相同时，不仅要判断两个类名是否相同，而且要判断是否由同一个类加载器实例加载的。
+只有两者同时满足的情况下，JVM才认为这两个class是相同的。就算两个class是同一份class字节码，
+如果被两个不同的ClassLoader实例所加载，JVM也会认为它们是两个不同class。
+比如网络上的一个Java类org.classloader.simple.NetClassLoaderSimple，
+javac编译之后生成字节码文件NetClassLoaderSimple.class，
+ClassLoaderA和ClassLoaderB这两个类加载器并读取了NetClassLoaderSimple.class文件，
+并分别定义出了java.lang.Class实例来表示这个类，对于JVM来说，它们是两个不同的实例对象，
+但它们确实是同一份字节码文件，如果试图将这个Class实例生成具体的对象进行转换时，
+就会抛运行时异常java.lang.ClassCaseException，提示这是两个不同的类型。&lt;/p&gt;
+
+&lt;h1&gt;自定义ClassLoader&lt;/h1&gt;
+
+&lt;p&gt;Java中提供的默认ClassLoader，只加载指定目录下的jar和class，如果我们想加载其它位置的类或jar时，
+比如：要加载网络上的一个class文件，通过动态加载到内存之后，要调用这个类中的方法实现业务逻辑。
+在这样的情况下，默认的ClassLoader就不能满足需求，所以需要定义自己的ClassLoader。&lt;/p&gt;
+
+&lt;p&gt;定义自已的类加载器：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;继承java.lang.ClassLoader&lt;/li&gt;
+&lt;li&gt;重写父类的findClass方法&lt;/li&gt;
+&lt;li&gt;如没有特殊的要求，一般不建议重写loadClass搜索类的算法&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;Tomcat ClassLoader&lt;/h1&gt;
+
+&lt;p&gt;以Tomcat的ClassLoader为例，来说明自定义ClassLoader的应用&lt;/p&gt;
+
+&lt;p&gt;跟其他主流的Java Web服务器一样，Tomcat也拥有不同的自定义类加载器，达到对各种资源库的控制。一般来说，Java Web服务器需要解决以下四个问题：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;同一个Web服务器里，各个Web项目之间各自使用的Java类库要互相隔离。&lt;/li&gt;
+&lt;li&gt;同一个Web服务器里，各个Web项目之间可以提供共享的Java类库。&lt;/li&gt;
+&lt;li&gt;服务器为了不受Web项目的影响，应该使服务器的类库与应用程序的类库互相独立。&lt;/li&gt;
+&lt;li&gt;对于支持JSP的Web服务器，应该支持热插拔（hotswap）功能。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;对于以上几个问题，如果单独使用一个类加载器明显是达不到效果的，必须根据实际使用若干个自定义类加载器。&lt;/p&gt;
+
+&lt;p&gt;Tomcat5 ClassLoader:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/tomcat5.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Tomcat6 ClassLoader:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/tomcat6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Tomcat7 ClassLoader:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/tomcat7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Tomcat5,6,7的ClassLoader结构略有不同。&lt;/p&gt;
+
+&lt;p&gt;Tomcat6中将CommonClassLoader,CatalinaClassLoader,SharedClassLoader合并，就一个CommonClassLoader.&lt;/p&gt;
+
+&lt;p&gt;Tomcat7中没有ExtensionClassLoader.&lt;/p&gt;
+
+&lt;p&gt;首先看前三个问题:&lt;/p&gt;
+
+&lt;p&gt;从上图可以看出，为了解决jar隔离和共享的问题。对于每个webapp,Tomcat都会创建一个WebAppClassLoader来加载应用，这样就保证了每个应用加载进来的class都是不同的(因为ClassLoader不同)!
+而共享的jar放在tomcat-home/lib目录下，由CommonClassLoader来加载。通过双亲委托模式，提供给其下的所有webapp共享&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;特别说明&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;font color=&quot;red&quot;&gt;
+对于WebAppClassLoader是违反双亲委托模型的。如果加载的是jre或者servlet api则依然是双亲委托模型。
+而如果不是的话，则会先尝试自行加载，如果找不到再委托父加载器加载。
+这个应该是可以理解的，因为应用的class是由WebAppClassLoader加载的，是项目私有的。
+&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;对于热部署功能，Tomcat只是提供了后台线程进行扫描，如果有修改即重新加载!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;public void backgroundProcess() {
+    if (reloadable &amp;amp;&amp;amp; modified()) {
+        try {
+            Thread.currentThread().setContextClassLoader
+                (WebappLoader.class.getClassLoader());
+            if (container instanceof StandardContext) {
+                ((StandardContext) container).reload();
+            }
+        } finally {
+            if (container.getLoader() != null) {
+                Thread.currentThread().setContextClassLoader
+                    (container.getLoader().getClassLoader());
+            }
+        }
+    } else {
+        closeJARs(false);
+    }
+}
+
+public synchronized void reload() {
+
+    if (!started)
+        throw new IllegalStateException
+            (sm.getString(&quot;containerBase.notStarted&quot;, logName()));
+
+    if(log.isInfoEnabled())
+        log.info(sm.getString(&quot;standardContext.reloadingStarted&quot;,
+                getName()));
+
+    setPaused(true);
+
+    try {
+        stop();
+    } catch (LifecycleException e) {
+        log.error(sm.getString(&quot;standardContext.stoppingContext&quot;,
+                getName()), e);
+    }
+
+    try {
+        start();
+    } catch (LifecycleException e) {
+        log.error(sm.getString(&quot;standardContext.startingContext&quot;,
+                getName()), e);
+    }
+
+    setPaused(false);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1&gt;OSGi ClassLoader&lt;/h1&gt;
+
+&lt;p&gt;对于Tomcat来说，其ClassLoader结构，大体上还是符合双亲委托模型的。&lt;/p&gt;
+
+&lt;p&gt;而OSGi则完全打破了双亲委托模型，自行实现了一套网状模型。&lt;/p&gt;
+
+&lt;p&gt;究其原因主要是为了实现模块化功能！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;目前JVM中没有模块化的概念，一个ClassLoader中的类，其访问控制权限由访问权限控制符来控制，是类级别的。OSGi通过自定义ClassLoader实现包级别的访问权限控制&lt;/li&gt;
+&lt;li&gt;通过自定义ClassLoader实现多版本控制(一个bundle可以发布多个版本，而jar不能多版本共存)&lt;/li&gt;
+&lt;li&gt;可独立部署和卸载&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/osgi01.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;其Class加载流程如下:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/jvm/classloader/osgi02.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Step 1: 检查是否java.&lt;em&gt;，或者在bootdelegation中定义
+      当bundle类加载器需要加载一个类时，首先检查包名是否以java.&lt;/em&gt;开头，或者是否在一个特定的配置文件（org.osgi.framework.bootdelegation）中定义。
+      如果是，则bundle类加载器立即委托给父类加载器（通常是Application类加载器）。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;这么做有两个原因：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;唯一能够定义java.*包的类加载器是bootstrap类加载器，这个规则是JVM要求的。如果OSGI bundle类加载器试图加载这种类，则会抛Security Exception。&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;一些JVM错误地假设父加载器委托永远会发生，内部VM类就能够通过任何类加载器找到特定的其他内部类。所以OSGi提供了org.osgi.framework.bootdelegation属性，允许对特定的包（即那些内部VM类）使用父加载器委托。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Step 2: 检查是否在Import-Package中声明
+      检查是否在Import-Package中声明。如果是，则找到导出包的bundle，将类加载请求委托给该bundle的类加载器。如此往复。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Step 3: 检查是否在Require-Bundle中声明
+      检查是否在Require-Bundle中声明。如果是，则将类加载请求委托给required bundle的类加载器。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Step 4: 检查是否bundle内部类
+      检查是否是该bundle内部的类，即当前JAR文件中的类。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Step5:  检查fragment
+      搜索可能附加在当前bundle上的fragment中的内部类。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;什么是fragment？&lt;/p&gt;
+
+&lt;p&gt;Fragment bundle是OSGi 4引入的概念，它是一种不完整的bundle，必须要附加到一个host bundle上才能工作；fragment能够为host bundle添加类或资源，
+在运行时，fragment中的类会合并到host bundle的内部classpath中。&lt;/p&gt;
 </summary>
     </entry>
     
     <entry>
         <title>读源码-String</title>
-        <link href="http://ivanpig.github.io/2015/05/04/string.html"/>
+        <link href="http://www.ivaneye.com/2015/05/04/string.html"/>
         <updated>2015-05-04T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/05/04/string</id>
+        <id>http://www.ivaneye.com/2015/05/04/string</id>
         <content type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&amp;hearts;&lt;/p&gt;
 
 &lt;h1&gt;String操作&lt;/h1&gt;
@@ -1066,9 +1567,9 @@ public String replaceAll(String regex, String replacement) {
     
     <entry>
         <title>Java Socket编程中加入代理</title>
-        <link href="http://ivanpig.github.io/2015/04/23/proxy.html"/>
+        <link href="http://www.ivaneye.com/2015/04/23/proxy.html"/>
         <updated>2015-04-23T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/04/23/proxy</id>
+        <id>http://www.ivaneye.com/2015/04/23/proxy</id>
         <content type="html">&lt;h1&gt;方法一&lt;/h1&gt;
 
 &lt;p&gt;使用系统属性来完成代理设置, 这种方法比较简单, 但是不能对单独的连接来设置代理:&lt;/p&gt;
@@ -1211,9 +1712,9 @@ public String replaceAll(String regex, String replacement) {
     
     <entry>
         <title>ZooKeeper安装与Java调用</title>
-        <link href="http://ivanpig.github.io/2015/04/22/zookeeper-begin.html"/>
+        <link href="http://www.ivaneye.com/2015/04/22/zookeeper-begin.html"/>
         <updated>2015-04-22T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/04/22/zookeeper-begin</id>
+        <id>http://www.ivaneye.com/2015/04/22/zookeeper-begin</id>
         <content type="html">&lt;h1&gt;下载&lt;/h1&gt;
 
 &lt;p&gt;ZooKeeper目前是Apache顶级项目，可从&lt;a href=&quot;http://zookeeper.apache.org/releases.html&quot;&gt;此处下载&lt;/a&gt;&lt;/p&gt;
@@ -1702,9 +2203,9 @@ public class ZooKeeperWatcher {
     
     <entry>
         <title>读源码-JUnit4实现</title>
-        <link href="http://ivanpig.github.io/2015/04/17/junit4-implements.html"/>
+        <link href="http://www.ivaneye.com/2015/04/17/junit4-implements.html"/>
         <updated>2015-04-17T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/04/17/junit4-implements</id>
+        <id>http://www.ivaneye.com/2015/04/17/junit4-implements</id>
         <content type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&amp;hearts;&lt;/p&gt;
 
 &lt;h1&gt;内容回顾&lt;/h1&gt;
@@ -1979,9 +2480,9 @@ public class ZooKeeperWatcher {
     
     <entry>
         <title>读源码-JUnit4使用</title>
-        <link href="http://ivanpig.github.io/2015/04/16/use-junit4.html"/>
+        <link href="http://www.ivaneye.com/2015/04/16/use-junit4.html"/>
         <updated>2015-04-16T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/04/16/use-junit4</id>
+        <id>http://www.ivaneye.com/2015/04/16/use-junit4</id>
         <content type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&lt;/p&gt;
 
 &lt;h1&gt;JUnit4简介&lt;/h1&gt;
@@ -2031,6 +2532,9 @@ public class Person {
   &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt;
 &amp;lt;/dependency&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- more --&gt;
+
 
 &lt;h1&gt;编写测试类&lt;/h1&gt;
 
@@ -2522,6 +3026,9 @@ public class Person {
 &amp;lt;/dependency&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;!-- more --&gt;
+
+
 &lt;h1&gt;编写测试类&lt;/h1&gt;
 
 &lt;pre&gt;&lt;code class=&quot;java&quot;&gt;package org.ivan;
@@ -2966,9 +3473,9 @@ public void testTempFolderRule() throws IOException {
     
     <entry>
         <title>读源码-JUnit3设计</title>
-        <link href="http://ivanpig.github.io/2015/04/08/junit3-design.html"/>
+        <link href="http://www.ivaneye.com/2015/04/08/junit3-design.html"/>
         <updated>2015-04-08T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/04/08/junit3-design</id>
+        <id>http://www.ivaneye.com/2015/04/08/junit3-design</id>
         <content type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&amp;hearts;&amp;hearts;&lt;/p&gt;
 
 &lt;h1&gt;内容回顾&lt;/h1&gt;
@@ -3459,9 +3966,9 @@ public void endTest(Test test) {
     
     <entry>
         <title>读源码-JUnit3实现</title>
-        <link href="http://ivanpig.github.io/2015/04/07/junit3-implements.html"/>
+        <link href="http://www.ivaneye.com/2015/04/07/junit3-implements.html"/>
         <updated>2015-04-07T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/04/07/junit3-implements</id>
+        <id>http://www.ivaneye.com/2015/04/07/junit3-implements</id>
         <content type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&amp;hearts;&lt;/p&gt;
 
 &lt;h1&gt;内容回顾&lt;/h1&gt;
@@ -4246,9 +4753,9 @@ private boolean isTestMethod(Method m) {
     
     <entry>
         <title>读源码-JUnit3使用</title>
-        <link href="http://ivanpig.github.io/2015/04/06/use-junit3.html"/>
+        <link href="http://www.ivaneye.com/2015/04/06/use-junit3.html"/>
         <updated>2015-04-06T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/04/06/use-junit3</id>
+        <id>http://www.ivaneye.com/2015/04/06/use-junit3</id>
         <content type="html">&lt;p&gt;&lt;em&gt;Level :&lt;/em&gt; &amp;hearts;&lt;/p&gt;
 
 &lt;h1&gt;JUnit简介&lt;/h1&gt;
@@ -5029,9 +5536,9 @@ public class TestAll {
     
     <entry>
         <title>自用Java开发框架</title>
-        <link href="http://ivanpig.github.io/2015/04/01/java_webframework.html"/>
+        <link href="http://www.ivaneye.com/2015/04/01/java_webframework.html"/>
         <updated>2015-04-01T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/04/01/java_webframework</id>
+        <id>http://www.ivaneye.com/2015/04/01/java_webframework</id>
         <content type="html">&lt;p&gt;框架结构图&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/mind/framework.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
@@ -5048,9 +5555,9 @@ public class TestAll {
     
     <entry>
         <title>如何读书相关书籍书评</title>
-        <link href="http://ivanpig.github.io/2015/04/01/book_review.html"/>
+        <link href="http://www.ivaneye.com/2015/04/01/book_review.html"/>
         <updated>2015-04-01T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/04/01/book_review</id>
+        <id>http://www.ivaneye.com/2015/04/01/book_review</id>
         <content type="html">&lt;h1&gt;《杠杆阅读术》&lt;/h1&gt;
 
 &lt;p&gt;讲述读书的方法:&lt;/p&gt;
@@ -5101,9 +5608,9 @@ public class TestAll {
     
     <entry>
         <title>一图胜千言:JVM</title>
-        <link href="http://ivanpig.github.io/2015/03/16/jvm.html"/>
+        <link href="http://www.ivaneye.com/2015/03/16/jvm.html"/>
         <updated>2015-03-16T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/03/16/jvm</id>
+        <id>http://www.ivaneye.com/2015/03/16/jvm</id>
         <content type="html">&lt;p&gt;&lt;a href=&quot;/mind/jvm.xmind&quot;&gt;xmind文件下载&lt;/a&gt;&lt;/p&gt;
 
 &lt;!-- more --&gt;
@@ -5122,9 +5629,9 @@ public class TestAll {
     
     <entry>
         <title>一图胜千言:事务管理</title>
-        <link href="http://ivanpig.github.io/2015/03/10/transactional.html"/>
+        <link href="http://www.ivaneye.com/2015/03/10/transactional.html"/>
         <updated>2015-03-10T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/03/10/transactional</id>
+        <id>http://www.ivaneye.com/2015/03/10/transactional</id>
         <content type="html">&lt;p&gt;&lt;a href=&quot;/mind/transaction.xmind&quot;&gt;xmind文件下载&lt;/a&gt;&lt;/p&gt;
 
 &lt;!-- more --&gt;
@@ -5143,9 +5650,9 @@ public class TestAll {
     
     <entry>
         <title>刨根问底-02为什么Java接口中的成员变量被设计为必须是public static final的？</title>
-        <link href="http://ivanpig.github.io/2015/03/03/interface_field.html"/>
+        <link href="http://www.ivaneye.com/2015/03/03/interface_field.html"/>
         <updated>2015-03-03T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/03/03/interface_field</id>
+        <id>http://www.ivaneye.com/2015/03/03/interface_field</id>
         <content type="html">&lt;h1&gt;概述&lt;/h1&gt;
 
 &lt;p&gt;此为&quot;刨根问底&quot;系列文章的第二篇，接上篇，为什么Java接口中的成员变量被设计为必须是public static final的？&lt;/p&gt;
@@ -5398,9 +5905,9 @@ public class Test{
     
     <entry>
         <title>刨根问底-01为什么Java接口中的方法默认是public？</title>
-        <link href="http://ivanpig.github.io/2015/03/02/interface_method.html"/>
+        <link href="http://www.ivaneye.com/2015/03/02/interface_method.html"/>
         <updated>2015-03-02T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/03/02/interface_method</id>
+        <id>http://www.ivaneye.com/2015/03/02/interface_method</id>
         <content type="html">&lt;h1&gt;概述&lt;/h1&gt;
 
 &lt;p&gt;去年担任了公司Java培训班的培训讲师！由于时间关系，课堂上只是讲了How，而很少涉及到Why!&lt;/p&gt;
@@ -5625,9 +6132,9 @@ public class PersonB implements Person{
     
     <entry>
         <title>语言和并发-01启动线程</title>
-        <link href="http://ivanpig.github.io/2015/03/01/start.html"/>
+        <link href="http://www.ivaneye.com/2015/03/01/start.html"/>
         <updated>2015-03-01T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/03/01/start</id>
+        <id>http://www.ivaneye.com/2015/03/01/start</id>
         <content type="html">&lt;h1&gt;概述&lt;/h1&gt;
 
 &lt;p&gt;本系列文章意在比较Java与Clojure在线程实现上的区别！&lt;/p&gt;
@@ -5918,9 +6425,9 @@ class C implements Callable&amp;lt;String&amp;gt; {
     
     <entry>
         <title>语言与模式-23迭代器模式</title>
-        <link href="http://ivanpig.github.io/2015/02/25/iterator.html"/>
+        <link href="http://www.ivaneye.com/2015/02/25/iterator.html"/>
         <updated>2015-02-25T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/25/iterator</id>
+        <id>http://www.ivaneye.com/2015/02/25/iterator</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;提供一种方法顺序访问一个聚合对象中各个元素, 而又不需暴露该对象的内部表示。&lt;/p&gt;
@@ -6055,9 +6562,9 @@ class C implements Callable&amp;lt;String&amp;gt; {
     
     <entry>
         <title>语言与模式-22访问者模式</title>
-        <link href="http://ivanpig.github.io/2015/02/24/visitor.html"/>
+        <link href="http://www.ivaneye.com/2015/02/24/visitor.html"/>
         <updated>2015-02-24T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/24/visitor</id>
+        <id>http://www.ivaneye.com/2015/02/24/visitor</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;表示一个作用于某对象结构中的各元素的操作。它使你可以在不改变各元素的类的前提下定义作用于这些元素的新操作。&lt;/p&gt;
@@ -6400,9 +6907,9 @@ public class ParkB implements ParkElement{
     
     <entry>
         <title>语言与模式-21解释器模式</title>
-        <link href="http://ivanpig.github.io/2015/02/23/interpreter.html"/>
+        <link href="http://www.ivaneye.com/2015/02/23/interpreter.html"/>
         <updated>2015-02-23T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/23/interpreter</id>
+        <id>http://www.ivaneye.com/2015/02/23/interpreter</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;给定一个语言，定义它的文法的一种表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子。&lt;/p&gt;
@@ -6969,9 +7476,9 @@ public class ParkB implements ParkElement{
     
     <entry>
         <title>语言与模式-20中介者模式</title>
-        <link href="http://ivanpig.github.io/2015/02/22/mediator.html"/>
+        <link href="http://www.ivaneye.com/2015/02/22/mediator.html"/>
         <updated>2015-02-22T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/22/mediator</id>
+        <id>http://www.ivaneye.com/2015/02/22/mediator</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。&lt;/p&gt;
@@ -7378,9 +7885,9 @@ public class Client {
     
     <entry>
         <title>语言与模式-19策略模式</title>
-        <link href="http://ivanpig.github.io/2015/02/21/strategy.html"/>
+        <link href="http://www.ivaneye.com/2015/02/21/strategy.html"/>
         <updated>2015-02-21T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/21/strategy</id>
+        <id>http://www.ivaneye.com/2015/02/21/strategy</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。&lt;/p&gt;
@@ -7569,9 +8076,9 @@ public class Client {
     
     <entry>
         <title>语言与模式-18状态模式</title>
-        <link href="http://ivanpig.github.io/2015/02/20/state.html"/>
+        <link href="http://www.ivaneye.com/2015/02/20/state.html"/>
         <updated>2015-02-20T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/20/state</id>
+        <id>http://www.ivaneye.com/2015/02/20/state</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。&lt;/p&gt;
@@ -7774,9 +8281,9 @@ public class UnPayState implements State{
     
     <entry>
         <title>语言与模式-17命令模式</title>
-        <link href="http://ivanpig.github.io/2015/02/19/command.html"/>
+        <link href="http://www.ivaneye.com/2015/02/19/command.html"/>
         <updated>2015-02-19T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/19/command</id>
+        <id>http://www.ivaneye.com/2015/02/19/command</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可取消的操作&lt;/p&gt;
@@ -7997,9 +8504,9 @@ public class UnPayState implements State{
     
     <entry>
         <title>语言与模式-16责任链模式</title>
-        <link href="http://ivanpig.github.io/2015/02/18/chain_of_responsibility.html"/>
+        <link href="http://www.ivaneye.com/2015/02/18/chain_of_responsibility.html"/>
         <updated>2015-02-18T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/18/chain_of_responsibility</id>
+        <id>http://www.ivaneye.com/2015/02/18/chain_of_responsibility</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。&lt;/p&gt;
@@ -8248,9 +8755,9 @@ public class UnPayState implements State{
     
     <entry>
         <title>语言与模式-15观察者模式</title>
-        <link href="http://ivanpig.github.io/2015/02/17/observer.html"/>
+        <link href="http://www.ivaneye.com/2015/02/17/observer.html"/>
         <updated>2015-02-17T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/17/observer</id>
+        <id>http://www.ivaneye.com/2015/02/17/observer</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;定义对象间的一种一对多的依赖关系,当一个对象的状态发生改变时, 所有依赖于它的对象都得到通知并被自动更新。&lt;/p&gt;
@@ -8523,9 +9030,9 @@ public class UnPayState implements State{
     
     <entry>
         <title>语言与模式-14备忘录模式</title>
-        <link href="http://ivanpig.github.io/2015/02/16/memento.html"/>
+        <link href="http://www.ivaneye.com/2015/02/16/memento.html"/>
         <updated>2015-02-16T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/16/memento</id>
+        <id>http://www.ivaneye.com/2015/02/16/memento</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到保存的状态。&lt;/p&gt;
@@ -8724,9 +9231,9 @@ public class UnPayState implements State{
     
     <entry>
         <title>语言与模式-13模板模式</title>
-        <link href="http://ivanpig.github.io/2015/02/15/template.html"/>
+        <link href="http://www.ivaneye.com/2015/02/15/template.html"/>
         <updated>2015-02-15T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/15/template</id>
+        <id>http://www.ivaneye.com/2015/02/15/template</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。Template Method使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。&lt;/p&gt;
@@ -8883,9 +9390,9 @@ layout.show();
     
     <entry>
         <title>语言与模式-12享元模式</title>
-        <link href="http://ivanpig.github.io/2015/02/14/flyweight.html"/>
+        <link href="http://www.ivaneye.com/2015/02/14/flyweight.html"/>
         <updated>2015-02-14T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/14/flyweight</id>
+        <id>http://www.ivaneye.com/2015/02/14/flyweight</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;运用共享技术有效地支持大量细粒度的对象。&lt;/p&gt;
@@ -9080,9 +9587,9 @@ layout.show();
     
     <entry>
         <title>语言与模式-11桥接模式</title>
-        <link href="http://ivanpig.github.io/2015/02/13/bridge.html"/>
+        <link href="http://www.ivaneye.com/2015/02/13/bridge.html"/>
         <updated>2015-02-13T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/13/bridge</id>
+        <id>http://www.ivaneye.com/2015/02/13/bridge</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;将抽象部分与它的实现部分分离，使它们都可以独立地变化。&lt;/p&gt;
@@ -9443,9 +9950,9 @@ public class Main {
     
     <entry>
         <title>语言与模式-10装饰模式</title>
-        <link href="http://ivanpig.github.io/2015/02/12/decorator.html"/>
+        <link href="http://www.ivaneye.com/2015/02/12/decorator.html"/>
         <updated>2015-02-12T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/12/decorator</id>
+        <id>http://www.ivaneye.com/2015/02/12/decorator</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;动态地给一个对象添加一些额外的职责。就增加功能来说，Decorator模式相比生成子类更为灵活。&lt;/p&gt;
@@ -9548,9 +10055,9 @@ public class FileInputStream extends InputStream
     
     <entry>
         <title>语言与模式-09组合模式</title>
-        <link href="http://ivanpig.github.io/2015/02/11/composite.html"/>
+        <link href="http://www.ivaneye.com/2015/02/11/composite.html"/>
         <updated>2015-02-11T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/11/composite</id>
+        <id>http://www.ivaneye.com/2015/02/11/composite</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;将对象组合成树形结构以表示“部分-整体”的层次结构。Composite使得用户对单个对象和组合对象的使用具有一致性。&lt;/p&gt;
@@ -9719,9 +10226,9 @@ public class FileInputStream extends InputStream
     
     <entry>
         <title>语言与模式-08适配器模式</title>
-        <link href="http://ivanpig.github.io/2015/02/10/adapter.html"/>
+        <link href="http://www.ivaneye.com/2015/02/10/adapter.html"/>
         <updated>2015-02-10T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/10/adapter</id>
+        <id>http://www.ivaneye.com/2015/02/10/adapter</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;将一个类的接口转换成另外一个客户希望的接口。Adapter 模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。&lt;/p&gt;
@@ -9896,9 +10403,9 @@ public class Cruze implements Car{
     
     <entry>
         <title>语言与模式-07代理模式</title>
-        <link href="http://ivanpig.github.io/2015/02/09/proxy.html"/>
+        <link href="http://www.ivaneye.com/2015/02/09/proxy.html"/>
         <updated>2015-02-09T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/09/proxy</id>
+        <id>http://www.ivaneye.com/2015/02/09/proxy</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;为其他对象提供一种代理以控制对这个对象的访问。&lt;/p&gt;
@@ -10047,9 +10554,9 @@ public class Main{
     
     <entry>
         <title>语言与模式-06门面模式</title>
-        <link href="http://ivanpig.github.io/2015/02/08/facade.html"/>
+        <link href="http://www.ivaneye.com/2015/02/08/facade.html"/>
         <updated>2015-02-08T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/08/facade</id>
+        <id>http://www.ivaneye.com/2015/02/08/facade</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。&lt;/p&gt;
@@ -10298,9 +10805,9 @@ public class Main{
     
     <entry>
         <title>语言与模式-05生成器模式</title>
-        <link href="http://ivanpig.github.io/2015/02/07/builder.html"/>
+        <link href="http://www.ivaneye.com/2015/02/07/builder.html"/>
         <updated>2015-02-07T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/07/builder</id>
+        <id>http://www.ivaneye.com/2015/02/07/builder</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。&lt;/p&gt;
@@ -10583,9 +11090,9 @@ public class Customer {
     
     <entry>
         <title>语言与模式-04原型模式</title>
-        <link href="http://ivanpig.github.io/2015/02/06/prototype.html"/>
+        <link href="http://www.ivaneye.com/2015/02/06/prototype.html"/>
         <updated>2015-02-06T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/06/prototype</id>
+        <id>http://www.ivaneye.com/2015/02/06/prototype</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。&lt;/p&gt;
@@ -10998,9 +11505,9 @@ ac-b:Hello B        --此处a中的b被修改后，ac中的b不会被影响
     
     <entry>
         <title>语言与模式-03抽象工厂模式</title>
-        <link href="http://ivanpig.github.io/2015/02/05/abstract_factory.html"/>
+        <link href="http://www.ivaneye.com/2015/02/05/abstract_factory.html"/>
         <updated>2015-02-05T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/05/abstract_factory</id>
+        <id>http://www.ivaneye.com/2015/02/05/abstract_factory</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。&lt;/p&gt;
@@ -11155,9 +11662,9 @@ ac-b:Hello B        --此处a中的b被修改后，ac中的b不会被影响
     
     <entry>
         <title>语言与模式-02工厂模式</title>
-        <link href="http://ivanpig.github.io/2015/02/04/factory.html"/>
+        <link href="http://www.ivaneye.com/2015/02/04/factory.html"/>
         <updated>2015-02-04T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/04/factory</id>
+        <id>http://www.ivaneye.com/2015/02/04/factory</id>
         <content type="html">&lt;h1&gt;意图&lt;/h1&gt;
 
 &lt;p&gt;定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method使一个类的实例化延迟到其子类。&lt;/p&gt;
@@ -11362,9 +11869,9 @@ factory.getPig().run();
     
     <entry>
         <title>语言与模式-01单例模式</title>
-        <link href="http://ivanpig.github.io/2015/02/03/singleton.html"/>
+        <link href="http://www.ivaneye.com/2015/02/03/singleton.html"/>
         <updated>2015-02-03T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2015/02/03/singleton</id>
+        <id>http://www.ivaneye.com/2015/02/03/singleton</id>
         <content type="html">&lt;h1&gt;概述&lt;/h1&gt;
 
 &lt;p&gt;设计模式是什么？如果要我现在来回答，那我的答案是：&lt;strong&gt;设计模式是对于语言本身缺陷的一种补充！&lt;/strong&gt;&lt;/p&gt;
@@ -11615,9 +12122,9 @@ factory.getPig().run();
     
     <entry>
         <title>LightTable Theme</title>
-        <link href="http://ivanpig.github.io/2014/11/28/pigtheme.html"/>
+        <link href="http://www.ivaneye.com/2014/11/28/pigtheme.html"/>
         <updated>2014-11-28T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/11/28/pigtheme</id>
+        <id>http://www.ivaneye.com/2014/11/28/pigtheme</id>
         <content type="html">&lt;h1&gt;LightTable Theme&lt;/h1&gt;
 
 &lt;ul&gt;
@@ -11644,9 +12151,9 @@ factory.getPig().run();
     
     <entry>
         <title>Clojure进阶:使用Clojure编写文字冒险游戏</title>
-        <link href="http://ivanpig.github.io/2014/10/02/clojure_spels.html"/>
+        <link href="http://www.ivaneye.com/2014/10/02/clojure_spels.html"/>
         <updated>2014-10-02T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/10/02/clojure_spels</id>
+        <id>http://www.ivaneye.com/2014/10/02/clojure_spels</id>
         <content type="html">&lt;p&gt;本文翻译自:&lt;a href=&quot;http://www.lisperati.com/clojure-spels/casting.html&quot;&gt;Casting SPELs in Clojure&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/clojure/cs_01.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
@@ -12783,9 +13290,9 @@ you see a bucket on the floor -)
     
     <entry>
         <title>Clojure进阶:使用Clojure构建DSL</title>
-        <link href="http://ivanpig.github.io/2014/10/01/dsl.html"/>
+        <link href="http://www.ivaneye.com/2014/10/01/dsl.html"/>
         <updated>2014-10-01T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/10/01/dsl</id>
+        <id>http://www.ivaneye.com/2014/10/01/dsl</id>
         <content type="html">&lt;p&gt;翻译自&lt;a href=&quot;http://clojure-doc.org/articles/tutorials/growing_a_dsl_with_clojure.html&quot;&gt;Growing a DSL with Clojure&lt;/a&gt;.主要讲解如何使用&lt;/p&gt;
 
 &lt;p&gt;Clojure来创建一个简单的DSL.包括如下知识点:&lt;/p&gt;
@@ -13724,9 +14231,9 @@ No method in multimethod 'emit' for dispatch value:
     
     <entry>
         <title>Clojure教程-命名空间</title>
-        <link href="http://ivanpig.github.io/2014/08/29/namespace.html"/>
+        <link href="http://www.ivaneye.com/2014/08/29/namespace.html"/>
         <updated>2014-08-29T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/08/29/namespace</id>
+        <id>http://www.ivaneye.com/2014/08/29/namespace</id>
         <content type="html">&lt;h1&gt;版本&lt;/h1&gt;
 
 &lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/language/namespaces.html&quot;&gt;Clojure Namespaces and Vars&lt;/a&gt;&lt;/p&gt;
@@ -14357,9 +14864,9 @@ CompilerException java.lang.RuntimeException: No such var: clojure.java.io/resou
     
     <entry>
         <title>Clojure教程-Record和Protocol</title>
-        <link href="http://ivanpig.github.io/2014/05/11/record_protocol.html"/>
+        <link href="http://www.ivaneye.com/2014/05/11/record_protocol.html"/>
         <updated>2014-05-11T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/05/11/record_protocol</id>
+        <id>http://www.ivaneye.com/2014/05/11/record_protocol</id>
         <content type="html">&lt;p&gt;本文翻译自:&lt;a href=&quot;http://www.jayway.com/2013/02/05/learn-clojure-using-records-and-protocols/&quot;&gt;Learn Clojure using records and protocols&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;当我对Clojure的括号不再疑惑后,另一个让我质疑为何要学习Clojure的问题是使用REPL很爽,但是我怎么来构建大型项目?&quot;.&lt;/p&gt;
@@ -14552,9 +15059,9 @@ Guice?&lt;/a&gt;&lt;/li&gt;
     
     <entry>
         <title>Clojure教程-函数</title>
-        <link href="http://ivanpig.github.io/2014/03/15/function.html"/>
+        <link href="http://www.ivaneye.com/2014/03/15/function.html"/>
         <updated>2014-03-15T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/03/15/function</id>
+        <id>http://www.ivaneye.com/2014/03/15/function</id>
         <content type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/language/functions.html&quot;&gt;Functions in Clojure&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;本文包括如下内容:&lt;/p&gt;
@@ -15375,9 +15882,9 @@ Translated by Ivan 2014&lt;/p&gt;
     
     <entry>
         <title>Clojure教程-数学计算</title>
-        <link href="http://ivanpig.github.io/2014/02/19/math.html"/>
+        <link href="http://www.ivaneye.com/2014/02/19/math.html"/>
         <updated>2014-02-19T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/02/19/math</id>
+        <id>http://www.ivaneye.com/2014/02/19/math</id>
         <content type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/cookbooks/math.html&quot;&gt;Mathematics with Clojure&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;本文包含了使用Clojure的内建函数,扩展包和部分JDK功能进行数学计算.&lt;/p&gt;
@@ -15498,9 +16005,9 @@ Github.&lt;/p&gt;
     
     <entry>
         <title>Clojure教程-文件处理</title>
-        <link href="http://ivanpig.github.io/2014/02/08/file.html"/>
+        <link href="http://www.ivaneye.com/2014/02/08/file.html"/>
         <updated>2014-02-08T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/02/08/file</id>
+        <id>http://www.ivaneye.com/2014/02/08/file</id>
         <content type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/cookbooks/files_and_directories.html&quot;&gt;Working with Files and Directories in Clojure&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;本文介绍使用Clojure的clojure.java.io命名空间下的函数以及JDK相关方法来操作文件和目录.&lt;/p&gt;
@@ -15715,9 +16222,9 @@ mkdir         创建目录
     
     <entry>
         <title>Clojure教程-字符串处理</title>
-        <link href="http://ivanpig.github.io/2014/02/05/string.html"/>
+        <link href="http://www.ivaneye.com/2014/02/05/string.html"/>
         <updated>2014-02-05T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/02/05/string</id>
+        <id>http://www.ivaneye.com/2014/02/05/string</id>
         <content type="html">&lt;p&gt;本文翻译自&lt;a href=&quot;http://clojure-doc.org/articles/cookbooks/strings.html&quot;&gt;Strings&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;本文内容包括使用Clojure内建的函数和标准库来操作字符串,以及JDK中的相关操作.&lt;/p&gt;
@@ -16342,9 +16849,9 @@ Lisp手册&lt;/a&gt;&lt;/p&gt;
     
     <entry>
         <title>Clojure教程-基本语法</title>
-        <link href="http://ivanpig.github.io/2014/02/02/basic.html"/>
+        <link href="http://www.ivaneye.com/2014/02/02/basic.html"/>
         <updated>2014-02-02T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/02/02/basic</id>
+        <id>http://www.ivaneye.com/2014/02/02/basic</id>
         <content type="html">&lt;h1&gt;简介&lt;/h1&gt;
 
 &lt;p&gt;学习一门语言最好的方法就是去使用它。我们就从一个小例子来学习Clojure语法.&lt;/p&gt;
@@ -17591,9 +18098,9 @@ repl里面输入&lt;/p&gt;
     
     <entry>
         <title>Clojure教程-环境搭建与Hello World</title>
-        <link href="http://ivanpig.github.io/2014/02/01/first_step.html"/>
+        <link href="http://www.ivaneye.com/2014/02/01/first_step.html"/>
         <updated>2014-02-01T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2014/02/01/first_step</id>
+        <id>http://www.ivaneye.com/2014/02/01/first_step</id>
         <content type="html">&lt;h1&gt;环境搭建&lt;/h1&gt;
 
 &lt;p&gt;Clojure是JVM上的一种语言，其语法是Lisp格式，所以称为是JVM上的Lisp方言。&lt;/p&gt;
@@ -17796,9 +18303,9 @@ script&lt;/a&gt;&lt;/li&gt;
     
     <entry>
         <title>Luminus手册-升级</title>
-        <link href="http://ivanpig.github.io/2013/10/02/upgrading.html"/>
+        <link href="http://www.ivaneye.com/2013/10/02/upgrading.html"/>
         <updated>2013-10-02T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/10/02/upgrading</id>
+        <id>http://www.ivaneye.com/2013/10/02/upgrading</id>
         <content type="html">&lt;h1&gt;Upgrading to the Latest Version&lt;/h1&gt;
 
 &lt;p&gt;不幸的是，框架无法自动从老版本升级到新版本。主要原因是新版本的依赖可能会有接口方面的修改，导致老代码无法正常运行。&lt;/p&gt;
@@ -17815,9 +18322,9 @@ script&lt;/a&gt;&lt;/li&gt;
     
     <entry>
         <title>Luminus手册-实用库</title>
-        <link href="http://ivanpig.github.io/2013/10/01/useful_libraries.html"/>
+        <link href="http://www.ivaneye.com/2013/10/01/useful_libraries.html"/>
         <updated>2013-10-01T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/10/01/useful_libraries</id>
+        <id>http://www.ivaneye.com/2013/10/01/useful_libraries</id>
         <content type="html">&lt;p&gt;Luminus的目标是从细粒度来方便你开发web应用。所以它默认包含了很多库包。&lt;/p&gt;
 
 &lt;p&gt;包括lib-noir提供一般工具，Selmer/Hiccup提供HTML模板,Timbre提供日志功能，
@@ -17840,9 +18347,9 @@ Tower提供国际化等等其他包。&lt;/p&gt;
     
     <entry>
         <title>Luminus手册-部署</title>
-        <link href="http://ivanpig.github.io/2013/09/30/deployment.html"/>
+        <link href="http://www.ivaneye.com/2013/09/30/deployment.html"/>
         <updated>2013-09-30T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/30/deployment</id>
+        <id>http://www.ivaneye.com/2013/09/30/deployment</id>
         <content type="html">&lt;h1&gt;Running Standalone&lt;/h1&gt;
 
 &lt;p&gt;要创建一个可独立运行的包，只需要运行如下的命令:&lt;/p&gt;
@@ -17999,9 +18506,9 @@ git commit -m &quot;init&quot;
     
     <entry>
         <title>Luminus手册-国际化</title>
-        <link href="http://ivanpig.github.io/2013/09/29/internationalization.html"/>
+        <link href="http://www.ivaneye.com/2013/09/29/internationalization.html"/>
         <updated>2013-09-29T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/29/internationalization</id>
+        <id>http://www.ivaneye.com/2013/09/29/internationalization</id>
         <content type="html">&lt;h1&gt;Internationalization&lt;/h1&gt;
 
 &lt;p&gt;Luminius模板包含了&lt;a href=&quot;https://github.com/ptaoussanis/tower&quot;&gt;Tower&lt;/a&gt;依赖，Tower提供了函数式的国际化和翻译。&lt;/p&gt;
@@ -18156,9 +18663,9 @@ fallback-locale
     
     <entry>
         <title>Luminus手册-日志</title>
-        <link href="http://ivanpig.github.io/2013/09/28/logging.html"/>
+        <link href="http://www.ivaneye.com/2013/09/28/logging.html"/>
         <updated>2013-09-28T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/28/logging</id>
+        <id>http://www.ivaneye.com/2013/09/28/logging</id>
         <content type="html">&lt;h1&gt;Logging&lt;/h1&gt;
 
 &lt;p&gt;Luminus模板中包括&lt;a href=&quot;https://github.com/ptaoussanis/timbre&quot;&gt;Timbre&lt;/a&gt;和&lt;a href=&quot;https://bitbucket.org/postspectacular/rotor&quot;&gt;Rotor&lt;/a&gt;。&lt;/p&gt;
@@ -18233,9 +18740,9 @@ fallback-locale
     
     <entry>
         <title>Luminus手册-数据迁移</title>
-        <link href="http://ivanpig.github.io/2013/09/27/database_migrations.html"/>
+        <link href="http://www.ivaneye.com/2013/09/27/database_migrations.html"/>
         <updated>2013-09-27T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/27/database_migrations</id>
+        <id>http://www.ivaneye.com/2013/09/27/database_migrations</id>
         <content type="html">&lt;h1&gt;Migrations&lt;/h1&gt;
 
 &lt;p&gt;默认情况下Luminus使用Ragtime来进行数据迁移。当你在创建Luminus项目时添加了+mysql或+postgres选项时，Ragtime会自动被添加进来。&lt;/p&gt;
@@ -18538,9 +19045,9 @@ actualized?函数，当待迁移列表没有数据时返回true&lt;/p&gt;
     
     <entry>
         <title>Luminus手册-访问数据库</title>
-        <link href="http://ivanpig.github.io/2013/09/26/database_access.html"/>
+        <link href="http://www.ivaneye.com/2013/09/26/database_access.html"/>
         <updated>2013-09-26T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/26/database_access</id>
+        <id>http://www.ivaneye.com/2013/09/26/database_access</id>
         <content type="html">&lt;h1&gt;Configuring the Database&lt;/h1&gt;
 
 &lt;p&gt;当你使用数据库参数来创建Luminus工程时，比如+postgress，那么Luminus会使用Korma来处理数据库操作.&lt;/p&gt;
@@ -18829,9 +19336,9 @@ actualized?函数，当待迁移列表没有数据时返回true&lt;/p&gt;
     
     <entry>
         <title>Luminus手册-安全</title>
-        <link href="http://ivanpig.github.io/2013/09/25/security.html"/>
+        <link href="http://www.ivaneye.com/2013/09/25/security.html"/>
         <updated>2013-09-25T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/25/security</id>
+        <id>http://www.ivaneye.com/2013/09/25/security</id>
         <content type="html">&lt;h1&gt;Security&lt;/h1&gt;
 
 &lt;p&gt;密码的散列和对比由noir.util.crypt提供。&lt;/p&gt;
@@ -19040,9 +19547,9 @@ actualized?函数，当待迁移列表没有数据时返回true&lt;/p&gt;
     
     <entry>
         <title>Luminus手册-输入验证</title>
-        <link href="http://ivanpig.github.io/2013/09/24/input_validation.html"/>
+        <link href="http://www.ivaneye.com/2013/09/24/input_validation.html"/>
         <updated>2013-09-24T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/24/input_validation</id>
+        <id>http://www.ivaneye.com/2013/09/24/input_validation</id>
         <content type="html">&lt;h1&gt;Input Validation&lt;/h1&gt;
 
 &lt;p&gt;验证相关助手方法在noir.validation命名空间中。如果我们要使用验证，我们需要先引入这个命名空间。&lt;/p&gt;
@@ -19213,9 +19720,9 @@ equal-to? args: [v n] - returns true if the string represents a number = given
     
     <entry>
         <title>Luminus手册-Session与Cookie</title>
-        <link href="http://ivanpig.github.io/2013/09/23/sessions_cookies.html"/>
+        <link href="http://www.ivaneye.com/2013/09/23/sessions_cookies.html"/>
         <updated>2013-09-23T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/23/sessions_cookies</id>
+        <id>http://www.ivaneye.com/2013/09/23/sessions_cookies</id>
         <content type="html">&lt;h1&gt;Sessions&lt;/h1&gt;
 
 &lt;p&gt;Session管理相关功能由noir.session提供。默认提供的noir.util.middleware/app-handler函数默认将Session保存在内存里。&lt;/p&gt;
@@ -19368,9 +19875,9 @@ equal-to? args: [v n] - returns true if the string represents a number = given
     
     <entry>
         <title>Luminus手册-自定义中间件</title>
-        <link href="http://ivanpig.github.io/2013/09/22/custom_middleware.html"/>
+        <link href="http://www.ivaneye.com/2013/09/22/custom_middleware.html"/>
         <updated>2013-09-22T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/22/custom_middleware</id>
+        <id>http://www.ivaneye.com/2013/09/22/custom_middleware</id>
         <content type="html">&lt;h1&gt;Adding custom middleware&lt;/h1&gt;
 
 &lt;p&gt;Luminus使用Ring来路由应用的处理程序，你也可以添加一些中间件。&lt;/p&gt;
@@ -19463,9 +19970,9 @@ equal-to? args: [v n] - returns true if the string represents a number = given
     
     <entry>
         <title>Luminus手册-响应</title>
-        <link href="http://ivanpig.github.io/2013/09/21/response_types.html"/>
+        <link href="http://www.ivaneye.com/2013/09/21/response_types.html"/>
         <updated>2013-09-21T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/21/response_types</id>
+        <id>http://www.ivaneye.com/2013/09/21/response_types</id>
         <content type="html">&lt;h1&gt;Responses&lt;/h1&gt;
 
 &lt;p&gt;noir.response提供了很多辅助函数来处理响应.&lt;/p&gt;
@@ -19634,9 +20141,9 @@ equal-to? args: [v n] - returns true if the string represents a number = given
     
     <entry>
         <title>Luminus手册-请求</title>
-        <link href="http://ivanpig.github.io/2013/09/20/request_types.html"/>
+        <link href="http://www.ivaneye.com/2013/09/20/request_types.html"/>
         <updated>2013-09-20T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/20/request_types</id>
+        <id>http://www.ivaneye.com/2013/09/20/request_types</id>
         <content type="html">&lt;h1&gt;Requests&lt;/h1&gt;
 
 &lt;p&gt;默认情况下，请求的参数(比如一个form的POST请求)将会被自动绑定到request的:params键上。&lt;/p&gt;
@@ -19691,9 +20198,9 @@ equal-to? args: [v n] - returns true if the string represents a number = given
     
     <entry>
         <title>Luminus手册-静态资源</title>
-        <link href="http://ivanpig.github.io/2013/09/19/staticresource.html"/>
+        <link href="http://www.ivaneye.com/2013/09/19/staticresource.html"/>
         <updated>2013-09-19T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/19/staticresource</id>
+        <id>http://www.ivaneye.com/2013/09/19/staticresource</id>
         <content type="html">&lt;h1&gt;Static resources&lt;/h1&gt;
 
 &lt;p&gt;在noir.io下有多个访问静态资源的帮助方法。
@@ -19806,9 +20313,9 @@ equal-to? args: [v n] - returns true if the string represents a number = given
     
     <entry>
         <title>Luminus手册-路由定义</title>
-        <link href="http://ivanpig.github.io/2013/09/18/defining_routes.html"/>
+        <link href="http://www.ivaneye.com/2013/09/18/defining_routes.html"/>
         <updated>2013-09-18T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/18/defining_routes</id>
+        <id>http://www.ivaneye.com/2013/09/18/defining_routes</id>
         <content type="html">&lt;h1&gt;Defining routes&lt;/h1&gt;
 
 &lt;p&gt;Luminus使用Compojure来定义应用的路由.路由由HTTP请求方法和接受它的URI，
@@ -20339,9 +20846,9 @@ noir.util.middleware/app-handler下的vector中，它在handler目录下。
     
     <entry>
         <title>Luminus手册-ClojureScript</title>
-        <link href="http://ivanpig.github.io/2013/09/17/clojurescript.html"/>
+        <link href="http://www.ivaneye.com/2013/09/17/clojurescript.html"/>
         <updated>2013-09-17T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/17/clojurescript</id>
+        <id>http://www.ivaneye.com/2013/09/17/clojurescript</id>
         <content type="html">&lt;h1&gt;Summary&lt;/h1&gt;
 
 &lt;p&gt;ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScript可以
@@ -20724,9 +21231,9 @@ POST函数能很方便的发送ajax请求。&lt;/p&gt;
     
     <entry>
         <title>Luminus手册-HTML模板</title>
-        <link href="http://ivanpig.github.io/2013/09/16/html_templating.html"/>
+        <link href="http://www.ivaneye.com/2013/09/16/html_templating.html"/>
         <updated>2013-09-16T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/16/html_templating</id>
+        <id>http://www.ivaneye.com/2013/09/16/html_templating</id>
         <content type="html">&lt;h1&gt;Templating Options&lt;/h1&gt;
 
 &lt;p&gt;Luminus包含了Hiccup的依赖.如果你熟悉Hiccup那么可以直接使用。
@@ -22051,9 +22558,9 @@ url。其余的参数必须是HTML元素。生成的HTML代码如下:&lt;/p&gt;
     
     <entry>
         <title>Luminus手册-应用配置</title>
-        <link href="http://ivanpig.github.io/2013/09/15/application_profile.html"/>
+        <link href="http://www.ivaneye.com/2013/09/15/application_profile.html"/>
         <updated>2013-09-15T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/15/application_profile</id>
+        <id>http://www.ivaneye.com/2013/09/15/application_profile</id>
         <content type="html">&lt;h1&gt;Profiles&lt;/h1&gt;
 
 &lt;p&gt;使用lein new luminus myapp命令会创建一个新的luminus应用，它使用的是默认的配置。如果你想使用其他的特性，你可以修改相应的配置参数。&lt;/p&gt;
@@ -22158,9 +22665,9 @@ url。其余的参数必须是HTML元素。生成的HTML代码如下:&lt;/p&gt;
     
     <entry>
         <title>Luminus手册-第一个应用</title>
-        <link href="http://ivanpig.github.io/2013/09/14/your_first_application.html"/>
+        <link href="http://www.ivaneye.com/2013/09/14/your_first_application.html"/>
         <updated>2013-09-14T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/09/14/your_first_application</id>
+        <id>http://www.ivaneye.com/2013/09/14/your_first_application</id>
         <content type="html">&lt;h1&gt;Guestbook应用&lt;/h1&gt;
 
 &lt;p&gt;此文使用Luminus构建一个简单的guestbook应用。guestbook可以保存信息，展示信息。此应用将涉及到简单的HTML模板，数据库访问和项目结构.&lt;/p&gt;
@@ -23463,9 +23970,9 @@ form input {
     
     <entry>
         <title>快学Scala习题解答—第十五章 注解</title>
-        <link href="http://ivanpig.github.io/2013/03/17/scala_exercises_15.html"/>
+        <link href="http://www.ivaneye.com/2013/03/17/scala_exercises_15.html"/>
         <updated>2013-03-17T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/17/scala_exercises_15</id>
+        <id>http://www.ivaneye.com/2013/03/17/scala_exercises_15</id>
         <content type="html">&lt;h1&gt;注解&lt;/h1&gt;
 
 &lt;h2&gt;编写四个JUnit测试用例，分别使用带或不带某个参数的@Test注解。用JUnit执行这些测试&lt;/h2&gt;
@@ -24028,9 +24535,9 @@ public int factorial(int);
     
     <entry>
         <title>快学Scala习题解答—第十四章 模式匹配和样例类</title>
-        <link href="http://ivanpig.github.io/2013/03/16/scala_exercises_14.html"/>
+        <link href="http://www.ivaneye.com/2013/03/16/scala_exercises_14.html"/>
         <updated>2013-03-16T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/16/scala_exercises_14</id>
+        <id>http://www.ivaneye.com/2013/03/16/scala_exercises_14</id>
         <content type="html">&lt;h1&gt;模式匹配和样例类&lt;/h1&gt;
 
 &lt;h2&gt;JDK发行包有一个src.zip文件包含了JDK的大多数源代码。解压并搜索样例标签(用正则表达式case [^:]+:)。然后查找以//开头并包含[Ff]alls?thr的注释，捕获类似// Falls through或// just fall thru这样的注释。假定JDK的程序员们遵守Java编码习惯，在该写注释的地方写下了这些注释，有多少百分比的样例是会掉入到下一个分支的？&lt;/h2&gt;
@@ -24431,9 +24938,9 @@ println(h(2))
     
     <entry>
         <title>快学Scala习题解答—第十三章 集合</title>
-        <link href="http://ivanpig.github.io/2013/03/15/scala_exercises_13.html"/>
+        <link href="http://www.ivaneye.com/2013/03/15/scala_exercises_13.html"/>
         <updated>2013-03-15T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/15/scala_exercises_13</id>
+        <id>http://www.ivaneye.com/2013/03/15/scala_exercises_13</id>
         <content type="html">&lt;h1&gt;集合&lt;/h1&gt;
 
 &lt;h2&gt;编写一个函数，给定字符串，产出一个包含所有字符的下标的映射。举例来说：indexes(&quot;Mississippi&quot;)应返回一个映射，让'M'对应集{0}，'i'对应集{1,4,7,10}，依此类推。使用字符到可变集的映射。另外，你如何保证集是经过排序的？&lt;/h2&gt;
@@ -24778,9 +25285,9 @@ println(frequencies)
     
     <entry>
         <title>快学Scala习题解答—第十二章 高阶函数</title>
-        <link href="http://ivanpig.github.io/2013/03/14/scala_exercises_12.html"/>
+        <link href="http://www.ivaneye.com/2013/03/14/scala_exercises_12.html"/>
         <updated>2013-03-14T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/14/scala_exercises_12</id>
+        <id>http://www.ivaneye.com/2013/03/14/scala_exercises_12</id>
         <content type="html">&lt;h1&gt;高阶函数&lt;/h1&gt;
 
 &lt;h2&gt;编写函数values(fun:(Int)=&gt;Int,low:Int,high:Int),该函数输出一个集合，对应给定区间内给定函数的输入和输出。比如，values(x=&gt;x*x,-5,5)应该产出一个对偶的集合(-5,25),(-4,16),(-3,9),...,(5,25)&lt;/h2&gt;
@@ -25059,9 +25566,9 @@ _)((6,7))应得到42。然后用这个函数通过map计算出各个对偶的元
     
     <entry>
         <title>快学Scala习题解答—第十一章 操作符</title>
-        <link href="http://ivanpig.github.io/2013/03/13/scala_exercises_11.html"/>
+        <link href="http://www.ivaneye.com/2013/03/13/scala_exercises_11.html"/>
         <updated>2013-03-13T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/13/scala_exercises_11</id>
+        <id>http://www.ivaneye.com/2013/03/13/scala_exercises_11</id>
         <content type="html">&lt;h1&gt;操作符&lt;/h1&gt;
 
 &lt;h2&gt;根据优先级规则,3 + 4 -&gt; 5和3 -&gt; 4 + 5是如何被求值的？&lt;/h2&gt;
@@ -25850,9 +26357,9 @@ object RichFile{
     
     <entry>
         <title>快学Scala习题解答—第十章 特质</title>
-        <link href="http://ivanpig.github.io/2013/03/12/scala_exercises_10.html"/>
+        <link href="http://www.ivaneye.com/2013/03/12/scala_exercises_10.html"/>
         <updated>2013-03-12T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/12/scala_exercises_10</id>
+        <id>http://www.ivaneye.com/2013/03/12/scala_exercises_10</id>
         <content type="html">&lt;h1&gt;特质&lt;/h1&gt;
 
 &lt;h2&gt;java.awt.Rectangle类有两个很有用的方法translate和grow,但可惜的是像java.awt.geom.Ellipse2D这样的类没有。在Scala中，你可以解决掉这个问题。定义一个RenctangleLike特质,加入具体的translate和grow方法。提供任何你需要用来实现的抽象方法,以便你可以像如下代码这样混入该特质:&lt;/h2&gt;
@@ -26147,9 +26654,9 @@ class IterableInputStream extends InputStream with Iterable[Byte]{
     
     <entry>
         <title>快学Scala习题解答—第九章 文件和正则表达式</title>
-        <link href="http://ivanpig.github.io/2013/03/11/scala_exercises_09.html"/>
+        <link href="http://www.ivaneye.com/2013/03/11/scala_exercises_09.html"/>
         <updated>2013-03-11T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/11/scala_exercises_09</id>
+        <id>http://www.ivaneye.com/2013/03/11/scala_exercises_09</id>
         <content type="html">&lt;h1&gt;文件和正则表达式&lt;/h1&gt;
 
 &lt;h2&gt;编写一小段Scala代码，将某个文件中的行倒转顺序(将最后一行作为第一行,依此类推)&lt;/h2&gt;
@@ -26518,9 +27025,9 @@ object Test extends App{
     
     <entry>
         <title>快学Scala习题解答—第八章 继承</title>
-        <link href="http://ivanpig.github.io/2013/03/10/scala_exercises_08.html"/>
+        <link href="http://www.ivaneye.com/2013/03/10/scala_exercises_08.html"/>
         <updated>2013-03-10T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/10/scala_exercises_08</id>
+        <id>http://www.ivaneye.com/2013/03/10/scala_exercises_08</id>
         <content type="html">&lt;h1&gt;继承&lt;/h1&gt;
 
 &lt;h2&gt;扩展如下的BankAccount类，新类CheckingAccount对每次存款和取款都收取1美元的手续费&lt;/h2&gt;
@@ -26869,9 +27376,9 @@ class Square(point:Point,width:Int) extends Rectangle(point.x,point.y,width,widt
     
     <entry>
         <title>快学Scala习题解答—第七章 包和引入</title>
-        <link href="http://ivanpig.github.io/2013/03/09/scala_exercises_07.html"/>
+        <link href="http://www.ivaneye.com/2013/03/09/scala_exercises_07.html"/>
         <updated>2013-03-09T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/09/scala_exercises_07</id>
+        <id>http://www.ivaneye.com/2013/03/09/scala_exercises_07</id>
         <content type="html">&lt;h1&gt;包和引入&lt;/h1&gt;
 
 &lt;h2&gt;编写示例程序，展示为什么&lt;/h2&gt;
@@ -27248,9 +27755,9 @@ object Test extends App{
     
     <entry>
         <title>快学Scala习题解答—第六章 对象</title>
-        <link href="http://ivanpig.github.io/2013/03/08/scala_exercises_06.html"/>
+        <link href="http://www.ivaneye.com/2013/03/08/scala_exercises_06.html"/>
         <updated>2013-03-08T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/08/scala_exercises_06</id>
+        <id>http://www.ivaneye.com/2013/03/08/scala_exercises_06</id>
         <content type="html">&lt;h1&gt;对象&lt;/h1&gt;
 
 &lt;h2&gt;编写一个Conversions对象，加入inchesToCentimeters,gallonsToLiters和milesToKilometers方法&lt;/h2&gt;
@@ -27499,9 +28006,9 @@ object Point extends App{
     
     <entry>
         <title>快学Scala习题解答—第五章 类</title>
-        <link href="http://ivanpig.github.io/2013/03/07/scala_exercises_05.html"/>
+        <link href="http://www.ivaneye.com/2013/03/07/scala_exercises_05.html"/>
         <updated>2013-03-07T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/07/scala_exercises_05</id>
+        <id>http://www.ivaneye.com/2013/03/07/scala_exercises_05</id>
         <content type="html">&lt;h1&gt;类&lt;/h1&gt;
 
 &lt;h2&gt;改进5.1节的Counter类,让它不要在Int.MaxValue时变成负数&lt;/h2&gt;
@@ -27848,9 +28355,9 @@ public Student();
     
     <entry>
         <title>快学Scala习题解答—第四章 映射和元组</title>
-        <link href="http://ivanpig.github.io/2013/03/06/scala_exercises_04.html"/>
+        <link href="http://www.ivaneye.com/2013/03/06/scala_exercises_04.html"/>
         <updated>2013-03-06T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/06/scala_exercises_04</id>
+        <id>http://www.ivaneye.com/2013/03/06/scala_exercises_04</id>
         <content type="html">&lt;h1&gt;映射和元组&lt;/h1&gt;
 
 &lt;h2&gt;设置一个映射,其中包含你想要的一些装备，以及它们的价格。然后构建另一个映射，采用同一组键，但是价格上打9折&lt;/h2&gt;
@@ -28217,9 +28724,9 @@ res0: scala.collection.immutable.IndexedSeq[(Char, Char)] = Vector((H,W), (e,o),
     
     <entry>
         <title>快学Scala习题解答—第三章 数组相关操作</title>
-        <link href="http://ivanpig.github.io/2013/03/05/scala_exercises_03.html"/>
+        <link href="http://www.ivaneye.com/2013/03/05/scala_exercises_03.html"/>
         <updated>2013-03-05T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/05/scala_exercises_03</id>
+        <id>http://www.ivaneye.com/2013/03/05/scala_exercises_03</id>
         <content type="html">&lt;h1&gt;数组相关操作&lt;/h1&gt;
 
 &lt;h2&gt;编写一段代码，将a设置为一个n个随机整数的数组，要求随机数介于0(包含)和n(不包含)之间&lt;/h2&gt;
@@ -28474,9 +28981,9 @@ println(flavors.getNativesForFlavor(DataFlavor.imageFlavor).toArray.toBuffer.mkS
     
     <entry>
         <title>快学Scala习题解答—第二章 控制结构和函数</title>
-        <link href="http://ivanpig.github.io/2013/03/04/scala_exercises_02.html"/>
+        <link href="http://www.ivaneye.com/2013/03/04/scala_exercises_02.html"/>
         <updated>2013-03-04T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/04/scala_exercises_02</id>
+        <id>http://www.ivaneye.com/2013/03/04/scala_exercises_02</id>
         <content type="html">&lt;h1&gt;控制结构和函数&lt;/h1&gt;
 
 &lt;h2&gt;一个数字如果为正数，则它的signum为1;如果是负数,则signum为-1;如果为0,则signum为0.编写一个函数来计算这个值&lt;/h2&gt;
@@ -28729,9 +29236,9 @@ res59: Long = 9415087488
     
     <entry>
         <title>快学Scala习题解答—第一章 基础</title>
-        <link href="http://ivanpig.github.io/2013/03/03/scala_exercises_01.html"/>
+        <link href="http://www.ivaneye.com/2013/03/03/scala_exercises_01.html"/>
         <updated>2013-03-03T00:00:00+08:00</updated>
-        <id>http://ivanpig.github.io//2013/03/03/scala_exercises_01</id>
+        <id>http://www.ivaneye.com/2013/03/03/scala_exercises_01</id>
         <content type="html">&lt;h1&gt;基础&lt;/h1&gt;
 
 &lt;h2&gt;在Scala REPL中键入3,然后按Tab键。有哪些方法可以被应用?&lt;/h2&gt;

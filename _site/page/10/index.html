@@ -6,8 +6,8 @@
         <meta name="description" content="">
         <meta name="keywords" content=""/>
         <meta name="author" content="ivanpig.github.io"> 
-        <link rel="canonical" href="http://ivanpig.github.io/page/10/index.html">
-        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link rel="canonical" href="http://www.ivaneye.com/page/10/index.html">
+        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
@@ -119,6 +119,77 @@
 
 
 
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/09/20/request_types.html">Luminus手册-请求</a></h2>
+
+        <p class="post-meta">By 09月20日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Requests</h1>
+
+<p>默认情况下，请求的参数(比如一个form的POST请求)将会被自动绑定到request的:params键上。</p>
+
+<p>但是，如果你在请求体内传递一些特殊类型的参数，则你需要使用适合的中间件来处理他们。Luminus使用ring-middleware-format来处理这些参数。</p>
+
+<p>中间件可以通过在noir.util.middleware/app-handler上添加:formats键来开启:</p>
+
+<pre><code class="{.clojure}">(def app (middleware/app-handler
+          all-routes
+          :formats [:json :edn]))
+</code></pre>
+
+<p>这样请求中的application/json和application/edn类型将会被中间件处理。相应的请求参数会在:params中。注意，这也会处理响应中的对应类型参数。具体信息请见Response Types章节。</p>
+
+<p>下面是有效的格式化类型:</p>
+
+<pre><code class="{.clojure}">:json - JSON with string keys in :params and :body-params
+:json-kw - JSON with keywodized keys in :params and :body-params
+:edn - native Clojure format.
+:yaml - YAML format
+:yaml-kw - YAML format with keywodized keys in :params and :body-params
+:yaml-in-html - yaml in a html page
+</code></pre>
+
+
+
+    <a href="/2013/09/20/request_types.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
 
 
@@ -624,95 +695,6 @@ cd guestbook
 
 
     <a href="/2013/09/14/your_first_application.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/17/scala_exercises_15.html">快学Scala习题解答—第十五章 注解</a></h2>
-
-        <p class="post-meta">By 03月17日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>注解</h1>
-
-<h2>编写四个JUnit测试用例，分别使用带或不带某个参数的@Test注解。用JUnit执行这些测试</h2>
-
-<pre><code class="{.scala}">import org.junit.Test
-
-class ScalaTest {
-
-  @Test
-  def test1(){
-    print("test1")
-  }
-
-  @Test(timeout = 1L)
-  def test2(){
-    print("test2")
-  }
-}
-</code></pre>
-
-<h2>创建一个类的示例，展示注解可以出现的所有位置。用@deprecated作为你的示例注解。</h2>
-
-<pre><code class="{.scala}">@deprecated
-class Test{
-
-  @deprecated
-  val t = _;
-
-  @deprecated(message = "unuse")
-  def hello(){
-    println("hello")
-  }
-}
-
-@deprecated
-object Test extends App{
-  val t = new Test()
-  t.hello()
-  t.t
-}
-</code></pre>
-
-
-
-
-    <a href="/2013/03/17/scala_exercises_15.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

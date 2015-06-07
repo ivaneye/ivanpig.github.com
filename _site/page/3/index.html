@@ -6,8 +6,8 @@
         <meta name="description" content="">
         <meta name="keywords" content=""/>
         <meta name="author" content="ivanpig.github.io"> 
-        <link rel="canonical" href="http://ivanpig.github.io/page/3/index.html">
-        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link rel="canonical" href="http://www.ivaneye.com/page/3/index.html">
+        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
@@ -119,6 +119,91 @@
 
 
 
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/03/03/interface_field.html">刨根问底-02为什么Java接口中的成员变量被设计为必须是public static final的？</a></h2>
+
+        <p class="post-meta">By 03月03日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#why"><i class="fa fa-folder-open">why (2)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (2)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>概述</h1>
+
+<p>此为"刨根问底"系列文章的第二篇，接上篇，为什么Java接口中的成员变量被设计为必须是public static final的？</p>
+
+<h1>网络答案</h1>
+
+<p>在网络上搜索到了如下两篇还算靠谱的解答!</p>
+
+<p><a href="http://shaomeng95.iteye.com/blog/998820">网络解答1</a></p>
+
+<p><a href="http://www.xyzws.com/javafaq/why-do-we-have-only-public-static-final-variables-in-interfaces/129">网络解答2</a></p>
+
+<h1>解释</h1>
+
+<p>上篇我们用反证法来证明了接口方法设为public为最合适选择!</p>
+
+<p>这里我们依然可以使用反证法来解释!</p>
+
+<p>假设接口中的成员变量不是public static final的!</p>
+
+<p>先将属性设置为private的!</p>
+
+<pre><code class="java">public interface Person{
+  private int num;
+}
+</code></pre>
+
+<p>OK!private的属性，当然只能在接口内部使用了!但是在接口里面给谁使用呢？接口里的方法只有方法头可没方法体！所以设为private，那就永远都访问不到了！</p>
+
+<p>好，那我们改成protected!</p>
+
+<pre><code class="java">public interface Person{
+  protected int num;
+}
+</code></pre>
+
+<p>这样子类就能访问了！但是外部如何访问呢？方法是有的:</p>
+
+
+
+
+    <a href="/2015/03/03/interface_field.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
 
 
@@ -669,92 +754,6 @@ public abstract class Person {
 
 
     <a href="/2015/02/22/mediator.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/21/strategy.html">语言与模式-19策略模式</a></h2>
-
-        <p class="post-meta">By 02月21日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。</p>
-
-<p><img src="/assets/designpattern/strategy.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>许多相关的类仅仅是行为有异。“策略”提供了一种用多个行为中的一个行为来配置一个类的方法。</li>
-<li>需要使用一个算法的不同变体。例如，你可能会定义一些反映不同的空间/时间权衡的算法。当这些变体实现为一个算法的类层次时，可以使用策略模式。</li>
-<li>算法使用客户不应该知道的数据。可使用策略模式以避免暴露复杂的、与算法相关的数据结构。</li>
-<li>一个类定义了多种行为, 并且这些行为在这个类的操作中以多个条件语句的形式出现。将相关的条件分支移入它们各自的Strategy类中以代替这些条件语句。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<pre><code class="java">public class Context {
-    //持有一个具体策略的对象
-    private Strategy strategy;
-    /**
-     * 构造函数，传入一个具体策略对象
-     * @param strategy    具体策略对象
-     */
-    public Context(Strategy strategy){
-        this.strategy = strategy;
-    }
-    /**
-     * 策略方法
-     */
-    public void contextInterface(){
-        strategy.strategyInterface();
-    }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/21/strategy.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

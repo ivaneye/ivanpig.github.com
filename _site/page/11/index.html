@@ -6,8 +6,8 @@
         <meta name="description" content="">
         <meta name="keywords" content=""/>
         <meta name="author" content="ivanpig.github.io"> 
-        <link rel="canonical" href="http://ivanpig.github.io/page/11/index.html">
-        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link rel="canonical" href="http://www.ivaneye.com/page/11/index.html">
+        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
@@ -119,6 +119,95 @@
 
 
 
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/17/scala_exercises_15.html">快学Scala习题解答—第十五章 注解</a></h2>
+
+        <p class="post-meta">By 03月17日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>注解</h1>
+
+<h2>编写四个JUnit测试用例，分别使用带或不带某个参数的@Test注解。用JUnit执行这些测试</h2>
+
+<pre><code class="{.scala}">import org.junit.Test
+
+class ScalaTest {
+
+  @Test
+  def test1(){
+    print("test1")
+  }
+
+  @Test(timeout = 1L)
+  def test2(){
+    print("test2")
+  }
+}
+</code></pre>
+
+<h2>创建一个类的示例，展示注解可以出现的所有位置。用@deprecated作为你的示例注解。</h2>
+
+<pre><code class="{.scala}">@deprecated
+class Test{
+
+  @deprecated
+  val t = _;
+
+  @deprecated(message = "unuse")
+  def hello(){
+    println("hello")
+  }
+}
+
+@deprecated
+object Test extends App{
+  val t = new Test()
+  t.hello()
+  t.t
+}
+</code></pre>
+
+
+
+
+    <a href="/2013/03/17/scala_exercises_15.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
 
 
@@ -610,95 +699,6 @@ pw.close()
 
 
     <a href="/2013/03/11/scala_exercises_09.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/10/scala_exercises_08.html">快学Scala习题解答—第八章 继承</a></h2>
-
-        <p class="post-meta">By 03月10日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>继承</h1>
-
-<h2>扩展如下的BankAccount类，新类CheckingAccount对每次存款和取款都收取1美元的手续费</h2>
-
-<pre><code class="{.scala}">class BankAccount(initialBalance:Double){
-    private var balance = initialBalance
-    def deposit(amount:Double) = { balance += amount; balance}
-    def withdraw(amount:Double) = {balance -= amount; balance}
-}
-</code></pre>
-
-<p>继承语法的使用。代码如下</p>
-
-<pre><code class="{.scala}">class CheckingAccount(initialBalance:Double) extends BankAccount(initialBalance){
-  override def deposit(amount: Double): Double = super.deposit(amount - 1)
-
-  override def withdraw(amount: Double): Double = super.withdraw(amount + 1)
-}
-</code></pre>
-
-<h2>扩展前一个练习的BankAccount类，新类SavingsAccount每个月都有利息产生(earnMonthlyInterest方法被调用)，并且有每月三次免手续费的存款或取款。在earnMonthlyInterest方法中重置交易计数。</h2>
-
-<pre><code class="{.scala}">class SavingsAccount(initialBalance:Double) extends BankAccount(initialBalance){
-  private var num:Int = _
-
-  def earnMonthlyInterest()={
-    num = 3
-    super.deposit(1)
-  }
-
-  override def deposit(amount: Double): Double = {
-    num -= 1
-    if(num &lt; 0) super.deposit(amount - 1) else super.deposit(amount)
-  }
-
-  override def withdraw(amount: Double): Double = {
-    num -= 1
-    if (num &lt; 0) super.withdraw(amount + 1) else super.withdraw(amount)
-  }
-}
-</code></pre>
-
-
-
-
-    <a href="/2013/03/10/scala_exercises_08.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

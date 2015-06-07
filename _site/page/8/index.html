@@ -6,8 +6,8 @@
         <meta name="description" content="">
         <meta name="keywords" content=""/>
         <meta name="author" content="ivanpig.github.io"> 
-        <link rel="canonical" href="http://ivanpig.github.io/page/8/index.html">
-        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link rel="canonical" href="http://www.ivaneye.com/page/8/index.html">
+        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
@@ -119,6 +119,154 @@
 
 
 
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2014/02/02/basic.html">Clojure教程-基本语法</a></h2>
+
+        <p class="post-meta">By 02月02日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>简介</h1>
+
+<p>学习一门语言最好的方法就是去使用它。我们就从一个小例子来学习Clojure语法.</p>
+
+<h1>核心语法</h1>
+
+<p>首先先来看一下Clojure的核心语法。</p>
+
+<p>Clojure的使用的是Lisp语法,又叫S表达式。核心语法非常的简单。但是对于熟悉c系语法(c,c++,java)的朋友来说，第一次接触会非常的不习惯。</p>
+
+<ul>
+<li>所有代码以"("开始,")"结束。即所有的代码都被()包裹</li>
+<li>"("后的第一个数据被当作函数或者宏来调用</li>
+<li>接着的数据被当作参数传递</li>
+<li>如果想原样返回数据，在"("前面添加"'"。此写法是(quote (...))的简写</li>
+</ul>
+
+
+<p>以前面的hello world程序为例。</p>
+
+<pre><code class="{.clojure}">(println "Hello World")
+</code></pre>
+
+<p>它以"("开始，后面跟的是函数println，接着空格跟的是参数"HelloWorld"，最后")"结尾。</p>
+
+<p>了解了如上规则，你就基本学会了Clojure的大部分语法。</p>
+
+<p>下面比较一下Clojure,Java,Python,Ruby的一些语法.</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;"> Clojure 表达式</th>
+<th style="text-align:left;"> 对应的 Java 语法   </th>
+<th style="text-align:left;"> 对应的 Python 语法 </th>
+<th style="text-align:left;">对应的 Ruby 语法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"> (not k)                        </td>
+<td style="text-align:left;"> !k                           </td>
+<td style="text-align:left;"> not k                   </td>
+<td style="text-align:left;"> not k or !k                                       </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (inc a)                        </td>
+<td style="text-align:left;"> a++、++a、a += 1、a + 1<sup>a</sup>    </td>
+<td style="text-align:left;"> a += 1、a + 1           </td>
+<td style="text-align:left;"> a += 1                                              </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (/ (+ x y) 2)                  </td>
+<td style="text-align:left;"> (x + y) / 2                  </td>
+<td style="text-align:left;"> (x + y) / 2             </td>
+<td style="text-align:left;"> (x + y) / 2                                       </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (instance? java. util.List al) </td>
+<td style="text-align:left;"> al instanceof java.util.List </td>
+<td style="text-align:left;"> isinstance(al,list)     </td>
+<td style="text-align:left;"> al.is_a? Array                                    </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (if (not a) (inc b) (dec b))   </td>
+<td style="text-align:left;"> !a ? b + 1 : b - 1           </td>
+<td style="text-align:left;"> b + 1 if not a else b-1 </td>
+<td style="text-align:left;"> !a ? b + 1 : b - 1                                </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (Math/pow 2 10)<sup>c</sup>              </td>
+<td style="text-align:left;"> Math.pow(2, 10)              </td>
+<td style="text-align:left;"> pow(2, 10)              </td>
+<td style="text-align:left;"> 2 ** 10                                           </td>
+</tr>
+<tr>
+<td style="text-align:left;"> (.someMethod someObj "foo" (.otherMethod otherObj 0)) </td>
+<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
+<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
+<td style="text-align:left;">someObj.someMethod("foo" , otherObj.otherMethod(0)) </td>
+</tr>
+</tbody>
+</table>
+
+
+<p>可以看出Clojure的语法有高度的一致性，即使你不熟悉S表达式，但是依据上面的原则，可以看懂它想表达的是一个什么意思。</p>
+
+<p>而对于其他三门语言，如果你没有一个个的学习相应的语法，你还是比较难理解它的意思的。</p>
+
+<h1>代码功能</h1>
+
+<p>了解了核心语法，我们就可以来编写代码了。我们要编写的代码功能很简单，进行简繁翻译，其中过滤不需要翻译以及需要特殊翻译的文字。我们将分几步来完成:</p>
+
+<ul>
+<li>读取简繁字典</li>
+<li>进行简繁翻译</li>
+<li>读取不需要翻译的文字</li>
+<li>过滤不翻译的文字</li>
+<li>提供给Java调用</li>
+<li>打包</li>
+</ul>
+
+
+
+
+
+    <a href="/2014/02/02/basic.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
 
 
@@ -579,94 +727,6 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
 
 
     <a href="/2013/09/28/logging.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/27/database_migrations.html">Luminus手册-数据迁移</a></h2>
-
-        <p class="post-meta">By 09月27日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Migrations</h1>
-
-<p>默认情况下Luminus使用Ragtime来进行数据迁移。当你在创建Luminus项目时添加了+mysql或+postgres选项时，Ragtime会自动被添加进来。</p>
-
-<h1>Migrations with Ragtime</h1>
-
-<p>Ragtime通过Leiningen插件来执行。此插件需要配置project.clj的:plugins中。</p>
-
-<pre><code class="clojure">:plugins [... [ragtime/ragtime.lein "0.3.4"]]
-</code></pre>
-
-<p>实际的迁移动作是由ragtime.sql.files这个适配器来执行。此适配器需要配置在依赖列表中，同时配置相关数据库配置。</p>
-
-<pre><code class="clojure">:dependencies [... [ragtime/ragtime.sql.files "0.3.4"]]
-:ragtime {:migrations ragtime.sql.files/migrations
-          :database "jdbc:mysql://localhost:3306/example_db?user=root"}
-</code></pre>
-
-<p>ragtime.sql.files适配器会从项目根目录下的指定目录查找sql脚本。我们只需要将脚本添加到对应目录下即可。</p>
-
-<p>脚本按字母顺序排序。我们来创建两个脚本。</p>
-
-<pre><code>migrations/2014-13-57-30-create-tables.up.sql
-
-CREATE TABLE users (id INT, name VARCHAR(25));
-
-migrations/2014-13-57-30-create-tables.down.sql
-
-DROP TABLE users;
-</code></pre>
-
-<p>通过如下命令执行：</p>
-
-<pre><code>lein ragtime migrate
-</code></pre>
-
-<p>通过如下命令回滚:</p>
-
-<pre><code>lein ragtime rollback
-</code></pre>
-
-
-
-
-    <a href="/2013/09/27/database_migrations.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

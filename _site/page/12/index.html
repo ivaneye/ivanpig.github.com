@@ -6,8 +6,8 @@
         <meta name="description" content="">
         <meta name="keywords" content=""/>
         <meta name="author" content="ivanpig.github.io"> 
-        <link rel="canonical" href="http://ivanpig.github.io/page/12/index.html">
-        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link rel="canonical" href="http://www.ivaneye.com/page/12/index.html">
+        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
@@ -119,6 +119,95 @@
 
 
 
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/10/scala_exercises_08.html">快学Scala习题解答—第八章 继承</a></h2>
+
+        <p class="post-meta">By 03月10日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>继承</h1>
+
+<h2>扩展如下的BankAccount类，新类CheckingAccount对每次存款和取款都收取1美元的手续费</h2>
+
+<pre><code class="{.scala}">class BankAccount(initialBalance:Double){
+    private var balance = initialBalance
+    def deposit(amount:Double) = { balance += amount; balance}
+    def withdraw(amount:Double) = {balance -= amount; balance}
+}
+</code></pre>
+
+<p>继承语法的使用。代码如下</p>
+
+<pre><code class="{.scala}">class CheckingAccount(initialBalance:Double) extends BankAccount(initialBalance){
+  override def deposit(amount: Double): Double = super.deposit(amount - 1)
+
+  override def withdraw(amount: Double): Double = super.withdraw(amount + 1)
+}
+</code></pre>
+
+<h2>扩展前一个练习的BankAccount类，新类SavingsAccount每个月都有利息产生(earnMonthlyInterest方法被调用)，并且有每月三次免手续费的存款或取款。在earnMonthlyInterest方法中重置交易计数。</h2>
+
+<pre><code class="{.scala}">class SavingsAccount(initialBalance:Double) extends BankAccount(initialBalance){
+  private var num:Int = _
+
+  def earnMonthlyInterest()={
+    num = 3
+    super.deposit(1)
+  }
+
+  override def deposit(amount: Double): Double = {
+    num -= 1
+    if(num &lt; 0) super.deposit(amount - 1) else super.deposit(amount)
+  }
+
+  override def withdraw(amount: Double): Double = {
+    num -= 1
+    if (num &lt; 0) super.withdraw(amount + 1) else super.withdraw(amount)
+  }
+}
+</code></pre>
+
+
+
+
+    <a href="/2013/03/10/scala_exercises_08.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
 
 
@@ -624,85 +713,6 @@ x: Unit = ()
 </section>
 
 
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/03/scala_exercises_01.html">快学Scala习题解答—第一章 基础</a></h2>
-
-        <p class="post-meta">By 03月03日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>基础</h1>
-
-<h2>在Scala REPL中键入3,然后按Tab键。有哪些方法可以被应用?</h2>
-
-<p>这个。。。。直接操作一遍就有结果了.此题不知是翻译的问题，还是原题的问题，在Scala
-REPL中需要按3. 然后按Tab才会提示。 直接按3加Tab是没有提示的。下面是结果</p>
-
-<pre><code class="{.example}">!=             ##             %              &amp;              *              +
--              /              &lt;              &lt;&lt;             &lt;=             ==
-&gt;              &gt;=             &gt;&gt;             &gt;&gt;&gt;            ^              asInstanceOf
-equals         getClass       hashCode       isInstanceOf   toByte         toChar
-toDouble       toFloat        toInt          toLong         toShort        toString
-unary_+        unary_-        unary_~        |
-</code></pre>
-
-<p>列出的方法并不全，需要查询全部方法还是需要到Scaladoc中的Int,Double,RichInt,RichDouble等类中去查看。</p>
-
-<h2>在Scala REPL中，计算3的平方根,然后再对该值求平方。现在，这个结果与3相差多少？(提示:res变量是你的朋友)</h2>
-
-<p>依次进行计算即可</p>
-
-<pre><code class="{.example}">scala&gt; scala.math.sqrt(3)
-warning: there were 1 deprecation warnings; re-run with -deprecation for details
-res5: Double = 1.7320508075688772
-
-scala&gt; res5*res5
-res6: Double = 2.9999999999999996
-
-scala&gt; 3 - res6
-res7: Double = 4.440892098500626E-16
-</code></pre>
-
-
-
-
-    <a href="/2013/03/03/scala_exercises_01.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
 <div class="pure-g pagination">
     
     
@@ -712,7 +722,7 @@ res7: Double = 4.440892098500626E-16
 
 
     
-    <span class=" pure-u-1-2 pagination-item"><p>Older →</p></span>
+    <a class=" pure-u-1-2 pagination-item" href="/page/13"><p>Older →</p></a>
     
 </div>
 

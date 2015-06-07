@@ -6,8 +6,8 @@
         <meta name="description" content="">
         <meta name="keywords" content=""/>
         <meta name="author" content="ivanpig.github.io"> 
-        <link rel="canonical" href="http://ivanpig.github.io/page/5/index.html">
-        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link rel="canonical" href="http://www.ivaneye.com/page/5/index.html">
+        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
@@ -119,6 +119,107 @@
 
 
 
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/02/14/flyweight.html">语言与模式-12享元模式</a></h2>
+
+        <p class="post-meta">By 02月14日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>运用共享技术有效地支持大量细粒度的对象。</p>
+
+<p><img src="/assets/designpattern/flyweight.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>一个应用程序使用了大量的对象。</li>
+<li>完全由于使用大量的对象，造成很大的存储开销。</li>
+<li>对象的大多数状态都可变为外部状态。</li>
+<li>如果删除对象的外部状态，那么可以用相对较少的共享对象取代很多组对象。</li>
+<li>应用程序不依赖于对象标识。由于Flyweight对象可以被共享，对于概念上明显有别的对象，标识测试将返回真值。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<p>抽象享元角色类</p>
+
+<pre><code class="java">public interface Flyweight {
+    //一个示意性方法，参数state是外蕴状态
+    public void operation(String state);
+}
+</code></pre>
+
+<pre><code class="java">public class ConcreteFlyweight implements Flyweight {
+    private Character intrinsicState = null;
+    /**
+     * 构造函数，内蕴状态作为参数传入
+     * @param state
+     */
+    public ConcreteFlyweight(Character state){
+        this.intrinsicState = state;
+    }
+
+
+    /**
+     * 外蕴状态作为参数传入方法中，改变方法的行为，
+     * 但是并不改变对象的内蕴状态。
+     */
+    @Override
+    public void operation(String state) {
+        // TODO Auto-generated method stub
+        System.out.println("Intrinsic State = " + this.intrinsicState);
+        System.out.println("Extrinsic State = " + state);
+    }
+
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/14/flyweight.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
 
 
@@ -682,104 +783,6 @@ public class Main{
 
 
     <a href="/2015/02/08/facade.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/07/builder.html">语言与模式-05生成器模式</a></h2>
-
-        <p class="post-meta">By 02月07日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</p>
-
-<p><img src="/assets/designpattern/builder.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>当创建复杂对象的算法应该独立于该对象的组成部分以及它们的装配方式时。</li>
-<li>当构造过程必须允许被构造的对象有不同的表示时。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<pre><code>// 待构建产品
-class Starbucks {
-    private String size;
-    private String drink;
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public void setDrink(String drink) {
-        this.drink = drink;
-    }
-}
-</code></pre>
-
-<pre><code>//抽象builder
-abstract class StarbucksBuilder {
-    protected Starbucks starbucks;
-
-    public Starbucks getStarbucks() {
-        return starbucks;
-    }
-
-    public void createStarbucks() {
-        starbucks = new Starbucks();
-        System.out.println("a drink is created");
-    }
-
-    public abstract void buildSize();
-    public abstract void buildDrink();
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/07/builder.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

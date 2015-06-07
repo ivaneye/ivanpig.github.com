@@ -6,8 +6,8 @@
         <meta name="description" content="">
         <meta name="keywords" content=""/>
         <meta name="author" content="ivanpig.github.io"> 
-        <link rel="canonical" href="http://ivanpig.github.io/page/2/index.html">
-        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link rel="canonical" href="http://www.ivaneye.com/page/2/index.html">
+        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
@@ -119,6 +119,102 @@
 
 
 
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/04/08/junit3-design.html">读源码-JUnit3设计</a></h2>
+
+        <p class="post-meta">By 04月08日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#junit3"><i class="fa fa-folder-open">junit3 (3)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (6)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit3 (3)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p><em>Level :</em> &hearts;&hearts;&hearts;</p>
+
+<h1>内容回顾</h1>
+
+<ul>
+<li>主要梳理了JUnit3的源码</li>
+</ul>
+
+
+<p>本篇主要说明JUnit3的代码设计及为什么这样设计！</p>
+
+<h1>run方法</h1>
+
+<p>上篇提出了两个问题！第一个问题是:为什么Test中的run方法要传入一个TestResult，然后再将自身传递给TestResult去执行呢？</p>
+
+<p>首先从名字可以看出,TestResult类是用来保存测试结果的。实际上是对测试提供了一个统一的收集测试结果的对象。这实际上是个设计模式，叫Collecting Parameter模式。</p>
+
+<h2>Collecting Parameter模式定义</h2>
+
+<p>当你需要从几个方法中收集结果时，你应当给方法增加一个参数，并传递一个会替你收集参数的对象。</p>
+
+<p>TestResult就是这样一个对象，它收集的结果可以方便在各个终端显示。</p>
+
+<h1>runProtected方法</h1>
+
+<p>上篇第二个问题:</p>
+
+<p>为什么TestResult的run()方法中，要先实例化一个Protectable对象，而不直接调用test的runBare方法呢？</p>
+
+<p>实际上，这主要是为了规避代码重复!</p>
+
+<p>查看源码，我们可以看到TestSetup类中的run方法，也实例化一个Protectable对象，继而进行调用。</p>
+
+<pre><code class="java">public void run(final TestResult result) {
+  Protectable p= new Protectable() {
+    public void protect() throws Exception {
+      setUp();
+      basicRun(result);
+      tearDown();
+    }
+  };
+  result.runProtected(this, p);
+}
+</code></pre>
+
+<p>在这里，Protectable中封装了不同的执行逻辑，然后传递给runProtected方法来执行。</p>
+
+
+
+
+    <a href="/2015/04/08/junit3-design.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
 
 
@@ -525,91 +621,6 @@ public class Person {
 
 
     <a href="/2015/03/10/transactional.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/03/03/interface_field.html">刨根问底-02为什么Java接口中的成员变量被设计为必须是public static final的？</a></h2>
-
-        <p class="post-meta">By 03月03日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#why"><i class="fa fa-folder-open">why (2)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (2)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>概述</h1>
-
-<p>此为"刨根问底"系列文章的第二篇，接上篇，为什么Java接口中的成员变量被设计为必须是public static final的？</p>
-
-<h1>网络答案</h1>
-
-<p>在网络上搜索到了如下两篇还算靠谱的解答!</p>
-
-<p><a href="http://shaomeng95.iteye.com/blog/998820">网络解答1</a></p>
-
-<p><a href="http://www.xyzws.com/javafaq/why-do-we-have-only-public-static-final-variables-in-interfaces/129">网络解答2</a></p>
-
-<h1>解释</h1>
-
-<p>上篇我们用反证法来证明了接口方法设为public为最合适选择!</p>
-
-<p>这里我们依然可以使用反证法来解释!</p>
-
-<p>假设接口中的成员变量不是public static final的!</p>
-
-<p>先将属性设置为private的!</p>
-
-<pre><code class="java">public interface Person{
-  private int num;
-}
-</code></pre>
-
-<p>OK!private的属性，当然只能在接口内部使用了!但是在接口里面给谁使用呢？接口里的方法只有方法头可没方法体！所以设为private，那就永远都访问不到了！</p>
-
-<p>好，那我们改成protected!</p>
-
-<pre><code class="java">public interface Person{
-  protected int num;
-}
-</code></pre>
-
-<p>这样子类就能访问了！但是外部如何访问呢？方法是有的:</p>
-
-
-
-
-    <a href="/2015/03/03/interface_field.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

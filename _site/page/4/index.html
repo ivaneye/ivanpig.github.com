@@ -6,8 +6,8 @@
         <meta name="description" content="">
         <meta name="keywords" content=""/>
         <meta name="author" content="ivanpig.github.io"> 
-        <link rel="canonical" href="http://ivanpig.github.io/page/4/index.html">
-        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link rel="canonical" href="http://www.ivaneye.com/page/4/index.html">
+        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
@@ -119,6 +119,92 @@
 
 
 
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/02/21/strategy.html">语言与模式-19策略模式</a></h2>
+
+        <p class="post-meta">By 02月21日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。</p>
+
+<p><img src="/assets/designpattern/strategy.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>许多相关的类仅仅是行为有异。“策略”提供了一种用多个行为中的一个行为来配置一个类的方法。</li>
+<li>需要使用一个算法的不同变体。例如，你可能会定义一些反映不同的空间/时间权衡的算法。当这些变体实现为一个算法的类层次时，可以使用策略模式。</li>
+<li>算法使用客户不应该知道的数据。可使用策略模式以避免暴露复杂的、与算法相关的数据结构。</li>
+<li>一个类定义了多种行为, 并且这些行为在这个类的操作中以多个条件语句的形式出现。将相关的条件分支移入它们各自的Strategy类中以代替这些条件语句。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="java">public class Context {
+    //持有一个具体策略的对象
+    private Strategy strategy;
+    /**
+     * 构造函数，传入一个具体策略对象
+     * @param strategy    具体策略对象
+     */
+    public Context(Strategy strategy){
+        this.strategy = strategy;
+    }
+    /**
+     * 策略方法
+     */
+    public void contextInterface(){
+        strategy.strategyInterface();
+    }
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/21/strategy.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
 
 
@@ -657,107 +743,6 @@ public class Detail extends Layout{
 
 
     <a href="/2015/02/15/template.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/14/flyweight.html">语言与模式-12享元模式</a></h2>
-
-        <p class="post-meta">By 02月14日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>运用共享技术有效地支持大量细粒度的对象。</p>
-
-<p><img src="/assets/designpattern/flyweight.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>一个应用程序使用了大量的对象。</li>
-<li>完全由于使用大量的对象，造成很大的存储开销。</li>
-<li>对象的大多数状态都可变为外部状态。</li>
-<li>如果删除对象的外部状态，那么可以用相对较少的共享对象取代很多组对象。</li>
-<li>应用程序不依赖于对象标识。由于Flyweight对象可以被共享，对于概念上明显有别的对象，标识测试将返回真值。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<p>抽象享元角色类</p>
-
-<pre><code class="java">public interface Flyweight {
-    //一个示意性方法，参数state是外蕴状态
-    public void operation(String state);
-}
-</code></pre>
-
-<pre><code class="java">public class ConcreteFlyweight implements Flyweight {
-    private Character intrinsicState = null;
-    /**
-     * 构造函数，内蕴状态作为参数传入
-     * @param state
-     */
-    public ConcreteFlyweight(Character state){
-        this.intrinsicState = state;
-    }
-
-
-    /**
-     * 外蕴状态作为参数传入方法中，改变方法的行为，
-     * 但是并不改变对象的内蕴状态。
-     */
-    @Override
-    public void operation(String state) {
-        // TODO Auto-generated method stub
-        System.out.println("Intrinsic State = " + this.intrinsicState);
-        System.out.println("Extrinsic State = " + state);
-    }
-
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/14/flyweight.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

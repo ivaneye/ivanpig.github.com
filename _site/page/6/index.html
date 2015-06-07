@@ -6,8 +6,8 @@
         <meta name="description" content="">
         <meta name="keywords" content=""/>
         <meta name="author" content="ivanpig.github.io"> 
-        <link rel="canonical" href="http://ivanpig.github.io/page/6/index.html">
-        <link href="http://ivanpig.github.io/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
+        <link rel="canonical" href="http://www.ivaneye.com/page/6/index.html">
+        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>不懂管理的开发不是好架构</title>
         <link rel="stylesheet" href="/css/min/pure-min.css">
@@ -119,6 +119,104 @@
 
 
 
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2015/02/07/builder.html">语言与模式-05生成器模式</a></h2>
+
+        <p class="post-meta">By 02月07日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</p>
+
+<p><img src="/assets/designpattern/builder.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>当创建复杂对象的算法应该独立于该对象的组成部分以及它们的装配方式时。</li>
+<li>当构造过程必须允许被构造的对象有不同的表示时。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code>// 待构建产品
+class Starbucks {
+    private String size;
+    private String drink;
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setDrink(String drink) {
+        this.drink = drink;
+    }
+}
+</code></pre>
+
+<pre><code>//抽象builder
+abstract class StarbucksBuilder {
+    protected Starbucks starbucks;
+
+    public Starbucks getStarbucks() {
+        return starbucks;
+    }
+
+    public void createStarbucks() {
+        starbucks = new Starbucks();
+        System.out.println("a drink is created");
+    }
+
+    public abstract void buildSize();
+    public abstract void buildDrink();
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/07/builder.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
 
 
 
@@ -658,99 +756,6 @@ user=&gt;
 
 
     <a href="/2014/10/02/clojure_spels.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2014/10/01/dsl.html">Clojure进阶:使用Clojure构建DSL</a></h2>
-
-        <p class="post-meta">By 10月01日  2014
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p>翻译自<a href="http://clojure-doc.org/articles/tutorials/growing_a_dsl_with_clojure.html">Growing a DSL with Clojure</a>.主要讲解如何使用</p>
-
-<p>Clojure来创建一个简单的DSL.包括如下知识点:</p>
-
-<ul>
-<li>多重方法(Multimethods)</li>
-<li>继承(Hierarchies)</li>
-<li>元编程及"代码即数据"哲学(Metaprogramming and the "Code as data" philosophy)</li>
-</ul>
-
-
-<p>Lisp及其方言(比如Clojure)可以很方便的创建DSL并能和源语言无缝的集成.</p>
-
-<p>Lisp界鼓吹的优点中，提到最多的可能就是:数据即代码，代码即数据了。在此文中我们将依此特性来定义一个DSL。</p>
-
-<p>我们将渐进式的开发这个DSL，不断的加入Clojure的特性和抽象。</p>
-
-<h1>任务</h1>
-
-<p>我们的目标是定义一个可以生成各种脚本语言的DSL.而且DSL代码看起来和普通的Clojure代码没有区别。</p>
-
-<p>例如,我们使用Clojure形式(form)来生成Bash脚本或者Windows批处理脚本:</p>
-
-<p>输入(Clojure形式):</p>
-
-<pre><code class="{.clojure}">(if (= 1 2)
-  (println "a")
-  (println "b"))
-</code></pre>
-
-<p>输出(Bash脚本):</p>
-
-<pre><code class="{.bash}">if [ 1 -eq 2 ]; then
-  echo "a"
-else
-  echo "b"
-fi
-</code></pre>
-
-<p>输出(Windows批处理):</p>
-
-<pre><code class="{.bash}">IF 1==2 (
-  ECHO a
-) ELSE (
-  ECHO b
-)
-</code></pre>
-
-
-
-
-    <a href="/2014/10/01/dsl.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
