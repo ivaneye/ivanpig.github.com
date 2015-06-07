@@ -132,6 +132,91 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/09/19/staticresource.html">Luminus手册-静态资源</a></h2>
+
+        <p class="post-meta">By 09月19日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Static resources</h1>
+
+<p>在noir.io下有多个访问静态资源的帮助方法。
+你可以通过调用resource-path来获取public目录的路径。</p>
+
+<h1>Handling file uploads</h1>
+
+<p>上传文件通过noir.io空间下的upload-file方法来实现，upload-file接受一个路径和文件的map。
+例如我们有一个upload.html文件:</p>
+
+<pre><code class="{.html}">    &lt;h2&gt;Upload a file&lt;/h2&gt;
+    &lt;form action="/upload" enctype="multipart/form-data" method="POST"&gt;
+        &lt;input id="file" name="file" type="file" /&gt;
+        &lt;input type="submit" value="upload" /&gt;
+    &lt;/form&gt;
+</code></pre>
+
+<p>我们可以这样来处理文件上传。</p>
+
+<pre><code class="{.clojure}">(ns myapp.upload
+  ...
+  (:require [upload-test.views.layout :as layout]
+            [noir.response :as response]
+            [noir.io :as io]))
+
+(defn upload-page []
+  (layout/render "upload.html"))
+
+(defn handle-upload [file]
+  (io/upload-file "/" file)
+  (response/redirect
+    (str "/" (:filename file))))
+
+(defroutes upload-routes
+  (GET "/upload" [] (upload-page))
+  (POST "/upload" [file] (handle-upload file)))
+</code></pre>
+
+
+
+
+    <a href="/2013/09/19/staticresource.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/09/18/defining_routes.html">Luminus手册-路由定义</a></h2>
 
         <p class="post-meta">By 09月18日  2013
@@ -148,7 +233,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -232,7 +317,7 @@ guestbook应用的例子中，我们看到了如下的路由定义:</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -320,7 +405,7 @@ ClojureScript库和其他库一样都配置在project.clj文件中。</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -411,7 +496,7 @@ name的变量的值。
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -491,7 +576,7 @@ name的变量的值。
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -628,82 +713,6 @@ object Test extends App{
 
 
     <a href="/2013/03/17/scala_exercises_15.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/16/scala_exercises_14.html">快学Scala习题解答—第十四章 模式匹配和样例类</a></h2>
-
-        <p class="post-meta">By 03月16日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>模式匹配和样例类</h1>
-
-<h2>JDK发行包有一个src.zip文件包含了JDK的大多数源代码。解压并搜索样例标签(用正则表达式case [^:]+:)。然后查找以//开头并包含[Ff]alls?thr的注释，捕获类似// Falls through或// just fall thru这样的注释。假定JDK的程序员们遵守Java编码习惯，在该写注释的地方写下了这些注释，有多少百分比的样例是会掉入到下一个分支的？</h2>
-
-<p>没读懂题意。。。。</p>
-
-<h2>利用模式匹配，编写一个swap函数，接受一个整数的对偶，返回对偶的两个组成部件互换位置的新对偶</h2>
-
-<pre><code class="{.scala}">def swap[S,T](tup: (S,T)) = {
-    tup match {
-        case (a ,b) =&gt; (b,a)
-    }
-}
-
-println(swap[String,Int](("1",2)))
-</code></pre>
-
-<h2>利用模式匹配，编写一个swap函数，交换数组中的前两个元素的位置，前提条件是数组长度至少为2</h2>
-
-<pre><code class="{.scala}">def swap(arr: Array[String]) = {
-  arr match {
-    case Array(a,b, ar @ _*) =&gt; Array(b,a) ++ ar
-    case _ =&gt; arr
-  }
-}
-
-println(swap(Array("1","2","3","4")).mkString)
-</code></pre>
-
-
-
-
-    <a href="/2013/03/16/scala_exercises_14.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

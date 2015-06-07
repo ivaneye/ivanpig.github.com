@@ -132,6 +132,105 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2014/02/01/first_step.html">Clojure教程-环境搭建与Hello World</a></h2>
+
+        <p class="post-meta">By 02月01日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>环境搭建</h1>
+
+<p>Clojure是JVM上的一种语言，其语法是Lisp格式，所以称为是JVM上的Lisp方言。</p>
+
+<p>Clojure依赖于JDK。请确保你的机器上安装了JDK6+。Clojure的安装非常的简单。
+可以分为两种方式:</p>
+
+<ul>
+<li>通过Leiningen安装</li>
+<li>手动安装</li>
+</ul>
+
+
+<p>通过Leiningen是比较普遍也很方便的方式。我们先通过Leiningen来安装。</p>
+
+<h2>通过Leiningen安装</h2>
+
+<p>Leiningen和Maven比较类似，是Clojure语言的管理工具。其实它就是基于Maven
+构建的。我们先来安装Leiningen</p>
+
+<ul>
+<li>首先下载<a href="https://raw.github.com/technomancy/leiningen/stable/bin/lein">lein
+script</a></li>
+<li>将lein script放置到你的path下(linux下直接放到用户目录下即可)，保存文
+件名叫lein。</li>
+<li>将其权限设置为可执行(chmod a+x lein)</li>
+<li>打开shell，输入lein即可</li>
+</ul>
+
+
+<p>leiningen会自动下载需要的依赖。运行完成后,Clojure开发环境即安装完成。</p>
+
+<h2>手动安装</h2>
+
+<p>leiningen需要以项目为单位才能运行。比如你想运行一个hello.clj程序，如果
+你通过leiningen来运行，则hello.clj需要在lein项目内，且设置为core，才能
+运行,比较麻烦(这个问题在Maven中同样存在)。</p>
+
+<p>而通过手动安装可以解决这个问题。</p>
+
+<ul>
+<li>首先下载<a href="http://repo1.maven.org/maven2/org/clojure/clojure/1.5.1/clojure-1.5.1.zip">Clojure</a>,
+目前稳定版本是1.5.1</li>
+<li>解压到任意位置，其中最主要的文件就是clojure-1.5.1.jar</li>
+<li>在path下编写脚本clj,输入如下内容</li>
+</ul>
+
+
+<pre><code class="{.bash}">java -jar /home/ivan/soft/clojure-1.5.1/clojure-1.5.1.jar $1
+ #clojure.jar请输入你本机的路径
+</code></pre>
+
+<p>这样就可以执行单个的Clojure文件了</p>
+
+
+
+
+    <a href="/2014/02/01/first_step.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/10/02/upgrading.html">Luminus手册-升级</a></h2>
 
         <p class="post-meta">By 10月02日  2013
@@ -148,7 +247,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -200,7 +299,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -255,7 +354,7 @@ Tower提供国际化等等其他包。</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -342,7 +441,7 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -430,7 +529,7 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -511,7 +610,7 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
             
@@ -568,91 +667,6 @@ DROP TABLE users;
 
 
     <a href="/2013/09/27/database_migrations.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/26/database_access.html">Luminus手册-访问数据库</a></h2>
-
-        <p class="post-meta">By 09月26日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Configuring the Database</h1>
-
-<p>当你使用数据库参数来创建Luminus工程时，比如+postgress，那么Luminus会使用Korma来处理数据库操作.</p>
-
-<p>Korma是一个基于Clojure的数据库操作DSL。Korma提供了一套简单的接口，方便你来处理复杂的数据。</p>
-
-<p>给一个现有的项目添加数据库支持，非常的简单。首先，你需要在project.clj文件中添加Korma依赖。</p>
-
-<pre><code class="{.clojure}">[korma "0.4.0"]
-</code></pre>
-
-<p>另外还需要相应数据库的驱动，所以你还需要在project.clj中添加相关的数据库驱动。比如说，你要连接PostreSQL数据库，你需要添加如下的依赖.</p>
-
-<pre><code class="{.clojure}">[postgresql/postgresql "9.3-1102-jdbc41"]
-</code></pre>
-
-<p>添加完依赖后，你可以创建一个新的namespace来管理你的model,这个namespace建议叫db.core。你需要在里面引入korma.db。</p>
-
-<pre><code class="clojure">(ns myapp.db.core
-  (:use korma.core
-        [korma.db :only (defdb)]))
-</code></pre>
-
-<h2>Setting up the database connection</h2>
-
-<p>配置完依赖后，我们要做的事情就是定义数据库连接。我们只需要提供一个包含连接信息的map。</p>
-
-<pre><code class="{.clojure}">(def db-spec {:subprotocol "postgresql"
-         :subname "//localhost/my_website"
-         :user "admin"
-         :password "admin"})
-</code></pre>
-
-<p>或者也可以配置服务器提供的JNDI名称来创建连接。</p>
-
-<pre><code class="{.clojure}">(def db-spec {:name "jdbc/myDatasource"})
-</code></pre>
-
-
-
-
-    <a href="/2013/09/26/database_access.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

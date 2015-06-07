@@ -132,6 +132,90 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/03/02/interface_method.html">刨根问底-01为什么Java接口中的方法默认是public？</a></h2>
+
+        <p class="post-meta">By 03月02日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#why"><i class="fa fa-folder-open">why (2)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (2)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>概述</h1>
+
+<p>去年担任了公司Java培训班的培训讲师！由于时间关系，课堂上只是讲了How，而很少涉及到Why!</p>
+
+<p>故计划编写此"刨根问底"系列文章，主要解释Java中的Why!</p>
+
+<p>此为该系列文章的第一篇，为什么Java接口中的方法默认是public的？</p>
+
+<h1>解释</h1>
+
+<p>首先我们来看下接口的定义，在《Thinking in Java》中，对接口做了如下定义:</p>
+
+<pre><code class="example">An interface says, "All classes that implement this particular interface will look like this." Thus, any code that uses a particular interface knows what methods might be called for that interface, and that’s all. So the interface is used to establish a "protocol" between classes. (Some object-oriented programming languages have a keyword called protocol to do the
+same thing.)
+
+接口意味着："所有实现了这个特定接口的类都应该可以被当作这个接口来看待"。也就是说，所有使用此特定接口的代码都应该知道该接口有哪些方法可以被调用，而且仅此而已！所以接口被用来定义接口之间的协议！(有些语言使用protocol这个关键字来做Java中interface关键字所要做的事情，例如:Clojure)
+</code></pre>
+
+<p>简单说来，接口就是用来定义一个"协议"的！这么看来，protocol这个关键字应该比interface这个关键字更加的准确！</p>
+
+<pre><code class="java">//Java接口定义
+public interface Person{
+  void say();
+}
+
+//这样会不会更合理？
+public protocol Person{
+  void say();
+}
+
+//Clojure类似代码
+(defprotocol Person
+  (say [this]))
+</code></pre>
+
+<p>上面的接口就定义了一个"协议",这个协议就是:"所有遵循这个协议(实现此接口)的类，必然有一个叫做say()的方法"。</p>
+
+
+
+
+    <a href="/2015/03/02/interface_method.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/03/01/start.html">语言和并发-01启动线程</a></h2>
 
         <p class="post-meta">By 03月01日  2015
@@ -152,7 +236,7 @@
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -246,7 +330,7 @@ public class Start {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -345,7 +429,7 @@ public class Start {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -434,7 +518,7 @@ public class VisitorA implements Visitor {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -522,7 +606,7 @@ public class VisitorA implements Visitor {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -620,7 +704,7 @@ public abstract class Person {
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -671,97 +755,6 @@ public abstract class Person {
 
 
     <a href="/2015/02/21/strategy.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/20/state.html">语言与模式-18状态模式</a></h2>
-
-        <p class="post-meta">By 02月20日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。</p>
-
-<p><img src="/assets/designpattern/state.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。</li>
-<li>一个操作中含有庞大的多分支的条件语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常, 有多个操作包含这一相同的条件结构。State模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<pre><code class="java">public class Order{
-     private State unPayState;
-     private State payedState;
-     private State sendState;
-     private State doneState;    //四种状态，四种类,对应的get,set方法省略
-
-     private State state = unPayState;     //当前状态
-
-     public Order(){
-        unPayState = new UnPayState(this);
-        payedState = new PayedState(this);            //传入Order对象，为了修改Order的状态
-        ...
-     }
-
-     public void pay(){
-          state.pay();
-     }
-
-     public void send(){
-          state.send();
-     }
-
-     ....
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/20/state.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

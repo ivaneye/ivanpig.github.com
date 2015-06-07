@@ -132,6 +132,97 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2014/08/29/namespace.html">Clojure教程-命名空间</a></h2>
+
+        <p class="post-meta">By 08月29日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>版本</h1>
+
+<p>本文翻译自<a href="http://clojure-doc.org/articles/language/namespaces.html">Clojure Namespaces and Vars</a></p>
+
+<p>本文涵盖如下内容:</p>
+
+<ul>
+<li>Clojure命名空间和var概述</li>
+<li>如何定义命名空间</li>
+<li>如何使用其它命名空间里的函数</li>
+<li>require,refer和use</li>
+<li>常见错误和典型错误,以及导致这些错误的原因</li>
+<li>命名空间和代码管理</li>
+</ul>
+
+
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets). The source is available on Github.</p>
+
+<p>涵盖Clojure版本:Clojure 1.5</p>
+
+<h1>概述</h1>
+
+<p>Clojure的函数通过命名空间来组织.Clojure命名空间和Java的包或者Python的模块很类似.命名空间实际上就是个map,将名字映射到了var上.在大部分情况下,这些var持有这些函数.</p>
+
+<h1>定义一个命名空间</h1>
+
+<p>一般情况下使用clojure.core/ns宏来定义命名空间.最基本的形式下,它将名字作为符号.</p>
+
+<pre><code class="clojure">(ns superlib.core)
+</code></pre>
+
+<p>命名空间可以由点号切割的好多段组成</p>
+
+<pre><code class="clojure">(ns megacorp.service.core)
+</code></pre>
+
+<p>需要注意的是,请尽量避免使用单段的命名空间,以免与其它开发人员的命名空间相冲突.如果库或者应用属于某个组织,那么建议以如下形式作为命名空间.[组织名称].[包名|应用名].[函数组名]
+例如</p>
+
+<pre><code class="clojure">(ns clojurewerkz.welle.kv)
+
+(ns megacorp.search.indexer.core)
+</code></pre>
+
+
+
+
+    <a href="/2014/08/29/namespace.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2014/05/11/record_protocol.html">Clojure教程-Record和Protocol</a></h2>
 
         <p class="post-meta">By 05月11日  2014
@@ -148,7 +239,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -218,7 +309,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -332,7 +423,7 @@
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -434,7 +525,7 @@ Github.</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -518,7 +609,7 @@ Github.</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -610,7 +701,7 @@ Github.</p>
             
             
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
             
             
         
@@ -727,105 +818,6 @@ Github.</p>
 
 
     <a href="/2014/02/02/basic.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2014/02/01/first_step.html">Clojure教程-环境搭建与Hello World</a></h2>
-
-        <p class="post-meta">By 02月01日  2014
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (54)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>环境搭建</h1>
-
-<p>Clojure是JVM上的一种语言，其语法是Lisp格式，所以称为是JVM上的Lisp方言。</p>
-
-<p>Clojure依赖于JDK。请确保你的机器上安装了JDK6+。Clojure的安装非常的简单。
-可以分为两种方式:</p>
-
-<ul>
-<li>通过Leiningen安装</li>
-<li>手动安装</li>
-</ul>
-
-
-<p>通过Leiningen是比较普遍也很方便的方式。我们先通过Leiningen来安装。</p>
-
-<h2>通过Leiningen安装</h2>
-
-<p>Leiningen和Maven比较类似，是Clojure语言的管理工具。其实它就是基于Maven
-构建的。我们先来安装Leiningen</p>
-
-<ul>
-<li>首先下载<a href="https://raw.github.com/technomancy/leiningen/stable/bin/lein">lein
-script</a></li>
-<li>将lein script放置到你的path下(linux下直接放到用户目录下即可)，保存文
-件名叫lein。</li>
-<li>将其权限设置为可执行(chmod a+x lein)</li>
-<li>打开shell，输入lein即可</li>
-</ul>
-
-
-<p>leiningen会自动下载需要的依赖。运行完成后,Clojure开发环境即安装完成。</p>
-
-<h2>手动安装</h2>
-
-<p>leiningen需要以项目为单位才能运行。比如你想运行一个hello.clj程序，如果
-你通过leiningen来运行，则hello.clj需要在lein项目内，且设置为core，才能
-运行,比较麻烦(这个问题在Maven中同样存在)。</p>
-
-<p>而通过手动安装可以解决这个问题。</p>
-
-<ul>
-<li>首先下载<a href="http://repo1.maven.org/maven2/org/clojure/clojure/1.5.1/clojure-1.5.1.zip">Clojure</a>,
-目前稳定版本是1.5.1</li>
-<li>解压到任意位置，其中最主要的文件就是clojure-1.5.1.jar</li>
-<li>在path下编写脚本clj,输入如下内容</li>
-</ul>
-
-
-<pre><code class="{.bash}">java -jar /home/ivan/soft/clojure-1.5.1/clojure-1.5.1.jar $1
- #clojure.jar请输入你本机的路径
-</code></pre>
-
-<p>这样就可以执行单个的Clojure文件了</p>
-
-
-
-
-    <a href="/2014/02/01/first_step.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

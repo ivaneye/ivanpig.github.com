@@ -4,13 +4,334 @@
     <title>IvanPig's Blog</title>
     <link href="http://ivanpig.github.io/rss.xml" rel="self"/>
     <link href="http://ivanpig.github.io/"/>
-    <updated>2015-05-16T21:40:04+08:00</updated>
+    <updated>2015-06-07T17:08:04+08:00</updated>
     <id>http://ivanpig.github.io/</id>
     <author>
         <name>Ivan</name>
         <email>ivan.pig@foxmail.com</email>
     </author>
 
+    
+    <entry>
+        <title>Clojure绘制UML</title>
+        <link href="http://ivanpig.github.io/2015/06/07/cdraw.html"/>
+        <updated>2015-06-07T00:00:00+08:00</updated>
+        <id>http://ivanpig.github.io//2015/06/07/cdraw</id>
+        <content type="html">&lt;h1&gt;简介&lt;/h1&gt;
+
+&lt;p&gt;使用Clojure封装了Graphviz的使用，目前主要实现了UML的绘制&lt;/p&gt;
+
+&lt;h1&gt;使用&lt;/h1&gt;
+
+&lt;p&gt;以命令模式的UML为例，演示cdraw的使用&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/command.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;安装Graphviz&lt;/h2&gt;
+
+&lt;p&gt;cdraw是对Graphviz的简单封装，请先安装Graphviz&lt;/p&gt;
+
+&lt;h2&gt;添加依赖&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用leiningen新建一个Clojure项目uml&lt;/li&gt;
+&lt;li&gt;在project.clj中添加如下依赖&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;[com.ivaneye/cdraw &quot;0.2.0&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;定义类&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在uml.core中编写如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns uml.core
+  (:require [cdraw.uml :refer :all]))
+
+ (defclass Client)
+ (defclass Inboker)
+ (defclass Receiver {:m [&quot;Action()&quot;]})
+ (defclass Command {:m [&quot;Execute()&quot;]})
+ (defclass ConcreteCommand {:f  [&quot;state&quot;] :m [&quot;Execute()&quot;]})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;第一，二行，引入了cdraw&lt;/li&gt;
+&lt;li&gt;defclass定义了类，及其字段(:f)和方法(:m),效果图如下:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h2&gt;添加依赖&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;继续在uml.core中添加依赖代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defrelation Client :u Receiver) 
+(defrelation ConcreteCommand :u Receiver {:t &quot;reveiver&quot;})  
+(defrelation Client :d ConcreteCommand)
+(defrelation ConcreteCommand :e Command)
+(defrelation Invoker :p Command)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Client关联Receiver&lt;/li&gt;
+&lt;li&gt;ConcreteCommand关联Receiver&lt;/li&gt;
+&lt;li&gt;Client依赖ConcreteCommand&lt;/li&gt;
+&lt;li&gt;ConcreteCommand继承Command&lt;/li&gt;
+&lt;li&gt;Invoker聚合Command&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;关联  :u 
+依赖 :d
+聚合 :p
+组合 :c
+继承 :e
+实现 :i
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;添加label&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在uml.core中添加如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(label ConcreteCommand &quot;receive-\\&amp;gt;Action()&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;blockquote&gt;&lt;p&gt;需要转义&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;定义子包&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defsub &quot;Sub Command&quot; Command ConcreteCommand)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;第一个参数为子包名称&lt;/li&gt;
+&lt;li&gt;后续为需要包含到子包中的类&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;生成&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在uml.core中添加如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(watch (to-file &quot;/t.dot&quot;) &quot;/t.png&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;to-file生成符合Graphviz的dot文件&lt;/li&gt;
+&lt;li&gt;watch生成需要的最终文件，这里是生成了png图片&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;最终代码&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns uml.core
+  (:require [cdraw.uml :refer :all]))
+
+
+(defclass Client)
+(defclass Invoker)
+(defclass Receiver {:m [&quot;Action()&quot;]})
+(defclass Command {:m [&quot;Execute()&quot;]})
+(defclass ConcreteCommand {:f  [&quot;state&quot;] :m [&quot;Execute()&quot;]})
+
+(defrelation Client :u Receiver)
+(defrelation ConcreteCommand :u Receiver {:t &quot;reveiver&quot;})
+(defrelation Client :d ConcreteCommand)
+(defrelation ConcreteCommand :e Command)
+(defrelation Invoker :p Command)
+
+(label ConcreteCommand &quot;receive-\\&amp;gt;Action()&quot;)
+
+(defsub &quot;Sub Command&quot; Command ConcreteCommand)
+
+(watch (to-file &quot;/t.dot&quot;) &quot;/t.png&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <summary type="html">&lt;h1&gt;简介&lt;/h1&gt;
+
+&lt;p&gt;使用Clojure封装了Graphviz的使用，目前主要实现了UML的绘制&lt;/p&gt;
+
+&lt;h1&gt;使用&lt;/h1&gt;
+
+&lt;p&gt;以命令模式的UML为例，演示cdraw的使用&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/designpattern/command.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;安装Graphviz&lt;/h2&gt;
+
+&lt;p&gt;cdraw是对Graphviz的简单封装，请先安装Graphviz&lt;/p&gt;
+
+&lt;h2&gt;添加依赖&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用leiningen新建一个Clojure项目uml&lt;/li&gt;
+&lt;li&gt;在project.clj中添加如下依赖&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;[com.ivaneye/cdraw &quot;0.2.0&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;定义类&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在uml.core中编写如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns uml.core
+  (:require [cdraw.uml :refer :all]))
+
+ (defclass Client)
+ (defclass Inboker)
+ (defclass Receiver {:m [&quot;Action()&quot;]})
+ (defclass Command {:m [&quot;Execute()&quot;]})
+ (defclass ConcreteCommand {:f  [&quot;state&quot;] :m [&quot;Execute()&quot;]})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;第一，二行，引入了cdraw&lt;/li&gt;
+&lt;li&gt;defclass定义了类，及其字段(:f)和方法(:m),效果图如下:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+
+&lt;h2&gt;添加依赖&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;继续在uml.core中添加依赖代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defrelation Client :u Receiver) 
+(defrelation ConcreteCommand :u Receiver {:t &quot;reveiver&quot;})  
+(defrelation Client :d ConcreteCommand)
+(defrelation ConcreteCommand :e Command)
+(defrelation Invoker :p Command)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Client关联Receiver&lt;/li&gt;
+&lt;li&gt;ConcreteCommand关联Receiver&lt;/li&gt;
+&lt;li&gt;Client依赖ConcreteCommand&lt;/li&gt;
+&lt;li&gt;ConcreteCommand继承Command&lt;/li&gt;
+&lt;li&gt;Invoker聚合Command&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code&gt;关联  :u 
+依赖 :d
+聚合 :p
+组合 :c
+继承 :e
+实现 :i
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;添加label&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在uml.core中添加如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(label ConcreteCommand &quot;receive-\\&amp;gt;Action()&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;blockquote&gt;&lt;p&gt;需要转义&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;定义子包&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defsub &quot;Sub Command&quot; Command ConcreteCommand)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;第一个参数为子包名称&lt;/li&gt;
+&lt;li&gt;后续为需要包含到子包中的类&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;生成&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在uml.core中添加如下代码&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(watch (to-file &quot;/t.dot&quot;) &quot;/t.png&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;to-file生成符合Graphviz的dot文件&lt;/li&gt;
+&lt;li&gt;watch生成需要的最终文件，这里是生成了png图片&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;最终代码&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns uml.core
+  (:require [cdraw.uml :refer :all]))
+
+
+(defclass Client)
+(defclass Invoker)
+(defclass Receiver {:m [&quot;Action()&quot;]})
+(defclass Command {:m [&quot;Execute()&quot;]})
+(defclass ConcreteCommand {:f  [&quot;state&quot;] :m [&quot;Execute()&quot;]})
+
+(defrelation Client :u Receiver)
+(defrelation ConcreteCommand :u Receiver {:t &quot;reveiver&quot;})
+(defrelation Client :d ConcreteCommand)
+(defrelation ConcreteCommand :e Command)
+(defrelation Invoker :p Command)
+
+(label ConcreteCommand &quot;receive-\\&amp;gt;Action()&quot;)
+
+(defsub &quot;Sub Command&quot; Command ConcreteCommand)
+
+(watch (to-file &quot;/t.dot&quot;) &quot;/t.png&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+    </entry>
     
     <entry>
         <title>读源码-String</title>

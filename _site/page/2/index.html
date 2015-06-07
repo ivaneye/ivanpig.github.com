@@ -132,6 +132,99 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/04/07/junit3-implements.html">读源码-JUnit3实现</a></h2>
+
+        <p class="post-meta">By 04月07日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#junit3"><i class="fa fa-folder-open">junit3 (3)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (6)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit3 (3)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p><em>Level :</em> &hearts;&hearts;</p>
+
+<h1>内容回顾</h1>
+
+<ul>
+<li>上篇内容主要介绍了JUnit3的使用</li>
+<li>如何编写测试类</li>
+<li>如何运行单个测试类</li>
+<li>如何运行多个测试类</li>
+<li>如何设置Class级别的setUp()和tearDown()方法</li>
+<li>如何多次运行测试</li>
+</ul>
+
+
+<p>本篇文章将梳理JUnit3源码</p>
+
+<h1>代码结构</h1>
+
+<p>上篇最后给出了测试UML图</p>
+
+<p><img src="/assets/opensource/junit3/diagram2.png" alt="" /></p>
+
+<p>我们可以看出</p>
+
+<ul>
+<li>所有的测试类都继承了TestCase这个类</li>
+<li>TestCase这个类继承了Assert类，实现了Test接口</li>
+</ul>
+
+
+<h1>Assert类</h1>
+
+<p>我们先看Assert这个类，你会发现这个类很简单，提供了各种静态的assert*()方法来进行比较。</p>
+
+<h1>Test接口</h1>
+
+<pre><code class="java">package junit.framework;
+
+public interface Test {
+    public abstract int countTestCases();
+    public abstract void run(TestResult result);
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/04/07/junit3-implements.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/04/06/use-junit3.html">读源码-JUnit3使用</a></h2>
 
         <p class="post-meta">By 04月06日  2015
@@ -235,7 +328,7 @@ public class Person {
             
             
             
-            <a class="post-categorybut " href="/type/#mycode"><i class="fa fa-folder-open">mycode (1)</i></a>
+            <a class="post-categorybut " href="/type/#mycode"><i class="fa fa-folder-open">mycode (2)</i></a>
             
             
             
@@ -517,90 +610,6 @@ public class Person {
 
 
     <a href="/2015/03/03/interface_field.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/03/02/interface_method.html">刨根问底-01为什么Java接口中的方法默认是public？</a></h2>
-
-        <p class="post-meta">By 03月02日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#why"><i class="fa fa-folder-open">why (2)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">why (2)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>概述</h1>
-
-<p>去年担任了公司Java培训班的培训讲师！由于时间关系，课堂上只是讲了How，而很少涉及到Why!</p>
-
-<p>故计划编写此"刨根问底"系列文章，主要解释Java中的Why!</p>
-
-<p>此为该系列文章的第一篇，为什么Java接口中的方法默认是public的？</p>
-
-<h1>解释</h1>
-
-<p>首先我们来看下接口的定义，在《Thinking in Java》中，对接口做了如下定义:</p>
-
-<pre><code class="example">An interface says, "All classes that implement this particular interface will look like this." Thus, any code that uses a particular interface knows what methods might be called for that interface, and that’s all. So the interface is used to establish a "protocol" between classes. (Some object-oriented programming languages have a keyword called protocol to do the
-same thing.)
-
-接口意味着："所有实现了这个特定接口的类都应该可以被当作这个接口来看待"。也就是说，所有使用此特定接口的代码都应该知道该接口有哪些方法可以被调用，而且仅此而已！所以接口被用来定义接口之间的协议！(有些语言使用protocol这个关键字来做Java中interface关键字所要做的事情，例如:Clojure)
-</code></pre>
-
-<p>简单说来，接口就是用来定义一个"协议"的！这么看来，protocol这个关键字应该比interface这个关键字更加的准确！</p>
-
-<pre><code class="java">//Java接口定义
-public interface Person{
-  void say();
-}
-
-//这样会不会更合理？
-public protocol Person{
-  void say();
-}
-
-//Clojure类似代码
-(defprotocol Person
-  (say [this]))
-</code></pre>
-
-<p>上面的接口就定义了一个"协议",这个协议就是:"所有遵循这个协议(实现此接口)的类，必然有一个叫做say()的方法"。</p>
-
-
-
-
-    <a href="/2015/03/02/interface_method.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

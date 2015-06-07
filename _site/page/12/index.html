@@ -122,6 +122,92 @@
 
 
 
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
+        <h2 class="post-title"><a href="/2013/03/09/scala_exercises_07.html">快学Scala习题解答—第七章 包和引入</a></h2>
+
+        <p class="post-meta">By 03月09日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>包和引入</h1>
+
+<h2>编写示例程序，展示为什么</h2>
+
+<pre><code class="{.scala}">package com.horstmann.impatient
+</code></pre>
+
+<p>不同于</p>
+
+<pre><code class="{.scala}">package com
+package horstmann
+package impatient
+</code></pre>
+
+<p>分别使用package的效果如下</p>
+
+<pre><code class="{.scala}">package com {
+  class T1() {}
+
+  package horstmann {
+    class T2(t: T1) {}
+
+    package impatient {
+      class T3(t1: T1, t2: T2) {}
+    }
+  }
+}
+</code></pre>
+
+<p>子包里的类可以使用父包里的类。但是第一种方式不可以</p>
+
+<pre><code class="{.scala}">package com.horstmann.impatient{
+  class T4(t1:T1,t3:T3)      //无法找到T1
+}
+</code></pre>
+
+
+
+
+    <a href="/2013/03/09/scala_exercises_07.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
 <section class="post">
     <header class="post-header">
         

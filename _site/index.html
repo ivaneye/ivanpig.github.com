@@ -132,6 +132,105 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/06/07/cdraw.html">Clojure绘制UML</a></h2>
+
+        <p class="post-meta">By 06月07日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#mycode"><i class="fa fa-folder-open">mycode (2)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">graphviz (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">cdraw (1)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>简介</h1>
+
+<p>使用Clojure封装了Graphviz的使用，目前主要实现了UML的绘制</p>
+
+<h1>使用</h1>
+
+<p>以命令模式的UML为例，演示cdraw的使用</p>
+
+<p><img src="/assets/designpattern/command.jpg" alt="" /></p>
+
+<h2>安装Graphviz</h2>
+
+<p>cdraw是对Graphviz的简单封装，请先安装Graphviz</p>
+
+<h2>添加依赖</h2>
+
+<ul>
+<li>使用leiningen新建一个Clojure项目uml</li>
+<li>在project.clj中添加如下依赖</li>
+</ul>
+
+
+<pre><code class="clojure">[com.ivaneye/cdraw "0.2.0"]
+</code></pre>
+
+<h2>定义类</h2>
+
+<ul>
+<li>在uml.core中编写如下代码</li>
+</ul>
+
+
+<pre><code class="clojure">(ns uml.core
+  (:require [cdraw.uml :refer :all]))
+
+ (defclass Client)
+ (defclass Inboker)
+ (defclass Receiver {:m ["Action()"]})
+ (defclass Command {:m ["Execute()"]})
+ (defclass ConcreteCommand {:f  ["state"] :m ["Execute()"]})
+</code></pre>
+
+<ul>
+<li>第一，二行，引入了cdraw</li>
+<li>defclass定义了类，及其字段(:f)和方法(:m),效果图如下:</li>
+</ul>
+
+
+<p><img src="/assets/mycode/cdraw/c1.png" alt="" /></p>
+
+
+
+
+    <a href="/2015/06/07/cdraw.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/05/04/string.html">读源码-String</a></h2>
 
         <p class="post-meta">By 05月04日  2015
@@ -1107,99 +1206,6 @@ public void testTempFolderRule() throws IOException {
 
 
     <a href="/2015/04/08/junit3-design.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/04/07/junit3-implements.html">读源码-JUnit3实现</a></h2>
-
-        <p class="post-meta">By 04月07日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#junit3"><i class="fa fa-folder-open">junit3 (3)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (6)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit3 (3)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p><em>Level :</em> &hearts;&hearts;</p>
-
-<h1>内容回顾</h1>
-
-<ul>
-<li>上篇内容主要介绍了JUnit3的使用</li>
-<li>如何编写测试类</li>
-<li>如何运行单个测试类</li>
-<li>如何运行多个测试类</li>
-<li>如何设置Class级别的setUp()和tearDown()方法</li>
-<li>如何多次运行测试</li>
-</ul>
-
-
-<p>本篇文章将梳理JUnit3源码</p>
-
-<h1>代码结构</h1>
-
-<p>上篇最后给出了测试UML图</p>
-
-<p><img src="/assets/opensource/junit3/diagram2.png" alt="" /></p>
-
-<p>我们可以看出</p>
-
-<ul>
-<li>所有的测试类都继承了TestCase这个类</li>
-<li>TestCase这个类继承了Assert类，实现了Test接口</li>
-</ul>
-
-
-<h1>Assert类</h1>
-
-<p>我们先看Assert这个类，你会发现这个类很简单，提供了各种静态的assert*()方法来进行比较。</p>
-
-<h1>Test接口</h1>
-
-<pre><code class="java">package junit.framework;
-
-public interface Test {
-    public abstract int countTestCases();
-    public abstract void run(TestResult result);
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/04/07/junit3-implements.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
