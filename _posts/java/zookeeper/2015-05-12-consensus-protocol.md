@@ -187,30 +187,30 @@ Paxos算法中主要有三个角色，Proposer,Acceptor和Learner。而其中最
     - 3-1. 假设a1,a2,a3先收到了p1的提议，则直接同意，并记录信息。(参考Paxos算法P1)形如[编号，提议，最大编号]，这里就是[1,p1的提议,1]
     - 3-2. 然后a1,a2,a3接收到了p2的提议。因为之前同意了p1的提议，但是p2的编号大于p1的编号，则也同意，但是反馈，已同意了p1的提议。修改最大编号[1,p1的提议,2](参考Paxos算法P2a，P2b)
 4. 步骤4
-        - 4-1. p1接收到了三个同意，则准备正式提交提议
-        - 4-2. p2接收到三个同意，但是反馈说已经同意了p1的提议了，于是p2修改提议为[2,p1的提议]进行提交(参考Paxos算法P2，P2b)
+    - 4-1. p1接收到了三个同意，则准备正式提交提议
+    - 4-2. p2接收到三个同意，但是反馈说已经同意了p1的提议了，于是p2修改提议为[2,p1的提议]进行提交(参考Paxos算法P2，P2b)
 5. 步骤5
-        - 5-1. a1,a2,a3接收到p1的正式提议，目前a1,a2,a3的信息为[1,p1的提议,2]，p1的编号小于2，直接拒绝。
-        - 5-2. a1,a2,a3接收到p2的提议，目前a1,a2,a3信息为[1,p1的提议,2]，p2的编号为2,同意。
+    - 5-1. a1,a2,a3接收到p1的正式提议，目前a1,a2,a3的信息为[1,p1的提议,2]，p1的编号小于2，直接拒绝。
+    - 5-2. a1,a2,a3接收到p2的提议，目前a1,a2,a3信息为[1,p1的提议,2]，p2的编号为2,同意。
 6. 最终结果为[1,p1的提议,2]
 
 ## Paxos算法条件
 
 - P1：An acceptor must accept the first proposal that it receives.
-        即一个Acceptor必须要同意其收到的第一个提议
+    即一个Acceptor必须要同意其收到的第一个提议
 - P2：If a proposal with value v is chosen, then every higher-numbered proposal that is chosen has value v.
-        如果一个包含了v的提议被选中，则后面序号高于此提议序号的被选中的提议需要包含v
+    如果一个包含了v的提议被选中，则后面序号高于此提议序号的被选中的提议需要包含v
 - P2a：If a proposal with value v is chosen, then every higher-numbered proposal accepted by any acceptor has value v.
-        如果一个包含了v的提议被选中，则后面序号高于此提议序号的被接受的提议需要包含v
+    如果一个包含了v的提议被选中，则后面序号高于此提议序号的被接受的提议需要包含v
 - P2b：If a proposal with value v is chosen, then every higher-numbered proposal issued by any proposer has value v.
-        如果一个包含了v的提议被选中，则后面序号高于此提议序号的被提出的提议需要包含v
+    如果一个包含了v的提议被选中，则后面序号高于此提议序号的被提出的提议需要包含v
 - P2c：For any v and n, if a proposal with value v and number n is issued, then there is a set S consisting of a majority of acceptors such that either
-        - (a) no acceptor in S has accepted any proposal numbered less than n, or
-        - (b) v is the value of the highest-numbered proposal among all proposals numbered less than n accepted by the acceptors in S.
+    - (a) no acceptor in S has accepted any proposal numbered less than n, or
+    - (b) v is the value of the highest-numbered proposal among all proposals numbered less than n accepted by the acceptors in S.
         
-        对于任意的v和n,如果[n,v]被提出，则有一个S集合，这个S集合由半数以上Acceptor组成，且这些Acceptor满足如下条件之一:
-        - (a) 没有同意任何小于n的提议
-        - (b) 有同意了小于n的提议，但是所同意的提议中，编号最大的那个提议值为v
+    对于任意的v和n,如果[n,v]被提出，则有一个S集合，这个S集合由半数以上Acceptor组成，且这些Acceptor满足如下条件之一:
+    - (a) 没有同意任何小于n的提议
+    - (b) 有同意了小于n的提议，但是所同意的提议中，编号最大的那个提议值为v
 
 ## 示例二
 
@@ -221,20 +221,20 @@ Paxos算法中主要有三个角色，Proposer,Acceptor和Learner。而其中最
 1. Proposer分别从全局计数器中获得唯一的编号,这里假设p1,p2,p3编号分别为1，2，3
 2. Proposer将编号及其提议一起提交给Acceptor的大多数(这里p1提交给a1,a2,a3。p2提交给a2,a3,a4。p3提交给a3,a4,a5)
 3. 步骤3
-        - 3-1. 假设a1,a2,a3先收到了p1的提议，则直接同意，并记录信息。(参考Paxos算法P1)形如[编号，提议，最大编号]，这里就是[1,p1的提议,1]
-        - 3-2. 然后a2,a3,a4接收到了p2的提议。对于a4，直接同意。对于a2,a3,因为之前同意了p1的提议，但是p2的编号大于p1的编号，则也同意，但是反馈，已同意了p1的提议。修改最大编号[1,p1的提议,2](参考Paxos算法P2a，P2b)
+    - 3-1. 假设a1,a2,a3先收到了p1的提议，则直接同意，并记录信息。(参考Paxos算法P1)形如[编号，提议，最大编号]，这里就是[1,p1的提议,1]
+    - 3-2. 然后a2,a3,a4接收到了p2的提议。对于a4，直接同意。对于a2,a3,因为之前同意了p1的提议，但是p2的编号大于p1的编号，则也同意，但是反馈，已同意了p1的提议。修改最大编号[1,p1的提议,2](参考Paxos算法P2a，P2b)
 - 3-3. 接着a3,a4,a5接收到了p3的提议，对于a5直接同意。而对于a3已经同意了p1,p3的编号大于p1，则同意，并反馈已同意了p1的提议,修改最大编号[1,p1的提议,3]。对于a4,已经同意了p2，做类似反馈，修改最大编号[2,p2的提议,3]
 4. 步骤4
-        - 4-1. p1接收到了三个同意，则准备正式提交提议[1,p1的提议]
-        - 4-2. p2接收到三个同意，但是反馈说已经同意了p1的提议了，于是p2修改提议为[2,p1的提议]进行提交(参考Paxos算法P2，P2b)
-        - 4-3. p3接收到了三个同意，但是反馈说已经同意了p1,p2的提议，于是p3修改提议为[3,p2的提议]，取同意的提议中编号大的提议
+    - 4-1. p1接收到了三个同意，则准备正式提交提议[1,p1的提议]
+    - 4-2. p2接收到三个同意，但是反馈说已经同意了p1的提议了，于是p2修改提议为[2,p1的提议]进行提交(参考Paxos算法P2，P2b)
+    - 4-3. p3接收到了三个同意，但是反馈说已经同意了p1,p2的提议，于是p3修改提议为[3,p2的提议]，取同意的提议中编号大的提议
 5. 步骤5
-        - 5-1. a1,a2,a3接收到p1的正式提议[1,p1的提议],a1[1,p1的提议,1]直接同意。a2[1,p1的提议,2]，p1编号小于2,拒绝。a3[1,p1的提议,3],p1小于3，拒绝.
-        - 5-2. a2,a3,a4接收到p2的正式提议[2,p1的提议],a2[1,p1的提议,2]，同意。a3[1,p1的提议,3],p2小于3，拒绝.a4[2,p2的提议,3],p2小于3，拒绝
-        - 5-3. a3,a4,a5接收到p3的正式提议[3,p2的提议],a3[1,p1的提议,3],同意，修改记录[2,p2的提议,3].a4[2,p2的提议,3],同意，修改记录[3,p2的提议,3].a5[3,p3的提议,3]，同意，修改记录[3,p2的提议,3]
+    - 5-1. a1,a2,a3接收到p1的正式提议[1,p1的提议],a1[1,p1的提议,1]直接同意。a2[1,p1的提议,2]，p1编号小于2,拒绝。a3[1,p1的提议,3],p1小于3，拒绝.
+    - 5-2. a2,a3,a4接收到p2的正式提议[2,p1的提议],a2[1,p1的提议,2]，同意。a3[1,p1的提议,3],p2小于3，拒绝.a4[2,p2的提议,3],p2小于3，拒绝
+    - 5-3. a3,a4,a5接收到p3的正式提议[3,p2的提议],a3[1,p1的提议,3],同意，修改记录[2,p2的提议,3].a4[2,p2的提议,3],同意，修改记录[3,p2的提议,3].a5[3,p3的提议,3]，同意，修改记录[3,p2的提议,3]
 6. 步骤6
-        - 6-1. p1接收到a2,a3的拒绝，提议废除
-        - 6-2. p2接收到a3,a4的拒绝，提议废除
-        - 6-3. p3接收到同意，提议成功。
+    - 6-1. p1接收到a2,a3的拒绝，提议废除
+    - 6-2. p2接收到a3,a4的拒绝，提议废除
+    - 6-3. p3接收到同意，提议成功。
 7. 最终结果为[3,p2的提议,3]
 
