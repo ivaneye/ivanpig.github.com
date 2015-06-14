@@ -132,6 +132,101 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/02/15/template.html">语言与模式-13模板模式</a></h2>
+
+        <p class="post-meta">By 02月15日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。Template Method使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。</p>
+
+<p><img src="/assets/designpattern/template.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>一次性实现一个算法的不变的部分，并将可变的行为留给子类来实现。</li>
+<li>各子类中公共的行为应被提取出来并集中到一个公共父类中以避免代码重复。这是Opdyke和Johnson所描述过的“重分解以一般化”的一个很好的例子。首先识别现有代码中的不同之处，并且将不同之处分离为新的操作。最后，用一个调用这些新的操作的模板方法来替换这些不同的代码。</li>
+<li>控制子类扩展。模板方法只在特定点调用“hook”操作，这样就只允许在这些点进行扩展。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<p>web开发中使用的布局就是模板模式的典型应用！</p>
+
+<pre><code class="{.java}">public abstract class Layout{
+
+     public void show(){
+          System.out.println("Header");
+          body();
+          System.out.println("Footer");
+     }
+
+     public abstract void body();
+}
+</code></pre>
+
+<pre><code class="{.java}">public class Index extends Layout{
+
+     public void body(){
+       System.out.println("Index");
+     }
+}
+
+public class Detail extends Layout{
+
+     public void body(){
+       System.out.println("Detail");
+     }
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/15/template.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/02/14/flyweight.html">语言与模式-12享元模式</a></h2>
 
         <p class="post-meta">By 02月14日  2015
@@ -695,94 +790,6 @@ public class Main{
 
 
     <a href="/2015/02/09/proxy.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/08/facade.html">语言与模式-06门面模式</a></h2>
-
-        <p class="post-meta">By 02月08日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
-
-<p><img src="/assets/designpattern/facade.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>当你要为一个复杂子系统提供一个简单接口时。子系统往往因为不断演化而变得越来越复杂。大多数模式使用时都会产生更多更小的类。这使得子系统更具可重用性，也更容易对子系统进行定制，但这也给那些不需要定制子系统的用户带来一些使用上的困难。Facade可以提供一个简单的缺省视图，这一视图对大多数用户来说已经足够，而那些需要更多的可定制性的用户可以越过Facade层。</li>
-<li>客户程序与抽象类的实现部分之间存在着很大的依赖性。引入Facade将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性和可移植性。</li>
-<li>当你需要构建一个层次结构的子系统时，使用门面模式定义子系统中每层的入口点。如果子系统之间是相互依赖的，你可以让它们仅通过Facade进行通讯，从而简化了它们之间的依赖关系。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<pre><code>public class Camara {
-    public void turnOn(){
-        System.out.println("开启摄像头！");
-    }
-
-    public void turnOff(){
-        System.out.println("关闭摄像头！");
-    }
-}
-</code></pre>
-
-<pre><code>public class Light {
-    public void turnOn(){
-        System.out.println("开灯！");
-    }
-
-    public void turnOff(){
-        System.out.println("关灯！");
-    }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/08/facade.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

@@ -132,6 +132,105 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/04/16/use-junit4.html">读源码-JUnit4使用</a></h2>
+
+        <p class="post-meta">By 04月16日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#junit4"><i class="fa fa-folder-open">junit4 (2)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (6)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit4 (2)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p><em>Level :</em> &hearts;</p>
+
+<h1>JUnit4简介</h1>
+
+<p>之前梳理了JUnit3，此篇将梳理JUnit4。</p>
+
+<p>JUnit4主要引入了注解。我们依然使用之前的例子来进行测试</p>
+
+<h1>场景</h1>
+
+<p>假设，我们有一个Person类</p>
+
+<ul>
+<li>包含两个方法say和sayHi</li>
+<li>两个方法都接收一个String类型的参数</li>
+<li>say返回"Hello,"+arg</li>
+<li>sayHi返回"Hi,"+arg</li>
+</ul>
+
+
+<p>代码如下:</p>
+
+<pre><code class="java">package org.ivan;
+
+public class Person {
+
+    public String say(String name) {
+        return "Hello," + name;
+    }
+
+    public String sayHi(String name) {
+        return "Hi," + name;
+    }
+}
+</code></pre>
+
+<p>在JUnit4中如何进行测试呢?</p>
+
+<h1>引入JUnit</h1>
+
+<p>首先还是引入JUnit4</p>
+
+<pre><code class="xml">&lt;dependency&gt;
+  &lt;groupId&gt;junit&lt;/groupId&gt;
+  &lt;artifactId&gt;junit&lt;/artifactId&gt;
+  &lt;version&gt;4.12&lt;/version&gt;
+  &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+
+
+
+    <a href="/2015/04/16/use-junit4.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/04/08/junit3-design.html">读源码-JUnit3设计</a></h2>
 
         <p class="post-meta">By 04月08日  2015
@@ -572,55 +671,6 @@ public class Person {
 
 
     <a href="/2015/03/16/jvm.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/03/10/transactional.html">一图胜千言:事务管理</a></h2>
-
-        <p class="post-meta">By 03月10日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#xmind"><i class="fa fa-folder-open">xmind (2)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">xmind (2)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">transactional (1)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p><a href="/mind/transaction.xmind">xmind文件下载</a></p>
-
-
-
-
-    <a href="/2015/03/10/transactional.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

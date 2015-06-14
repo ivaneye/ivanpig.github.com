@@ -132,6 +132,85 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2013/09/14/your_first_application.html">Luminus手册-第一个应用</a></h2>
+
+        <p class="post-meta">By 09月14日  2013
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>Guestbook应用</h1>
+
+<p>此文使用Luminus构建一个简单的guestbook应用。guestbook可以保存信息，展示信息。此应用将涉及到简单的HTML模板，数据库访问和项目结构.</p>
+
+<h1>安装Leiningen</h1>
+
+<p>首先你需要安装Leiningen才能使用Luminus。安装Leiningen非常的简单:</p>
+
+<ul>
+<li>下载脚本</li>
+<li>将其设置为可执行权限(chmod +x lein)</li>
+<li>将脚本放到你的PATH下面</li>
+<li>运行lein self-install ，然后等待安装结束</li>
+</ul>
+
+
+<pre><code class="sh">wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
+chmod +x lein
+mv lein ~/bin
+lein self-install
+</code></pre>
+
+<h1>创建一个新应用</h1>
+
+<p>安装完Leiningen后，你就可以在命令行中输入如下的命令</p>
+
+<pre><code class="sh">lein new luminus guestbook +h2
+cd guestbook
+</code></pre>
+
+<p>上面的命令将会创建一个使用了H2嵌入式数据库的模板项目。</p>
+
+
+
+
+    <a href="/2013/09/14/your_first_application.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2013/03/17/scala_exercises_15.html">快学Scala习题解答—第十五章 注解</a></h2>
 
         <p class="post-meta">By 03月17日  2013
@@ -614,91 +693,6 @@ object Test extends App{
 
 
     <a href="/2013/03/12/scala_exercises_10.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/03/11/scala_exercises_09.html">快学Scala习题解答—第九章 文件和正则表达式</a></h2>
-
-        <p class="post-meta">By 03月11日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#scala"><i class="fa fa-folder-open">scala (15)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">scala (15)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>文件和正则表达式</h1>
-
-<h2>编写一小段Scala代码，将某个文件中的行倒转顺序(将最后一行作为第一行,依此类推)</h2>
-
-<pre><code class="{.scala}">import io.Source
-import java.io.PrintWriter
-
-val path = "test.txt"
-
-val reader = Source.fromFile(path).getLines()
-
-val result = reader.toArray.reverse
-
-val pw = new PrintWriter(path)
-
-result.foreach(line =&gt; pw.write(line + "\n"))
-
-pw.close()
-</code></pre>
-
-<h2>编写Scala程序,从一个带有制表符的文件读取内容,将每个制表符替换成一组空格,使得制表符隔开的n列仍然保持纵向对齐,并将结果写入同一个文件</h2>
-
-<pre><code class="{.scala}">import io.Source
-import java.io.PrintWriter
-
-val path = "test.txt"
-
-val reader = Source.fromFile(path).getLines()
-
-val result = for ( t &lt;- reader) yield t.replaceAll("\\t","    ")
-
-val pw = new PrintWriter(path)
-
-result.foreach(line =&gt; pw.write(line + "\n"))
-
-pw.close()
-</code></pre>
-
-
-
-
-    <a href="/2013/03/11/scala_exercises_09.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

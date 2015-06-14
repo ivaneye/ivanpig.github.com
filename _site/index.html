@@ -322,6 +322,73 @@ sun.misc.Launcher$AppClassLoader@610f7612
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/05/12/consensus-protocol.html">一致性协议</a></h2>
+
+        <p class="post-meta">By 05月12日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#consensus"><i class="fa fa-folder-open">consensus (1)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">consensus (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">paxos (1)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">zookeeper (2)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>简介</h1>
+
+<p>一致性协议主要是为了解决分布式环境下的数据一致性问题。</p>
+
+<p>对于单节点应用来说，数据的同步相对较简单。例如数据库的事务，多线程中的锁，都是为了保证数据的一致性。</p>
+
+<p>而对于分布式环境来说，没有完善的强一致性解决方案。</p>
+
+<p>在2000年，加州大学伯克利分校Eric Brewer教授提出了CAP猜想(后被证明可行)：一个分布式系统不可能同时满足一致性(C:Consistency),
+可用性(A:Abailability)和分区容错性(P:Partition tolerance)这三个基本需求，最多只能同时满足其中的两项。</p>
+
+<p>后eBay架构师Dan Pritchett提出了BASE理论，即Basically Available(基本可用),Soft state(软状态)和Eventually consisent(最终一致性)。
+其核心思想即无法做到强一致性，但系统可以根据自身做到最终一致性。</p>
+
+<p>故对于分布式系统设计，目前的做法是保证可用性和分区容错性的基础上去实现最终一致性。</p>
+
+<p>而对于最终一致性处理，比较著名的协议和算法便是：二阶段提交协议(2PC)，三阶段提交协议(3PC)以及Paxos算法。</p>
+
+
+
+
+    <a href="/2015/05/12/consensus-protocol.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/05/04/string.html">读源码-String</a></h2>
 
         <p class="post-meta">By 05月04日  2015
@@ -505,7 +572,7 @@ sun.misc.Launcher$AppClassLoader@610f7612
             
             <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
             
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">zookeeper (1)</i></a>
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">zookeeper (2)</i></a>
             
             
         
@@ -663,105 +730,6 @@ get /test                   //获取/test目录的值
 
 
     <a href="/2015/04/17/junit4-implements.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/04/16/use-junit4.html">读源码-JUnit4使用</a></h2>
-
-        <p class="post-meta">By 04月16日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#junit4"><i class="fa fa-folder-open">junit4 (2)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">opensource (6)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">junit4 (2)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <p><em>Level :</em> &hearts;</p>
-
-<h1>JUnit4简介</h1>
-
-<p>之前梳理了JUnit3，此篇将梳理JUnit4。</p>
-
-<p>JUnit4主要引入了注解。我们依然使用之前的例子来进行测试</p>
-
-<h1>场景</h1>
-
-<p>假设，我们有一个Person类</p>
-
-<ul>
-<li>包含两个方法say和sayHi</li>
-<li>两个方法都接收一个String类型的参数</li>
-<li>say返回"Hello,"+arg</li>
-<li>sayHi返回"Hi,"+arg</li>
-</ul>
-
-
-<p>代码如下:</p>
-
-<pre><code class="java">package org.ivan;
-
-public class Person {
-
-    public String say(String name) {
-        return "Hello," + name;
-    }
-
-    public String sayHi(String name) {
-        return "Hi," + name;
-    }
-}
-</code></pre>
-
-<p>在JUnit4中如何进行测试呢?</p>
-
-<h1>引入JUnit</h1>
-
-<p>首先还是引入JUnit4</p>
-
-<pre><code class="xml">&lt;dependency&gt;
-  &lt;groupId&gt;junit&lt;/groupId&gt;
-  &lt;artifactId&gt;junit&lt;/artifactId&gt;
-  &lt;version&gt;4.12&lt;/version&gt;
-  &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-</code></pre>
-
-
-
-
-    <a href="/2015/04/16/use-junit4.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

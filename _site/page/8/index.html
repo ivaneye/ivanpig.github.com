@@ -132,6 +132,98 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2014/02/05/string.html">Clojure教程-字符串处理</a></h2>
+
+        <p class="post-meta">By 02月05日  2014
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (10)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <p>本文翻译自<a href="http://clojure-doc.org/articles/cookbooks/strings.html">Strings</a></p>
+
+<p>本文内容包括使用Clojure内建的函数和标准库来操作字符串,以及JDK中的相关操作.</p>
+
+<p>版权:</p>
+
+<p>This work is licensed under a Creative Commons Attribution 3.0 Unported License (including images &amp; stylesheets).</p>
+
+<p>源代码在<a href="https://github.com/clojuredocs/guides">Github</a>上.</p>
+
+<h1>概述</h1>
+
+<ul>
+<li>Clojure中的字符串就是Java字符串.你可以使用Java中的相应方法来对其进行处理.</li>
+<li>Java字符串是不可变的,所以能很方便的在Clojure中使用</li>
+<li>你不能给Java字符串添加元数据</li>
+<li>Clojure提供一些方便的符号</li>
+</ul>
+
+
+<pre><code class="{.example}">    "foo"    java.lang.String
+    #"\d"    java.util.regex.Pattern (正则表达式,匹配一个数字)
+    \f       java.lang.Character (表示'f')
+</code></pre>
+
+<ul>
+<li><strong>注意</strong>:
+人类的大脑和计算机之间还是有很大的差异的.所以Java的字符串(UTF-16编码)并不能像人们所认为的那样很好的和字符一一对应.比如说,一个Unicode的位和我们所认为的字符的一位是无法对应的(像韩国韩语尊宝,这些词由多个字符组成.)同样的,一个Unicode位可能是由2个UTF-16字符组成.</li>
+</ul>
+
+
+<h1>预备知识</h1>
+
+<p>一些例子用到了clojure.string,clojure.edn和clojure.pprint.我们假设你的ns宏里面已经包含了如下内容:</p>
+
+<pre><code class="{.clojure}">(:require [clojure.string :as str]
+          [clojure.edn :as edn]
+          [clojure.pprint :as pp])
+</code></pre>
+
+<p>或者在REPL里面,你需要载入:</p>
+
+<pre><code class="{.clojure}">(require '[clojure.string :as str])
+(require '[clojure.edn :as edn])
+(require '[clojure.pprint :as pp])
+</code></pre>
+
+
+
+
+    <a href="/2014/02/05/string.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2014/02/02/basic.html">Clojure教程-基本语法</a></h2>
 
         <p class="post-meta">By 02月02日  2014
@@ -646,87 +738,6 @@ java -jar target/myapp1-0.1.0-SNAPSHOT-standalone.jar
 
 
     <a href="/2013/09/29/internationalization.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2013/09/28/logging.html">Luminus手册-日志</a></h2>
-
-        <p class="post-meta">By 09月28日  2013
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#luminus"><i class="fa fa-folder-open">luminus (19)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">luminus (19)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>Logging</h1>
-
-<p>Luminus模板中包括<a href="https://github.com/ptaoussanis/timbre">Timbre</a>和<a href="https://bitbucket.org/postspectacular/rotor">Rotor</a>。</p>
-
-<p>日志通过在handler/init函数中进行如下的设置进行初始化:</p>
-
-<pre><code class="{.clojure}">  (timbre/set-config!
-    [:appenders :rotor]
-    {:min-level :info
-     :enabled? true
-     :async? false ; should be always false for rotor
-     :max-message-per-msecs nil
-     :fn rotor/append})
-
-  (timbre/set-config!
-    [:shared-appender-config :rotor]
-    {:path ".log" :max-size 10000 :backlog 10})
-</code></pre>
-
-<p>Timbre可以记录Clojure的所有日志.</p>
-
-<pre><code class="{.clojure}">(ns example
- (:use [taoensso.timbre :only [trace debug info warn error fatal]]))
-
-(info "Hello")
-
-=&gt;2012-Dec-24 09:03:09 -0500 Helios.local INFO [timbretest] - Hello
-
-(info {:user {:id "Anonymous"}})
-
-=&gt;2012-Dec-24 09:02:44 -0500 Helios.local INFO [timbretest] - {:user {:id "Anonymous"}}
-</code></pre>
-
-<p>更多信息请见<a href="https://github.com/ptaoussanis/timbre">Github</a></p>
-
-
-
-    <a href="/2013/09/28/logging.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 

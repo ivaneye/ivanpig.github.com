@@ -132,6 +132,104 @@
              src="/img/head.jpg">
         
 
+        <h2 class="post-title"><a href="/2015/02/22/mediator.html">语言与模式-20中介者模式</a></h2>
+
+        <p class="post-meta">By 02月22日  2015
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
+            
+            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>意图</h1>
+
+<p>用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
+
+<p><img src="/assets/designpattern/mediator.jpg" alt="" /></p>
+
+<h1>适用性</h1>
+
+<ul>
+<li>一组对象以定义良好但是复杂的方式进行通信。产生的相互依赖关系结构混乱且难以理解。</li>
+<li>一个对象引用其他很多对象并且直接与这些对象通信,导致难以复用该对象。</li>
+<li>想定制一个分布在多个类中的行为，而又不想生成太多的子类。</li>
+</ul>
+
+
+<h1>Java实现</h1>
+
+<pre><code class="java">//抽象同事类
+public abstract class Person {
+    // 维持一个抽象中介者的引用
+    protected Mediator mediator;
+
+    protected String name;
+
+    public Person(String name, Mediator mediator){
+        this.mediator = mediator;
+        this.name = name;
+    }
+
+    /**
+     * 设置中介者对象
+     * @param mediator
+     */
+    public void setMediator(Mediator mediator){
+        this.mediator = mediator;
+    }
+
+    /**
+     * 向中介 发送消息
+     */
+    protected abstract void sendMessage(String msg);
+
+    /**
+     * 从中介 获取消息
+     */
+    protected abstract void getMessage(String msg);
+}
+</code></pre>
+
+
+
+
+    <a href="/2015/02/22/mediator.html" class="post-categorybut">阅读全文</a>
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        
+        <img class="post-avatar" height="48" width="48"
+             src="/img/head.jpg">
+        
+
         <h2 class="post-title"><a href="/2015/02/21/strategy.html">语言与模式-19策略模式</a></h2>
 
         <p class="post-meta">By 02月21日  2015
@@ -648,101 +746,6 @@
 
 
     <a href="/2015/02/16/memento.html" class="post-categorybut">阅读全文</a>
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
-        <h2 class="post-title"><a href="/2015/02/15/template.html">语言与模式-13模板模式</a></h2>
-
-        <p class="post-meta">By 02月15日  2015
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#designpattern"><i class="fa fa-folder-open">designpattern (23)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">designpattern (23)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#"><i class="fa fa-tags">clojure (55)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>意图</h1>
-
-<p>定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。Template Method使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。</p>
-
-<p><img src="/assets/designpattern/template.jpg" alt="" /></p>
-
-<h1>适用性</h1>
-
-<ul>
-<li>一次性实现一个算法的不变的部分，并将可变的行为留给子类来实现。</li>
-<li>各子类中公共的行为应被提取出来并集中到一个公共父类中以避免代码重复。这是Opdyke和Johnson所描述过的“重分解以一般化”的一个很好的例子。首先识别现有代码中的不同之处，并且将不同之处分离为新的操作。最后，用一个调用这些新的操作的模板方法来替换这些不同的代码。</li>
-<li>控制子类扩展。模板方法只在特定点调用“hook”操作，这样就只允许在这些点进行扩展。</li>
-</ul>
-
-
-<h1>Java实现</h1>
-
-<p>web开发中使用的布局就是模板模式的典型应用！</p>
-
-<pre><code class="{.java}">public abstract class Layout{
-
-     public void show(){
-          System.out.println("Header");
-          body();
-          System.out.println("Footer");
-     }
-
-     public abstract void body();
-}
-</code></pre>
-
-<pre><code class="{.java}">public class Index extends Layout{
-
-     public void body(){
-       System.out.println("Index");
-     }
-}
-
-public class Detail extends Layout{
-
-     public void body(){
-       System.out.println("Detail");
-     }
-}
-</code></pre>
-
-
-
-
-    <a href="/2015/02/15/template.html" class="post-categorybut">阅读全文</a>
 </div>
 </section>
 
