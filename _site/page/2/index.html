@@ -1,102 +1,50 @@
-<!DOCTYPE HTML>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="keywords" content=""/>
-        <meta name="author" content="ivanpig.github.io"> 
-        <link rel="canonical" href="http://www.ivaneye.com/page/2/index.html">
-        <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
-        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
-        <title>不懂管理的开发不是好架构</title>
-        <link rel="stylesheet" href="/css/min/pure-min.css">
-        <!--[if lte IE 8]>
-<link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
-<![endif]-->
-        <!--[if gt IE 8]><!-->
-        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
-        <!--<![endif]-->
+<!DOCTYPE html>
+<html lang="en" slick-uniqueid="3">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Asciidoctor 1.5.1">
+    <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
+    <title></title>
+    <link rel="stylesheet" href="/css/simple/font-awesome.css"/>
+    <link rel="stylesheet" href="/css/simple/simple.css"/>
+    <link rel="stylesheet" href="/css/simple/highliight.css"/>
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <style>
+        h1 {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body class="article toc2 toc-left">
+<div id="toc" class="toc2">
+    <div class="headerpic">
+        <a href="/">
+            <img id="_home" src="/img/head.jpg" alt="Profile Picture" style="width: 100px;" title="返回首页">
+        </a>
+        <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)"
+            width="90%" color="#ccc" size="1/">
 
-        <!--[if lte IE 8]>
-<link rel="stylesheet" href="/css/JekyllPure-old-ie.css">
-<![endif]-->
-        <!--[if gt IE 8]><!-->
-        <link rel="stylesheet" href="/css/JekyllPure.css">
-        <!--<![endif]-->
-
-        <link href="/css/min/font-awesome.min.css" rel="stylesheet">
-        <!--[if lte IE 8]>
-<link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
-<![endif]-->
-        <script src="/js/min/jquery-1.7.2.min.js"></script>
-        <link rel="stylesheet" href="/css/themes/my.css"/>
-        <script src="/js/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-    </head>
-
-    <body>
-
-        <div id="layout" class="pure-g">
-            <div class="sidebar pure-u-1 pure-u-md-1-4">
-                <div class="header">
-                    <div class="headerpic">
-                        <a href="/">
-                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
-                        </a>
-                    </div>
-                    <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->
-                    <h2 id="_tagline" class="brand-tagline">Just Perfect</h2>
-<!--                     <br class="newline"/><br class="newline"/> -->
-
-                    <nav class="nav">
-                        <ul class="nav-list">
-                            <li class="nav-item">
-                                <a class="pure-button" href="/Timing">时间轴</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="pure-button" href="/tag">标签库</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="pure-button" href="/type">分类库</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="search">
-                        <form action="/search">
-                            <input type="text" class="search-query" placeholder="Search Blog" name="query" title="全站搜索-只支持英文">
-                        </form>
-                    </div>
-
-                    <div id="toc"></div>
-                    <div id="toc1"></div>
-                    <nav id="nav">
-                        <ul class="nav-list">
-                            <li class="nav-link">
-                                <a class="weibo "  href="http://weibo.com/1686537657/profile?topnav=1&wvr=6" ><i class="fa fa-weibo fa-2x"></i></a>
-                            </li>
-                            <li class="nav-link">
-                                <a class="github" href="https://github.com/ivanpig"><i class="fa fa-github fa-2x"></i></a>
-                            </li>
-                            <li class="nav-link">
-                                <a class="rss" href="/rss.xml" ><i class="fa fa-rss fa-2x"></i></a>
-                            </li>
-                        </ul>
-                    </nav>
-							<div id="qrcode">
-							<img src="/img/qrcode.jpg" width="170"/>
-							</div>
-                </div>
-            </div>
-
-            <div class="content pure-u-1 pure-u-md-3-4">
-                <!--[if lt IE 8]>
-<i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
-<![endif]-->
-                <div>
-                    <div class="posts">
-
-                        
+        <p class="post-meta">
+            <a class="pure-button" href="/Timing">时间轴</a>
+            <a class="pure-button" href="/tag">标签库</a>
+            <a class="pure-button" href="/type">分类库</a>
+        </p>
+        <p class="post-meta">
+            <form action="/search">
+                <input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索">
+            </form>
+        </p>
+        <div>
+            <img src="/img/qrcode.jpg" width="170">
+        </div>
+    </div>
+</div>
+<div id="content">
+    
 
 
 
@@ -127,14 +75,9 @@
 
 <section class="post">
     <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
         <h2 class="post-title"><a href="/2015/04/16/use-junit4.html">读源码-JUnit4使用</a></h2>
 
-        <p class="post-meta">By 04月16日  2015
+        <p class="post-meta">By    2015年04月16日
             
             
             
@@ -215,7 +158,8 @@ public class Person {
 
 
 
-    <a href="/2015/04/16/use-junit4.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/04/16/use-junit4.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
 </div>
 </section>
 
@@ -226,14 +170,9 @@ public class Person {
 
 <section class="post">
     <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
         <h2 class="post-title"><a href="/2015/04/08/junit3-design.html">读源码-JUnit3设计</a></h2>
 
-        <p class="post-meta">By 04月08日  2015
+        <p class="post-meta">By    2015年04月08日
             
             
             
@@ -311,7 +250,8 @@ public class Person {
 
 
 
-    <a href="/2015/04/08/junit3-design.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/04/08/junit3-design.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
 </div>
 </section>
 
@@ -322,14 +262,9 @@ public class Person {
 
 <section class="post">
     <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
         <h2 class="post-title"><a href="/2015/04/07/junit3-implements.html">读源码-JUnit3实现</a></h2>
 
-        <p class="post-meta">By 04月07日  2015
+        <p class="post-meta">By    2015年04月07日
             
             
             
@@ -404,7 +339,8 @@ public interface Test {
 
 
 
-    <a href="/2015/04/07/junit3-implements.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/04/07/junit3-implements.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
 </div>
 </section>
 
@@ -415,14 +351,9 @@ public interface Test {
 
 <section class="post">
     <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
         <h2 class="post-title"><a href="/2015/04/06/use-junit3.html">读源码-JUnit3使用</a></h2>
 
-        <p class="post-meta">By 04月06日  2015
+        <p class="post-meta">By    2015年04月06日
             
             
             
@@ -500,7 +431,8 @@ public class Person {
 
 
 
-    <a href="/2015/04/06/use-junit3.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/04/06/use-junit3.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
 </div>
 </section>
 
@@ -511,14 +443,9 @@ public class Person {
 
 <section class="post">
     <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
         <h2 class="post-title"><a href="/2015/04/01/java_webframework.html">自用Java开发框架</a></h2>
 
-        <p class="post-meta">By 04月01日  2015
+        <p class="post-meta">By    2015年04月01日
             
             
             
@@ -552,7 +479,8 @@ public class Person {
 
 
 
-    <a href="/2015/04/01/java_webframework.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/04/01/java_webframework.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
 </div>
 </section>
 
@@ -563,14 +491,9 @@ public class Person {
 
 <section class="post">
     <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
         <h2 class="post-title"><a href="/2015/04/01/book_review.html">如何读书相关书籍书评</a></h2>
 
-        <p class="post-meta">By 04月01日  2015
+        <p class="post-meta">By    2015年04月01日
             
             
             
@@ -621,7 +544,8 @@ public class Person {
 
 
 
-    <a href="/2015/04/01/book_review.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/04/01/book_review.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
 </div>
 </section>
 
@@ -632,14 +556,9 @@ public class Person {
 
 <section class="post">
     <header class="post-header">
-        
-        <img class="post-avatar" height="48" width="48"
-             src="/img/head.jpg">
-        
-
         <h2 class="post-title"><a href="/2015/03/16/jvm.html">一图胜千言:JVM</a></h2>
 
-        <p class="post-meta">By 03月16日  2015
+        <p class="post-meta">By    2015年03月16日
             
             
             
@@ -670,50 +589,52 @@ public class Person {
 
 
 
-    <a href="/2015/03/16/jvm.html" class="post-categorybut">阅读全文</a>
+    <a href="/2015/03/16/jvm.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
 </div>
 </section>
 
 
-<div class="pure-g pagination">
-    
-    
-    <a class="pure-u-1-2 pagination-item" href="/"><p>← Newer</p></a>
-    
-    
 
 
-    
-    <a class=" pure-u-1-2 pagination-item" href="/page/3"><p>Older →</p></a>
-    
+<table class="tableblock frame-all grid-all spread">
+    <colgroup>
+        <col style="width: 50%;">
+        <col style="width: 50%;">
+    </colgroup>
+    <tbody>
+    <tr>
+        <td class="tableblock valign-middle halign-center valign-top disablelink">
+        
+        
+        <a class="pure-u-1-2 pagination-item" href="/"><i class="fa fa-mail-reply"></i> Newer</a>
+        
+        
+            </td>
+
+        <td class="tableblock valign-middle halign-center valign-top disablelink">
+        
+        <a class=" pure-u-1-2 pagination-item" href="/page/3">Older <i class="fa fa-mail-forward"></i></a>
+        
+            </td>
+
+    </tr>
+    </tbody>
+</table>
+
+
+
+
 </div>
 
+<div id="footer">
+    <div id="footer-text">
+        <a href="/about.html">About</a>
+        <a href="tencent://message/?uin=561802774">QQ</a>
+        <a href="https://github.com/ivanpig">GitHub</a><br>
+        © 2015 IvanEye
+    </div>
+</div>
 
-
-
-
-
-
-
-                    </div>
-                </div>
-                <div class="footer">
-                    <a href="/about.html">About</a>
-                    <a href="tencent://message/?uin=561802774">QQ</a>
-                    <a href="https://github.com/ivanpig">GitHub</a>
-                    <script src="/js/min/nprogress.min.js"></script>
-                    <script src="/js/index.js"></script>
-                </div>
-                <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
-
-            </div>
-
-        </div>
-<script type="text/javascript">
-var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2278992c92bf7ea162797e107e900616' type='text/javascript'%3E%3C/script%3E"));
-</script>
-
-    </body>
-
+</body>
 </html>
