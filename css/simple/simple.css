@@ -1901,7 +1901,7 @@ p {
     padding: 0.3em 1em;
     color: #fff;
     background: #4d85d1;
-    font-size: 100%;
+    font-size: 90%;
     border-radius: 4px;
     -moz-box-shadow: 1px 1px 2px #000;
     -webkit-box-shadow: 1px 1px 2px #000;
@@ -1909,9 +1909,9 @@ p {
 }
 
 .article img{
-    -moz-box-shadow: 1px 1px 2px #000;
-    -webkit-box-shadow: 1px 1px 2px #000;
-    box-shadow: 1px 1px 2px #000;
+    -moz-box-shadow: 2px 2px 3px #000;
+    -webkit-box-shadow: 2px 2px 3px #000;
+    box-shadow: 2px 2px 3px #000;
 }
 
 
