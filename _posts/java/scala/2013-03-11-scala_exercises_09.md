@@ -14,7 +14,7 @@ author: 王一帆
 编写一小段Scala代码，将某个文件中的行倒转顺序(将最后一行作为第一行,依此类推)
 ----------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 import io.Source
 import java.io.PrintWriter
 
@@ -29,12 +29,12 @@ val pw = new PrintWriter(path)
 result.foreach(line => pw.write(line + "\n"))
 
 pw.close()
-```
+{% endhighlight %}
 
 编写Scala程序,从一个带有制表符的文件读取内容,将每个制表符替换成一组空格,使得制表符隔开的n列仍然保持纵向对齐,并将结果写入同一个文件
 ----------------------------------------------------------------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 import io.Source
 import java.io.PrintWriter
 
@@ -49,23 +49,23 @@ val pw = new PrintWriter(path)
 result.foreach(line => pw.write(line + "\n"))
 
 pw.close()
-```
+{% endhighlight %}
 
 <!-- more -->
 
 编写一小段Scala代码,从一个文件读取内容并把所有字符数大于12的单词打印到控制台。如果你能用单行代码完成会有额外奖励
 ----------------------------------------------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 import io.Source
 
 Source.fromFile("test.txt").mkString.split("\\s+").foreach(arg => if(arg.length > 12) println(arg))
-```
+{% endhighlight %}
 
 编写Scala程序，从包含浮点数的文本文件读取内容，打印出文件中所有浮点数之和，平均值，最大值和最小值
 -------------------------------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 import io.Source
 
 val nums = Source.fromFile("test.txt").mkString.split("\\s+")
@@ -78,19 +78,19 @@ println(total)
 println(total/nums.length)
 println(nums.max)
 println(nums.min)
-```
+{% endhighlight %}
 
 编写Scala程序，向文件中写入2的n次方及其倒数，指数n从0到20。对齐各列:
 --------------------------------------------------------------------
 
-``` {.example}
+{% highlight sh %}
    1         1
    2         0.5
    4         0.25
  ...         ...
-```
+{% endhighlight %}
 
-``` {.scala}
+{% highlight scala %}
 import java.io.PrintWriter
 
 val pw = new PrintWriter("test.txt")
@@ -104,13 +104,13 @@ for ( n <- 0 to 20){
 }
 
 pw.close()
-```
+{% endhighlight %}
 
 编写正则表达式,匹配Java或C++程序代码中类似"like this,maybe with " or\
 "这样的带引号的字符串。编写Scala程序将某个源文件中所有类似的字符串打印出来
 --------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 import io.Source
 
 val source = Source.fromFile("test.txt").mkString
@@ -118,12 +118,12 @@ val source = Source.fromFile("test.txt").mkString
 val pattern = "\\w+\\s+\"".r
 
 pattern.findAllIn(source).foreach(println)
-```
+{% endhighlight %}
 
 编写Scala程序，从文本文件读取内容，并打印出所有的非浮点数的词法单位。要求使用正则表达式
 ---------------------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 import io.Source
 
 val source = Source.fromFile("test.txt").mkString
@@ -131,12 +131,12 @@ val source = Source.fromFile("test.txt").mkString
 val pattern = """[^((\d+\.){0,1}\d+)^\s+]+""".r
 
 pattern.findAllIn(source).foreach(println)
-```
+{% endhighlight %}
 
 编写Scala程序打印出某个网页中所有img标签的src属性。使用正则表达式和分组
 -----------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 import io.Source
 
 val source = Source.fromFile("D:\\ProgramCodes\\ScalaTest\\src\\test.txt").mkString
@@ -144,12 +144,12 @@ val pattern = """<img[^>]+(src\s*=\s*"[^>^"]+")[^>]*>""".r
 
 for (pattern(str) <- pattern.findAllIn(source)) println(str)
 
-```
+{% endhighlight %}
 
 编写Scala程序，盘点给定目录及其子目录中总共有多少以.class为扩展名的文件
 -----------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 import java.io.File
 
 val path = "."
@@ -165,14 +165,14 @@ def subdirs(dir:File):Iterator[File]={
 val n = subdirs(dir).length
 
 println(n)
-```
+{% endhighlight %}
 
 扩展那个可序列化的Person类，让它能以一个集合保存某个人的朋友信息。构造出一些Person对象，让他们中的一些人成为朋友，然后将Array[Person]保存到文件。将这个数组从文件中重新读出来，校验朋友关系是否完好
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 注意,请在main中执行。脚本执行无法序列化。
 
-``` {.scala}
+{% highlight scala %}
 import collection.mutable.ArrayBuffer
 import java.io.{ObjectInputStream, FileOutputStream, FileInputStream, ObjectOutputStream}
 
@@ -209,4 +209,4 @@ object Test extends App{
   val p = in.readObject().asInstanceOf[Person]
   println(p)
 }
-```
+{% endhighlight %}

@@ -15,18 +15,18 @@ author: 王一帆
 编写一个Conversions对象，加入inchesToCentimeters,gallonsToLiters和milesToKilometers方法
 ---------------------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 object Conversions{
     def inchesToCentimeters(){}
     def gallonsToLiters(){}
     def milesToKilometers(){}
 }
-```
+{% endhighlight %}
 
 前一个练习不是很面向对象。提供一个通用的超类UnitConversion并定义扩展该超类的InchesToCentimeters,GallonsToLiters和MilesToKilometers对象
 --------------------------------------------------------------------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 abstract class UnitConversion{
 
   def inchesToCentimeters(){}
@@ -46,7 +46,7 @@ object GallonsToLiters extends UnitConversion{
 object MilesToKilometers extends UnitConversion{
   override def milesToKilometers() {}
 }
-```
+{% endhighlight %}
 
 <!-- more -->
 
@@ -55,7 +55,7 @@ object MilesToKilometers extends UnitConversion{
 
 Point中的getLocation方法返回的是Point对象，如果想返回Origin对象，需要Origin类才行
 
-``` {.scala}
+{% highlight scala %}
 object Origin extends Point with App{
 
   override def getLocation: Point = super.getLocation
@@ -64,14 +64,14 @@ object Origin extends Point with App{
   println(Origin.toString)
 
 }
-```
+{% endhighlight %}
 
 定义一个Point类和一个伴生对象,使得我们可以不用new而直接用Point(3,4)来构造Point实例
 ----------------------------------------------------------------------------------
 
 apply方法的使用
 
-``` {.scala}
+{% highlight scala %}
 class Point(x:Int,y:Int){
   override def toString: String = "x = " + x + " y = " + y
 }
@@ -84,21 +84,21 @@ object Point extends App{
   val p = Point(1,2)
   println(p)
 }
-```
+{% endhighlight %}
 
 编写一个Scala应用程序,使用App特质,以反序打印命令行参数,用空格隔开。举例来说,scala Reverse Hello World应该打印World Hello
 ------------------------------------------------------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 object Reverse extends App{
   args.reverse.foreach(arg => print(arg  + " "))
 }
-```
+{% endhighlight %}
 
 编写一个扑克牌4种花色的枚举,让其toString方法分别返回♣,@\<span style="color:red"\>♦@\</span\>,@\<span style="color:red"\>♥@\</span\>,♠
 -------------------------------------------------------------------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 object Card extends Enumeration with App{
   val M = Value("♣")
   val T = Value("♠")
@@ -110,12 +110,12 @@ object Card extends Enumeration with App{
   println(Card.H)
   println(Card.F)
 }
-```
+{% endhighlight %}
 
 实现一个函数,检查某张牌的花色是否为红色
 ---------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 object Card extends Enumeration with App{
   val M = Value("♣")
   val T = Value("♠")
@@ -129,12 +129,12 @@ object Card extends Enumeration with App{
 
   color(Card.H)
 }
-```
+{% endhighlight %}
 
 编写一个枚举,描述RGB立方体的8个角。ID使用颜色值(例如:红色是0xff0000)
 --------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 object RGB extends Enumeration with App{
   val RED = Value(0xff0000,"Red")
   val BLACK = Value(0x000000,"Black")
@@ -145,4 +145,4 @@ object RGB extends Enumeration with App{
   val BLUE = Value(0x0000ff,"Blue")
   val MAGENTA = Value(0xff00ff,"Magenta")
 }
-```
+{% endhighlight %}

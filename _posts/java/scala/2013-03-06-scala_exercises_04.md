@@ -17,13 +17,13 @@ author: 王一帆
 
 映射的简单操作
 
-``` {.example}
+{% highlight sh %}
 scala> val map = Map("book"->10,"gun"->18,"ipad"->1000)
 map: scala.collection.immutable.Map[java.lang.String,Int] = Map(book -> 10, gun -> 18, ipad -> 1000)
 
 scala> for((k,v) <- map) yield (k,v * 0.9)
 res3: scala.collection.immutable.Map[java.lang.String,Double] = Map(book -> 9.0, gun -> 16.2, ipad -> 900.0)
-```
+{% endhighlight %}
 
 编写一段程序，从文件中读取单词。用一个可变映射来清点每个单词出现的频率。读取这些单词的操作可以使用java.util.Scanner:
 --------------------------------------------------------------------------------------------------------------------
@@ -34,13 +34,13 @@ while(in.hasNext()) 处理 in.next() 或者翻到第9章看看更Scala的做法�
 @\<p\>当然使用Scala的方法啦。参考第9章@\</p\>
 首先，创建一个文件myfile.txt。输入如下内容
 
-``` {.example}
+{% highlight sh %}
 test test ttt test ttt t test sss s
-```
+{% endhighlight %}
 
 Scala代码如下
 
-``` {.scala}
+{% highlight scala %}
 import scala.io.Source
 import scala.collection.mutable.HashMap
 
@@ -58,7 +58,7 @@ for(key <- tokens){
 }
 
 println(map.mkString(","))
-```
+{% endhighlight %}
 
 <!-- more -->
 
@@ -67,7 +67,7 @@ println(map.mkString(","))
 
 不可变映射与可变映射的区别就是，每次添加元素，都会返回一个新的映射
 
-``` {.scala}
+{% highlight scala %}
 import scala.io.Source
 
 val source = Source.fromFile("myfile.txt").mkString
@@ -81,14 +81,14 @@ for(key <- tokens){
 }
 
 println(map.mkString(","))
-```
+{% endhighlight %}
 
 重复前一个练习，这次使用已排序的映射，以便单词可以按顺序打印出来
 ----------------------------------------------------------------
 
 和上面的代码没有什么区别，只是将映射修改为SortedMap
 
-``` {.scala}
+{% highlight scala %}
 import scala.io.Source
 import scala.collection.SortedMap
 
@@ -103,14 +103,14 @@ for(key <- tokens){
 }
 
 println(map.mkString(","))
-```
+{% endhighlight %}
 
 重复前一个练习，这次使用java.util.TreeMap并使之适用于Scala API
 --------------------------------------------------------------
 
 主要涉及java与scala的转换类的使用
 
-``` {.scala}
+{% highlight scala %}
 import scala.io.Source
 import scala.collection.mutable.Map
 import scala.collection.JavaConversions.mapAsScalaMap
@@ -127,14 +127,14 @@ for(key <- tokens){
 }
 
 println(map.mkString(","))
-```
+{% endhighlight %}
 
 定义一个链式哈希映射,将"Monday"映射到java.util.Calendar.MONDAY,依次类推加入其他日期。展示元素是以插入的顺序被访问的
 -------------------------------------------------------------------------------------------------------------------
 
 LinkedHashMap的使用
 
-``` {.scala}
+{% highlight scala %}
 import scala.collection.mutable.LinkedHashMap
 import java.util.Calendar
 
@@ -150,14 +150,14 @@ map += ("Sunday"->Calendar.SUNDAY)
 
 
 println(map.mkString(","))
-```
+{% endhighlight %}
 
 打印出所有Java系统属性的表格，
 ------------------------------
 
 属性转scala map的使用
 
-``` {.scala}
+{% highlight scala %}
 import scala.collection.JavaConversions.propertiesAsScalaMap
 
 val props:scala.collection.Map[String,String] = System.getProperties()
@@ -174,40 +174,40 @@ for(key <- keys) {
   print(" | ")
   println(props(key))
 }
-```
+{% endhighlight %}
 
 编写一个函数minmax(values:Array[Int]),返回数组中最小值和最大值的对偶
 --------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 def minmax(values:Array[Int])={
   (values.max,values.min)
 }
-```
+{% endhighlight %}
 
 编写一个函数Iteqgt(values:Array[int],v:Int),返回数组中小于v,等于v和大于v的数量，要求三个值一起返回
 --------------------------------------------------------------------------------------------------
 
-``` {.scala}
+{% highlight scala %}
 def iteqgt(values:Array[Int],v:Int)={
   val buf = values.toBuffer
   (values.count(_ < v),values.count(_ == v),values.count(_ > v))
 }
-```
+{% endhighlight %}
 
 当你将两个字符串拉链在一起，比如"Hello".zip("World")，会是什么结果？想出一个讲得通的用例
 ----------------------------------------------------------------------------------------
 
-``` {.example}
+{% highlight sh %}
 scala> "Hello".zip("World")
 res0: scala.collection.immutable.IndexedSeq[(Char, Char)] = Vector((H,W), (e,o), (l,r), (l,l), (o,d))
-```
+{% endhighlight %}
 
 StringOps中的zip定义如下
 
-``` {.example}
+{% highlight sh %}
 abstract def zip[B](that: GenIterable[B]): StringOps[(A, B)]
-```
+{% endhighlight %}
 
 GenIterable是可遍历对象需要包含的trait，对于String来说，它是可遍历的。但是它的遍历是遍历单个字母。
 所以拉链就针对每个字母来进行。
