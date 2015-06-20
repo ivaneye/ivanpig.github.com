@@ -18,30 +18,30 @@ published: false
 
 - 单行注释
 
-```
+{% endhighlight %}
 ## This is a single line comment.
-```
+{% endhighlight %}
 
 - 多行注释：
 
-```
+{% endhighlight %}
 #* 
 Thus begins a multi-line comment. 
 Online visitors won't see this text 
 because the Velocity Templating Engine will ignore it. 
 *#
-```
+{% endhighlight %}
 
 - Javadoc-style 注释：
 
-```
+{% endhighlight %}
 #** This is a VTL comment block and may 
 be used to store such information as the 
 document author and versioning information: 
 @author 
 @version 5 
 *#
-```
+{% endhighlight %}
 
 <!-- more -->
 
@@ -54,49 +54,49 @@ document author and versioning information:
 必须以字母开头。
 其余部分可包括:
 
-```
+{% endhighlight %}
 alphabetic (a .. z, A .. Z)
 numeric (0 .. 9)
 hyphen ("-")
 underscore ("_")
-```
+{% endhighlight %}
 
 - 属性：
 
 变量后面加.即可。
 比如：
 
-```
+{% endhighlight %}
 $customer.Address 
 $purchase.Total
-```
+{% endhighlight %}
 
 - 方法：
 
-```
+{% endhighlight %}
 $purchase.getTotal() 
 $page.setTitle( "My Home Page" )
-```
+{% endhighlight %}
 
 ## 设值：
 
-```
+{% endhighlight %}
 #set( $a = "Velocity" )
-```
+{% endhighlight %}
 
 ## 循环：
 
-```
+{% endhighlight %}
 #foreach( $mud in $mudsOnSpecial ) 
 
 #end
 $foreach.count 1...
 $foreach.index 0...
-```
+{% endhighlight %}
 
 ## 判断:
 
-```
+{% endhighlight %}
 #if(...)
 
 #elseif(...)
@@ -104,54 +104,54 @@ $foreach.index 0...
 #else
 
 #end
-```
+{% endhighlight %}
 
 ## 引入：
 
-```
+{% endhighlight %}
 #include("")   引入文件，不解析，只能引入TEMPLATE_ROOT下的文件，可引入多个文件，以逗号隔开
 #parse("")     引入文件，解析,只能引入一个文件
-```
+{% endhighlight %}
 
 ## 中断：
 
-```
+{% endhighlight %}
 #break
-```
+{% endhighlight %}
 
 和Java中break类似，可中断#foreach, #parse, #evaluate, #define, #macro, or #@somebodymacro
 默认中断当前范围的代码，带名称中断到特定范围。#break($macro)
 
 ## 停止：调试时使用
 
-```
+{% endhighlight %}
 #stop
-```
+{% endhighlight %}
 
 ## 动态执行VTL:
 
-```
+{% endhighlight %}
 #evaluate 
 #set($source1 = "abc") 
 #set($select = "1") 
 #set($dynamicsource = "$source$select") 
 ## $dynamicsource is now the string '$source1' 
 #evaluate($dynamicsource)
-```
+{% endhighlight %}
 
 ## 定义：
 
-```
+{% endhighlight %}
 #define
 定义一段VTL，供调用
 #define( $block )Hello $who#end 
 #set( $who = 'World!' ) 
 $block
-```
+{% endhighlight %}
 
 ## 宏：
 
-```
+{% endhighlight %}
 #macro
 #define定义了变量，#macro定义了操作
 
@@ -160,21 +160,21 @@ $block
 <tr><td></td></tr> 
 #end
 #d()
-```
+{% endhighlight %}
 
 ## 宏$!bodyContent
 
-```
+{% endhighlight %}
 #macro( d ) 
 <tr><td>$!bodyContent</td></tr> 
 #end
 
 #@d()Hello!#end
-```
+{% endhighlight %}
 
 ## 转意符：
 
-```
+{% endhighlight %}
 ## The following line defines $email in this template: 
 #set( $email = "foo" ) 
 $email 
@@ -182,7 +182,7 @@ $email
 结果：
 foo 
 $email
-```
+{% endhighlight %}
 
 # Velocity实现机制：
 
@@ -196,7 +196,7 @@ $email
 
 代码如下：
 
-```java
+{% highlight java %}
 import java.io.StringWriter; 
 import org.apache.velocity.VelocityContext; 
 import org.apache.velocity.Template; 
@@ -220,13 +220,13 @@ template = Velocity.getTemplate("mytemplate.vm");
 } catch( Exception e ) {} 
 StringWriter sw = new StringWriter(); 
 template.merge( context, sw );
-```
+{% endhighlight %}
 
 ## Singleton与Separate 
 
 Singleton模式下，jvm中只有一个Velocity实例，应用中可方便配置，代码如下:
 
-```java
+{% highlight java %}
 import org.apache.velocity.app.Velocity; 
 import org.apache.velocity.Template; 
 
@@ -239,11 +239,11 @@ Velocity.setProperty( Velocity.RUNTIME_LOG_LOGSYSTEM, this);
 Velocity.init(); 
 ... 
 Template t = Velocity.getTemplate("foo.vm");
-```
+{% endhighlight %}
 
 Separate模式下,jvm中会有多个Velocity实例，每个velocity可单独配置，针对各自的需求可调用不同的velocity.
 
-```java
+{% highlight java %}
 import org.apache.velocity.app.VelocityEngine; 
 import org.apache.velocity.Template; 
 ... 
@@ -254,4 +254,4 @@ ve.setProperty( VelocityEngine.RUNTIME_LOG_LOGSYSTEM, this);
 /* * initialize the engine */ ve.init(); 
 ... 
 Template t = ve.getTemplate("foo.vm");
-```
+{% endhighlight %}
