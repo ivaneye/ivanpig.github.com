@@ -38,7 +38,7 @@ layout: blog
         {% if page.next.istop %}
         {% assign _next = page.next.next %}
         {% endif%}
-        <td class="tableblock valign-middle halign-center valign-top"><a class="pure-u-1-2 pagination-item " href="{{ BASE_PATH }}{{ _next.url }}" title="{{ _next.title }}"><p>{{ _next.title }}&nbsp;<i class="fa fa-mail-forward"></i></p></a></td>
+        <td class="tableblock valign-middle halign-center valign-top"><a class="pure-u-1-2 pagination-item " href="{{ BASE_PATH }}{{ _next.url }}" title="{{ _next.title }}">{{ _next.title }}&nbsp;<i class="fa fa-mail-forward"></i></a></td>
         {% else %}
         <td class="tableblock valign-middle halign-center valign-top disablelink"><p>下一篇&nbsp;<i class="fa fa-chain-broken"></i></p></span></td>
         {% endif %}
@@ -47,7 +47,10 @@ layout: blog
     </tbody>
 </table>
 
-<img src="/img/alipay.png" height="156" width="156"/>
+<span>
+    <h4 style="display: inline-block;">(^_^)如果您觉得此文对您有帮助，打个赏喝个咖啡(^_^)</h4>
+    <img src="/img/alipay.png" height="156" width="156"/>
+</span>
 
 <script src="/js/simplepage.js" ></script>
 
