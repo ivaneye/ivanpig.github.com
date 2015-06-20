@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 读源码-Velocity使用
-categories: [junit4]
-tags: [opensource,junit4,java]
+categories: [velocity]
+tags: [opensource,velocity,java]
 avatarimg: "/img/head.jpg"
 published: false
 
