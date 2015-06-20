@@ -16,23 +16,23 @@ author: 王一帆
 
 Ragtime通过Leiningen插件来执行。此插件需要配置project.clj的:plugins中。
 
-```clojure
+{% highlight clojure %}
 :plugins [... [ragtime/ragtime.lein "0.3.4"]]
-```
+{% endhighlight %}
 
 实际的迁移动作是由ragtime.sql.files这个适配器来执行。此适配器需要配置在依赖列表中，同时配置相关数据库配置。
 
-```clojure
+{% highlight clojure %}
 :dependencies [... [ragtime/ragtime.sql.files "0.3.4"]]
 :ragtime {:migrations ragtime.sql.files/migrations
           :database "jdbc:mysql://localhost:3306/example_db?user=root"}
-```
+{% endhighlight %}
 
 ragtime.sql.files适配器会从项目根目录下的指定目录查找sql脚本。我们只需要将脚本添加到对应目录下即可。
 
 脚本按字母顺序排序。我们来创建两个脚本。
 
-```
+{% highlight sql %}
 migrations/2014-13-57-30-create-tables.up.sql
 
 CREATE TABLE users (id INT, name VARCHAR(25));
@@ -40,19 +40,19 @@ CREATE TABLE users (id INT, name VARCHAR(25));
 migrations/2014-13-57-30-create-tables.down.sql
 
 DROP TABLE users;
-```
+{% endhighlight %}
 
 通过如下命令执行：
 
-```
+{% highlight sh %}
 lein ragtime migrate
-```
+{% endhighlight %}
 
 通过如下命令回滚:
 
-```
+{% highlight sh %}
 lein ragtime rollback
-```
+{% endhighlight %}
 
 <!-- more -->
 
@@ -63,38 +63,38 @@ lein ragtime rollback
 
 首先，我们来创建一个Luminus项目。
 
-``` {.bash}
+{% highlight sh %}
 lein new luminus ltest +site
-```
+{% endhighlight %}
 
 然后添加Lobos依赖。
 
-``` {.clojure}
+{% highlight clojure %}
 [lobos "1.0.0-beta1"]
-```
+{% endhighlight %}
 
 接着我们需要在src目录下创建一个lobos目录，并在该目录下创建两个文件
 config.clj和migrations.clj，其中包含如下内容:
 
-``` {.clojure}
+{% highlight clojure %}
 (ns lobos.config
   (:use lobos.connectivity)
   (:require [ltest.models.schema :as schema]))
 
 (open-global schema/db-spec)
-```
+{% endhighlight %}
 
-``` {.clojure}
+{% highlight clojure %}
 (ns lobos.migrations
   (:refer-clojure
    :exclude [alter drop bigint boolean char double float time])
   (:use (lobos [migration :only [defmigration]] core schema config)))
-```
+{% endhighlight %}
 
 我们来创建我们的第一个迁移，使用lobos来管理create-users-table函数.
 你只需要将create-users-table函数从schema.clj移动到migations.clj中即可。
 
-``` {.clojure}
+{% highlight clojure %}
 (defmigration add-users-table
   (up [] (create
           (table :users
@@ -107,54 +107,54 @@ config.clj和migrations.clj，其中包含如下内容:
                  (boolean :is_active)
                  (varchar :pass 100))))
   (down [] (drop (table :users))))
-```
+{% endhighlight %}
 
 如果想添加其他的迁移，只需要再添加一个类似的definition即可。
 现在我们定义了迁移，下面我们来看看schema命名空间，我们来更新并使用它。
 我们将添加lobos.migration依赖:
 
-``` {.clojure}
+{% highlight clojure %}
 (ns ltest.models.schema
   (:use [lobos.core :only (defcommand migrate)])
   (:require [noir.io :as io]
             [lobos.migration :as lm]))
-```
+{% endhighlight %}
 
 接着定义一个command，返回给我们一个待迁移列表.
 
-``` {.clojure}
+{% highlight clojure %}
 (defcommand pending-migrations []
   (lm/pending-migrations db-spec sname))
-```
+{% endhighlight %}
 
 根据这个信息我们可以知道数据库的状态。我们来重命名initialised?和
 actualized?函数，当待迁移列表没有数据时返回true
 
-``` {.clojure}
+{% highlight clojure %}
 (defn actualized?
   "checks if there are no pending migrations"
   []
   (empty? (pending-migrations)))
-```
+{% endhighlight %}
 
 我们还需要将create-tables函数替换为actualize函数，actualize函数将会触
 发迁移。
 
-``` {.clojure}
+{% highlight clojure %}
 (def actualize migrate)
-```
+{% endhighlight %}
 
 实际上actualize只是一个对migrate的引用，migrate是lobos.core中的函数.
 最后我们需要做的就是更新handler.clj文件，来使用我们的新函数:
 
-``` {.clojure}
+{% highlight clojure %}
 (defn init
   "runs when the application starts and checks if the database
    schema exists, calls schema/create-tables if not."
   []
   (if-not (schema/actualized?)
     (schema/actualize)))
-```
+{% endhighlight %}
 
 现在运行你的服务器，你的应用将会自动运行所有的待执行迁移。
 希望这个教程对你在Luminus中使用数据迁移有帮助。相关代码请见[这里](https://github.com/edtsech/ltest)

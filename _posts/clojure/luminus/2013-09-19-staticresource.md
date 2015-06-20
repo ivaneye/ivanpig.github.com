@@ -20,17 +20,17 @@ Handling file uploads
 上传文件通过noir.io空间下的upload-file方法来实现，upload-file接受一个路径和文件的map。
 例如我们有一个upload.html文件:
 
-``` {.html}
+{% highlight html %}
     <h2>Upload a file</h2>
     <form action="/upload" enctype="multipart/form-data" method="POST">
         <input id="file" name="file" type="file" />
         <input type="submit" value="upload" />
     </form>
-```
+{% endhighlight %}
 
 我们可以这样来处理文件上传。
 
-``` {.clojure}
+{% highlight clojure %}
 (ns myapp.upload
   ...
   (:require [upload-test.views.layout :as layout]
@@ -48,7 +48,7 @@ Handling file uploads
 (defroutes upload-routes
   (GET "/upload" [] (upload-page))
   (POST "/upload" [file] (handle-upload file)))
-```
+{% endhighlight %}
 
 <!-- more -->
 
@@ -57,13 +57,13 @@ Serving static resources
 
 你可以使用get-resource通过相对路径来加载public目录中的资源，例如:
 
-``` {.clojure}
+{% highlight clojure %}
 (get-resource "/md/outline.md")
-```
+{% endhighlight %}
 
 上面的代码将返回在包含public/md/outline.md下资源的clojure.java.io/resource。
 最后，我们可以使用slurp-resource来读取文件的内容:
 
-``` {.clojure}
+{% highlight clojure %}
 (slurp-resource "/md/outline.md")
-```
+{% endhighlight %}

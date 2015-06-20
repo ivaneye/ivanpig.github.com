@@ -15,26 +15,26 @@ Session管理相关功能由noir.session提供。默认提供的noir.util.middle
 当然你可以修改它，只需要给函数传递第二个参数，告诉它将Session保存在哪里就可
 以了。 下面的例子创建了一个保存在内存里的session.
 
-``` {.clojure}
+{% highlight clojure %}
 (def app (middleware/app-handler [home-routes app-routes]))
-```
+{% endhighlight %}
 
 下面，我们来重新定义session的保存位置。使用:session-options来替换掉默认的值就可以了。
 
-``` {.clojure}
+{% highlight clojure %}
 (def app
   (middleware/app-handler
     [home-routes app-routes]
     :session-options {:cookie-name "example-app-session"
                       :store (cookie-store)}))
-```
+{% endhighlight %}
 
 Accessing the session
 =====================
 
 你可以在任意范围内的任何函数里访问并操作session。
 
-``` {.clojure}
+{% highlight clojure %}
 (require '[noir.session :as session])
 
 (defn set-user [id]
@@ -56,14 +56,14 @@ Accessing the session
   (GET "/remove" [] (remove-user))
   (GET "/set-if-nil/:id" [id] (set-user-if-nil id))
   (GET "/logout" [] (clear-session)))
-```
+{% endhighlight %}
 
 你还可以通过noir.session/flash-put!和noir.session/flash-get来创建flash变量.
 
-``` {.clojure}
+{% highlight clojure %}
 (session/flash-put! :message "User added!")
 (session/flash-get :message)
-```
+{% endhighlight %}
 
 <!-- more -->
 
@@ -72,7 +72,7 @@ Cookies
 
 Cookie处理函数由noir.cookies提供。设置或获取Cookie和Session很类似。
 
-``` {.clojure}
+{% highlight clojure %}
 (require '[noir.cookies :as cookies])
 
 (defn set-user-cookie [id]
@@ -86,4 +86,4 @@ Cookie处理函数由noir.cookies提供。设置或获取Cookie和Session很类�
               {:value (str (java.util.UUID/randomUUID))
               :path "/"
               :expires 1})
-```
+{% endhighlight %}

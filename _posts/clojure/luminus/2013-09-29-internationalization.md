@@ -15,7 +15,7 @@ Luminius模板包含了[Tower](https://github.com/ptaoussanis/tower)依赖，Tow
 
 首先，我们需要创建一个字典map：
 
-```clojure
+{% highlight clojure %}
 (def tconfig
   {:fallback-locale :en-US
    :dictionary
@@ -25,23 +25,23 @@ Luminius模板包含了[Tower](https://github.com/ptaoussanis/tower)依赖，Tow
     :fr-FR {:page {:title "Voici un titre"
                    :content "Il est temps de commencer votre site."}}
     }})
-```
+{% endhighlight %}
 
 然后添加Tower中间件来包装我们的配置:
 
-```
+{% highlight clojure %}
 (def app
  (app-handler
    [routes]
    :middleware
    [#(taoensso.tower.ring/wrap-tower-middleware % {:tconfig tconfig})]))
-```
+{% endhighlight %}
 
 中间件将会通过accept-language头来确定相应的语言。中间件将会添加两个key到请求中。地一个key是:t,它的值是翻译函数。第二个key是:locale，它的值是中间件提供的语言类型。
 
 你可以提供一个自定义的locale-selector函数给中间件。
 
-```clojure
+{% highlight clojure %}
 (defn my-selector [req]
   (when (= (:remote-addr req) "127.0.0.1") :en))
 
@@ -51,24 +51,24 @@ Luminius模板包含了[Tower](https://github.com/ptaoussanis/tower)依赖，Tow
     :middleware
     [#(wrap-tower-middleware % {:tconfig tconfig
                                 :locale-selector my-selector})]))
-```
+{% endhighlight %}
 
 <!-- more -->
 
 中间件将按照如下顺序查找，会使用第一个有效的语言来进行处理:
 
-```clojure
+{% highlight clojure %}
 (:locale request)
 (when-let [ls locale-selector] (ls request))
 (:locale session)
 (:locale params)
 (locale-from-headers headers)
 fallback-locale
-```
+{% endhighlight %}
 
 当中间件设置完成后，我们可以通过下面的代码来实现国际化:
 
-```clojure
+{% highlight clojure %}
 (ns mysite.routes.home
   (:use compojure.core)
   (:require [i18ntest.layout :as layout]
@@ -86,4 +86,4 @@ fallback-locale
 (defroutes home-routes
   (GET "/" req (home-page req))
   (GET "/about" [] (about-page)))
-```
+{% endhighlight %}
