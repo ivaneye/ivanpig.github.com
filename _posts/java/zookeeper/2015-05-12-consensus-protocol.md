@@ -4,6 +4,7 @@ title: 一致性协议
 categories: [consensus]
 tags: [consensus,paxos,zookeeper]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 
 ---
 

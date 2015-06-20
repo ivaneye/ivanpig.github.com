@@ -4,6 +4,7 @@ title: Clojure教程-环境搭建与Hello World
 categories: clojure
 tags: [clojure]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 
 ---
 

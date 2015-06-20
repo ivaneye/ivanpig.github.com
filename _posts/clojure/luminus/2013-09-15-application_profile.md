@@ -4,6 +4,7 @@ title: Luminus手册-应用配置
 categories: luminus
 tags: [clojure,luminus]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 
 ---
 Profiles

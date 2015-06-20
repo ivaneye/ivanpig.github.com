@@ -4,6 +4,7 @@ title: Clojure教程-Record和Protocol
 categories: clojure
 tags: [clojure]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 
 ---
 

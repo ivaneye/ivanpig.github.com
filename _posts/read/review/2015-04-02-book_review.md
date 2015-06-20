@@ -4,6 +4,7 @@ title:  英语口语相关书籍书评
 categories: [book]
 tags: [book,review]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 published: false
 
 ---

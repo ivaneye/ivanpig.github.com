@@ -4,6 +4,7 @@ title: 快学Scala习题解答—第六章 对象
 categories: scala
 tags: [java,scala]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 
 ---
 

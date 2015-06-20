@@ -4,6 +4,7 @@ title: Java基础
 categories: train
 tags: [java,javase,train]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 published: false
 
 ---

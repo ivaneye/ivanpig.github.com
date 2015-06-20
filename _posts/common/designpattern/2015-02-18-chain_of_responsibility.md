@@ -4,6 +4,7 @@ title: 语言与模式-16责任链模式
 categories: [designpattern]
 tags: [designpattern,java,clojure]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 
 ---
 

@@ -4,6 +4,7 @@ title: Clojure进阶:使用Clojure编写文字冒险游戏
 categories: clojure
 tags: [clojure]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 
 ---
 

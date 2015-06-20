@@ -4,6 +4,7 @@ title: Luminus手册-输入验证
 categories: luminus
 tags: [clojure,luminus]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 
 ---
 # Input Validation

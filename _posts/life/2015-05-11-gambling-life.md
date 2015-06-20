@@ -4,6 +4,7 @@ title: 赌博人生
 categories: [life]
 tags: [life]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 published: false
 
 ---

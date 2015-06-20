@@ -4,6 +4,7 @@ title: 读源码-Velocity使用
 categories: [velocity]
 tags: [opensource,velocity,java]
 avatarimg: "/img/head.jpg"
+author: 王一帆
 published: false
 
 ---
