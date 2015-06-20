@@ -3,21 +3,6 @@
  */
 
 $(function () {
-
-    $("div.highlight pre").attr("class","pygments highlight");
-    $("div.highlight").each(function(){
-        var _this = $(this);
-        var inner = _this.html();
-        _this.empty();
-        var _t = $("<div class='content'></div>");
-        _t.append(inner);
-        _this.append(_t);
-
-        var lang = _this.find("code").attr("data-lang");
-        $("")
-    });
-    $("div.highlight").attr("class","listingblock");
-
     //构建左目录树
     var _toc1 = $("<ul class='sectlevel1'></ul>");//一级目录ul
     var _innerToc1;  //二级目录对应的li
@@ -54,6 +39,10 @@ $(function () {
         }
         _this.html(name);
     });
+    if(innerT2 != null){
+        _innerToc1.append(_toc2);
+        innerT2 = null;
+    }
 
     $("#toc").append(_toc1);
 
