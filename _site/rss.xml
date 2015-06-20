@@ -4,7 +4,7 @@
     <title>IvanEye</title>
     <link href="http://www.ivaneye.com/rss.xml" rel="self"/>
     <link href="http://www.ivaneye.com/"/>
-    <updated>2015-06-14T15:25:46+08:00</updated>
+    <updated>2015-06-20T14:23:35+08:00</updated>
     <id>http://www.ivaneye.com/</id>
     <author>
         <name>Ivan</name>
@@ -27,11 +27,11 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/designpattern/command.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2&gt;安装Graphviz&lt;/h2&gt;
+&lt;h1&gt;安装Graphviz&lt;/h1&gt;
 
 &lt;p&gt;cdraw是对Graphviz的简单封装，请先安装Graphviz&lt;/p&gt;
 
-&lt;h2&gt;添加依赖&lt;/h2&gt;
+&lt;h1&gt;添加依赖&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;使用leiningen新建一个Clojure项目uml&lt;/li&gt;
@@ -39,25 +39,25 @@
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;[com.ivaneye/cdraw &quot;0.2.0&quot;]
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;com.ivaneye/cdraw&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;0.2.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;h2&gt;定义类&lt;/h2&gt;
+
+&lt;h1&gt;定义类&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;在uml.core中编写如下代码&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns uml.core
-  (:require [cdraw.uml :refer :all]))
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;ns &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;uml.core&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:require&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;cdraw.uml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:refer&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt;
+  
+ &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+ &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Inboker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+ &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Action()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
+ &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Execute()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
+ &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:f&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;state&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Execute()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
- (defclass Client)
- (defclass Inboker)
- (defclass Receiver {:m [&quot;Action()&quot;]})
- (defclass Command {:m [&quot;Execute()&quot;]})
- (defclass ConcreteCommand {:f  [&quot;state&quot;] :m [&quot;Execute()&quot;]})
-&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
 &lt;li&gt;第一，二行，引入了cdraw&lt;/li&gt;
@@ -70,19 +70,19 @@
 &lt;!-- more --&gt;
 
 
-&lt;h2&gt;添加依赖&lt;/h2&gt;
+&lt;h1&gt;添加依赖&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;继续在uml.core中添加依赖代码&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defrelation Client :u Receiver) 
-(defrelation ConcreteCommand :u Receiver {:t &quot;reveiver&quot;})  
-(defrelation Client :d ConcreteCommand)
-(defrelation ConcreteCommand :e Command)
-(defrelation Invoker :p Command)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:u&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:u&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:t&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;reveiver&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;  
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:e&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Invoker&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:p&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;ul&gt;
 &lt;li&gt;Client关联Receiver&lt;/li&gt;
@@ -93,37 +93,32 @@
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code&gt;关联  :u 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;关联 :u 
 依赖 :d
 聚合 :p
 组合 :c
 继承 :e
-实现 :i
-&lt;/code&gt;&lt;/pre&gt;
+实现 :i&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2&gt;添加label&lt;/h2&gt;
+&lt;h1&gt;添加label&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;在uml.core中添加如下代码&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(label ConcreteCommand &quot;receive-\\&amp;gt;Action()&quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;blockquote&gt;&lt;p&gt;需要转义&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;receive-&amp;gt;Action()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2&gt;定义子包&lt;/h2&gt;
+&lt;h1&gt;定义子包&lt;/h1&gt;
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defsub &quot;Sub Command&quot; Command ConcreteCommand)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defsub&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Sub Command&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;ul&gt;
 &lt;li&gt;第一个参数为子包名称&lt;/li&gt;
@@ -133,15 +128,15 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2&gt;生成&lt;/h2&gt;
+&lt;h1&gt;生成&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;在uml.core中添加如下代码&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(watch (to-file &quot;/t.dot&quot;) &quot;/t.png&quot;)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;watch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to-file&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;/t.dot&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;/t.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;ul&gt;
 &lt;li&gt;to-file生成符合Graphviz的dot文件&lt;/li&gt;
@@ -149,30 +144,30 @@
 &lt;/ul&gt;
 
 
-&lt;h2&gt;最终代码&lt;/h2&gt;
+&lt;h1&gt;最终代码&lt;/h1&gt;
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns uml.core
-  (:require [cdraw.uml :refer :all]))
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;ns &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;uml.core&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:require&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;cdraw.uml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:refer&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt;
 
 
-(defclass Client)
-(defclass Invoker)
-(defclass Receiver {:m [&quot;Action()&quot;]})
-(defclass Command {:m [&quot;Execute()&quot;]})
-(defclass ConcreteCommand {:f  [&quot;state&quot;] :m [&quot;Execute()&quot;]})
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Invoker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Action()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Execute()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:f&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;state&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Execute()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
 
-(defrelation Client :u Receiver)
-(defrelation ConcreteCommand :u Receiver {:t &quot;reveiver&quot;})
-(defrelation Client :d ConcreteCommand)
-(defrelation ConcreteCommand :e Command)
-(defrelation Invoker :p Command)
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:u&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:u&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:t&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;reveiver&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:e&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Invoker&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:p&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-(label ConcreteCommand &quot;receive-\\&amp;gt;Action()&quot;)
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;receive-\\&amp;gt;Action()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-(defsub &quot;Sub Command&quot; Command ConcreteCommand)
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defsub&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Sub Command&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-(watch (to-file &quot;/t.dot&quot;) &quot;/t.png&quot;)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;watch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to-file&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;/t.dot&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;/t.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;ul&gt;
 &lt;li&gt;cdraw项目地址:&lt;a href=&quot;https://github.com/ivanpig/cdraw&quot;&gt;https://github.com/ivanpig/cdraw&lt;/a&gt;&lt;/li&gt;
@@ -189,11 +184,11 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/designpattern/command.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2&gt;安装Graphviz&lt;/h2&gt;
+&lt;h1&gt;安装Graphviz&lt;/h1&gt;
 
 &lt;p&gt;cdraw是对Graphviz的简单封装，请先安装Graphviz&lt;/p&gt;
 
-&lt;h2&gt;添加依赖&lt;/h2&gt;
+&lt;h1&gt;添加依赖&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;使用leiningen新建一个Clojure项目uml&lt;/li&gt;
@@ -201,25 +196,25 @@
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;[com.ivaneye/cdraw &quot;0.2.0&quot;]
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;com.ivaneye/cdraw&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;0.2.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;h2&gt;定义类&lt;/h2&gt;
+
+&lt;h1&gt;定义类&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;在uml.core中编写如下代码&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns uml.core
-  (:require [cdraw.uml :refer :all]))
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;ns &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;uml.core&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:require&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;cdraw.uml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:refer&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt;
+  
+ &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+ &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Inboker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+ &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Action()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
+ &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Execute()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
+ &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:f&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;state&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Execute()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
- (defclass Client)
- (defclass Inboker)
- (defclass Receiver {:m [&quot;Action()&quot;]})
- (defclass Command {:m [&quot;Execute()&quot;]})
- (defclass ConcreteCommand {:f  [&quot;state&quot;] :m [&quot;Execute()&quot;]})
-&lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
 &lt;li&gt;第一，二行，引入了cdraw&lt;/li&gt;
@@ -232,19 +227,19 @@
 &lt;!-- more --&gt;
 
 
-&lt;h2&gt;添加依赖&lt;/h2&gt;
+&lt;h1&gt;添加依赖&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;继续在uml.core中添加依赖代码&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defrelation Client :u Receiver) 
-(defrelation ConcreteCommand :u Receiver {:t &quot;reveiver&quot;})  
-(defrelation Client :d ConcreteCommand)
-(defrelation ConcreteCommand :e Command)
-(defrelation Invoker :p Command)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:u&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:u&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:t&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;reveiver&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;  
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:e&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Invoker&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:p&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;ul&gt;
 &lt;li&gt;Client关联Receiver&lt;/li&gt;
@@ -255,37 +250,32 @@
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code&gt;关联  :u 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;关联 :u 
 依赖 :d
 聚合 :p
 组合 :c
 继承 :e
-实现 :i
-&lt;/code&gt;&lt;/pre&gt;
+实现 :i&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2&gt;添加label&lt;/h2&gt;
+&lt;h1&gt;添加label&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;在uml.core中添加如下代码&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(label ConcreteCommand &quot;receive-\\&amp;gt;Action()&quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;blockquote&gt;&lt;p&gt;需要转义&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;receive-&amp;gt;Action()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2&gt;定义子包&lt;/h2&gt;
+&lt;h1&gt;定义子包&lt;/h1&gt;
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(defsub &quot;Sub Command&quot; Command ConcreteCommand)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defsub&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Sub Command&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;ul&gt;
 &lt;li&gt;第一个参数为子包名称&lt;/li&gt;
@@ -295,15 +285,15 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/mycode/cdraw/c4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2&gt;生成&lt;/h2&gt;
+&lt;h1&gt;生成&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;在uml.core中添加如下代码&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(watch (to-file &quot;/t.dot&quot;) &quot;/t.png&quot;)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;watch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to-file&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;/t.dot&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;/t.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;ul&gt;
 &lt;li&gt;to-file生成符合Graphviz的dot文件&lt;/li&gt;
@@ -311,30 +301,30 @@
 &lt;/ul&gt;
 
 
-&lt;h2&gt;最终代码&lt;/h2&gt;
+&lt;h1&gt;最终代码&lt;/h1&gt;
 
-&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;(ns uml.core
-  (:require [cdraw.uml :refer :all]))
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;ns &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;uml.core&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:require&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;cdraw.uml&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:refer&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt;
 
 
-(defclass Client)
-(defclass Invoker)
-(defclass Receiver {:m [&quot;Action()&quot;]})
-(defclass Command {:m [&quot;Execute()&quot;]})
-(defclass ConcreteCommand {:f  [&quot;state&quot;] :m [&quot;Execute()&quot;]})
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Invoker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Action()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Execute()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defclass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:f&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;state&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Execute()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
 
-(defrelation Client :u Receiver)
-(defrelation ConcreteCommand :u Receiver {:t &quot;reveiver&quot;})
-(defrelation Client :d ConcreteCommand)
-(defrelation ConcreteCommand :e Command)
-(defrelation Invoker :p Command)
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:u&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:u&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Receiver&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:t&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;reveiver&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:e&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defrelation&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Invoker&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:p&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-(label ConcreteCommand &quot;receive-\\&amp;gt;Action()&quot;)
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;receive-\\&amp;gt;Action()&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-(defsub &quot;Sub Command&quot; Command ConcreteCommand)
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defsub&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Sub Command&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ConcreteCommand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-(watch (to-file &quot;/t.dot&quot;) &quot;/t.png&quot;)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;watch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to-file&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;/t.dot&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;/t.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;ul&gt;
 &lt;li&gt;cdraw项目地址:&lt;a href=&quot;https://github.com/ivanpig/cdraw&quot;&gt;https://github.com/ivanpig/cdraw&lt;/a&gt;&lt;/li&gt;

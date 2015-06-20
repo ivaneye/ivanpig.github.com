@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="description"
+          content="Materialize is a modern responsive CSS framework based on Material Design by Google. ">
+    <title>Forms - Materialize</title>
+    <!-- Favicons-->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <!--  Android 5 Chrome Color-->
+    <meta name="theme-color" content="#EE6E73">
+    <!-- CSS-->
+    <link href="/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <link rel="stylesheet" href="/css/themes/my.css"/>
+    <script src="/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<body>
+<nav>
+    <div class="nav-wrapper teal">
+        <a href="#" class="brand-logo">&nbsp;Ivan's Blog</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="sass.html">时间轴</a></li>
+            <li><a href="components.html">标签库</a></li>
+            <li><a href="javascript.html">分类库</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<main>
+    <div class="container">
+        <!--[if lt IE 8]>
+        <i class="label label-danger">亲爱的用户，您的浏览器版本过低，建议您升级浏览器获得更好的用户体验</i>
+        <![endif]-->
+        <div>
+            <div class="posts">
+
+                {{ content }}
+
+            </div>
+        </div>
+
+        <script src="/js/min/nprogress.min.js"></script>
+        <script src="/js/index.js"></script>
+        <div class="topfade"><a href="javascript:;" title="返回顶部"></a></div>
+
+    </div>
+</main>
+
+<footer class="page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col l4 s12">
+                <img src="/img/qrcode.jpg" width="170"/>
+            </div>
+            <div class="col l4 s12">
+                <h5 class="white-text">Join the Discussion</h5>
+
+                <p class="grey-text text-lighten-4">We have a Gitter chat room set up where you can talk directly with
+                    us. Come in and discuss new features, future goals, general problems or questions, or anything else
+                    you can think of.</p>
+                <a class="btn waves-effect waves-light red lighten-3" target="_blank"
+                   href="https://gitter.im/Dogfalo/materialize">Chat</a>
+            </div>
+            <div class="col l4 s12" style="overflow: hidden;">
+                <h5 class="white-text">Connect</h5>
+                <a href="/about.html">About</a>
+                <a href="tencent://message/?uin=561802774">QQ</a>
+                <a href="https://github.com/ivanpig">GitHub</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            © 2014-2015 Materialize, All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="/js/materialize.min.js" type="text/javascript"></script>
+
+{% include analytics.html %}
+</body>
+
+</html>

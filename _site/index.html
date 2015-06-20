@@ -172,11 +172,11 @@
 
 <p><img src="/assets/designpattern/command.jpg" alt="" /></p>
 
-<h2>安装Graphviz</h2>
+<h1>安装Graphviz</h1>
 
 <p>cdraw是对Graphviz的简单封装，请先安装Graphviz</p>
 
-<h2>添加依赖</h2>
+<h1>添加依赖</h1>
 
 <ul>
 <li>使用leiningen新建一个Clojure项目uml</li>
@@ -184,25 +184,25 @@
 </ul>
 
 
-<pre><code class="clojure">[com.ivaneye/cdraw "0.2.0"]
-</code></pre>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">[</span><span class="nv">com.ivaneye/cdraw</span> <span class="s">&quot;0.2.0&quot;</span><span class="p">]</span></code></pre></div>
 
-<h2>定义类</h2>
+
+<h1>定义类</h1>
 
 <ul>
 <li>在uml.core中编写如下代码</li>
 </ul>
 
 
-<pre><code class="clojure">(ns uml.core
-  (:require [cdraw.uml :refer :all]))
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">ns </span><span class="nv">uml.core</span>
+  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">cdraw.uml</span> <span class="ss">:refer</span> <span class="ss">:all</span><span class="p">]))</span>
+  
+ <span class="p">(</span><span class="nf">defclass</span> <span class="nv">Client</span><span class="p">)</span>
+ <span class="p">(</span><span class="nf">defclass</span> <span class="nv">Inboker</span><span class="p">)</span>
+ <span class="p">(</span><span class="nf">defclass</span> <span class="nv">Receiver</span> <span class="p">{</span><span class="ss">:m</span> <span class="p">[</span><span class="s">&quot;Action()&quot;</span><span class="p">]})</span>
+ <span class="p">(</span><span class="nf">defclass</span> <span class="nv">Command</span> <span class="p">{</span><span class="ss">:m</span> <span class="p">[</span><span class="s">&quot;Execute()&quot;</span><span class="p">]})</span>
+ <span class="p">(</span><span class="nf">defclass</span> <span class="nv">ConcreteCommand</span> <span class="p">{</span><span class="ss">:f</span>  <span class="p">[</span><span class="s">&quot;state&quot;</span><span class="p">]</span> <span class="ss">:m</span> <span class="p">[</span><span class="s">&quot;Execute()&quot;</span><span class="p">]})</span></code></pre></div>
 
- (defclass Client)
- (defclass Inboker)
- (defclass Receiver {:m ["Action()"]})
- (defclass Command {:m ["Execute()"]})
- (defclass ConcreteCommand {:f  ["state"] :m ["Execute()"]})
-</code></pre>
 
 <ul>
 <li>第一，二行，引入了cdraw</li>
