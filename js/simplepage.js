@@ -45,5 +45,4 @@ $(function () {
     }
 
     $("#toc").append(_toc1);
-
 })
