@@ -21,11 +21,11 @@
             {% assign categories_list = page.categories %}
             {% if categories_list.first[0] == null %}
             {% for category in categories_list %}
-            <a class="post-categorybut " href="/type/#{{ post.categories  }}"><i class="fa fa-folder-open">&nbsp;{{ category | join: "/" }} ({{ site.categories[category].size }})</i></a>
+            <a class="post-categorybut " href="/type/#{{ category  }}"><i class="fa fa-folder-open">&nbsp;{{ category | join: "/" }} ({{ site.categories[category].size }})</i></a>
             {% endfor %}
             {% else %}
             {% for category in categories_list %}
-            <a class="post-categorybut " href="/type/#{{ post.categories  }}"><i class="fa fa-folder-open">&nbsp;{{ category[0] | join: "/" }} ({{ category[1].size }})</i></a>
+            <a class="post-categorybut " href="/type/#{{ category[0]  }}"><i class="fa fa-folder-open">&nbsp;{{ category[0] | join: "/" }} ({{ category[1].size }})</i></a>
             {% endfor %}
             {% endif %}
             {% endunless %}
@@ -34,11 +34,11 @@
             {% assign tags_list = page.tags %}
             {% if tags_list.first[0] == null %}
             {% for tag in tags_list %}
-            <a class="post-category " href="/tag/#{{ page.tags | first }}"><i class="fa fa-tags">&nbsp;{{ tag }} ({{ site.tags[tag].size }})</i></a>
+            <a class="post-category " href="/tag/#{{ tag }}"><i class="fa fa-tags">&nbsp;{{ tag }} ({{ site.tags[tag].size }})</i></a>
             {% endfor %}
             {% else %}
             {% for tag in tags_list %}
-            <a class="post-category " href="/tag/#{{ page.tags[1] }}"><i class="fa fa-tags">&nbsp;{{ tag[0] }} ({{ tag[1].size }})</i></a>
+            <a class="post-category " href="/tag/#{{ tag[0] }}"><i class="fa fa-tags">&nbsp;{{ tag[0] }} ({{ tag[1].size }})</i></a>
         </p>
         {% endfor %}
         {% endif %}

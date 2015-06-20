@@ -33,11 +33,11 @@ description: ""
             {% assign tags_list = post.tags %}
             {% if tags_list.first[0] == null %}
             {% for tag in tags_list %}
-            <a class="post-category " href="/tag/#{{ page.tags | first }}"><i class="fa fa-tags">{{ tag }} ({{ site.tags[tag].size }})</i></a>
+            <a class="post-category " href="/tag/#{{ tag }}"><i class="fa fa-tags">{{ tag }} ({{ site.tags[tag].size }})</i></a>
             {% endfor %}
             {% else %}
             {% for tag in tags_list %}
-            <a class="post-category " href="/tag/#{{ page.tags[1] }}"><i class="fa fa-tags">{{ tag[0] }} ({{ tag[1].size }})</i></a>
+            <a class="post-category " href="/tag/#{{ tag[0] }}"><i class="fa fa-tags">{{ tag[0] }} ({{ tag[1].size }})</i></a>
         </p>
         {% endfor %}
         {% endif %}
@@ -87,11 +87,11 @@ description: ""
             {% assign tags_list = post.tags %}
             {% if tags_list.first[0] == null %}
             {% for tag in tags_list %}
-            <a class="post-category " href="/tag/#{{ page.tags | first }}"><i class="fa fa-tags">{{ tag }} ({{ site.tags[tag].size }})</i></a>
+            <a class="post-category " href="/tag/#{{ tag }}"><i class="fa fa-tags">{{ tag }} ({{ site.tags[tag].size }})</i></a>
             {% endfor %}
             {% else %}
             {% for tag in tags_list %}
-            <a class="post-category " href="/tag/#{{ page.tags[1] }}"><i class="fa fa-tags">{{ tag[0] }} ({{ tag[1].size }})</i></a>
+            <a class="post-category " href="/tag/#{{ tag[0] }}"><i class="fa fa-tags">{{ tag[0] }} ({{ tag[1].size }})</i></a>
         </p>
         {% endfor %}
         {% endif %}
