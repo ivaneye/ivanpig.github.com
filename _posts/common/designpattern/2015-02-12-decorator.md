@@ -23,13 +23,13 @@ author: 王一帆
 
 JavaIO库的使用可能如下
 
-``` {.java}
+{% highlight java %}
 BufferedInputStream bi = new BufferedInputStream(new FileInputStream(filename));
-```
+{% endhighlight %}
 
 我们都知道FileInputStream是用来读取文件的，BufferedInputStream是提供了缓存的能力。我们分别看下他们的源代码
 
-``` {.java}
+{% highlight java %}
 public class BufferedInputStream extends FilterInputStream
 ...
 
@@ -38,7 +38,7 @@ public class FilterInputStream extends InputStream
 
 public class FileInputStream extends InputStream
 ...
-```
+{% endhighlight %}
 
 BufferedInputStream继承了FilterInputStream，FilterInputStream和FileInputStream一样都继承自InputStream.
 

@@ -23,7 +23,7 @@ author: 王一帆
 
 抽象表达式角色
 
-```java
+{% highlight java %}
 public abstract class Expression {
     /**
      * 以环境为准，本方法解释给定的任何一个表达式
@@ -42,13 +42,13 @@ public abstract class Expression {
      */
     public abstract String toString();
 }
-```
+{% endhighlight %}
 
 <!-- more -->
 
 一个Constant对象代表一个布尔常量
 
-```java
+{% highlight java %}
 public class Constant extends Expression{
 
     private boolean value;
@@ -81,11 +81,11 @@ public class Constant extends Expression{
         return new Boolean(value).toString();
     }
 }
-```
+{% endhighlight %}
 
 一个Variable对象代表一个有名变量
 
-```java
+{% highlight java %}
 public class Variable extends Expression {
 
     private String name;
@@ -118,11 +118,11 @@ public class Variable extends Expression {
         return ctx.lookup(this);
     }
 }
-```
+{% endhighlight %}
 
 代表逻辑“与”操作的And类，表示由两个布尔表达式通过逻辑“与”操作给出一个新的布尔表达式的操作
 
-```java
+{% highlight java %}
 public class And extends Expression {
 
     private Expression left,right;
@@ -155,11 +155,11 @@ public class And extends Expression {
         return "(" + left.toString() + " AND " + right.toString() + ")";
     }
 }
-```
+{% endhighlight %}
 
 代表逻辑“或”操作的Or类，代表由两个布尔表达式通过逻辑“或”操作给出一个新的布尔表达式的操作
 
-```java
+{% highlight java %}
 public class Or extends Expression {
     private Expression left,right;
 
@@ -190,11 +190,11 @@ public class Or extends Expression {
         return "(" + left.toString() + " OR " + right.toString() + ")";
     }
 }
-```
+{% endhighlight %}
 
 代表逻辑“非”操作的Not类，代表由一个布尔表达式通过逻辑“非”操作给出一个新的布尔表达式的操作
 
-```java
+{% highlight java %}
 public class Not extends Expression {
 
     private Expression exp;
@@ -226,11 +226,11 @@ public class Not extends Expression {
         return "(Not " + exp.toString() + ")";
     }
 }
-```
+{% endhighlight %}
 
 环境(Context)类定义出从变量到布尔值的一个映射
 
-```java
+{% highlight java %}
 public class Context {
 
     private Map<Variable,Boolean> map = new HashMap<Variable,Boolean>();
@@ -247,11 +247,11 @@ public class Context {
         return value.booleanValue();
     }
 }
-```
+{% endhighlight %}
 
 客户端类
 
-```java
+{% highlight java %}
 public class Client {
 
     public static void main(String[] args) {
@@ -268,7 +268,7 @@ public class Client {
         System.out.println(exp.toString() + "=" + exp.interpret(ctx));
     }
 }
-```
+{% endhighlight %}
 
 # Clojure实现
 
@@ -276,7 +276,7 @@ public class Client {
 
 先演示不带上下文的解析器！其实就是内部DSL!
 
-```clojure
+{% highlight clojure %}
 (defmacro assign [a v]
    `(def ~a ~v))
 
@@ -289,6 +289,6 @@ public class Client {
 (println "x =" x)
 (println "y =" y)
 (println exp "=" (eval exp))
-```
+{% endhighlight %}
 
 [这里](/assets/designpattern/comp.clj)是一个较完整的代码!

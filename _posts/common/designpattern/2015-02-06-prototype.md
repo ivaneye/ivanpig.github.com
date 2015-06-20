@@ -22,7 +22,7 @@ author: 王一帆
 
 # Java实现
 
-``` {.java}
+{% highlight java %}
 //浅拷贝
 public class A implements Cloneable{
 
@@ -79,11 +79,11 @@ public class A implements Cloneable{
         System.out.println("ac-b:" + ac.getB().getStr());
     }
 }
-```
+{% endhighlight %}
 
 <!-- more -->
 
-```
+{% highlight java%}
 public class B{
      private String str;
 
@@ -95,9 +95,9 @@ public class B{
         this.str = str;
     }
 }
-```
+{% endhighlight %}
 
-```
+{% highlight sh %}
 //输出结果
 a-str:Hello
 a-b:Hello B
@@ -108,9 +108,9 @@ a-b:Hello BB
 ac-str:Hello
 ac-b:Hello BB       --浅拷贝导致了，ac和a中的B是相同的引用，a中的b被修改后，ac中的b也被修改，这应该是不想要的结果
                     --所以需要深拷贝。深拷贝就是将所有涉及到的对象都进行Clone
-```
+{% endhighlight %}
 
-``` {.java}
+{% highlight java %}
 //深拷贝
 public class A implements Cloneable{
 
@@ -168,9 +168,9 @@ public class A implements Cloneable{
         System.out.println("ac-b:" + ac.getB().getStr());
     }
 }
-```
+{% endhighlight %}
 
-```
+{% highlight java%}
 //B也要实现Cloneable并重写clone方法
 public class B implements Cloneable{
      private String str;
@@ -188,9 +188,9 @@ public class B implements Cloneable{
         return super.clone();
     }
 }
-```
+{% endhighlight %}
 
-```
+{% highlight sh %}
 //输出结果
 /*
 a-str:Hello
@@ -202,7 +202,7 @@ a-b:Hello BB
 ac-str:Hello
 ac-b:Hello B        --此处a中的b被修改后，ac中的b不会被影响
 */
-```
+{% endhighlight %}
 
 # Clojure实现
 

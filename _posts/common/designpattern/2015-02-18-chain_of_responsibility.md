@@ -22,7 +22,7 @@ author: 王一帆
 
 # Java实现
 
-```java
+{% highlight java %}
 public abstract class Handler {
 
     protected Handler successor;
@@ -36,11 +36,11 @@ public abstract class Handler {
     public void setSuccessor(Handler successor) {
         this.successor = successor;
     }
-```
+{% endhighlight %}
 
 <!-- more -->
 
-```java
+{% highlight java %}
 public class ConcreteHandler1 extends Handler {
 
     @Override
@@ -56,9 +56,9 @@ public class ConcreteHandler1 extends Handler {
     }
 
 }
-```
+{% endhighlight %}
 
-```java
+{% highlight java %}
 public class ConcreteHandler2 extends Handler {
 
     @Override
@@ -73,9 +73,9 @@ public class ConcreteHandler2 extends Handler {
         }
     }
 }
-```
+{% endhighlight %}
 
-```java
+{% highlight java %}
 public class ConcreteHandlerN extends Handler {
 
     /**
@@ -88,9 +88,9 @@ public class ConcreteHandlerN extends Handler {
         System.out.println( "ConcreteHandlerN handled");
     }
 }
-```
+{% endhighlight %}
 
-```java
+{% highlight java %}
 public class Client {
 
     public static void main(String[] args) {
@@ -107,11 +107,11 @@ public class Client {
         handler1.handlerRequest("ConcreteHandler2");
     }
 }
-```
+{% endhighlight %}
 
 # Clojure实现
 
-```clojure
+{% highlight clojure %}
 
 (defn handler-request1 [condition]
   (if (= "ConcreteHandler1" condition)
@@ -130,4 +130,4 @@ public class Client {
     handler-request1
     handler-request2
     handler-requestn)
-```
+{% endhighlight %}
