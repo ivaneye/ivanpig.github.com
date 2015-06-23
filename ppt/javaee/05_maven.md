@@ -122,7 +122,7 @@ mvn archetype:create
 
 ## 目录结构
 
-![]({{site.IMG_PATH}}/home/ivan/my/ivanpig.github.com/ppt/javaee/file/maven02.gif)
+![]({{site.CDN_PATH}}/home/ivan/my/ivanpig.github.com/ppt/javaee/file/maven02.gif)
 
 
 ## 课堂练习
@@ -137,19 +137,19 @@ mvn archetype:create
 
 ## 新建Maven项目一
 
-![]({{site.IMG_PATH}}/home/ivan/my/teach/javaee/file/maven_01.jpg)
+![]({{site.CDN_PATH}}/home/ivan/my/teach/javaee/file/maven_01.jpg)
 
 ## 新建Maven项目二
 
-![]({{site.IMG_PATH}}/home/ivan/my/teach/javaee/file/maven_02.jpg)
+![]({{site.CDN_PATH}}/home/ivan/my/teach/javaee/file/maven_02.jpg)
 
 ## 新建Maven项目三
 
-![]({{site.IMG_PATH}}/home/ivan/my/teach/javaee/file/maven_03.jpg)
+![]({{site.CDN_PATH}}/home/ivan/my/teach/javaee/file/maven_03.jpg)
 
 ## 新建Maven项目四
 
-![]({{site.IMG_PATH}}/home/ivan/my/teach/javaee/file/maven_04.jpg)
+![]({{site.CDN_PATH}}/home/ivan/my/teach/javaee/file/maven_04.jpg)
 
 ## 课堂练习
 

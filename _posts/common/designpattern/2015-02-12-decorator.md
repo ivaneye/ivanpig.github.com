@@ -11,7 +11,7 @@ author: 王一帆
 
 动态地给一个对象添加一些额外的职责。就增加功能来说，Decorator模式相比生成子类更为灵活。
 
-![]({{site.IMG_PATH}}/assets/designpattern/decorator.jpg)
+![]({{site.CDN_PATH}}/assets/designpattern/decorator.jpg)
 
 # 适用性
 

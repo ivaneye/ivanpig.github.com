@@ -13,4 +13,4 @@ author: 王一帆
 
 <!-- more -->
 
-![]({{site.IMG_PATH}}/mind/transaction.png)
+![]({{site.CDN_PATH}}/mind/transaction.png)

@@ -10,12 +10,12 @@
         <link href="http://www.ivaneye.com/rss.xml" title="RSS 2.0" type="application/rss+xml" rel="alternate"/>
         <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
         <title>{% if page.title %}{{ page.title }} - {% endif %}IvanPig's Blog</title>
-        <link rel="stylesheet" href="/css/min/pure-min.css">
+        <link rel="stylesheet" href="{{site.CDN_PATH}}/css/min/pure-min.css">
         <!--[if lte IE 8]>
 <link rel="stylesheet" href="/css/min/grids-responsive-old-ie-min.css">
 <![endif]-->
         <!--[if gt IE 8]><!-->
-        <link rel="stylesheet" href="/css/min/grids-responsive-min.css">
+        <link rel="stylesheet" href="{{site.CDN_PATH}}/css/min/grids-responsive-min.css">
         <!--<![endif]-->
 
         <!--[if lte IE 8]>
@@ -29,9 +29,9 @@
         <!--[if lte IE 8]>
 <link rel="stylesheet" href="/css/min/font-awesome-ie7.min.css">
 <![endif]-->
-        <script src="/js/min/jquery-1.7.2.min.js"></script>
-        <link rel="stylesheet" href="/css/themes/my.css"/>
-        <script src="/js/highlight.pack.js"></script>
+        <script src="{{site.CDN_PATH}}/js/min/jquery-1.7.2.min.js"></script>
+        <link rel="stylesheet" href="{{site.CDN_PATH}}/css/themes/my.css"/>
+        <script src="{{site.CDN_PATH}}/js/highlight.pack.js"></script>
     </head>
 
     <body>
@@ -41,7 +41,7 @@
                 <div class="header">
                     <div class="headerpic">
                         <a href="/">
-                            <img src="/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
+                            <img src="{{site.CDN_PATH}}/img/head.jpg" alt="Profile Picture" style="width: 140px;" title="返回首页">
                         </a>
                     </div>
                     <!-- <h1 class="brand-title">IvanPig's Blog</h1>-->

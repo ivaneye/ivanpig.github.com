@@ -9,10 +9,10 @@
     <meta name="generator" content="Asciidoctor 1.5.1">
     <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
     <title>你看到的是你想看到的</title>
-    <link rel="stylesheet" href="/css/simple/font-awesome.min.css"/>
-    <link rel="stylesheet" href="/css/simple/simple.css"/>
-    <link rel="stylesheet" href="/css/simple/highliight.css"/>
-    <script src="/js/min/jquery-1.7.2.min.js"></script>
+    <link rel="stylesheet" href="{{site.CDN_PATH}}/css/simple/font-awesome.min.css"/>
+    <link rel="stylesheet" href="{{site.CDN_PATH}}/css/simple/simple.css"/>
+    <link rel="stylesheet" href="{{site.CDN_PATH}}/css/simple/highliight.css"/>
+    <script src="{{site.CDN_PATH}}/js/min/jquery-1.7.2.min.js"></script>
     <script type="text/javascript">
         //获取url中的参数
         function getUrlParam(name) {
@@ -22,9 +22,9 @@
         }
         var style = getUrlParam("style");
         if(style == null || style == undefined){
-            document.write("<link rel='stylesheet' href='/css/simple/highliight.css'/>");
+            document.write("<link rel='stylesheet' href='{{site.CDN_PATH}}/css/simple/highliight.css'/>");
         }else{
-            document.write("<link rel='stylesheet' href='/css/pygmentscss/" + style + ".css'/>");
+            document.write("<link rel='stylesheet' href='{{site.CDN_PATH}}/css/pygmentscss/" + style + ".css'/>");
         }
     </script>
     <style>
@@ -70,6 +70,6 @@
     </div>
 </div>
 
-<script src="/js/simplecode.js" ></script>
+<script src="{{site.CDN_PATH}}/js/simplecode.js" ></script>
 </body>
 </html>

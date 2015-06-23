@@ -11,7 +11,7 @@ author: 王一帆
 
 运用共享技术有效地支持大量细粒度的对象。
 
-![]({{site.IMG_PATH}}/assets/designpattern/flyweight.jpg)
+![]({{site.CDN_PATH}}/assets/designpattern/flyweight.jpg)
 
 # 适用性
 
