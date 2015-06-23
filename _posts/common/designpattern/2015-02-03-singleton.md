@@ -26,7 +26,7 @@ author: 王一帆
 
 保证一个类仅有一个实例，并提供一个访问它的全局访问点。
 
-![](/assets/designpattern/singleton.jpg)
+![]({{site.IMG_PATH}}/assets/designpattern/singleton.jpg)
 
 # 适用性
 

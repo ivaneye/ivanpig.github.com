@@ -10,6 +10,6 @@ author: 王一帆
 
 框架结构图
 
-![](/mind/framework.png)
+![]({{site.IMG_PATH}}/mind/framework.png)
 
 [源码下载](https://github.com/ivanpig/pig-template)

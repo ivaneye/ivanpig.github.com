@@ -9,7 +9,7 @@
 当我们在浏览器中输入类似上面的链接后,做了什么事情?
 
 
-![](/home/ivan/my/teach/javaee/file/server.jpg)
+![]({{site.IMG_PATH}}/home/ivan/my/teach/javaee/file/server.jpg)
 
 ## HTTP请求报文
 

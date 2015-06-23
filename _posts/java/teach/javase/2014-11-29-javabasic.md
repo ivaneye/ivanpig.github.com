@@ -104,7 +104,7 @@ Java中需要理解两个路径：
 
 ## 学习曲线
 
-![](../assets/javabasic/5.jpg)
+![]({{site.IMG_PATH}}../assets/javabasic/5.jpg)
 
 ## 练习
 
@@ -146,13 +146,13 @@ public class Hello{
 
 --------------
 
-![](/home/ivan/my/teach/java/javase/01_basic/file/2.jpg)
+![]({{site.IMG_PATH}}/home/ivan/my/teach/java/javase/01_basic/file/2.jpg)
 
 -   思考,Java如何做到跨平台?
 
 ##
 
-![](/home/ivan/my/teach/java/javase/01_basic/file/1.jpg)
+![]({{site.IMG_PATH}}/home/ivan/my/teach/java/javase/01_basic/file/1.jpg)
 
 # 代码组成
 
@@ -212,7 +212,7 @@ public class Hello{
 ## 关键字
 
 
-![](/home/ivan/my/teach/java/javase/01_basic/file/3.jpg)
+![]({{site.IMG_PATH}}/home/ivan/my/teach/java/javase/01_basic/file/3.jpg)
 
 ## 字面量
 
@@ -261,7 +261,7 @@ public class Hello{
 
 --------------
 
-![](/home/ivan/my/teach/java/javase/01_basic/file/4.jpg)
+![]({{site.IMG_PATH}}/home/ivan/my/teach/java/javase/01_basic/file/4.jpg)
 
 ## 使用递归来计算基本类型的范围
 
@@ -880,7 +880,7 @@ public class Test {
 
 -   使用数组计算矩阵乘法
 
-![](/home/ivan/my/teach/java/javase/01_basic/file/6.jpg)
+![]({{site.IMG_PATH}}/home/ivan/my/teach/java/javase/01_basic/file/6.jpg)
 
 ## 答案
 

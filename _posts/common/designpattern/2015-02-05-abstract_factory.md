@@ -12,7 +12,7 @@ author: 王一帆
 
 提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。
 
-![](/assets/designpattern/abstract_factory.jpg)
+![]({{site.IMG_PATH}}/assets/designpattern/abstract_factory.jpg)
 
 # 适用性
 

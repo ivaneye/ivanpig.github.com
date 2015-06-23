@@ -23,7 +23,7 @@
 
 - 以SpringMVC为例
 
-![](/home/ivan/my/teach/javaee/file/springmvc_01.jpg)
+![]({{site.IMG_PATH}}/home/ivan/my/teach/javaee/file/springmvc_01.jpg)
 
 ## 实际上...
 
