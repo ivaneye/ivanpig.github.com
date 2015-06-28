@@ -36,7 +36,7 @@ TestResult就是这样一个对象，它收集的结果可以方便在各个终�
 
 查看源码，我们可以看到TestSetup类中的run方法，也实例化一个Protectable对象，继而进行调用。
 
-{% highlight java %}
+```java
 public void run(final TestResult result) {
   Protectable p= new Protectable() {
     public void protect() throws Exception {
@@ -47,7 +47,7 @@ public void run(final TestResult result) {
   };
   result.runProtected(this, p);
 }
-{% endhighlight %}
+```
 
 在这里，Protectable中封装了不同的执行逻辑，然后传递给runProtected方法来执行。
 
@@ -57,7 +57,7 @@ public void run(final TestResult result) {
 
 上篇提到了startTest和endTest方法，只是简单的提到了它们是触发添加的Listener的。我们来看下它们的实现。
 
-{% highlight java %}
+```java
 public void startTest(Test test) {
 	final int count= test.countTestCases();
 	synchronized(this) {
@@ -73,7 +73,7 @@ public void endTest(Test test) {
 		((TestListener)e.nextElement()).endTest(test);
 	}
 }
-{% endhighlight %}
+```
 
 它们只是去遍历TestListener去执行其对应的方法。
 
@@ -91,7 +91,7 @@ public void endTest(Test test) {
 
 runBare方法如下:
 
-{% highlight java %}
+```java
 public void runBare() throws Throwable {
   Throwable exception= null;
   setUp();
@@ -108,7 +108,7 @@ public void runBare() throws Throwable {
   }
   if (exception != null) throw exception;
 }
-{% endhighlight %}
+```
 
 runBare()方法定义了测试执行的整体框架，而对应的实现都由子类来实现了！
 
@@ -123,7 +123,7 @@ runBare()方法定义了测试执行的整体框架，而对应的实现都由�
 
 我们看runTest方法
 
-{% highlight java %}
+```java
 protected void runTest() throws Throwable {
 		assertNotNull(fName); // Some VMs crash when calling getMethod(null,null);
 		Method runMethod= null;
@@ -152,7 +152,7 @@ protected void runTest() throws Throwable {
 			throw e;
 		}
 }
-{% endhighlight %}
+```
 
 # TestSuite与TestCase
 
@@ -193,7 +193,7 @@ JUnit通过继承TestCase来实现具体的测试，执行测试则是执行具�
 
 在执行测试方法时，在runTest()方法内，使用了反射，来执行test*()方法.
 
-{% highlight java %}
+```java
 protected void runTest() throws Throwable {
 	assertNotNull(fName); // Some VMs crash when calling getMethod(null,null);
 	Method runMethod= null;
@@ -222,7 +222,7 @@ protected void runTest() throws Throwable {
 		throw e;
 	}
 }
-{% endhighlight %}
+```
 
 这里网上不少文章分析这里是适配器模式，个人认为比较牵强。
 

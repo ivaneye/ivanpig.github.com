@@ -15,21 +15,21 @@ author: 王一帆
 编写示例程序，展示为什么
 ------------------------
 
-{% highlight scala %}
+```scala
 package com.horstmann.impatient
-{% endhighlight %}
+```
 
 不同于
 
-{% highlight scala %}
+```scala
 package com
 package horstmann
 package impatient
-{% endhighlight %}
+```
 
 分别使用package的效果如下
 
-{% highlight scala %}
+```scala
 package com {
   class T1() {}
 
@@ -41,15 +41,15 @@ package com {
     }
   }
 }
-{% endhighlight %}
+```
 
 子包里的类可以使用父包里的类。但是第一种方式不可以
 
-{% highlight scala %}
+```scala
 package com.horstmann.impatient{
   class T4(t1:T1,t3:T3)      //无法找到T1
 }
-{% endhighlight %}
+```
 
 <!-- more -->
 
@@ -58,7 +58,7 @@ package com.horstmann.impatient{
 
 这样可以吗？
 
-{% highlight scala %}
+```scala
 package com {
   class T1() {}
 
@@ -76,17 +76,17 @@ import com._
 class TT(t1:T1){
 
 }
-{% endhighlight %}
+```
 
 编写一个包random,加入函数nextInt():Int,nextDouble():Double,setSeed(seed:Int):Unit。生成随机数的算法采用线性同余生成器:
 ----------------------------------------------------------------------------------------------------------------------
 
-{% highlight sh %}
+```sh
 后值 = (前值 * a + b)mod 2^n
 其中,a = 1664525,b=1013904223,n = 32,前值的初始值为seed
-{% endhighlight %}
+```
 
-{% highlight scala %}
+```scala
 package random{
 package object random{
 
@@ -126,7 +126,7 @@ object Test extends App {
 }
 
 }
-{% endhighlight %}
+```
 
 在你看来Scala的设计者为什么要提供package object语法而不是简单的让你将函数和变量添加到包中呢？
 ---------------------------------------------------------------------------------------------
@@ -141,7 +141,7 @@ private[com] def giveRaise(rate:Double)的含义是什么？有用吗？
 编写一段程序,将Java哈希映射中的所有元素拷贝到Scala哈希映射。用引入语句重命名这两个类。
 --------------------------------------------------------------------------------------
 
-{% highlight scala %}
+```scala
 import java.util.{HashMap => JavaHashMap}
 import scala.collection.mutable.HashMap
 
@@ -160,12 +160,12 @@ object Test extends App{
 
   println(smap.mkString)
 }
-{% endhighlight %}
+```
 
 在前一个练习中，将所有引入语句移动到尽可能小的作用域里
 ------------------------------------------------------
 
-{% highlight scala %}
+```scala
 object Test extends App{
 
   import java.util.{HashMap => JavaHashMap}
@@ -185,22 +185,22 @@ object Test extends App{
 
   println(smap.mkString)
 }
-{% endhighlight %}
+```
 
 以下代码的作用是什么？这是个好主意吗？
 --------------------------------------
 
-{% highlight scala %}
+```scala
 import java._
 import javax._
-{% endhighlight %}
+```
 
 导入java和javax下的所有类。而java和javax下是没有类的。所以此代码无用
 
 编写一段程序，引入java.lang.System类，从user.name系统属性读取用户名，从Console对象读取一个密码,如果密码不是"secret"，则在标准错误流中打印一个消息；如果密码是"secret"，则在标准输出流中打印一个问候消息。不要使用任何其他引入，也不要使用任何限定词(带句点的那种)
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-{% highlight scala %}
+```scala
 import java.lang.System
 
 object Test extends App{
@@ -209,7 +209,7 @@ object Test extends App{
   if (password equals "secret") System.out.println("Hello " + System.getProperty("user.name"))
   else System.err.println("password error!")
 }
-{% endhighlight %}
+```
 
 除了StringBuilder,还有哪些java.lang的成员是被scala包覆盖的？
 ------------------------------------------------------------

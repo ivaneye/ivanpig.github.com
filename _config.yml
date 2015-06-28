@@ -3,10 +3,14 @@ production_url: http://www.ivaneye.com
 #
 # Jekyll Settings
 #
-#rdiscount解析器对于嵌入html javascript代码,为文章增加特定效果兼容较好
-markdown: rdiscount
-rdiscount:
-  extensions: [  "autolink", ]
+markdown: redcarpet   # [ maruku | rdiscount | kramdown | redcarpet ]
+redcarpet:
+  extensions:
+    - fenced_code_blocks
+    - no_intra_emphasis
+    - strikethrough
+    - autolink
+    - tables
 markdown_ext:  markdown,mkd,mkdn,md
 highlighter: pygments
 permalink: /:year/:month/:day/:title.html

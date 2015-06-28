@@ -20,15 +20,15 @@ author: 王一帆
 
 # Java实现
 
-{% highlight java %}
+```java
 public interface Node {
     void check();
     void add(Node node) throws Exception;
     void remove(Node node) throws Exception;
 }
-{% endhighlight %}
+```
 
-{% highlight java %}
+```java
 public class ParentNode implements Node {
     private List<Node> list = new ArrayList<Node>();
 
@@ -47,11 +47,11 @@ public class ParentNode implements Node {
         list.remove(node);
     }
 }
-{% endhighlight %}
+```
 
 <!-- more -->
 
-{% highlight java %}
+```java
 public class ChildNode implements Node {
     public void check() {
         System.out.println("ChildNode is Checked");
@@ -65,9 +65,9 @@ public class ChildNode implements Node {
         throw new Exception("This node can not remove");
     }
 }
-{% endhighlight %}
+```
 
-{% highlight java %}
+```java
 public class Main {
 
     public static void main(String[] args) throws Exception {
@@ -81,7 +81,7 @@ public class Main {
         node3.check();
     }
 }
-{% endhighlight %}
+```
 
 # Clojure实现
 

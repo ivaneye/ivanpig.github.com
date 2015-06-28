@@ -27,7 +27,7 @@ Java程序都是由若干个.class文件组成，程序的运行过程即是对c
 
 示例:
 
-{% highlight java %}
+```java
 import com.sun.nio.zipfs.ZipFileStore;
 
 public class Test {
@@ -40,15 +40,15 @@ public class Test {
 }
 
 class A{}
-{% endhighlight %}
+```
 
 输出结果:
 
-{% highlight sh %}
+```sh
 null                          //BootStrap ClassLoader输出为null
 sun.misc.Launcher$ExtClassLoader@3e10c986
 sun.misc.Launcher$AppClassLoader@610f7612
-{% endhighlight %}
+```
 
 <!-- more -->
 
@@ -142,7 +142,7 @@ Tomcat7中没有ExtensionClassLoader.
 
 对于热部署功能，Tomcat只是提供了后台线程进行扫描，如果有修改即重新加载!
 
-{% highlight java %}
+```java
 public void backgroundProcess() {
     if (reloadable && modified()) {
         try {
@@ -190,7 +190,7 @@ public synchronized void reload() {
 
     setPaused(false);
 }
-{% endhighlight  %}
+```
 
 # OSGi ClassLoader
 

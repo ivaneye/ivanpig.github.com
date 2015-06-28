@@ -17,21 +17,21 @@ Requests
 
 中间件可以通过在noir.util.middleware/app-handler上添加:formats键来开启:
 
-{% highlight clojure %}
+```clojure
 (def app (middleware/app-handler
           all-routes
           :formats [:json :edn]))
-{% endhighlight %}
+```
 
 这样请求中的application/json和application/edn类型将会被中间件处理。相应的请求参数会在:params中。注意，这也会处理响应中的对应类型参数。具体信息请见Response Types章节。
 
 下面是有效的格式化类型:
 
-{% highlight clojure %}
+```clojure
 :json - JSON with string keys in :params and :body-params
 :json-kw - JSON with keywodized keys in :params and :body-params
 :edn - native Clojure format.
 :yaml - YAML format
 :yaml-kw - YAML format with keywodized keys in :params and :body-params
 :yaml-in-html - yaml in a html page
-{% endhighlight %}
+```

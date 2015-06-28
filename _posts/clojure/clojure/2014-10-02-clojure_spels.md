@@ -30,22 +30,22 @@ Clojure是运行在JVM之上的,所以你需要先安装JVM.如果你是MAC机,�
 
 而Clojure,你可以从它的[官网](http://clojure.org/)获得最新版本.下载完成后,你只需要解压缩,打开命令行,切换到解压缩目录,输入:
 
-{% highlight sh %}
+```sh
 java -jar clojure.jar
-{% endhighlight %}
+```
 
 如果没有问题,那么你将会看到Clojure输出提示
 
-{% highlight sh %}
+```sh
 Clojure 1.6.0
 user=>
-{% endhighlight %}
+```
 
 教程中有很多Clojure代码片段,类似下面的样子:
 
-{% highlight clojure %}
+```clojure
 '(these kinds of boxes)
-{% endhighlight %}
+```
 
 你只需要将这些代码片段拷贝到Clojure REPL中运行就可以了!当你学习完此教程,你将会有一个你自己的文字冒险游戏了!
 
@@ -73,9 +73,9 @@ form也是个list,不过它的第一个符号被lisp编译器特殊对待了---�
 
 为了进一步的学习form,让我们来创建一些form,来定义我们游戏世界里的数据.首先,我们的游戏有一些对象,玩家可以使用他们--让我们来定义吧:
 
-{% highlight clojure %}
+```clojure
 (def objects '(whiskey-bottle bucket frog chain))
-{% endhighlight %}
+```
 
 让我们来看看这行代码是什么意思:Lisp编译器总是使用代码模式来读取内容,所以第一个符号(这里是def),肯定是个命令.
 
@@ -92,7 +92,7 @@ def命令就是用来设值的(如果你学过Common Lisp,你应该会知道它�
 
 在这个简单的游戏里,只有三个地点:一个房子,它包含起居室,阁楼和花园.让我们来定义一个新变量,叫做game-map来描述这个游戏地图:
 
-{% highlight clojure %}
+```clojure
 (def game-map (hash-map
    'living-room '((you are in the living room
                    of a wizards house - there is a wizard
@@ -106,7 +106,7 @@ def命令就是用来设值的(如果你学过Common Lisp,你应该会知道它�
              wizards house - there is a giant
              welding torch in the corner -)
             (downstairs stairway living-room))))
-{% endhighlight %}
+```
 
 这个map包含了三个地点的所有重要信息:每个地点都有个独立的名字,一个简短的描述,描述了我们能在这些地点看到什么,以及如何进入此处或从此处出去.
 
@@ -114,21 +114,21 @@ def命令就是用来设值的(如果你学过Common Lisp,你应该会知道它�
 
 现在我们有了一个地图和一组对象,让我们来创建另一个变量,来描述这些对象在地图的哪些地方.
 
-{% highlight clojure %}
+```clojure
 (def object-locations (hash-map
                        'whiskey-bottle 'living-room
                        'bucket 'living-room
                        'chain 'garden
                        'frog 'garden))
-{% endhighlight %}
+```
 
 这里我们将每个对象和地点进行了关联.Clojure提供了Map这个数据结构.Map使用hash-map函数来创建,它需要一组参数类似(key1 value1 keys value2...).我们的game-map变量也是个Map---三个key分别是living-room,garden和attic.
 
 我们定义了游戏世界,以及游戏世界中的对象,现在就剩下一件事了,就是描述玩家的地点!
 
-{% highlight clojure %}
+```clojure
 (def location 'living-room)
-{% endhighlight %}
+```
 
 搞定,现在让我们来定义游戏操作吧!
 
@@ -140,10 +140,10 @@ def命令就是用来设值的(如果你学过Common Lisp,你应该会知道它�
 
 我们想要的第一个命令能够告诉我们当前地点的描述.那么我们该怎么定义这个函数呢?它要知道我们想要描述的地点以及能够从map中查找地点的描述.如下:
 
-{% highlight clojure %}
+```clojure
 (defn describe-location [location game-map]
   (first (location game-map)))
-{% endhighlight %}
+```
 
 defn定义了一个函数.函数的名字叫做describe-location,它需要两个参数:地点和游戏地图.这两个变量在函数定义的括号内,所以它们是局部变量,因此对于全局的location和game-map没有关系.
 
@@ -155,15 +155,15 @@ defn定义了一个函数.函数的名字叫做describe-location,它需要两个
 
 为了能找到起居室的描述,describe-locatin函数首先需要从地图中找到起居室.(location game-map)就是进行从game-map中查找内容的,并返回起居室的描述.然后first命令来处理返回值,取得返回的list的第一个元素,这个就是起居室的描述了. 现在我们来测试一下
 
-{% highlight clojure %}
+```clojure
 (describe-location 'living-room game-map)
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
  user=> (describe-location 'living-room game-map)
  (you are in the living-room of a wizard's house -
  there is a wizard snoring loudly on the couch -)
-{% endhighlight %}
+```
 
 很完美!这就是我们要的结果!请注意我们在living-room前添加了一个单引号,因为这个符号是地点map的一个名称!但是,为什么我们没有在game-map前面添加单引号呢?这是因为我们需要编译器去查询这个符号所指向的数据(就是那个map)
 
@@ -185,38 +185,38 @@ defn定义了一个函数.函数的名字叫做describe-location,它需要两个
 
 describe-location函数的另一个问题是,它没告诉我们怎么进入一个位置或者怎么从某个位置出来.让我们来编写这样的函数:
 
-{% highlight clojure %}
+```clojure
 (defn describe-path [path]
   `(there is a ~(second path) going ~(first path) from here -))
-{% endhighlight %}
+```
 
 这个函数看起来很明了:它看起来更像是数据而不是函数.我们先来尝试调用它,看它做了些什么:
 
-{% highlight clojure %}
+```clojure
 (describe-path '(west door garden))
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
 user=> (describe-path '(west door garden))
 (user/there user/is user/a door user/going west user/from user/here clojure.core/-)
-{% endhighlight %}
+```
 
 这是什么?!结果看起来很乱,包含了很多的/和一些其它的文字!这是因为Clojure会将命名空间的名字添加到表达式的前面.我们这里不深究细节,只给你提供消除这些内容的函数:
 
-{% highlight clojure %}
+```clojure
 (defn spel-print [list] (map (fn [x] (symbol (name x))) list))
-{% endhighlight %}
+```
 
 修改调用方式
 
-{% highlight clojure %}
+```clojure
 (spel-print (describe-path '(west door garden)))
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
 user=> (spel-print (describe-path '(west door garden)))
 (there is a door going west from here -)
-{% endhighlight %}
+```
 
 现在结果很清晰了:这个函数接收一个描述路径的list然后将其解析到一个句子里面.我们回过头来看这个函数,这个函数和它产生的数据非常的像:它就是拼接第一个和第二个list的元素到语句中!它是怎么做到的?使用语法quote!
 
@@ -230,30 +230,30 @@ user=> (spel-print (describe-path '(west door garden)))
 
 现在我们能描述一个路径,但是一个地点可能会有多个路径,所以让我们来创建一个函数叫做describe-paths:
 
-{% highlight clojure %}
+```clojure
 (defn describe-paths [location game-map]
   (apply concat (map describe-path (rest (get game-map location)))))
-{% endhighlight %}
+```
 
 这个函数使用了另一个在函数式编程中很常用的技术:高阶函数.apply和map这两个函数能将其它的函数作为参数.map函数将另一个函数分别作用到list中的每个对象上,这里是调用describe-path函数.apply concat是为了减少多余的括号,没有多少功能性操作!我们来试试新函数
 
-{% highlight clojure %}
+```clojure
 (spel-print (describe-paths 'living-room game-map))
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
 user=> (spel-print (describe-paths 'living-room game-map))
 (there is a door going west from here -
 there is a stairway going upstairs from here -)
-{% endhighlight %}
+```
 
 漂亮!
 
 最后,我们还剩下一件事要做:描述某个地点的某个对象!我们先写个帮助函数来告诉我们在某个地方是否有某个对象!
 
-{% highlight clojure %}
+```clojure
 (defn is-at? [obj loc obj-loc] (= (obj obj-loc) loc))
-{% endhighlight %}
+```
 
 =也是个函数,它判断对象的地点是否和当前地点相同!
 
@@ -261,58 +261,58 @@ there is a stairway going upstairs from here -)
 
 我们来尝试一下:
 
-{% highlight clojure %}
+```clojure
 (is-at? 'whiskey-bottle 'living-room object-locations)
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
 user=> (is-at? 'whiskey-bottle 'living-room object-locations)
 true
-{% endhighlight %}
+```
 
 返回结果是true,意味着whiskey-bottle在起居室.
 
 现在让我们来使用这个函数描述地板:
 
-{% highlight clojure %}
+```clojure
 (defn describe-floor [loc objs obj-loc]
   (apply concat (map (fn [x]
                        `(you see a ~x on the floor -))
                      (filter (fn [x]
                                (is-at? x loc obj-loc)) objs))))
-{% endhighlight %}
+```
 
 这个函数包含了很多新事物:首先,它有匿名函数(fn定义的函数).第一个fn干的事,和下面的函数做的事情是一样的:
 
-{% highlight clojure %}
+```clojure
 (defn blabla [x] `(you see a ~x on the floor.))
-{% endhighlight %}
+```
 
 然后将这个blabla函数传递给map函数.filter函数是过滤掉那些在当前位置没有出现的物体.我们来试一下新函数:
 
-{% highlight clojure %}
+```clojure
 (spel-print (describe-floor 'living-room objects object-locations))
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
 user=> (spel-print (describe-floor 'living-room objects object-locations))
 (you see a whiskey-bottle on the floor - you see a bucket on the floor -)
-{% endhighlight %}
+```
 
 现在,让我们来将这些函数串联起来,定义一个叫look的函数,使用全局变量(这个函数就不是函数式的了!)来描述所有的内容:
 
-{% highlight clojure %}
+```clojure
 (defn look []
   (spel-print (concat (describe-location location game-map)
           (describe-paths location game-map)
           (describe-floor location objects object-locations))))
-{% endhighlight %}
+```
 
 ![]({{site.CDN_PATH}}/assets/clojure/cs_10.jpg)
 
 我们来试一下:
 
-{% highlight sh %}
+```sh
 user=> (look)
 (you are in the living room of a wizards house -
 there is a wizard snoring loudly on the couch -
@@ -320,7 +320,7 @@ there is a door going west from here -
 there is a stairway going upstairs from here -
 you see a whiskey-bottle on the floor -
 you see a bucket on the floor -)
-{% endhighlight %}
+```
 
 很酷吧!
 
@@ -329,31 +329,31 @@ you see a bucket on the floor -)
 
 好了,现在我们能看我们的世界了,让我们来写一些代码来环游我们的世界.walk-direction包含了一些方向可以使我们走到那里:
 
-{% highlight clojure %}
+```clojure
 (defn walk-direction [direction]
   (let [next (first (filter (fn [x] (= direction (first x)))
                             (rest (location game-map))))]
     (cond next (do (def location (nth next 2)) (look))
           :else '(you cannot go that way -))))
-{% endhighlight %}
+```
 
 这里的let用来创建局部变量next,用来描述玩家的方向.rest返回一个list,包含原list中除了第一个元素外的全部元素.如果用户输入了错误的方向,next会返回
 ().
 
 cond类似于if-then条件:每个cond都包含一个值,lisp检查该值是否为真,如果为真则执行其后的动作.在这里,如果下一个位置不是nil,则会定义玩家的location到新位置,然后告诉玩家该位置的描述!如果next是nil,则告诉玩家,无法到达,请重试:
 
-{% highlight clojure %}
+```clojure
 (walk-direction 'west)
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
 user=> (walk-direction 'west)
 (you are in a beautiful garden -
 there is a well in front of you -
 there is a door going east from here -
 you see a frog on the floor -
 you see a chain on the floor -)
-{% endhighlight %}
+```
 
 现在,我们通过创建look函数来简化描述.walk-direction也是类似的功能.但是它需要输入方向,而且还有个quote.我们能否告诉编译器west仅仅是个数据,而不是代码呢?
 
@@ -362,15 +362,15 @@ you see a chain on the floor -)
 
 现在我们开始学习Lisp中一个很强大的功能:创建SPELs!SPEL是"语义增强逻辑"的简称,它能够从语言级别,按照我们的需求定制,对我们的代码添加新的行为-这是Lisp最为强大的一部分.为了开启SPELs,我们需要先激活Lisp编译器的SPEL
 
-{% highlight clojure %}
+```clojure
 (defmacro defspel [& rest] `(defmacro ~@rest))
-{% endhighlight %}
+```
 
 现在,我们来编写我们的SPEL,叫做walk:
 
-{% highlight clojure %}
+```clojure
 (defspel walk [direction] `(walk-direction '~direction))
-{% endhighlight %}
+```
 
 这段代码干了什么?它告诉编译器walk不是实际的名称,实际的名字叫walk-direction,并且direction前面有个quote.SPEL的主要功能就是能在我们的代码被编译器编译之前插入一些内容!
 
@@ -378,11 +378,11 @@ you see a chain on the floor -)
 
 注意到了吗?这段代码和我们之前写的describe-path很类似:在Lisp中,不只是代码和数据看起来很像,代码和特殊形式对于编译器来说也是一样的-高度的统一带来简明的设计!我们来试试新代码:
 
-{% highlight clojure %}
+```clojure
 (walk east)
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
 user=> (walk east)
 (you are in the living room of a wizards house -
 there is a wizard snoring loudly on the couch -
@@ -390,56 +390,56 @@ there is a door going west from here -
 there is a stairway going upstairs from here -
 you see a whiskey-bottle on the floor -
 you see a bucket on the floor -)
-{% endhighlight %}
+```
 
 感觉好多了! 现在我们来创建一个命令来收集游戏里的物品
 
-{% highlight clojure %}
+```clojure
 (defn pickup-object [object]
   (cond (is-at? object location object-locations)
         (do
           (def object-locations (assoc object-locations object 'body))
           `(you are now carrying the ~object))
         :else '(you cannot get that.)))
-{% endhighlight %}
+```
 
 这个函数检查物品是否在当前地点的地上-如果在,则将它放到list里面,并返回成功提示!否则提示失败! 现在我们来创建另一个SPEL来简化这条命令:
 
-{% highlight clojure %}
+```clojure
 (defspel pickup [object] `(spel-print (pickup-object '~object)))
-{% endhighlight %}
+```
 
 调用
 
-{% highlight clojure %}
+```clojure
 (pickup whiskey-bottle)
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
 user=> (pickup whiskey-bottle)
 (you are now carrying the whiskey-bottle)
-{% endhighlight %}
+```
 
 现在我们来添加更多有用的命令-首先,一个能让我们查看我们捡到的物品的函 数:
 
-{% highlight clojure %}
+```clojure
 (defn inventory []
   (filter (fn [x] (is-at? x 'body object-locations)) objects))
-{% endhighlight %}
+```
 
 以及一个检查我们是否有某个物品的函数:
 
-{% highlight clojure %}
+```clojure
 (defn have? [object]
    (some #{object} (inventory)))
-{% endhighlight %}
+```
 
 创建特殊操作
 ============
 
 现在我们只剩下一件事情需要做了:添加一些特殊动作,使得玩家能够赢得游戏.第一条命令是让玩家在阁楼里给水桶焊接链条.
 
-{% highlight clojure %}
+```clojure
 (def chain-welded false)
 
 (defn weld [subject object]
@@ -452,26 +452,26 @@ user=> (pickup whiskey-bottle)
         (do (def chain-welded true)
             '(the chain is now securely welded to the bucket -))
         :else '(you cannot weld like that -)))
-{% endhighlight %}
+```
 
 首先我们创建了一个新的全局变量来进行判断,我们是否进行了此操作.然后我们创建了一个weld函数,来确认此操作的条件是否完成,如果已完成则进行此操作.
 
 ![]({{site.CDN_PATH}}/assets/clojure/cs_12.jpg) 来试一下:
 
-{% highlight clojure %}
+```clojure
 (weld 'chain 'bucket)
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
 user=> (weld 'chain 'bucket)
 (you cannot weld like that -)
-{% endhighlight %}
+```
 
 Oops...我们没有水桶,也没有链条,是吧?周围也没有焊接的机器!
 
 现在,让我们创建一条命令来将链条和水桶放到井里:
 
-{% highlight clojure %}
+```clojure
 (def bucket-filled false)
 
 (defn dunk [subject object]
@@ -483,13 +483,13 @@ Oops...我们没有水桶,也没有链条,是吧?周围也没有焊接的机器!
         (do (def bucket-filled true)
             '(the bucket is now full of water))
         :else '(you cannot dunk like that -)))
-{% endhighlight %}
+```
 
 注意到了吗?这个命令和weld命令看起来好像!两条命令都需要检查位置,物体和对象!但是它们还是有不同,以至于我们不能将它们抽到一个函数里.太可惜了!
 
 但是...这可是Lisp.我们不止能写函数,还能写SPEL!我们来创建了SPEL来处理:
 
-{% highlight clojure %}
+```clojure
 (defspel game-action [command subj obj place & args]
   `(defspel ~command [subject# object#]
      `(spel-print (cond (and (= location '~'~place)
@@ -498,7 +498,7 @@ Oops...我们没有水桶,也没有链条,是吧?周围也没有焊接的机器!
                              (have? '~'~subj))
                         ~@'~args
                         :else '(i cannot ~'~command like that -)))))
-{% endhighlight %}
+```
 
 非常复杂的SPEL!它有很多怪异的quote,语法quote,逗号以及很多怪异的符号!更重要的是他是一个构建SPEL的SPEL!!即使是很有经验的Lisp程序员,也需要费下脑细胞才能写出这么个玩样!!(这里我们不管)
 
@@ -508,23 +508,23 @@ Oops...我们没有水桶,也没有链条,是吧?周围也没有焊接的机器!
 
 让我们使用这个新的SPEL来替换我们的weld命令:
 
-{% highlight clojure %}
+```clojure
 (game-action weld chain bucket attic
    (cond (and (have? 'bucket) (def chain-welded true))
               '(the chain is now securely welded to the bucket -)
          :else '(you do not have a bucket -)))
-{% endhighlight %}
+```
 
 现在我们来看看这条命令变得多容易理解:game-action这个SPEL使得我们能编写我们想要的核心代码,而不需要额外的信息.这就像我们创建了我们自己的专门创建游戏命令的编程语言.使用SPEL创建伪语言称为领域特定语言编程(DSL),它使得你的编码更加的快捷优美!
 
-{% highlight clojure %}
+```clojure
 (weld chain bucket)
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```sh
 user=> (weld chain bucket)
 (you do not have a chain -)
-{% endhighlight %}
+```
 
 ...我们还没有做好焊接前的准备工作,但是这条命令生效了!
 
@@ -532,13 +532,13 @@ user=> (weld chain bucket)
 
 下面我们重写dunk命令:
 
-{% highlight clojure %}
+```clojure
 (game-action dunk bucket well garden
              (cond chain-welded
                    (do (def bucket-filled true)
                        '(the bucket is now full of water))
                    :else '(the water level is too low to reach -)))
-{% endhighlight %}
+```
 
 注意weld命令需要检验我们是否有物体,但是dunk不需要.我们的game-action这个SPEL使得这段代码易写易读.
 
@@ -546,7 +546,7 @@ user=> (weld chain bucket)
 
 最后,就是将水泼到巫师身上:
 
-{% highlight clojure %}
+```clojure
 (game-action splash bucket wizard living-room
              (cond (not bucket-filled) '(the bucket has nothing in it -)
                    (have? 'frog) '(the wizard awakens and sees that you stole
@@ -557,7 +557,7 @@ user=> (weld chain bucket)
                                warmly -
                                he hands you the magic low-carb donut - you win!
                                the end -)))
-{% endhighlight %}
+```
 
 ![]({{site.CDN_PATH}}/assets/clojure/cs_16.jpg)
 
@@ -578,10 +578,10 @@ user=> (weld chain bucket)
 
 另一个问题就是我们在代码中大量使用了符号(symbol)
 
-{% highlight clojure %}
+```clojure
 '(this is not how Lispers usually write text)
 "Lispers write text using double quotes"
-{% endhighlight %}
+```
 
 符号在Clojure有特殊含义,主要是用来持有函数,变量或其它内容的.所以,在Lisp中将符号作为文本信息描述是很奇怪的事情!使用字符串来显示文本信息可以避免这样的尴尬!不过,使用字符串的话,在教程里就没法讲很多关于符号的内容了!
 
@@ -615,9 +615,9 @@ Q. 后面我该阅读哪些内容来扩充我的Lisp知识? A.
 
 如果你有一个库或者是一个Lisp实现者,请先放下你手头上的工作,先在你的库里,添加下面这行代码:
 
-{% highlight clojure %}
+```clojure
 (defmacro defspel [& rest] `(defmacro ~@rest))
-{% endhighlight %}
+```
 
 译者感想
 ========

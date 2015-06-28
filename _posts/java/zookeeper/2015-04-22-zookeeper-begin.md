@@ -23,11 +23,11 @@ ZooKeeper目前是Apache顶级项目，可从[此处下载](http://zookeeper.apa
 - 在ZooKeeper目录/bin下，使用命令行启动zkCli.cmd或者zkCli.sh即可启动ZooKeeper客户端
 - 在客户端可以执行: ls,get,set等命令，来展示，获取或设置值
 
-{% highlight sh %}
+```sh
 ls /                        //列出/下的内容
 set /test test              //给/test目录设值
 get /test                   //获取/test目录的值
-{% endhighlight %}
+```
 
 <!-- more -->
 
@@ -39,7 +39,7 @@ get /test                   //获取/test目录的值
 
 pom.xml添加依赖:
 
-{% highlight xml %}
+```xml
 <dependencies>
     <dependency>
         <groupId>org.apache.zookeeper</groupId>
@@ -47,11 +47,11 @@ pom.xml添加依赖:
         <version>3.4.5</version>
     </dependency>
 </dependencies>
-{% endhighlight %}
+```
 
 ZookeeperTest代码:
 
-{% highlight java %}
+```java
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -143,7 +143,7 @@ public class ZookeeperTest {
         }
     }
 }
-{% endhighlight %}
+```
 
 # 基于Curator的操作
 
@@ -152,7 +152,7 @@ public class ZookeeperTest {
 
 添加pom依赖：
 
-{% highlight xml %}
+```xml
 <dependency>
     <groupId>org.apache.curator</groupId>
     <artifactId>curator-framework</artifactId>
@@ -163,9 +163,9 @@ public class ZookeeperTest {
     <artifactId>curator-recipes</artifactId>
     <version>2.7.1</version>
 </dependency>
-{% endhighlight %}
+```
 
-{% highlight java %}
+```java
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -238,6 +238,6 @@ public class ZooKeeperWatcher {
 
     }
 }
-{% endhighlight %}
+```
 
 如上代码，当对/root目录进行操作时，即可监控到！

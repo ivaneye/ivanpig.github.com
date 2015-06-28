@@ -51,10 +51,10 @@ leiningen需要以项目为单位才能运行。比如你想运行一个hello.cl
 -   解压到任意位置，其中最主要的文件就是clojure-1.5.1.jar
 -   在path下编写脚本clj,输入如下内容
 
-{% highlight sh %}
+```sh
 java -jar /home/ivan/soft/clojure-1.5.1/clojure-1.5.1.jar $1
  #clojure.jar请输入你本机的路径
-{% endhighlight %}
+```
 
 这样就可以执行单个的Clojure文件了
 
@@ -68,17 +68,17 @@ REPL
 
 老掉牙的入门程序。如果你想体验Clojure。那么只需要在Shell中运行
 
-{% highlight sh %}
+```sh
 lein repl
-{% endhighlight %}
+```
 
 则会运行一个Clojure的REPL环境，你可以直接输入Clojure代码，REPL直接反馈结果。
 
 试试输入如下代码
 
-{% highlight clojure %}
+```clojure
 (println "Hello World")
-{% endhighlight %}
+```
 
 结果如图
 
@@ -89,9 +89,9 @@ lein repl
 
 如果你想将Clojure代码保存到文件中去运行，那么将上面的代码保存到.clj结尾的文件中，并在shell中运行如下命令即可
 
-{% highlight sh %}
+```sh
 clj hello.clj
-{% endhighlight %}
+```
 
 编辑器
 ------

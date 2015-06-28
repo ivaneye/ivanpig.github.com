@@ -25,29 +25,29 @@ published: false
 
 所以我们从多项式开始，来引出编程语言！首先看如下一组多项式：
 
-{% endhighlight %}
+```
 1
 1 + 1
 (1 + 1) * 3 + (1 + 1)
 (1 + 1) * 3 + (1 + 2)
-{% endhighlight %}
+```
 
 - 请找出如上多项式的共同点？
 - 数学上如何处理上面的问题呢？
 
-{% endhighlight %}
+```
 令 a = 1 + 1,b = 1 + 2
 1       =>    (1 + 1) - 1  =>  a - 1  => 1 * a + (-1)
 1 + 1   =>    a   =>  1 * a + (0 * a)
 (1 + 1) * 3 + (1 + 1)    =>   3 * a + a
 (1 + 1) * 3 + (1 + 2)    =>   3 * a + b
-{% endhighlight %}
+```
 
 可以看出:上面的多项式都可以表示为na+b的形式
 
 那编程语言如何处理这些问题呢?
 
-{% highlight java %}
+```java
 int a = 1 + 1;
 int b = 1 + 2;
 //a,b称为变量，类似自然语言中的代词。变量是编程语言中最基本的抽象
@@ -56,7 +56,7 @@ int b = 1 + 2;
 1 + 1   =>    a   =>  1 * a + (0 * a)
 (1 + 1) * 3 + (1 + 1)    =>   3 * a + a
 (1 + 1) * 3 + (1 + 2)    =>   3 * a + b
-{% endhighlight %}
+```
 
 可以看出，基本是没有区别的!
 
@@ -68,17 +68,17 @@ int b = 1 + 2;
 -   到[Oracle官方网站](http://www.oracle.com/technetwork/java/javase/downloads/index.html)下载相应操作系统的JDK进行安装
 -   打开命令行,输入
 
-{% endhighlight %}
+```
 java -version
-{% endhighlight %}
+```
 
 得到如下信息，则表示搭建成功!
 
-{% highlight sh %}
+```sh
 java version "1.8.0"
 Java(TM) SE Runtime Environment (build 1.8.0-b132)
 Java HotSpot(TM) 64-Bit Server VM (build 25.0-b70, mixed mode)
-{% endhighlight %}
+```
 
 Java中需要理解两个路径：
 
@@ -121,7 +121,7 @@ Java中需要理解两个路径：
 -   创建文件Hello.java
 -   输入如下代码
 
-{% endhighlight %} {.java}
+``` {.java}
 
 //例子代码
 public class Hello{
@@ -131,7 +131,7 @@ public class Hello{
         System.out.println("(1 + 1) * 3 + (1 + 2) = " + (a * 3 + b));
     }
 }
-{% endhighlight %}
+```
 
 -   打开命令行,切换到文件所在路径
 -   输入javac Hello.java
@@ -158,7 +158,7 @@ public class Hello{
 
 ----------------------------
 
-{% endhighlight %} {.java}
+``` {.java}
 
 //例子代码
 public class Hello{
@@ -168,7 +168,7 @@ public class Hello{
         System.out.println("(1 + 1) * 3 + (1 + 2) = " + (a * 3 + b));
     }
 }
-{% endhighlight %}
+```
 
 -   注释
 -   标识符(Hello,args)
@@ -181,24 +181,24 @@ public class Hello{
 ## 注释
 
 
-{% endhighlight %} {.java}
+``` {.java}
 
 //单行注释
-{% endhighlight %}
+```
 
-{% endhighlight %} {.java}
+``` {.java}
 
 /*
 多行注释
 */
-{% endhighlight %}
+```
 
-{% endhighlight %} {.java}
+``` {.java}
 
 /**
  * javadoc注释
  */
-{% endhighlight %}
+```
 
 ## 标识符
 
@@ -247,7 +247,7 @@ public class Hello{
 -   静态方法(static)
 -   方法调用[递归调用]
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Hello{
     public static void main(String[] args){
@@ -255,7 +255,7 @@ public class Hello{
         Hello.main(null);
     }
 }
-{% endhighlight %}
+```
 
 # 基本类型
 
@@ -265,7 +265,7 @@ public class Hello{
 
 ## 使用递归来计算基本类型的范围
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test{
     public static long p(int num){
@@ -278,7 +278,7 @@ public class Test{
         return p(num) + caculateRange(--num);
     }
 }
-{% endhighlight %}
+```
 
 # 数组
 
@@ -288,7 +288,7 @@ public class Test{
 
 ## 一维数组
 
-{% endhighlight %} {.java}
+``` {.java}
 
 int[] arr;
 int arr[];
@@ -297,16 +297,16 @@ arr = {1,2,3};
 arr = new int[3];  //默认初始化
 //使用,下标从0开始
 arr[0];
-{% endhighlight %}
+```
 
 ## 多维数组
 
-{% endhighlight %} {.java}
+``` {.java}
 
 int[][] arr = { {1,2,3},{4,5,6}};
 int[][][] arr = new int[2][3][4];
 //每一维长度可以不同
-{% endhighlight %}
+```
 
 # 运算符(操作符)
 
@@ -323,7 +323,7 @@ int[][][] arr = new int[2][3][4];
 
 ## 算术运算符
 
-{% highlight sh %}
+```sh
 
 +    加法 - 相加运算符两侧的值
 -    减法 - 左操作数减去右操作数
@@ -332,11 +332,11 @@ int[][][] arr = new int[2][3][4];
 %    取模 - 右操作数除左操作数的余数
 ++   自增 - 操作数的值增加1
 -    自减 - 操作数的值减少1
-{% endhighlight %}
+```
 
 ## 实例
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
   public static void main(String args[]) {
@@ -356,11 +356,11 @@ public class Test {
      System.out.println("++d   = " +  (++d) );
   }
 }
-{% endhighlight %}
+```
 
 ## 关系运算符
 
-{% highlight sh %}
+```sh
 
 ==   检查如果两个操作数的值是否相等，如果相等则条件为真
 =!   检查如果两个操作数的值是否相等，如果值不相等则条件为真
@@ -368,11 +368,11 @@ public class Test {
 <    检查左操作数的值是否小于右操作数的值，如果是那么条件为真
 >=   检查左操作数的值是否大于或等于右操作数的值，如果是那么条件为真
 <=   检查左操作数的值是否小于或等于右操作数的值，如果是那么条件为真
-{% endhighlight %}
+```
 
 ## 实例
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
   public static void main(String args[]) {
@@ -386,11 +386,11 @@ public class Test {
      System.out.println("b <= a = " + (b <= a) );
   }
 }
-{% endhighlight %}
+```
 
 ## 位运算符
 
-{% highlight sh %}
+```sh
 
 &    按位与操作符，当且仅当两个操作数的某一位都非0时候结果的该位才为1
 |    按位或操作符，只要两个操作数的某一位有一个非0时候结果的该位就为1
@@ -399,11 +399,11 @@ public class Test {
 <<   按位左移运算符。左操作数按位左移右操作数指定的位数
 >>   按位右移运算符。左操作数按位右移右操作数指定的位数
 >>>      按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。
-{% endhighlight %}
+```
 
 ## 实例
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
   public static void main(String args[]) {
@@ -426,20 +426,20 @@ public class Test {
      System.out.println("a >>> 2 = " + c );
   }
 }
-{% endhighlight %}
+```
 
 ## 逻辑运算符
 
-{% highlight sh %}
+```sh
 
 &&   称为逻辑与运算符。当且仅当两个操作数都为真，条件才为真
 ||   称为逻辑或操作符。如果任何两个操作数任何一个为真，条件为真
 !    称为逻辑非运算符。用来反转操作数的逻辑状态。如果条件为true，则逻辑非运算符将得到false。
-{% endhighlight %}
+```
 
 ## 实例
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
   public static void main(String args[]) {
@@ -450,11 +450,11 @@ public class Test {
      System.out.println("!(a && b) = " + !(a && b));
   }
 }
-{% endhighlight %}
+```
 
 ## 赋值运算符
 
-{% highlight sh %}
+```sh
 
 =    简单的赋值运算符，将右操作数的值赋给左侧操作数
 +=   加和赋值操作符，它把左操作数和右操作数相加赋值给左操作数
@@ -467,11 +467,11 @@ public class Test {
 &=   按位与赋值运算符
 ^=   按位异或赋值操作符
 |=   按位或赋值操作符
-{% endhighlight %}
+```
 
 ## 实例
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
   public static void main(String args[]) {
@@ -486,16 +486,16 @@ public class Test {
      a = 10; c = 15; c /= a ;
   }
 }
-{% endhighlight %}
+```
 
 ## 三目运算符
 
-{% highlight sh %}
+```sh
 
 variable x = (expression) ? value if true : value if false
-{% endhighlight %}
+```
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]){
@@ -507,23 +507,23 @@ public class Test {
         System.out.println( "Value of b is : " + b );
    }
 }
-{% endhighlight %}
+```
 
 ## instanceof
 
-{% highlight sh %}
+```sh
 
 ( Object reference variable ) instanceof  (class/interface type)
-{% endhighlight %}
+```
 
-{% endhighlight %} {.java}
+``` {.java}
 
 "James" instanceof String;
-{% endhighlight %}
+```
 
 ## 运算符优先级
 
-{% highlight sh %}
+```sh
 
 后缀     () [] . (点操作符)
 一元   ++ - ！ ~
@@ -540,7 +540,7 @@ public class Test {
 条件   ? ：
 赋值   = += -= *= /= %= >>= <<= ＆= ^= |=
 逗号   ,
-{% endhighlight %}
+```
 
 # 控制执行流程
 
@@ -559,14 +559,14 @@ public class Test {
 
 ## if
 
-{% endhighlight %} {.java}
+``` {.java}
 
 if(布尔表达式) {
    //如果布尔表达式为true将执行的语句
 }
-{% endhighlight %}
+```
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]){
@@ -576,20 +576,20 @@ public class Test {
       }
    }
 }
-{% endhighlight %}
+```
 
 ## if...else
 
-{% endhighlight %} {.java}
+``` {.java}
 
 if(布尔表达式){
    //如果布尔表达式的值为true
 }else{
    //如果布尔表达式的值为false
 }
-{% endhighlight %}
+```
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]){
@@ -601,12 +601,12 @@ public class Test {
       }
    }
 }
-{% endhighlight %}
+```
 
 ## if...else if...else
 
 
-{% endhighlight %} {.java}
+``` {.java}
 
 if(布尔表达式 1){
    //如果布尔表达式 1的值为true执行代码
@@ -617,11 +617,11 @@ if(布尔表达式 1){
 }else {
    //如果以上布尔表达式都不为true执行代码
 }
-{% endhighlight %}
+```
 
 ## 实例
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]){
@@ -637,11 +637,11 @@ public class Test {
       }
    }
 }
-{% endhighlight %}
+```
 
 ## if嵌套
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]){
@@ -654,11 +654,11 @@ public class Test {
        }
     }
 }
-{% endhighlight %}
+```
 
 ## switch
 
-{% endhighlight %} {.java}
+``` {.java}
 
 switch(expression){
     case value :
@@ -671,7 +671,7 @@ switch(expression){
     default : //可选
        //语句
 }
-{% endhighlight %}
+```
 
 ## 注意点
 
@@ -685,7 +685,7 @@ switch(expression){
 
 ## 实例
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]){
@@ -709,18 +709,18 @@ public class Test {
       System.out.println("Your grade is " + grade);
    }
 }
-{% endhighlight %}
+```
 
 ## while
 
-{% endhighlight %} {.java}
+``` {.java}
 
 while( 布尔表达式 ) {
     //循环内容
 }
-{% endhighlight %}
+```
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]) {
@@ -732,18 +732,18 @@ public class Test {
       }
    }
 }
-{% endhighlight %}
+```
 
 ## do-while
 
-{% endhighlight %} {.java}
+``` {.java}
 
 do {
        //代码语句
 }while(布尔表达式);
-{% endhighlight %}
+```
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]){
@@ -755,16 +755,16 @@ public class Test {
       }while( x < 20 );
    }
 }
-{% endhighlight %}
+```
 
 ## for
 
-{% endhighlight %} {.java}
+``` {.java}
 
 for(初始化; 布尔表达式; 更新) {
     //代码语句
 }
-{% endhighlight %}
+```
 
 -   最先执行初始化步骤。可以声明并初始化一个或多个循环控制变量，也可以是空语句。
 -   然后，检测布尔表达式的值。如果为true，循环体被执行。如果为false，循环终止，开始执行循环体后面的语句。
@@ -773,7 +773,7 @@ for(初始化; 布尔表达式; 更新) {
 
 ## 实例
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]) {
@@ -783,18 +783,18 @@ public class Test {
       }
    }
 }
-{% endhighlight %}
+```
 
 ## foreach
 
-{% endhighlight %} {.java}
+``` {.java}
 
 for(声明语句 : 表达式) {
    //代码句子
 }
-{% endhighlight %}
+```
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]){
@@ -812,11 +812,11 @@ public class Test {
       }
    }
 }
-{% endhighlight %}
+```
 
 ## break
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]) {
@@ -831,11 +831,11 @@ public class Test {
       }
    }
 }
-{% endhighlight %}
+```
 
 ## continue
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]) {
@@ -849,11 +849,11 @@ public class Test {
       }
    }
 }
-{% endhighlight %}
+```
 
 ## labeled break与labeled continue
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test {
    public static void main(String args[]) {
@@ -870,7 +870,7 @@ public class Test {
         }
     }
 }
-{% endhighlight %}
+```
 
 ## return
 
@@ -884,7 +884,7 @@ public class Test {
 
 ## 答案
 
-{% endhighlight %} {.java}
+``` {.java}
 
 public class Test{
     public static void main(String[] args){
@@ -907,7 +907,7 @@ public class Test{
         System.out.println(c[1][1]);
     }
 }
-{% endhighlight %}
+```
 
 ## 课后作业
 
@@ -915,19 +915,19 @@ public class Test{
 - 请任意修改hello world,并尝试编译运行!如报错,请尝试理解报错信息!
 - 请编写程序,打印如下图形.你能想出几种方法?你认为最简单的方法是哪种?
 
-{% endhighlight %}
+```
 
   1
  111
 11111
-{% endhighlight %}
+```
 
 - 请使用循环和递归分别实现斐波那契数列
 
-{% endhighlight %}
+```
 
 1 1 2 3 5 8 13 ...
-{% endhighlight %}
+```
 
 - 本机安装eclipse,并在eclipse中运行hello world
 - 请到网上搜索面向对象编程,尝试理解面向对象编程,及其与面向过程编程的区别

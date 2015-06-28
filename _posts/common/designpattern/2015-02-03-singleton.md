@@ -37,7 +37,7 @@ author: 王一帆
 
 懒汉式：
 
-{% highlight java %}
+```java
 public class Singleton{
        private Singleton(){}
 
@@ -50,13 +50,13 @@ public class Singleton{
 
       private static Singleton single;
 }
-{% endhighlight %}
+```
 
 <!-- more -->
 
 饿汉式：
 
-{% highlight java %}
+```java
 public class Singleton{
        private Singleton(){}
 
@@ -65,11 +65,11 @@ public class Singleton{
        }
       private static Singleton single=new Singleton();
 }
-{% endhighlight %}
+```
 
 double-checked locking：
 
-{% highlight java %}
+```java
 public class Singleton{
        private Singleton(){}
 
@@ -85,7 +85,7 @@ public class Singleton{
        }
       private volatile static Singleton single;
 }
-{% endhighlight %}
+```
 
 # Clojure实现
 
@@ -97,7 +97,7 @@ public class Singleton{
 
 对于上面的例子，假设你是要调用Singleton里的prt方法，代码如下:
 
-{% highlight java %}
+```java
 public class Singleton{
        private Singleton(){}
 
@@ -118,16 +118,16 @@ public class Singleton{
 
       private volatile static Singleton single;
 }
-{% endhighlight %}
+```
 
 在Clojure里面你可以这么写:
 
-{% highlight clojure %}
+```clojure
 (defn prt []
   (println "This is Singleton"))
 
 ;调用
 (prt)
-{% endhighlight %}
+```
 
 需要模式吗？

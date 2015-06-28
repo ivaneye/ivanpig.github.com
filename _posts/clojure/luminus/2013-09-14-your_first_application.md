@@ -22,21 +22,21 @@ author: 王一帆
 -   运行lein self-install ，然后等待安装结束
 
 
-{% highlight sh %}
+```sh
 wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
 chmod +x lein
 mv lein ~/bin
 lein self-install
-{% endhighlight %}
+```
 
 # 创建一个新应用
 
 安装完Leiningen后，你就可以在命令行中输入如下的命令
 
-{% highlight sh %}
+```sh
 lein new luminus guestbook +h2
 cd guestbook
-{% endhighlight %}
+```
 
 上面的命令将会创建一个使用了H2嵌入式数据库的模板项目。
 
@@ -46,7 +46,7 @@ cd guestbook
 
 新创建的项目的目录结构如下
 
-{% highlight sh %}
+```sh
 guestbook
 |____.gitignore
 |____Procfile
@@ -87,7 +87,7 @@ guestbook
 |____migrations
   |____201501155317-add-users-table.down.sql
   |____201501155317-add-users-table.up.sql
-{% endhighlight %}
+```
 
 我们先来看一看根目录下的文件的作用:
 
@@ -152,7 +152,7 @@ Luminus使用Ragtime来管理数据迁移。数据通过使用up，down文件来
 
 上面已经说过了，项目所有的依赖关系都是由project.clj来管理的。这个文件看起来像这样。
 
-{% highlight clojure %}
+```clojure
 (defproject guestbook "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
@@ -207,7 +207,7 @@ Luminus使用Ragtime来管理数据迁移。数据通过使用up，down文件来
          :injections [(require 'pjstadig.humane-test-output)
                       (pjstadig.humane-test-output/activate!)]
          :env {:dev true}}})
-{% endhighlight %}
+```
 
 project.clj就是个简单的Clojure的list，这个list中包含了键值对，描述了应用的方方面面。如果你要添加自定义依赖，只需要简单的将需要的依赖添加到:dependencies这个vector内。
 
@@ -221,7 +221,7 @@ project.clj就是个简单的Clojure的list，这个list中包含了键值对，
 
 首先，我们可以通过在数据迁移目录中新建<date>-add-users-table.up.sql文件来创建一个model。文件中包含了如下内容:
 
-{% highlight sql %}
+```sql
 CREATE TABLE users
 (id VARCHAR(20) PRIMARY KEY,
  first_name VARCHAR(30),
@@ -231,28 +231,28 @@ CREATE TABLE users
  last_login TIME,
  is_active BOOLEAN,
  pass VARCHAR(100));
-{% endhighlight %}
+```
 
 我们将users表修改为适合我们应用的名称:
 
-{% highlight sql %}
+```sql
 CREATE TABLE guestbook
 (id INTEGER PRIMARY KEY AUTO_INCREMENT,
  name VARCHAR(30),
  message VARCHAR(200),
  timestamp TIMESTAMP);
-{% endhighlight %}
+```
 guestbook表将保存所有的信息描述。我们保存上面的sql，并通过在项目根目录运行如下的命令来创建数据库:
 
-{% highlight sh %}
+```sh
 lein ragtime migrate
-{% endhighlight %}
+```
 
 # 访问数据库
 
 接着我们来看看src/guestbook/db/core.clj文件。我们发现里面已经有了数据库链接的相关配置.
 
-{% highlight clojure %}
+```clojure
 (ns guestbook.db.core
   (:require
     [yesql.core :refer [defqueries]]
@@ -269,12 +269,12 @@ lein ragtime migrate
                  :fields clojure.string/upper-case}})
 
 (defqueries "sql/queries.sql" {:connection db-spec})
-{% endhighlight %}
+```
 这个数据库将数据库文件保存在相对应用目录的site.db文件中。
 
 在执行defqueries这个函数时，会自动生成执行数据库查询的函数，这些函数是与查询相对应的。相关的查询在sql/queries.sql文件中。
 
-{% highlight sql %}
+```sql
 
 --name: create-user!
 -- creates a new user record
@@ -292,13 +292,13 @@ WHERE id = :id
 -- retrieve a used given the id.
 SELECT * FROM users
 WHERE id = :id
-{% endhighlight %}
+```
 
 可以看到，所有的函数名称都定义在--name:后面。接下来的一行注释定义了函数说明，最后是sql。sql参数使用:加变量名的形式来传递。
 
 下面我们来添加自定义sql
 
-{% highlight sql %}
+```sql
 --name:save-message!
 -- creates a new message
 INSERT INTO guestbook
@@ -308,35 +308,35 @@ VALUES (:name, :message, :timestamp)
 --name:get-messages
 -- selects all available messages
 SELECT * from guestbook
-{% endhighlight %}
+```
 
 # 运行项目
 
-{% highlight sh %}
+```sh
 lein ring server
 guestbook started successfully...
 2013-03-01 19:05:30.389:INFO:oejs.Server:jetty-7.6.1.v20120215
 Started server on port 3000
 2013-03-01 19:05:30.459:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:3000
-{% endhighlight %}
+```
 
 浏览器会自动打开，你将能看到运行的应用。如果你不想浏览器自动打开，你可以用下面的命令来启动项目.
 
-{% highlight sh %}
+```sh
 lein ring server-headless
-{% endhighlight %}
+```
 
 你也可以自定义端口号，命令如下:
 
-{% highlight sh %}
+```sh
 lein ring server-headless 8000
-{% endhighlight %}
+```
 
 # 创建表单页面
 
 应用的路由是定义在guestbook.routes.home命名空间下的。我们来打开它，并添加一些逻辑。首先，需要添加db命名空间以及Bouncer验证和ring.util.response.
 
-{% highlight clojure %}
+```clojure
 (ns guestbook.routes.home
   (:require
     ...
@@ -344,24 +344,24 @@ lein ring server-headless 8000
     [bouncer.core :as b]
     [bouncer.validators :as v]
     [ring.util.response :refer [redirect]))
-{% endhighlight %}
+```
 
 然后创建一个函数来验证form参数
 
-{% highlight clojure %}
+```clojure
 (defn validate-message [params]
   (first
     (b/validate
       params
       :name v/required
       :message [v/required [v/min-count 10]])))
-{% endhighlight %}
+```
 
 上面的函数使用Bouncer根据我们编写的逻辑来验证:name和:message。在这里name为必填，message必须最少包含10个字符。可以通过嵌套vector来对一个字段构建多个验证。
 
 我们添加一个函数来验证和保存信息：
 
-{% highlight clojure %}
+```clojure
 (defn save-message! [{:keys [params]}]
   (if-let [errors (validate-message params)]
     (-> (redirect "/")
@@ -369,44 +369,44 @@ lein ring server-headless 8000
     (do
       (db/save-message! (assoc params :timestamp (java.util.Date.)))
       (redirect "/"))))
-{% endhighlight %}
+```
 
 上面的函数通过:params从request中获取表单参数。当validate-message返回错误信息时将重定向到"/"，并将错误信息通过:flash来返回。否则保存信息。
 
 接着，我们会修改home-page这个controller:
 
-{% highlight clojure %}
+```clojure
 (defn home-page [{:keys [flash]}]
   (layout/render
    "home.html"
    (merge {:messages (db/get-messages)}
           (select-keys flash [:name :message :errors]))
    :name (:name flash)))
-{% endhighlight %}
+```
 
 我们所做的就是多传递了几个参数给模板，其中一个是从数据库中查询到的信息.
 
 最后呢，在home-routes定义里面添加这个controller的路由定义。
 
-{% highlight clojure %}
+```clojure
 (defroutes home-routes
   (GET "/" request (home-page request))
   (POST "/" request (save-message! request))
   (GET "/about" [] (about-page)))
-{% endhighlight %}
+```
 
 别忘了引入POST
 
-{% highlight clojure %}
+```clojure
 (ns guestbook.routes.home
   (:require ...
             [compojure.core :refer [defroutes GET POST]]
             ...))
-{% endhighlight %}
+```
 
 controller已经编写OK。我们打开处于resources/templates下的home.html模板,目前只是简单的显示内容：
 
-{% highlight html %}
+```html
 { % extends "templates/base.html" %}
 { % block content %}
  <div class="jumbotron">
@@ -421,11 +421,11 @@ controller已经编写OK。我们打开处于resources/templates下的home.html�
     </div>
  </div>
 { % endblock %}
-{% endhighlight %}
+```
 
 我们改为如下代码：
 
-{% highlight html %}
+```html
 { % extends "templates/base.html" %}
 { % block content %}
  <div class="jumbotron">
@@ -447,20 +447,20 @@ controller已经编写OK。我们打开处于resources/templates下的home.html�
  </div>
 { % endblock %}
 
-{% endhighlight %}
+```
 
 我们使用了迭代器来遍历信息。而每个迭代结果都是一个包含了信息的map。我们能通过名字来访问它们。同时，我们使用了一个日期过滤器来生成一个适于人类阅读的时间. 接着我们来添加错误信息的展示.
 
-{% highlight html %}
+```html
 { % if error %}
     <p>{ {error}}</p>
 { % endif %}
 
-{% endhighlight %}
+```
 
 我们只是简单的检查了一下是否有错误信息，如果有就展示。最后我们创建一个form来接受用户提交留言.
 
-{% highlight html %}
+```html
 <form action="/" method="POST">
     <p>
        Name:
@@ -474,11 +474,11 @@ controller已经编写OK。我们打开处于resources/templates下的home.html�
     </p>
     <input type="submit" value="comment">
 </form>
-{% endhighlight %}
+```
 
 最后，home.html看起来像这样
 
-{% highlight html %}
+```html
 { % extends "guestbook/views/templates/base.html" %}
 
 { % block content %}
@@ -511,11 +511,11 @@ controller已经编写OK。我们打开处于resources/templates下的home.html�
 </form>
 { % endblock %}
 
-{% endhighlight %}
+```
 
 我们可以修改位于resources/public/css目录下的screen.css来使得页面更好看一些.
 
-{% highlight css %}
+```css
 body {
 	height: 100%;
 	padding-top: 70px;
@@ -634,7 +634,7 @@ form input {
 	width: 50%;
 	clear: both;
 }
-{% endhighlight %}
+```
 
 现在刷新页面就可以看到我们修改的内容了。试试留个言！
 
@@ -642,21 +642,21 @@ form input {
 
 要打包程序，可输入
 
-{% highlight sh %}
+```sh
 lein ring uberjar
-{% endhighlight %}
+```
 
 这将会创建一个可运行的jar。通过下面的命令来运行
 
-{% highlight sh %}
+```sh
 java -jar target/guestbook-0.1.0-SNAPSHOT-standalone.jar
-{% endhighlight %}
+```
 
 如果我们想把应用部署到tomcat这样的服务器上，你可以运行
 
-{% highlight sh %}
+```sh
 lein ring uberwar
-{% endhighlight %}
+```
 
 这将会打包一个war包。
 

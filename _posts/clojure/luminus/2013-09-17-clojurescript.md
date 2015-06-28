@@ -26,7 +26,7 @@ ClojureScript可以作为JavaScript在客户端的替代品。使用ClojureScrip
 。不过在现有的项目中添加ClojureScript也同样的简单。你只需要在
 project.clj文件中添加如下内容即可。
 
-{% highlight clojure %}
+```clojure
 :plugins [...
           [lein-cljsbuild "0.3.0"]]
 
@@ -36,7 +36,7 @@ project.clj文件中添加如下内容即可。
 {:builds [{:source-paths ["src-cljs"]
            :compiler {:output-to "resources/public/js/site.js"
                       :optimizations :advanced}}]}
-{% endhighlight %}
+```
 
 上面的代码将在项目中添加cljsbuild插件和一个钩子。
 所有的命名空间需要在项目根目录下的src-cljs目录内。注意，ClojureScript
@@ -57,15 +57,15 @@ Running the Compiler
 开发ClojureScript应用最简单的方法就是自动运行编译器。这样，你的任何修
 改都会立即生效。要开启自动编译，只需要输入如下命令:
 
-{% highlight sh %}
+```sh
 lein cljsbuild auto
-{% endhighlight %}
+```
 
 也可以使用一次编译的方式。这将会将所有的js编译到一个js文件中。
 
-{% highlight sh %}
+```sh
 lein cljsbuild once
-{% endhighlight %}
+```
 
 Advanced Compilation and Exports
 ================================
@@ -73,44 +73,44 @@ Advanced Compilation and Exports
 使用高级编译的话变量名会被编译器压缩。如果要确保函数被编译为js时函数名
 不变，那么我们需要保证他们的名字是受保护的。而这只需要添加\^:export注解：
 
-{% highlight clojure %}
+```clojure
 (ns main)
 
 (defn ^:export init []
   (js/alert "hello world"))
-{% endhighlight %}
+```
 
 现在我们可以像这样来调用:
 
-{% highlight clojure %}
+```clojure
     <script>
     main.init();
     </script>
-{% endhighlight %}
+```
 
 如果我们在代码里使用js库，那么我们必须要保护我们所调用的函数名。例如，
 如果我们想使用AlbumColors库，如果我们这样写:
 
-{% highlight clojure %}
+```clojure
 (defn ^:export init []
   (.getColors (js/AlbumColors. "/img/foo.jpg")
     (fn [[background]]
      (.log js/console background))))
-{% endhighlight %}
+```
 
 当使用高级编译时AlbumColors和getColors将会被改写。为了不让编译器改写他
 们，我们需要创建一个js文件，里面包含了我们需要保护的函数，并在代码里引
 用它。
 
-{% highlight javascript %}
+```js
 var AlbumColors = {};
 AlbumColors.getColors = function() {};
-{% endhighlight %}
+```
 
 我们把上面的代码放到resource目录下一个叫externs.js文件里面。并在
 cljsbuild丽引用它，像这样:
 
-{% highlight clojure %}
+```clojure
 {:source-paths ["src-cljs"]
      :compiler
      {:pretty-print false
@@ -118,7 +118,7 @@ cljsbuild丽引用它，像这样:
       ;;specify the externs file to protect function names
       :externs ["resources/externs.js"]
       :optimizations :advanced}}
-{% endhighlight %}
+```
 
 Interacting with JavaScript
 ===========================
@@ -127,27 +127,27 @@ Interacting with JavaScript
 
 \*方法调用\*
 
-{% highlight clojure %}
+```clojure
 (.method object params)
 
 (.log js/console "hello world!")
-{% endhighlight %}
+```
 
 \*访问属性\*
 
-{% highlight clojure %}
+```clojure
 (.-property object)
 
 (.-style div)
-{% endhighlight %}
+```
 
 \*设置属性\*
 
-{% highlight clojure %}
+```clojure
 (set! (.-property object))
 
 (set! (.-color (.-style div) "#234567"))
-{% endhighlight %}
+```
 
 更多的例子请查看[Himera文档](http://himera.herokuapp.com/synonym.html)
 
@@ -182,7 +182,7 @@ POST函数能很方便的发送ajax请求。
 
 和ajax-request参数功能相同。
 
-{% highlight clojure %}
+```clojure
 (ns foo
   (:require [ajax.core :refer [GET POST]]))
 
@@ -204,4 +204,4 @@ POST函数能很方便的发送ajax请求。
                   :user    "Bob"}
          :handler handler
          :error-handler error-handler})
-{% endhighlight %}
+```

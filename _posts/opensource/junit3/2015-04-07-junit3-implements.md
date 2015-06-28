@@ -36,14 +36,14 @@ author: 王一帆
 
 # Test接口
 
-{% highlight java %}
+```java
 package junit.framework;
 
 public interface Test {
 	public abstract int countTestCases();
 	public abstract void run(TestResult result);
 }
-{% endhighlight %}
+```
 
 <!-- more -->
 
@@ -56,7 +56,7 @@ Test接口有两个方法
 
 TestCase实现了Test接口，那么肯定需要实现如上两个方法
 
-{% highlight java %}
+```java
 public abstract class TestCase extends Assert implements Test {
 
   ...
@@ -72,7 +72,7 @@ public abstract class TestCase extends Assert implements Test {
   ...
 
 }
-{% endhighlight %}
+```
 
 - countTestCases()方法返回1
 - run(result)方法中，是调用TestResult()中的run(Test)方法
@@ -83,7 +83,7 @@ public abstract class TestCase extends Assert implements Test {
 
 TestResult类看名字也能才出来，是用来收集测试结果的类.
 
-{% highlight java %}
+```java
 protected void run(final TestCase test) {
   startTest(test);
   Protectable p= new Protectable() {
@@ -107,7 +107,7 @@ public void runProtected(final Test test, Protectable p) {
     addError(test, e);
   }
 }
-{% endhighlight %}
+```
 
 - startTest(test)方法是触发添加的Listener的
 - 后面构建了一个Protectable对象，里面运行test.runBare()
@@ -118,7 +118,7 @@ public void runProtected(final Test test, Protectable p) {
 
 我们再次回到了TestCase方法，看看runBare()方法
 
-{% highlight java %}
+```java
 public void runBare() throws Throwable {
   Throwable exception= null;
   setUp();
@@ -135,7 +135,7 @@ public void runBare() throws Throwable {
   }
   if (exception != null) throw exception;
 }
-{% endhighlight %}
+```
 
 - 从这里的代码，我们终于看到了测试执行的一个大致流程
 - 先执行setUp()方法，接着runTest()，最后tearDown()。是不是就是我们的测试执行流程呢？
@@ -144,23 +144,23 @@ public void runBare() throws Throwable {
 
 - setUp()
 
-{% highlight java %}
+```java
 protected void setUp() throws Exception {
 }
-{% endhighlight %}
+```
 
 - tearDown()
 
-{% highlight java %}
+```java
 protected void tearDown() throws Exception {
 }
-{% endhighlight %}
+```
 
 上面两个方法主要就是给子类覆盖的！
 
 - runTest()
 
-{% highlight java %}
+```java
 protected void runTest() throws Throwable {
   assertNotNull(fName); // Some VMs crash when calling  getMethod(null,null);
   Method runMethod= null;
@@ -187,7 +187,7 @@ protected void runTest() throws Throwable {
     throw e;
   }
 }
-{% endhighlight %}
+```
 
 这里就是通过反射来获取方法进而执行！
 
@@ -197,15 +197,15 @@ protected void runTest() throws Throwable {
 
 在上篇中通过命令行执行
 
-{% highlight sh %}
+```sh
 java junit.textui.TestRunner org.ivan.TestAll
-{% endhighlight %}
+```
 
 可以看到，入口类为TestRunner
 
 # TestRunner类
 
-{% highlight java %}
+```java
 public static void main(String args[]) {
   TestRunner aTestRunner= new TestRunner();
   try {
@@ -252,13 +252,13 @@ public TestResult start(String args[]) throws Exception {
     throw new Exception("Could not create and run test suite: " + e);
   }
 }
-{% endhighlight %}
+```
 
 - TestRunner中的核心方法为start方法，主要解析传递的参数，并执行相应的测试
 - 其中Test suite= getTest(testCase);返回的实际上是TestSuite。也就是说，即使你不将TestCase添加到TestSuite中，JUnit也会自动帮你进行封装
 - doRun就是实际的运行测试的方法了
 
-{% highlight java %}
+```java
 public TestResult doRun(Test suite, boolean wait) {
   TestResult result= createTestResult();
   result.addListener(fPrinter);
@@ -271,7 +271,7 @@ public TestResult doRun(Test suite, boolean wait) {
   pause(wait);
   return result;
 }
-{% endhighlight %}
+```
 
 - 首先实例化一个TestResult，然后添加Listener
 - 执行TestSuite的run方法
@@ -279,7 +279,7 @@ public TestResult doRun(Test suite, boolean wait) {
 
 # TestSuite
 
-{% highlight java %}
+```java
 public void run(TestResult result) {
 for (Enumeration e= tests(); e.hasMoreElements(); ) {
   if (result.shouldStop() )
@@ -292,14 +292,14 @@ for (Enumeration e= tests(); e.hasMoreElements(); ) {
 public void runTest(Test test, TestResult result) {
   test.run(result);
 }
-{% endhighlight %}
+```
 
 - 我们知道TestSuite中是Test的集合，这里run方法，就是遍历TestSuite中的Test并调用runTest方法
 - 而runTest方法实际上就是调用test的run方法
 
 那Test是如何添加到TestSuite中的呢？这个动作是在实例化TestSuite时进行的!
 
-{% highlight java %}
+```java
 public TestSuite(final Class theClass) {
   fName= theClass.getName();
   try {
@@ -326,11 +326,11 @@ public TestSuite(final Class theClass) {
   if (fTests.size() == 0)
   addTest(warning("No tests found in "+theClass.getName()));
 }
-{% endhighlight %}
+```
 
 - 核心功能就是addTestMethod方法
 
-{% highlight java %}
+```java
 private void addTestMethod(Method m, Vector names, Class theClass) {
   String name= m.getName();
   if (names.contains(name))
@@ -350,7 +350,7 @@ private boolean isTestMethod(Method m) {
 	Class returnType= m.getReturnType();
 	return parameters.length == 0 && name.startsWith("test") && returnType.equals(Void.TYPE);
 }
-{% endhighlight %}
+```
 
 - isTestMethod方法用来判断是否为测试方法
 - 是测试方法的条件是:方法没有参数，方法名以test开头，且没有返回值

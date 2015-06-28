@@ -27,15 +27,15 @@ Profiles
 
 要添加配置，只需要简单的添加到你的应用的名字后面，比如:
 
-{% highlight sh %}
+```sh
 lein new luminus myapp +cljs
-{% endhighlight %}
+```
 
 可以多个参数一起使用:
 
-{% highlight sh %}
+```sh
 lein new luminus myapp +site +postgres
-{% endhighlight %}
+```
 
 如果两个参数会生成相同的文件，则后面参数所生成的文件会覆盖前面参数所生
 成的文件。
@@ -48,13 +48,13 @@ HTTP Kit notes
 HTTP Kit是一个嵌入式的服务器。与Jetty不同的是，HTTP Kit并不被lein-ring
 支持。所以你需要这样来运行HTTP Kit.
 
-{% highlight sh %}
+```sh
 lein run
-{% endhighlight %}
+```
 
 为了能热部署，你需要使用-dev选项，并且可以自定义端口号。默认端口号是8080
 要打包一个可运行的HTTP Kit的jar不包，使用如下的命令:
 
-{% highlight sh %}
+```sh
 lein uberjar
-{% endhighlight %}
+```

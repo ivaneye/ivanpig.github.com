@@ -18,22 +18,22 @@ Setting headers
 
 可以使用set-header来设置响应头，使用一个map作为参数。这里需要注意的是,map的key必须是字符串。
 
-{% highlight clojure %}
+```clojure
 (set-headers {"x-csrf" csrf}
     (common/layout [:p "hi there"]))
-{% endhighlight %}
+```
 
 Setting content type
 ====================
 
 你可以使用content-type函数来设置响应的类型:
 
-{% highlight clojure %}
+```clojure
 (GET "/project" []
        (noir.response/content-type
        "application/pdf"
        (clojure.java.io/input-stream "report.pdf")))
-{% endhighlight %}
+```
 
 下面是有效的响应类型设置:
 
@@ -42,18 +42,18 @@ Setting content type
 -   JSONP - Generates JSON for the given content and creates a javascript response for calling func-name with it.
 -   edn - Wraps the response in the application/edn content-type and calls pr-str on the Clojure data stuctures passed in.
 
-{% highlight clojure %}
+```clojure
 (GET "/xml" [] (xml "<foo></foo>"))
 (GET "/json" [] (json {:response "ok"}))
 (GET "/jsonp" [] (jsonp  "showUsers" [{:name "John"} {:name "Jane"}]))
 (GET "/edn" [] (edn {:foo 1 :bar 2}))
-{% endhighlight %}
+```
 
 为了设置响应类型，你还需要设置noir.util.middleware/app-handler中间件。和上一节的请求一样，你只需要配置:formats键就可以了
 
-{% highlight clojure %}
+```clojure
 (app-handler routes :formats [:json])
-{% endhighlight %}
+```
 <!-- more -->
 
 可用的格式化类型:
@@ -68,9 +68,9 @@ Setting content type
 
 可以使用status函数来设置一个自定义的状态
 
-{% highlight clojure %}
+```clojure
 (GET "/missing-page" [] (status 404 "your page could not be found"))
-{% endhighlight %}
+```
 
 Redirects
 =========
@@ -85,9 +85,9 @@ noir.response/redirect可以进行重定向。他可以向重定向函数传递�
 
 如果不传递参数的话，那么默认为:found
 
-{% highlight clojure %}
+```clojure
 (require 'noir.response)
 
 (redirect "/foo")
 (redirect "/bar" :see-other)
-{% endhighlight %}
+```

@@ -43,7 +43,7 @@ JUnit4的入口方法在org.junit.runner.JUnitCore中，我们从这里开始。
 
 核心执行方法为run方法
 
-{% highlight java %}
+```java
 public Result run(Runner runner) {
     Result result = new Result();
     RunListener listener = result.createListener();
@@ -57,7 +57,7 @@ public Result run(Runner runner) {
     }
     return result;
 }
-{% endhighlight %}
+```
 
 结构与JUnit3中的TestRunner的doRun方法类似。
 
@@ -70,7 +70,7 @@ public Result run(Runner runner) {
 
 JUnit4ClassRunner就是执行JUnit4测试类的处理类。
 
-{% highlight java %}
+```java
 public void run(final RunNotifier notifier) {
     new ClassRoadie(notifier, testClass, getDescription(), new Runnable() {
         public void run() {
@@ -78,11 +78,11 @@ public void run(final RunNotifier notifier) {
         }
     }).runProtected();
 }
-{% endhighlight %}
+```
 
 runProtected方法如下
 
-{% highlight java %}
+```java
 public void runProtected() {
         try {
             runBefores();
@@ -92,24 +92,24 @@ public void runProtected() {
             runAfters();
         }
     }
-{% endhighlight %}
+```
 
 这里的结构和JUnit3的TestResult类的run()方法和runProtected()很像。
 
 - runProtected定义了执行整体流程
 - runMethods(notifier)为实际执行的方法,其实就是遍历所有测试方法来执行
 
-{% highlight java %}
+```java
 protected void runMethods(final RunNotifier notifier) {
     for (Method method : testMethods) {
         invokeTestMethod(method, notifier);
     }
 }
-{% endhighlight %}
+```
 
 而这些测试i方法是如何得到的呢？当然通过反射了，相关代码在TestClass中
 
-{% highlight java %}
+```java
 public List<Method> getAnnotatedMethods(Class<? extends Annotation> annotationClass) {
     List<Method> results = new ArrayList<Method>();
     for (Class<?> eachClass : getSuperClasses(klass)) {
@@ -126,6 +126,6 @@ public List<Method> getAnnotatedMethods(Class<? extends Annotation> annotationCl
     }
     return results;
 }
-{% endhighlight %}
+```
 
 如果熟悉了JUnit3的流程，那么JUnit4的流程就相对的好梳理很多了，少了很多的继承关系!

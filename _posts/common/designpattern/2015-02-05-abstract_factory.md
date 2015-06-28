@@ -27,7 +27,7 @@ author: 王一帆
 
 比如:Pig不仅分颜色，还分国家，比如荷兰Pig，新西兰Pig。
 
-{% highlight java %}
+```java
 public class RedPigFactory implements PigFactory{
      public Pig getNetherlandsPig(){
           return new RedNetherlandsPig();
@@ -37,7 +37,7 @@ public class RedPigFactory implements PigFactory{
           return new RedNewZealandPig();
      }
 }
-{% endhighlight %}
+```
 
 <!-- more -->
 
@@ -46,7 +46,7 @@ public class RedPigFactory implements PigFactory{
 
 而在Clojure中就是选择函数的条件多了！
 
-{% highlight clojure %}
+```clojure
 (defmulti run (fn [t] t))
 
 (defmethod run
@@ -80,4 +80,4 @@ public class RedPigFactory implements PigFactory{
   (println "NewZealand BluePig run"))
 
 (run [:BluePig :Netherlands])
-{% endhighlight %}
+```

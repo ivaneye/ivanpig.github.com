@@ -37,15 +37,15 @@ Rich object是面向对象语言中的思想.即将数据及和数据相关的�
 
 首先,DTO就是数据,而Clojure擅长数据处理,例如map,list和set.但是如果你想要类似结构体的东西,Clojure里提供了record.如果你了解Scala你会发现这玩样和case class很像.定义record的方式如下:
 
-{% highlight clojure %}
+```clojure
 (defrecord Person [firstName lastName])
-{% endhighlight %}
+```
 
 这实际上创建了一个叫Person的Java类,它包含两个不可变的属性以及实现了hashCode和equals方法.record的行为模式和map很像,所以大部分适用于map的方法都适用与record!需要注意的是,虽然Clojure是动态类型,但是你可以使用类型提示来标示特定类型:
 
-{% highlight clojure %}
+```clojure
 (defrecord Person [^String firstName ^String lastName])
-{% endhighlight %}
+```
 
 好,那现在我们来看看如何定义Service!让我们将问题分解为组织相关函数,定义接口及依赖注入!
 
@@ -55,18 +55,18 @@ Rich object是面向对象语言中的思想.即将数据及和数据相关的�
 
 如果你想定义类似class的东西,你需要先定义接口!那你需要使用protocol!你可以把它当做和Java中的接口类似的东西.实际上,除了使用protocol你也可以直接使用Java的接口,因为Clojure可以直接访问Java代码!创建protocol的方式如下:
 
-{% highlight clojure %}
+```clojure
 (defprotocol Greet
     (sayHello [this])
-{% endhighlight %}
+```
 
 这和下面的代码功能相同:
 
-{% highlight java %}
+```java
 public interface Greet{
     Object sayHello();
 }
-{% endhighlight %}
+```
 
 有两点需要注意:
 
@@ -75,11 +75,11 @@ public interface Greet{
 
 实现protocol可以使用如下代码:
 
-{% highlight clojure %}
+```clojure
 (defrecord Person [firstName lastName]
     Greet
     (sayHello [this] (print "Hello,my name is " firstName)))
-{% endhighlight %}
+```
 
 最后就是依赖注入了!结论是:依赖注入对与Clojure来说不是必要的!可以看看下面两篇文章!
 

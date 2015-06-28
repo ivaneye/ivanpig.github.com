@@ -17,26 +17,26 @@ Luminus使用Ring来路由应用的处理程序，你也可以添加一些中间
 
 中间件其实就是个简单的函数，它接受现有的处理程序和一些可选参数作为函数参数并返回一个新的处理程序。
 
-{% highlight clojure %}
+```clojure
 (defn wrap-nocache [handler]
   (fn [request]
      (let [response (handler request)]
         (assoc-in response [:headers  "Pragma"] "no-cache"))))
 
 (def app (wrap-nocache handler))
-{% endhighlight %}
+```
 
 可以看到，上面的函数接受一个处理函数并返回一个新的函数，这个函数接受request作为参数。返回的函数只在handler所在的范围内有效。当调用这个函数时，它将会给响应map添加Pragma:no-cache键值对。
 
 你可以添加自定义的中间件，只需要使用:middleware关键字就可以了:
 
-{% highlight clojure %}
+```clojure
 (def app (middleware/app-handler
           all-routes
           ;;put any custom middleware
           ;;in the middleware vector
           :middleware [wrap-nocache]))
-{% endhighlight %}
+```
 
 具体内容可参见Ring官方文档。
 

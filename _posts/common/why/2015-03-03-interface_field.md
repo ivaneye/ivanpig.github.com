@@ -30,27 +30,27 @@ author: 王一帆
 
 先将属性设置为private的!
 
-{% highlight java %}
+```java
 public interface Person{
   private int num;
 }
-{% endhighlight %}
+```
 
 OK!private的属性，当然只能在接口内部使用了!但是在接口里面给谁使用呢？接口里的方法只有方法头可没方法体！所以设为private，那就永远都访问不到了！
 
 好，那我们改成protected!
 
-{% highlight java %}
+```java
 public interface Person{
   protected int num;
 }
-{% endhighlight %}
+```
 
 这样子类就能访问了！但是外部如何访问呢？方法是有的:
 
 <!-- more -->
 
-{% highlight java %}
+```java
 public interface Person{
   protected int num;
 
@@ -66,24 +66,24 @@ class PersonA implements Person{
     this.num = num;
   }
 }
-{% endhighlight %}
+```
 
 如果有100个类实现了Person接口！请问有多少重复代码?
 
 接着是默认访问权限控制符:
 
-{% highlight java %}
+```java
 public interface Person{
   //非public static final
   int num;
 }
-{% endhighlight %}
+```
 
 对于包外的类来说，和protected一样的问题!这里不废话了！
 
 最后就只剩下public了！
 
-{% highlight java %}
+```java
 public interface Person{
   public int num;
 }
@@ -100,7 +100,7 @@ public class Test{
     System.out.println(p.num); //打印结果是？
   }
 }
-{% endhighlight %}
+```
 
 如上代码你会发现，两者打印结果居然不相同！这就好像是，这个"协议"公开是一套，而如果你有关系，会给你另一套"内部协议"!
 
@@ -108,7 +108,7 @@ public class Test{
 
 所以如果想这个成员变量为接口所有，只能将其设为static!
 
-{% highlight java %}
+```java
 public interface Person{
   public static int num;
 }
@@ -125,7 +125,7 @@ public class Test{
     System.out.println(Person.num); //结果？
   }
 }
-{% endhighlight %}
+```
 
 如上代码的意思就是，A和B遵循了"协议"Person，但是只要A或B感觉不满意就可以随便改！那还叫"协议"吗?
 

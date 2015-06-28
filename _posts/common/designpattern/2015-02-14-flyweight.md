@@ -25,14 +25,14 @@ author: 王一帆
 
 抽象享元角色类
 
-{% highlight java %}
+```java
 public interface Flyweight {
     //一个示意性方法，参数state是外蕴状态
     public void operation(String state);
 }
-{% endhighlight %}
+```
 
-{% highlight java %}
+```java
 public class ConcreteFlyweight implements Flyweight {
     private Character intrinsicState = null;
     /**
@@ -56,11 +56,11 @@ public class ConcreteFlyweight implements Flyweight {
     }
 
 }
-{% endhighlight %}
+```
 
 <!-- more -->
 
-{% highlight java %}
+```java
 public class FlyweightFactory {
     private Map<Character,Flyweight> files = new HashMap<Character,Flyweight>();
 
@@ -76,11 +76,11 @@ public class FlyweightFactory {
         return fly;
     }
 }
-{% endhighlight %}
+```
 
 调用
 
-{% highlight java %}
+```java
 public class Client {
 
     public static void main(String[] args) {
@@ -96,7 +96,7 @@ public class Client {
     }
 
 }
-{% endhighlight %}
+```
 
 # Clojure实现
 
