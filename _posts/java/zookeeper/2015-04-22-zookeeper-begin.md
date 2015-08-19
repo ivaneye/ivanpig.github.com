@@ -4,7 +4,7 @@ title: ZooKeeper安装与Java调用
 categories: zookeeper
 tags: [java,zookeeper]
 avatarimg: "/img/head.jpg"
-author: 王一帆
+author: Ivan
 
 ---
 

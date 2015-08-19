@@ -4,7 +4,7 @@ title: 语言与模式-03抽象工厂模式
 categories: [designpattern]
 tags: [designpattern,java,clojure]
 avatarimg: "/img/head.jpg"
-author: 王一帆
+author: Ivan
 
 ---
 

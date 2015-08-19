@@ -4,7 +4,7 @@ title: 快学Scala习题解答—第一章 基础
 categories: scala
 tags: [java,scala]
 avatarimg: "/img/head.jpg"
-author: 王一帆
+author: Ivan
 
 ---
 

@@ -4,7 +4,7 @@ title: Luminus手册-HTML模板
 categories: luminus
 tags: [clojure,luminus]
 avatarimg: "/img/head.jpg"
-author: 王一帆
+author: Ivan
 
 ---
 
