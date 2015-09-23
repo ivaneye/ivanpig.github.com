@@ -375,6 +375,7 @@ $ mkdir mods
 $ javac -d mods -modulesourcepath src $(find src -name "*.java")
 ```
 最后修改模块com.greetings来使用这个API
+
 ```
 $ cat src/com.greetings/module-info.java
 ```
