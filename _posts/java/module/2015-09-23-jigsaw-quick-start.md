@@ -51,6 +51,7 @@ public class Main {
 <!-- more -->
 
 使用下面的命令，将源代码编译到mods/com.greetings目录下
+
 ```
 $ mkdir -p mods/com.greetings
 
@@ -60,6 +61,7 @@ $ javac -d mods/com.greetings \
 ```
 
 通过下面的命令运行:
+
 ```
 $ java -modulepath mods -m com.greetings/com.greetings.Main
 ```
@@ -119,6 +121,7 @@ public class Main {
 }
 ```
 分别翻译org.astro模块和com.greetings模块.在编译com.greetings模块时需要指定模块路径，这样才能解析对org.astro的依赖.
+
 ```
 $ mkdir mods/org.astro mods/com.greetings
 ```
@@ -130,10 +133,12 @@ $ javac -modulepath mods -d mods/com.greetings \
         src/com.greetings/module-info.java src/com.greetings/com/greetings/Main.java
 ```
 运行和前面的例子相同:
+
 ```
 $ java -modulepath mods -m com.greetings/com.greetings.Main
 ```
 打印出:
+
 ```
 Greetings world!
 ```
@@ -146,6 +151,7 @@ Java中的访问权限控制符是在类上的，而module-info.java中的导入
 ## 多模块编译
 
 前面的例子中模块com.greetings和模块org.astro是分开编译的。当然也可以多个模块一起来编译.
+
 ```
 $ mkdir mods
 
@@ -162,6 +168,7 @@ $ find mods -type f
 ## 打包
 前面的例子只是简单的编译，而一般为了便于发布，会将模块打包成模块化的jar包。模块化的jar包就是在包的根目录下有一个module-info.class文件，来定义模块信息。
 下面的命令在mlib目录下打一个叫org.astro@1.0.jar的模块化jar包和一个叫com.greetings.jar的模块化jar包。
+
 ```
 $ mkdir mlib
 
@@ -176,6 +183,7 @@ $ ls mlib
     com.greetings.jar   org.astro@1.0.jar
 ```
 在这个例子中，模块org.astro打包时指定版本为1.0。模块com.greetings打包时指定主类为com.greetings.Main,这样我们可以直接执行模块com.greetings而不需要指明主类。
+
 ```
 $ java -mp mlib -m com.greetings
 
@@ -183,6 +191,7 @@ $ java -mp mlib -m com.greetings
 ```
 
 -modulepath可以简写为-mp。jar命令行工具新增了许多新属性，其中一个是打印模块化jar的模块定义:
+
 ```
 $ jar --print-module-descriptor --archive=mlib/org.astro@1.0.jar
 
@@ -197,6 +206,7 @@ $ jar --print-module-descriptor --archive=mlib/org.astro@1.0.jar
 ## 缺少导入或导出
 
 现在让我们看一下在前面的例子里，如果我们没有对模块进行导入导出声明，会有什么错误!
+
 ```
 $ cat src/com.greetings/module-info.java
 ```
@@ -220,6 +230,7 @@ $ javac -modulepath mods -d mods/com.greetings \
     2 errors
 ```
 现在恢复导入，注释掉导出!
+
 ```
 $ cat src/com.greetings/module-info.java
 ```
@@ -262,6 +273,7 @@ $ javac -modulepath mods -d mods/com.greetings \
 + 模块org.fastsocket是服务生产模块。它提供了一个com.socket.spi.NetworkSocketProvider的实现，它不需要导出任何包
 
 下面是模块com.socket的源码：
+
 ```
 $ cat src/com.socket/module-info.java
 ```
@@ -313,6 +325,7 @@ public abstract class NetworkSocketProvider {
 }
 ```
 下面是模块org.fastsocket的源码:
+
 ```
 $ cat src/org.fastsocket/module-info.java
 ```
@@ -356,6 +369,7 @@ class FastNetworkSocket extends NetworkSocket {
 ```
 
 编译:
+
 ```
 $ mkdir mods
 $ javac -d mods -modulesourcepath src $(find src -name "*.java")
@@ -388,6 +402,7 @@ public class Main {
 $ javac -d mods/com.greetings/ -mp mods $(find src/com.greetings/ -name "*.java")
 ```
 最后我们来运行:
+
 ```
 $ java -mp mods -m com.greetings/com.greetings.Main
 
@@ -426,6 +441,7 @@ jlink工具支持很多高级属性，请通过jlink --help查看
 后面，javac在编译一个包里的类时，如果已经存在在某个模块中，则会有警告。如果要为某个以存在的模块编译类，需要添加-Xmodule属性.
 
 下面是个例子，它编译一个新版本的java.util.concurrent.ConcurrentHashMap，并使用它:
+
 ```
 javac -Xmodule:java.base -d mypatches/java.base \
         src/java.base/java/util/concurrent/ConcurrentHashMap.java
