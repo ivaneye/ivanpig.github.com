@@ -48,6 +48,8 @@ public class Main {
 }
 ```
 
+<!-- more -->
+
 使用下面的命令，将源代码编译到mods/com.greetings目录下
 ```
 $ mkdir -p mods/com.greetings
