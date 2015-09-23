@@ -5,7 +5,6 @@ categories: module
 tags: [jigsaw,java,module]
 avatarimg: "/img/head.jpg"
 author: Ivan
-published: false
 
 ---
 
