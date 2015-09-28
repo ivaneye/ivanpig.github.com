@@ -457,4 +457,4 @@ java -Xoverride:mypatches ...
 + jigsaw不需要第三方运行环境，对于开发者来说要比OSGi更友好
 + jigsaw自带解决传递依赖的工具
 + jigsaw在编译期就能处理模块间的依赖，而不像OSGi需要到运行时才报模块依赖问题。主要还是第二点:jigsaw不需要第三方运行环境
-+ jigsaw可以动态选择实现，但是如何实现例子中没有提到!
++ jigsaw可以动态选择实现，但是如何实现例子中没有提到!(网上查资料说:jigsaw并不支持OSGi那样的dynamic Service，就是说不支持动态的装载和卸载Service了。需要进一步证实)
