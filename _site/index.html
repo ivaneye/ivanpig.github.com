@@ -9,9 +9,9 @@
     <meta name="generator" content="Asciidoctor 1.5.1">
     <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
     <title>你看到的是你想看到的</title>
-    <link rel="stylesheet" href="/css/simple/font-awesome.min.css"/>
-    <link rel="stylesheet" href="/css/simple/simple.css"/>
-    <link rel="stylesheet" href="/css/simple/highliight.css"/>
+    <link rel="stylesheet" href="http://7xipn4.com1.z0.glb.clouddn.com/css/simple/font-awesome.min.css"/>
+    <link rel="stylesheet" href="http://7xipn4.com1.z0.glb.clouddn.com/css/simple/simple.css"/>
+    <link rel="stylesheet" href="http://7xipn4.com1.z0.glb.clouddn.com/css/simple/highliight.css"/>
     <script src="/js/min/jquery-1.7.2.min.js"></script>
     <script type="text/javascript">
         //获取url中的参数
@@ -22,9 +22,9 @@
         }
         var style = getUrlParam("style");
         if(style == null || style == undefined){
-            document.write("<link rel='stylesheet' href='/css/simple/highliight.css'/>");
+            document.write("<link rel='stylesheet' href='http://7xipn4.com1.z0.glb.clouddn.com/css/simple/highliight.css'/>");
         }else{
-            document.write("<link rel='stylesheet' href='/css/pygmentscss/" + style + ".css'/>");
+            document.write("<link rel='stylesheet' href='http://7xipn4.com1.z0.glb.clouddn.com/css/pygmentscss/" + style + ".css'/>");
         }
     </script>
     <style>
@@ -37,7 +37,7 @@
 <div id="toc" class="toc2">
     <div class="headerpic">
         <a href="/">
-            <img id="_home" src="/img/head.jpg" alt="Profile Picture" style="width: 100px;" title="返回首页">
+            <img id="_home" src="http://7xipn4.com1.z0.glb.clouddn.com/img/head.jpg" alt="Profile Picture" style="width: 100px;" title="返回首页">
         </a>
         <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)"
             width="90%" color="#ccc" size="1/">
@@ -89,6 +89,291 @@
 
 <section class="post">
     <header class="post-header">
+        <h2 class="post-title"><a href="/2015/07/05/binary.html">从1到n:二进制</a></h2>
+
+        <p class="post-meta">By 王一帆   2015年07月05日
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#从1到n"><i class="fa fa-folder-open">从1到n (2)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#从1到n"><i class="fa fa-tags">从1到n (2)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>十进制</h1>
+
+<h2>为什么十进制&quot;最流行&quot;?</h2>
+
+<p>从网上搜集到的资料，个人感觉最靠谱的原因是人类有十根手指。</p>
+
+<p>回忆自己学数字，或者电视里，或者教自己的小孩数字，应该都是从数手指头开始的。然后就出现了如下奇葩图:</p>
+
+<p><img src="/assets/my/1n/binary/01.jpg" alt=""></p>
+
+<p>这样数数很方便，伸手就能数，十个手指头不够还能数脚趾头，不够再借别人的接着数。</p>
+
+<h2>为0正名</h2>
+
+<p>数指头的方式很方便，但是也带来了一个问题:大家可以回忆一下，自己在学数数的时候是不是从1开始教的?1-9,然后10-19,后来才学的0?然后学到了负数，数字就被划分成了正数，负数和0。</p>
+
+<p>从一开始，0一直被特殊对待着。所以对于十进制来说,脑海里的印象都是从1开始。别人让你数10个数，你的第一反映应该是</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">1   2   3   4   5   6   7   8   9   10
+</code></pre></div>
+<p>再多数几个数，就是</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">1   2   3   4   5   6   7   8   9   10
+11  12  13  14  15  16  17  18  19  20
+21  22  23  24  25  26  27  28  29  30
+</code></pre></div>
+<p>能看出来问题吗？10其实是两位数，但是和一位数归类到一起了。这导致了数数和进制产生了差别!</p>
+
+<p>请看<a href="http://jingyan.baidu.com/article/5bbb5a1b475d2e13eba1791e.html">百度经验</a>
+对十进制的描述时，第一句话对十进制的定义就是有问题的:&quot;从 1～～10 然后进位，再从 11～～20 再进位，这种逢十进位的方法，就叫做十进制。&quot;</p>
+
+<p>&quot;从 1～～10 然后进位&quot;?10已经是进位后的数了，怎么再进位！！！</p>
+
+<p>可以把这个看成是生活经验与学术上的差异吧！</p>
+
+<p>我们把上面的数字按照进制来重新排列一下：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    1   2   3   4   5   6   7   8   9
+10  11  12  13  14  15  16  17  18  19
+20  21  22  23  24  25  26  27  28  29
+......
+</code></pre></div>
+<p>如上可见，一位数和其它位数的数比较，会少了一位！其它位数的数字都是从n0开始，而一位数是从1开始的。补上0后，才是完整的十进制。</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">0   1   2   3   4   5   6   7   8   9
+10  11  12  13  14  15  16  17  18  19
+20  21  22  23  24  25  26  27  28  29
+......
+</code></pre></div>
+<p>所以十进制的定义应该是：<strong>由0-9这十个数字组成，逢10进1。</strong></p>
+
+<p>个人感觉十进制被理解错的另一个原因是:一位数到两位数，逢10进1，就是10，没有感官上的进制的动作。</p>
+
+<h1>二进制</h1>
+
+<p>从上面十进制的定义我们可以给出二进制的定义:<strong>由0-1这两个数字组成，逢2进1</strong></p>
+
+<table><thead>
+<tr>
+<th>十进制</th>
+<th style="text-align: center">二进制</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>0</td>
+<td style="text-align: center">0</td>
+</tr>
+<tr>
+<td>1</td>
+<td style="text-align: center">1</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align: center">01</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align: center">11</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align: center">100</td>
+</tr>
+<tr>
+<td>5</td>
+<td style="text-align: center">101</td>
+</tr>
+<tr>
+<td>6</td>
+<td style="text-align: center">110</td>
+</tr>
+<tr>
+<td>7</td>
+<td style="text-align: center">111</td>
+</tr>
+<tr>
+<td>8</td>
+<td style="text-align: center">1000</td>
+</tr>
+<tr>
+<td>9</td>
+<td style="text-align: center">1001</td>
+</tr>
+</tbody></table>
+
+<h1>计算机中的二进制</h1>
+
+<h1>二进制的计算</h1>
+
+<h1>参考资料</h1>
+
+<h2>为什么十进制&quot;最流行&quot;?</h2>
+
+<ul>
+<li><a href="http://jingyan.baidu.com/article/5bbb5a1b475d2e13eba1791e.html">百度经验</a></li>
+<li><a href="http://www.guokr.com/question/194124/">果壳问答</a></li>
+<li><a href="http://www.zhihu.com/question/19588617">知乎</a></li>
+</ul>
+
+
+
+    <a href="/2015/07/05/binary.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/2015/07/05/01.html">从1到n:前言与目录</a></h2>
+
+        <p class="post-meta">By 王一帆   2015年07月05日
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#从1到n"><i class="fa fa-folder-open">从1到n (2)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#从1到n"><i class="fa fa-tags">从1到n (2)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>简介</h1>
+
+<h1>目录</h1>
+
+<h2>二进制</h2>
+
+<h2>编码</h2>
+
+<h2>跨平台</h2>
+
+<h2>文件系统</h2>
+
+<h2>编程语言</h2>
+
+<h2>流</h2>
+
+<h2>线程</h2>
+
+
+
+    <a href="/2015/07/05/01.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/2015/06/28/cweb.html">Clojure Web栈</a></h2>
+
+        <p class="post-meta">By 王一帆   2015年06月28日
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#clojure"><i class="fa fa-folder-open">clojure (11)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">clojure (56)</i></a>
+            
+            <a class="post-category " href="/tag/#framework"><i class="fa fa-tags">framework (2)</i></a>
+            
+            <a class="post-category " href="/tag/#mycode"><i class="fa fa-tags">mycode (1)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>简介</h1>
+
+<p>Clojure是动态语言，刚开始使用Clojure进行web开发时，可能都会想着Clojure有没有rails实现呢？毕竟Rails开发web还是很方便的。<a href="https://github.com/macourtney/Conjure">Conjure</a>就是类Rails框架，不过已经三年无人维护了。</p>
+
+<p>目前Clojure Web开发基本都是基于<a href="https://github.com/ring-clojure/ring">ring</a>扩展的!这和Linux的设计有点类似,ring就是Clojure Web的核心，提供:</p>
+
+<ul>
+<li>解析Request,Response的功能</li>
+<li>处理功能Handler</li>
+<li>拦截功能Middleware</li>
+</ul>
+
+<p>而其它额外功能均在其上进行扩展。</p>
+
+<p>本文主要介绍各个Clojure Web类库，通过这些类库，你能构建Clojure Web程序。</p>
+
+<p>先从核心ring开始!</p>
+
+<h1>ring</h1>
+
+<h2>Handler</h2>
+
+<h2>Request</h2>
+
+<h2>Response</h2>
+
+<h2>Middleware</h2>
+
+
+
+    <a href="/2015/06/28/cweb.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
         <h2 class="post-title"><a href="/2015/06/07/cdraw.html">Clojure绘制UML</a></h2>
 
         <p class="post-meta">By 王一帆   2015年06月07日
@@ -105,7 +390,7 @@
             
             
             
-            <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">clojure (55)</i></a>
+            <a class="post-category " href="/tag/#clojure"><i class="fa fa-tags">clojure (56)</i></a>
             
             <a class="post-category " href="/tag/#graphviz"><i class="fa fa-tags">graphviz (1)</i></a>
             
@@ -127,7 +412,7 @@
 
 <p>以命令模式的UML为例，演示cdraw的使用</p>
 
-<p><img src="/assets/designpattern/command.jpg" alt="" /></p>
+<p><img src="http://7xipn4.com1.z0.glb.clouddn.com/assets/designpattern/command.jpg" alt=""></p>
 
 <h1>安装Graphviz</h1>
 
@@ -139,35 +424,28 @@
 <li>使用leiningen新建一个Clojure项目uml</li>
 <li>在project.clj中添加如下依赖</li>
 </ul>
-
-
-<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">[</span><span class="nv">com.ivaneye/cdraw</span> <span class="s">&quot;0.2.0&quot;</span><span class="p">]</span></code></pre></div>
-
-
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">[</span><span class="nv">com.ivaneye/cdraw</span> <span class="s">&quot;0.2.0&quot;</span><span class="p">]</span>
+</code></pre></div>
 <h1>定义类</h1>
 
 <ul>
 <li>在uml.core中编写如下代码</li>
 </ul>
-
-
 <div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">ns </span><span class="nv">uml.core</span>
   <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">cdraw.uml</span> <span class="ss">:refer</span> <span class="ss">:all</span><span class="p">]))</span>
-  
+
  <span class="p">(</span><span class="nf">defclass</span> <span class="nv">Client</span><span class="p">)</span>
  <span class="p">(</span><span class="nf">defclass</span> <span class="nv">Inboker</span><span class="p">)</span>
  <span class="p">(</span><span class="nf">defclass</span> <span class="nv">Receiver</span> <span class="p">{</span><span class="ss">:m</span> <span class="p">[</span><span class="s">&quot;Action()&quot;</span><span class="p">]})</span>
  <span class="p">(</span><span class="nf">defclass</span> <span class="nv">Command</span> <span class="p">{</span><span class="ss">:m</span> <span class="p">[</span><span class="s">&quot;Execute()&quot;</span><span class="p">]})</span>
- <span class="p">(</span><span class="nf">defclass</span> <span class="nv">ConcreteCommand</span> <span class="p">{</span><span class="ss">:f</span>  <span class="p">[</span><span class="s">&quot;state&quot;</span><span class="p">]</span> <span class="ss">:m</span> <span class="p">[</span><span class="s">&quot;Execute()&quot;</span><span class="p">]})</span></code></pre></div>
-
-
+ <span class="p">(</span><span class="nf">defclass</span> <span class="nv">ConcreteCommand</span> <span class="p">{</span><span class="ss">:f</span>  <span class="p">[</span><span class="s">&quot;state&quot;</span><span class="p">]</span> <span class="ss">:m</span> <span class="p">[</span><span class="s">&quot;Execute()&quot;</span><span class="p">]})</span>
+</code></pre></div>
 <ul>
 <li>第一，二行，引入了cdraw</li>
 <li>defclass定义了类，及其字段(:f)和方法(:m),效果图如下:</li>
 </ul>
 
-
-<p><img src="/assets/mycode/cdraw/c1.png" alt="" /></p>
+<p><img src="http://7xipn4.com1.z0.glb.clouddn.com/assets/mycode/cdraw/c1.png" alt=""></p>
 
 
 
@@ -230,11 +508,9 @@
 <li>App ClassLoader：称为系统类加载器，负责加载应用程序classpath目录下的所有jar和class文件。</li>
 </ul>
 
-
-<p><img src="/assets/jvm/classloader/classloader.jpg" alt="" /></p>
+<p><img src="http://7xipn4.com1.z0.glb.clouddn.com/assets/jvm/classloader/classloader.jpg" alt=""></p>
 
 <p>示例:</p>
-
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">com.sun.nio.zipfs.ZipFileStore</span><span class="o">;</span>
 
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
@@ -246,18 +522,13 @@
     <span class="o">}</span>
 <span class="o">}</span>
 
-<span class="kd">class</span> <span class="nc">A</span><span class="o">{}</span></code></pre></div>
-
-
+<span class="kd">class</span> <span class="nc">A</span><span class="o">{}</span>
+</code></pre></div>
 <p>输出结果:</p>
-
 <div class="highlight"><pre><code class="language-sh" data-lang="sh">null                          //BootStrap ClassLoader输出为null
 sun.misc.Launcher<span class="nv">$ExtClassLoader</span>@3e10c986
-sun.misc.Launcher<span class="nv">$AppClassLoader</span>@610f7612</code></pre></div>
-
-
-
-
+sun.misc.Launcher<span class="nv">$AppClassLoader</span>@610f7612
+</code></pre></div>
 
 
 
@@ -367,7 +638,6 @@ sun.misc.Launcher<span class="nv">$AppClassLoader</span>@610f7612</code></pre></
 
 <div class="post-description">
     <h1>String操作</h1>
-
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">String</span> <span class="n">str</span> <span class="o">=</span> <span class="s">&quot;abCb&quot;</span><span class="o">;</span>
@@ -391,280 +661,21 @@ sun.misc.Launcher<span class="nv">$AppClassLoader</span>@610f7612</code></pre></
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">trim</span><span class="o">());</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;b&quot;</span><span class="o">));</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-
-
+<span class="o">}</span>
+</code></pre></div>
 <h1>String实现</h1>
 
 <p>String是不可变的，其是一个final类</p>
-
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">String</span></code></pre></div>
-
-
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">String</span>
+</code></pre></div>
 <p>其实现了java.io.Serializable, Comparable<String>, CharSequence三个接口</p>
 
-<p><img src="/assets/opensource/jdk/string.png" alt="" /></p>
+<p><img src="http://7xipn4.com1.z0.glb.clouddn.com/assets/opensource/jdk/string.png" alt=""></p>
 
 
 
 
     <a href="/2015/05/04/string.html" class="post-readmore">阅读全文</a>
-    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/2015/04/23/proxy.html">Java Socket编程中加入代理</a></h2>
-
-        <p class="post-meta">By 王一帆   2015年04月23日
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#code"><i class="fa fa-folder-open">code (1)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#proxy"><i class="fa fa-tags">proxy (1)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>方法一</h1>
-
-<p>使用系统属性来完成代理设置, 这种方法比较简单, 但是不能对单独的连接来设置代理:</p>
-
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">Properties</span> <span class="n">prop</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperties</span><span class="o">();</span>
-    <span class="c1">// 设置http访问要使用的代理服务器的地址</span>
-    <span class="n">prop</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;http.proxyHost&quot;</span><span class="o">,</span> <span class="s">&quot;192.168.0.254&quot;</span><span class="o">);</span>
-    <span class="c1">// 设置http访问要使用的代理服务器的端口</span>
-    <span class="n">prop</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;http.proxyPort&quot;</span><span class="o">,</span> <span class="s">&quot;8080&quot;</span><span class="o">);</span>
-    <span class="c1">// 设置不需要通过代理服务器访问的主机，可以使用*通配符，多个地址用|分隔</span>
-    <span class="n">prop</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;http.nonProxyHosts&quot;</span><span class="o">,</span> <span class="s">&quot;localhost|192.168.0.*&quot;</span><span class="o">);</span>
-    <span class="c1">// 设置安全访问使用的代理服务器地址与端口</span>
-    <span class="c1">// 它没有https.nonProxyHosts属性，它按照http.nonProxyHosts 中设置的规则访问</span>
-    <span class="n">prop</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;https.proxyHost&quot;</span><span class="o">,</span> <span class="s">&quot;192.168.0.254&quot;</span><span class="o">);</span>
-    <span class="n">prop</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;https.proxyPort&quot;</span><span class="o">,</span> <span class="s">&quot;443&quot;</span><span class="o">);</span>
-    <span class="c1">// 使用ftp代理服务器的主机、端口以及不需要使用ftp代理服务器的主机</span>
-    <span class="n">prop</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;ftp.proxyHost&quot;</span><span class="o">,</span> <span class="s">&quot;192.168.0.254&quot;</span><span class="o">);</span>
-    <span class="n">prop</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;ftp.proxyPort&quot;</span><span class="o">,</span> <span class="s">&quot;2121&quot;</span><span class="o">);</span>
-    <span class="n">prop</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;ftp.nonProxyHosts&quot;</span><span class="o">,</span> <span class="s">&quot;localhost|192.168.0.*&quot;</span><span class="o">);</span>
-    <span class="c1">// socks代理服务器的地址与端口</span>
-    <span class="n">prop</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;socksProxyHost&quot;</span><span class="o">,</span> <span class="s">&quot;192.168.0.254&quot;</span><span class="o">);</span>
-    <span class="n">prop</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;socksProxyPort&quot;</span><span class="o">,</span> <span class="s">&quot;8000&quot;</span><span class="o">);</span>
-    <span class="c1">// 设置登陆到代理服务器的用户名和密码</span>
-    <span class="n">Authenticator</span><span class="o">.</span><span class="na">setDefault</span><span class="o">(</span><span class="k">new</span> <span class="nf">MyAuthenticator</span><span class="o">(</span><span class="s">&quot;userName&quot;</span><span class="o">,</span> <span class="s">&quot;Password&quot;</span><span class="o">));</span>
-<span class="o">}</span></code></pre></div>
-
-
-
-
-
-
-
-    <a href="/2015/04/23/proxy.html" class="post-readmore">阅读全文</a>
-    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/2015/04/22/zookeeper-begin.html">ZooKeeper安装与Java调用</a></h2>
-
-        <p class="post-meta">By 王一帆   2015年04月22日
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#zookeeper"><i class="fa fa-folder-open">zookeeper (1)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (50)</i></a>
-            
-            <a class="post-category " href="/tag/#zookeeper"><i class="fa fa-tags">zookeeper (2)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>下载</h1>
-
-<p>ZooKeeper目前是Apache顶级项目，可从<a href="http://zookeeper.apache.org/releases.html">此处下载</a></p>
-
-<h1>安装</h1>
-
-<ul>
-<li>将下载的压缩包，解压缩到任意路径下.(例如:d:/soft)</li>
-<li>至ZooKeeper目录/conf下，会发现有一个zoo_sample.cfg，在当前目录拷贝一份，并重命名为zoo.cfg</li>
-<li>进入ZooKeeper目录/bin下，通过zkServer.cmd或zkServer.sh启动ZooKeeper</li>
-</ul>
-
-
-<h1>客户端操作</h1>
-
-<ul>
-<li>在ZooKeeper目录/bin下，使用命令行启动zkCli.cmd或者zkCli.sh即可启动ZooKeeper客户端</li>
-<li>在客户端可以执行: ls,get,set等命令，来展示，获取或设置值</li>
-</ul>
-
-
-<div class="highlight"><pre><code class="language-sh" data-lang="sh">ls /                        //列出/下的内容
-<span class="nb">set</span> /test <span class="nb">test</span>              //给/test目录设值
-get /test                   //获取/test目录的值</code></pre></div>
-
-
-
-
-
-
-
-    <a href="/2015/04/22/zookeeper-begin.html" class="post-readmore">阅读全文</a>
-    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/2015/04/17/junit4-implements.html">读源码-JUnit4实现</a></h2>
-
-        <p class="post-meta">By 王一帆   2015年04月17日
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#junit4"><i class="fa fa-folder-open">junit4 (2)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#opensource"><i class="fa fa-tags">opensource (6)</i></a>
-            
-            <a class="post-category " href="/tag/#junit4"><i class="fa fa-tags">junit4 (2)</i></a>
-            
-            <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (50)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>内容回顾</h1>
-
-<ul>
-<li>上篇内容主要介绍了JUnit4的使用</li>
-<li>如何编写测试类</li>
-<li>如何运行单个测试类</li>
-<li>如何运行多个测试类</li>
-<li>如何设置Class级别的setUp()和tearDown()方法</li>
-<li>如何多次运行测试</li>
-</ul>
-
-
-<p>本篇文章将梳理JUnit4源码</p>
-
-<h1>代码结构</h1>
-
-<p>上篇最后给出了测试UML图</p>
-
-<p><img src="/assets/opensource/junit4/diagram.png" alt="" /></p>
-
-<p>在JUnit3中</p>
-
-<ul>
-<li>所有的测试类都继承了TestCase这个类</li>
-<li>TestCase这个类继承了Assert类，实现了Test接口</li>
-</ul>
-
-
-<p>而这里</p>
-
-<ul>
-<li>测试类不集成任何的父类</li>
-<li>也没有Test接口</li>
-</ul>
-
-
-<p>完全通过注解来处理，所以这里主要就梳理一下JUnit4注解处理相关代码</p>
-
-<h1>JUnitCore</h1>
-
-<p>JUnit4的入口方法在org.junit.runner.JUnitCore中，我们从这里开始。</p>
-
-<p>核心执行方法为run方法</p>
-
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Result</span> <span class="nf">run</span><span class="o">(</span><span class="n">Runner</span> <span class="n">runner</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">Result</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Result</span><span class="o">();</span>
-    <span class="n">RunListener</span> <span class="n">listener</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">createListener</span><span class="o">();</span>
-    <span class="n">notifier</span><span class="o">.</span><span class="na">addFirstListener</span><span class="o">(</span><span class="n">listener</span><span class="o">);</span>
-    <span class="k">try</span> <span class="o">{</span>
-        <span class="n">notifier</span><span class="o">.</span><span class="na">fireTestRunStarted</span><span class="o">(</span><span class="n">runner</span><span class="o">.</span><span class="na">getDescription</span><span class="o">());</span>
-        <span class="n">runner</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">notifier</span><span class="o">);</span>
-        <span class="n">notifier</span><span class="o">.</span><span class="na">fireTestRunFinished</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
-    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-        <span class="n">removeListener</span><span class="o">(</span><span class="n">listener</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-<span class="o">}</span></code></pre></div>
-
-
-<p>结构与JUnit3中的TestRunner的doRun方法类似。</p>
-
-<ul>
-<li>添加监听器</li>
-<li>执行测试</li>
-</ul>
-
-
-
-
-
-    <a href="/2015/04/17/junit4-implements.html" class="post-readmore">阅读全文</a>
     <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
 </div>
 </section>
