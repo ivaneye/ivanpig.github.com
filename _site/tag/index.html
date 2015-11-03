@@ -9,9 +9,9 @@
     <meta name="generator" content="Asciidoctor 1.5.1">
     <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
     <title>你看到的是你想看到的</title>
-    <link rel="stylesheet" href="http://7xipn4.com1.z0.glb.clouddn.com/css/simple/font-awesome.min.css"/>
-    <link rel="stylesheet" href="http://7xipn4.com1.z0.glb.clouddn.com/css/simple/simple.css"/>
-    <link rel="stylesheet" href="http://7xipn4.com1.z0.glb.clouddn.com/css/simple/highliight.css"/>
+    <link rel="stylesheet" href="/css/simple/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/css/simple/simple.css"/>
+    <link rel="stylesheet" href="/css/simple/highliight.css"/>
     <script src="/js/min/jquery-1.7.2.min.js"></script>
     <script type="text/javascript">
         //获取url中的参数
@@ -22,9 +22,9 @@
         }
         var style = getUrlParam("style");
         if(style == null || style == undefined){
-            document.write("<link rel='stylesheet' href='http://7xipn4.com1.z0.glb.clouddn.com/css/simple/highliight.css'/>");
+            document.write("<link rel='stylesheet' href='/css/simple/highliight.css'/>");
         }else{
-            document.write("<link rel='stylesheet' href='http://7xipn4.com1.z0.glb.clouddn.com/css/pygmentscss/" + style + ".css'/>");
+            document.write("<link rel='stylesheet' href='/css/pygmentscss/" + style + ".css'/>");
         }
     </script>
     <style>
@@ -37,7 +37,7 @@
 <div id="toc" class="toc2">
     <div class="headerpic">
         <a href="/">
-            <img id="_home" src="http://7xipn4.com1.z0.glb.clouddn.com/img/head.jpg" alt="Profile Picture" style="width: 100px;" title="返回首页">
+            <img id="_home" src="/img/head.jpg" alt="Profile Picture" style="width: 100px;" title="返回首页">
         </a>
         <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)"
             width="90%" color="#ccc" size="1/">
@@ -60,11 +60,11 @@
 <div id="content">
     <div id='tagcloud' >
     
-    <a href="/tag#java" title="java" rel="50">java</a>
+    <a href="/tag#java" title="java" rel="52">java</a>
     
     <a href="/tag#scala" title="scala" rel="15">scala</a>
     
-    <a href="/tag#clojure" title="clojure" rel="56">clojure</a>
+    <a href="/tag#clojure" title="clojure" rel="55">clojure</a>
     
     <a href="/tag#luminus" title="luminus" rel="19">luminus</a>
     
@@ -88,7 +88,7 @@
     
     <a href="/tag#review" title="review" rel="1">review</a>
     
-    <a href="/tag#framework" title="framework" rel="2">framework</a>
+    <a href="/tag#framework" title="framework" rel="1">framework</a>
     
     <a href="/tag#opensource" title="opensource" rel="6">opensource</a>
     
@@ -116,9 +116,15 @@
     
     <a href="/tag#cdraw" title="cdraw" rel="1">cdraw</a>
     
-    <a href="/tag#mycode" title="mycode" rel="1">mycode</a>
+    <a href="/tag#jigsaw" title="jigsaw" rel="1">jigsaw</a>
     
-    <a href="/tag#从1到n" title="从1到n" rel="2">从1到n</a>
+    <a href="/tag#module" title="module" rel="1">module</a>
+    
+    <a href="/tag#docker" title="docker" rel="1">docker</a>
+    
+    <a href="/tag#how" title="how" rel="2">how</a>
+    
+    <a href="/tag#language" title="language" rel="2">language</a>
     
 </div>
 <script src="/js/min/jquery.tagcloud.min.js"></script>
@@ -139,6 +145,16 @@
     <div class="column fJqueryba">
         <h2 class=""><a name="java"></a>java</h2>
         <ul class="columnUl">
+            
+            <li>
+                <b><a href="/2015/11/03/javabasic.html" title="" class="gray_2" target="_blank">Java环境与语法</a></b>
+                <span>03 Nov 2015</span>
+            </li>
+            
+            <li>
+                <b><a href="/2015/09/23/jigsaw-quick-start.html" title="" class="gray_2" target="_blank">Java模块化:jigsaw初体验</a></b>
+                <span>23 Sep 2015</span>
+            </li>
             
             <li>
                 <b><a href="/2015/05/04/string.html" title="" class="gray_2" target="_blank">读源码-String</a></b>
@@ -478,11 +494,6 @@
     <div class="column fJqueryba">
         <h2 class=""><a name="clojure"></a>clojure</h2>
         <ul class="columnUl">
-            
-            <li>
-                <b><a href="/2015/06/28/cweb.html" title="" class="gray_2" target="_blank">Clojure Web栈</a></b>
-                <span>28 Jun 2015</span>
-            </li>
             
             <li>
                 <b><a href="/2015/06/07/cdraw.html" title="" class="gray_2" target="_blank">Clojure绘制UML</a></b>
@@ -1109,11 +1120,6 @@
         <ul class="columnUl">
             
             <li>
-                <b><a href="/2015/06/28/cweb.html" title="" class="gray_2" target="_blank">Clojure Web栈</a></b>
-                <span>28 Jun 2015</span>
-            </li>
-            
-            <li>
                 <b><a href="/2015/04/01/java_webframework.html" title="" class="gray_2" target="_blank">自用Java开发框架</a></b>
                 <span>01 Apr 2015</span>
             </li>
@@ -1323,29 +1329,70 @@
     </div>
     
     <div class="column fJqueryba">
-        <h2 class=""><a name="mycode"></a>mycode</h2>
+        <h2 class=""><a name="jigsaw"></a>jigsaw</h2>
         <ul class="columnUl">
             
             <li>
-                <b><a href="/2015/06/28/cweb.html" title="" class="gray_2" target="_blank">Clojure Web栈</a></b>
-                <span>28 Jun 2015</span>
+                <b><a href="/2015/09/23/jigsaw-quick-start.html" title="" class="gray_2" target="_blank">Java模块化:jigsaw初体验</a></b>
+                <span>23 Sep 2015</span>
             </li>
             
         </ul>
     </div>
     
     <div class="column fJqueryba">
-        <h2 class=""><a name="从1到n"></a>从1到n</h2>
+        <h2 class=""><a name="module"></a>module</h2>
         <ul class="columnUl">
             
             <li>
-                <b><a href="/2015/07/05/binary.html" title="" class="gray_2" target="_blank">从1到n:二进制</a></b>
-                <span>05 Jul 2015</span>
+                <b><a href="/2015/09/23/jigsaw-quick-start.html" title="" class="gray_2" target="_blank">Java模块化:jigsaw初体验</a></b>
+                <span>23 Sep 2015</span>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="column fJqueryba">
+        <h2 class=""><a name="docker"></a>docker</h2>
+        <ul class="columnUl">
+            
+            <li>
+                <b><a href="/2015/10/29/docker-first.html" title="" class="gray_2" target="_blank">Docker初探</a></b>
+                <span>29 Oct 2015</span>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="column fJqueryba">
+        <h2 class=""><a name="how"></a>how</h2>
+        <ul class="columnUl">
+            
+            <li>
+                <b><a href="/2015/11/03/javabasic.html" title="" class="gray_2" target="_blank">Java环境与语法</a></b>
+                <span>03 Nov 2015</span>
             </li>
             
             <li>
-                <b><a href="/2015/07/05/01.html" title="" class="gray_2" target="_blank">从1到n:前言与目录</a></b>
-                <span>05 Jul 2015</span>
+                <b><a href="/2015/11/01/language.html" title="" class="gray_2" target="_blank">如何学习一门编程语言</a></b>
+                <span>01 Nov 2015</span>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="column fJqueryba">
+        <h2 class=""><a name="language"></a>language</h2>
+        <ul class="columnUl">
+            
+            <li>
+                <b><a href="/2015/11/03/javabasic.html" title="" class="gray_2" target="_blank">Java环境与语法</a></b>
+                <span>03 Nov 2015</span>
+            </li>
+            
+            <li>
+                <b><a href="/2015/11/01/language.html" title="" class="gray_2" target="_blank">如何学习一门编程语言</a></b>
+                <span>01 Nov 2015</span>
             </li>
             
         </ul>
