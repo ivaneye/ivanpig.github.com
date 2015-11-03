@@ -5,13 +5,16 @@ categories: train
 tags: [how,language,java]
 avatarimg: "/img/head.jpg"
 author: Ivan
-published: false
 
 ---
 
 # 简介
 
-本文是对[如何学习一门编程语言]({% post_url /how/language/2015-11-01-language %})的具体实践。由我给毕业生做的Java培训PPT修改而成。
+本文是对[如何学习一门编程语言]({% post_url /how/language/2015-11-01-language %})的具体实践。
+
+前面说了基础语法是很简单的，如果有语言基础，比较好的方法是过一遍[Learn X in Y minutes](http://learnxinyminutes.com/)。
+
+下文是在公司给毕业生做培训时的PPT，可做参考！
 
 # Java环境搭建
 
@@ -56,18 +59,6 @@ public class Hello{
 -   输入java Hello
 
 <!-- more -->
-
-# 运行机制
-
---------------
-
-![]({{site.CDN_PATH}}/home/ivan/my/teach/java/javase/01_basic/file/2.jpg)
-
--   思考,Java如何做到跨平台?
-
-##
-
-![]({{site.CDN_PATH}}/home/ivan/my/teach/java/javase/01_basic/file/1.jpg)
 
 # 代码组成
 
@@ -124,7 +115,7 @@ public class Hello{
 
 ## 关键字
 
-![]({{site.CDN_PATH}}/home/ivan/my/teach/java/javase/01_basic/file/3.jpg)
+![]({{site.CDN_PATH}}/assets/how/language/javase/javabasic/3.jpg)
 
 ## 字面量
 
@@ -168,7 +159,7 @@ public class Hello{
 
 --------------
 
-![]({{site.CDN_PATH}}/home/ivan/my/teach/java/javase/01_basic/file/4.jpg)
+![]({{site.CDN_PATH}}/assets/how/language/javase/javabasic/4.jpg)
 
 ## 使用递归来计算基本类型的范围
 
