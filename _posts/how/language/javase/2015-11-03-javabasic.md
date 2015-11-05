@@ -10,7 +10,7 @@ author: Ivan
 
 # 简介
 
-本文是对[如何学习一门编程语言]({% post_url /how/language/2015-11-01-language %})的具体实践。
+本文是对[如何学习一门编程语言]({% post_url /how/language/2015-11-01-language %})的具体实践-Java语言第一篇。
 
 前面说了基础语法是很简单的，如果有语言基础，比较好的方法是过一遍[Learn X in Y minutes](http://learnxinyminutes.com/)。
 
