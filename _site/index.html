@@ -9,9 +9,9 @@
     <meta name="generator" content="Asciidoctor 1.5.1">
     <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
     <title>你看到的是你想看到的</title>
-    <link rel="stylesheet" href="/css/simple/font-awesome.min.css"/>
-    <link rel="stylesheet" href="/css/simple/simple.css"/>
-    <link rel="stylesheet" href="/css/simple/highliight.css"/>
+    <link rel="stylesheet" href="http://7xipn4.com1.z0.glb.clouddn.com/css/simple/font-awesome.min.css"/>
+    <link rel="stylesheet" href="http://7xipn4.com1.z0.glb.clouddn.com/css/simple/simple.css"/>
+    <link rel="stylesheet" href="http://7xipn4.com1.z0.glb.clouddn.com/css/simple/highliight.css"/>
     <script src="/js/min/jquery-1.7.2.min.js"></script>
     <script type="text/javascript">
         //获取url中的参数
@@ -22,9 +22,9 @@
         }
         var style = getUrlParam("style");
         if(style == null || style == undefined){
-            document.write("<link rel='stylesheet' href='/css/simple/highliight.css'/>");
+            document.write("<link rel='stylesheet' href='http://7xipn4.com1.z0.glb.clouddn.com/css/simple/highliight.css'/>");
         }else{
-            document.write("<link rel='stylesheet' href='/css/pygmentscss/" + style + ".css'/>");
+            document.write("<link rel='stylesheet' href='http://7xipn4.com1.z0.glb.clouddn.com/css/pygmentscss/" + style + ".css'/>");
         }
     </script>
     <style>
@@ -37,7 +37,7 @@
 <div id="toc" class="toc2">
     <div class="headerpic">
         <a href="/">
-            <img id="_home" src="/img/head.jpg" alt="Profile Picture" style="width: 100px;" title="返回首页">
+            <img id="_home" src="http://7xipn4.com1.z0.glb.clouddn.com/img/head.jpg" alt="Profile Picture" style="width: 100px;" title="返回首页">
         </a>
         <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)"
             width="90%" color="#ccc" size="1/">
@@ -89,14 +89,14 @@
 
 <section class="post">
     <header class="post-header">
-        <h2 class="post-title"><a href="/2015/11/03/javabasic.html">Java环境与语法</a></h2>
+        <h2 class="post-title"><a href="/2015/11/07/java-oo.html">Java语言思想(初版)</a></h2>
 
-        <p class="post-meta">By Ivan   2015年11月03日
+        <p class="post-meta">By Ivan   2015年11月07日
             
             
             
             
-            <a class="post-categorybut " href="/type/#train"><i class="fa fa-folder-open">train (1)</i></a>
+            <a class="post-categorybut " href="/type/#train"><i class="fa fa-folder-open">train (2)</i></a>
             
             
             
@@ -105,11 +105,11 @@
             
             
             
-            <a class="post-category " href="/tag/#how"><i class="fa fa-tags">how (2)</i></a>
+            <a class="post-category " href="/tag/#how"><i class="fa fa-tags">how (3)</i></a>
             
-            <a class="post-category " href="/tag/#language"><i class="fa fa-tags">language (2)</i></a>
+            <a class="post-category " href="/tag/#language"><i class="fa fa-tags">language (3)</i></a>
             
-            <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (52)</i></a>
+            <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (53)</i></a>
             
             
         
@@ -121,7 +121,83 @@
 <div class="post-description">
     <h1>简介</h1>
 
-<p>本文是对<a href="/2015/11/01/language.html">如何学习一门编程语言</a>的具体实践。</p>
+<p>本文是对<a href="/2015/11/01/language.html">如何学习一门编程语言</a>的具体实践-Java语言第二篇。</p>
+
+<p>Java是一门面向对象语言，所以其思想就是面向对象思想。</p>
+
+<h1>面向对象思想</h1>
+
+<p>那么，什么是面向对象思想呢？</p>
+
+<ul>
+<li>封装：面向对象程序设计隐藏了某一方法的具体执行步骤</li>
+<li>继承：在某种情况下，一个类会有“子类”。子类比原本的类（称为父类）要更加具体化。</li>
+<li>多态：指由继承而产生的相关的不同的类，其对象对同一消息会做出不同的响应</li>
+</ul>
+
+<p>这是维基百科上的答案！也是网上能得到的最多的答案！而这实际上根本不能算是面向对象思想。因为非面向对象语言也有此特性(后面介绍其它语言会讲到)，或者说普通得根本就不能算是特性了！！！</p>
+
+<h2>那么到底什么是面向对象思想呢？！</h2>
+
+<p>其实很简单，就是&quot;对象&quot;思想！面向对象思想中：将所有的东西都作为对象，所有的操作均是基于对象之上。以对象作为最小封装单位，以对象为单位进行交互，在对象之上实现了继承与多态。</p>
+
+<p>基于此，进而产生了对象之间的关系！</p>
+
+<h2>类之间的关系</h2>
+
+<ul>
+<li>  is (like) a</li>
+<li>  has a</li>
+</ul>
+
+
+
+
+    <a href="/2015/11/07/java-oo.html" class="post-readmore">阅读全文</a>
+    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
+</div>
+</section>
+
+
+
+
+
+
+<section class="post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/2015/11/03/javabasic.html">Java环境与语法</a></h2>
+
+        <p class="post-meta">By Ivan   2015年11月03日
+            
+            
+            
+            
+            <a class="post-categorybut " href="/type/#train"><i class="fa fa-folder-open">train (2)</i></a>
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="post-category " href="/tag/#how"><i class="fa fa-tags">how (3)</i></a>
+            
+            <a class="post-category " href="/tag/#language"><i class="fa fa-tags">language (3)</i></a>
+            
+            <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (53)</i></a>
+            
+            
+        
+        
+
+    </p>
+</header>
+
+<div class="post-description">
+    <h1>简介</h1>
+
+<p>本文是对<a href="/2015/11/01/language.html">如何学习一门编程语言</a>的具体实践-Java语言第一篇。</p>
 
 <p>前面说了基础语法是很简单的，如果有语言基础，比较好的方法是过一遍<a href="http://learnxinyminutes.com/">Learn X in Y minutes</a>。</p>
 
@@ -199,9 +275,9 @@ Java HotSpot<span class="o">(</span>TM<span class="o">)</span> 64-Bit Server VM 
             
             
             
-            <a class="post-category " href="/tag/#how"><i class="fa fa-tags">how (2)</i></a>
+            <a class="post-category " href="/tag/#how"><i class="fa fa-tags">how (3)</i></a>
             
-            <a class="post-category " href="/tag/#language"><i class="fa fa-tags">language (2)</i></a>
+            <a class="post-category " href="/tag/#language"><i class="fa fa-tags">language (3)</i></a>
             
             
         
@@ -363,7 +439,7 @@ boot2docker ip
             
             <a class="post-category " href="/tag/#jigsaw"><i class="fa fa-tags">jigsaw (1)</i></a>
             
-            <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (52)</i></a>
+            <a class="post-category " href="/tag/#java"><i class="fa fa-tags">java (53)</i></a>
             
             <a class="post-category " href="/tag/#module"><i class="fa fa-tags">module (1)</i></a>
             
@@ -455,7 +531,7 @@ src/com.greetings/module-info.java
 
 <p>以命令模式的UML为例，演示cdraw的使用</p>
 
-<p><img src="/assets/designpattern/command.jpg" alt=""></p>
+<p><img src="http://7xipn4.com1.z0.glb.clouddn.com/assets/designpattern/command.jpg" alt=""></p>
 
 <h1>安装Graphviz</h1>
 
@@ -488,7 +564,7 @@ src/com.greetings/module-info.java
 <li>defclass定义了类，及其字段(:f)和方法(:m),效果图如下:</li>
 </ul>
 
-<p><img src="/assets/mycode/cdraw/c1.png" alt=""></p>
+<p><img src="http://7xipn4.com1.z0.glb.clouddn.com/assets/mycode/cdraw/c1.png" alt=""></p>
 
 
 
@@ -551,7 +627,7 @@ src/com.greetings/module-info.java
 <li>App ClassLoader：称为系统类加载器，负责加载应用程序classpath目录下的所有jar和class文件。</li>
 </ul>
 
-<p><img src="/assets/jvm/classloader/classloader.jpg" alt=""></p>
+<p><img src="http://7xipn4.com1.z0.glb.clouddn.com/assets/jvm/classloader/classloader.jpg" alt=""></p>
 
 <p>示例:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">com.sun.nio.zipfs.ZipFileStore</span><span class="o">;</span>
@@ -576,69 +652,6 @@ sun.misc.Launcher<span class="nv">$AppClassLoader</span>@610f7612
 
 
     <a href="/2015/05/20/classloader.html" class="post-readmore">阅读全文</a>
-    <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
-</div>
-</section>
-
-
-
-
-
-
-<section class="post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/2015/05/12/consensus-protocol.html">一致性协议</a></h2>
-
-        <p class="post-meta">By Ivan   2015年05月12日
-            
-            
-            
-            
-            <a class="post-categorybut " href="/type/#consensus"><i class="fa fa-folder-open">consensus (1)</i></a>
-            
-            
-            
-
-            
-            
-            
-            
-            <a class="post-category " href="/tag/#consensus"><i class="fa fa-tags">consensus (1)</i></a>
-            
-            <a class="post-category " href="/tag/#paxos"><i class="fa fa-tags">paxos (1)</i></a>
-            
-            <a class="post-category " href="/tag/#zookeeper"><i class="fa fa-tags">zookeeper (2)</i></a>
-            
-            
-        
-        
-
-    </p>
-</header>
-
-<div class="post-description">
-    <h1>简介</h1>
-
-<p>一致性协议主要是为了解决分布式环境下的数据一致性问题。</p>
-
-<p>对于单节点应用来说，数据的同步相对较简单。例如数据库的事务，多线程中的锁，都是为了保证数据的一致性。</p>
-
-<p>而对于分布式环境来说，没有完善的强一致性解决方案。</p>
-
-<p>在2000年，加州大学伯克利分校Eric Brewer教授提出了CAP猜想(后被证明可行)：一个分布式系统不可能同时满足一致性(C:Consistency),
-可用性(A:Abailability)和分区容错性(P:Partition tolerance)这三个基本需求，最多只能同时满足其中的两项。</p>
-
-<p>后eBay架构师Dan Pritchett提出了BASE理论，即Basically Available(基本可用),Soft state(软状态)和Eventually consisent(最终一致性)。
-其核心思想即无法做到强一致性，但系统可以根据自身做到最终一致性。</p>
-
-<p>故对于分布式系统设计，目前的做法是保证可用性和分区容错性的基础上去实现最终一致性。</p>
-
-<p>而对于最终一致性处理，比较著名的协议和算法便是：二阶段提交协议(2PC)，三阶段提交协议(3PC)以及Paxos算法。</p>
-
-
-
-
-    <a href="/2015/05/12/consensus-protocol.html" class="post-readmore">阅读全文</a>
     <hr style="FILTER: progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)" width="90%" color="#ccc" size="1/">
 </div>
 </section>
