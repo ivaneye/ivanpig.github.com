@@ -107,5 +107,5 @@ IDE的话，Intellij IDEA有Clojure环境，不过速度太慢了。一般编写
 
 另外还有lighttable，详细介绍可见[这里](http://lighttable.com/)
 
-相关文章见[这里]({% post_url clojure/lighttable/2014-11-28-pigtheme %})
+相关文章见[这里]({% post_url /tech/language/clojure/lighttable/2014-11-28-pigtheme %})
 
