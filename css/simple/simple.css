@@ -320,7 +320,7 @@ p aside {
 }
 
 h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
-    font-family: "Open Sans", "DejaVu Sans", sans-serif;
+    font-family: "Microsoft YaHei","Open Sans", "DejaVu Sans", sans-serif;
     font-weight: 300;
     font-style: normal;
     color: #ba3925;
@@ -742,7 +742,7 @@ p a > code:hover {
 }
 
 #toc ul {
-    font-family: "Open Sans", "DejaVu Sans", sans-serif;
+    font-family: "Microsoft YaHei","Open Sans", "DejaVu Sans", sans-serif;
     list-style-type: none
 }
 
@@ -978,7 +978,7 @@ table.tableblock #preamble > .sectionbody > .paragraph:first-of-type p {
 
 .admonitionblock > table td.icon .title {
     font-weight: bold;
-    font-family: "Open Sans", "DejaVu Sans", sans-serif;
+    font-family: "Microsoft YaHei","Open Sans", "DejaVu Sans", sans-serif;
     text-transform: uppercase
 }
 
@@ -1226,7 +1226,7 @@ table.pyhltable .linenodiv {
 }
 
 .verseblock pre {
-    font-family: "Open Sans", "DejaVu Sans", sans;
+    font-family: "Microsoft YaHei","Open Sans", "DejaVu Sans", sans;
     font-size: 1.15rem;
     color: rgba(0, 0, 0, .85);
     font-weight: 300;
@@ -1809,7 +1809,7 @@ span.icon > .fa {
     width: 1.67em;
     height: 1.67em;
     line-height: 1.67em;
-    font-family: "Open Sans", "DejaVu Sans", sans-serif;
+    font-family: "Microsoft YaHei","Open Sans", "DejaVu Sans", sans-serif;
     font-style: normal;
     font-weight: bold
 }
