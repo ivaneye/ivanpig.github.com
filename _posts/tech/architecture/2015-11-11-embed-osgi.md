@@ -419,12 +419,14 @@ org.osgi.framework.system.packages.extra=org.embedosgi.host
             <Implementation-Title>demo</Implementation-Title>
             <Implementation-Version>1.0.0</Implementation-Version>
             <Export-Package></Export-Package>
-            <Import-Package>org.embedosgi.host</Import-Package>
+            <Import-Package>*</Import-Package>
             <Bundle-Activator>org.embedosgi.activator.Activator</Bundle-Activator>
         </instructions>
     </configuration>
 </plugin>
 ```
+
+\*号表示自动生成需要的导入包，你也可以将Import-Package标签删除，默认就是自动导入
 
 也就是说，通过系统Bundle导出了org.embedosgi.host这个包，然后在Bundle项目中导入了这个包。这样就可以在Bundle中调用了
 
@@ -433,11 +435,11 @@ org.osgi.framework.system.packages.extra=org.embedosgi.host
 配置
 
 ```
-org.osgi.framework.bootdelegation=sun.*,com.sun.*,org.embedosgi.*
+org.osgi.framework.bootdelegation=sun.*,com.sun.*,org.osgi.framework,org.osgi.framework.*,org.embedosgi.host
 org.osgi.framework.bundle.parent=app
 ```
 
-这里的意思是所有以sun,com.sun和org.embedosgi开头的包都通过AppClassLoader加载，加载后对所有bundle可见。
+这里的意思是所有以sun,com.sun,org.osgi.framework和org.embedosgi开头的包都通过AppClassLoader加载，加载后对所有bundle可见。
 
 Bundle项目不需要做任何导入导出！
 
