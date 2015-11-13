@@ -2,10 +2,9 @@
 layout: post
 title: Groovy环境与语法
 categories: train
-tags: [how,language,Groovy]
+tags: [how,language,groovy]
 avatarimg: "/img/head.jpg"
 author: Ivan
-published: false
 
 ---
 
@@ -28,6 +27,10 @@ groovy -version
 Groovy Version: 2.4.4 JVM: 1.7.0_79 Vendor: Oracle Corporation OS: Windows 7
 ```
 
+*说明*:
+
+Groovy兼容绝大部分Java语法，就是说Java代码可以直接使用Groovy运行，下面的代码将以Java代码为基础，一步步修改为Groovy语法
+
 # 第一个程序
 
 -   创建文件Hello.groovy
@@ -35,18 +38,39 @@ Groovy Version: 2.4.4 JVM: 1.7.0_79 Vendor: Oracle Corporation OS: Windows 7
 
 ```groovy
 //例子代码
-object Hello {
-  def main(args: Array[String]) {
-    val a = 1 + 1
-    val b = 1 + 2
-    println("(1 + 1) * 3 + (1 + 2) = " + (a * 3 + b))
-  }
+public class Hello{
+    public static void main(String[] args){
+        int a = 1 + 1;
+        int b = 1 + 2;
+        System.out.println("(1 + 1) * 3 + (1 + 2) = " + (a * 3 + b));
+    }
 }
 ```
 
 -   打开命令行,切换到文件所在路径
--   输入Groovyc Hello.Groovy
--   输入Groovy Hello
+-   输入groovyc Hello.groovy
+-   输入groovy Hello
+-   你也可以直接输入groovy Hello.groovy直接运行
+
+Groovy默认访问权限都是public的，可以不需要分号结尾，可以字符串内解析。所以代码可以写成:
+
+```groovy
+class Hello{
+    static void main(String[] args){
+        int a = 1 + 1
+        int b = 1 + 2
+        println("(1 + 1) * 3 + (1 + 2) = ${(a * 3 + b)}")
+    }
+}
+```
+
+Groovy可以不需要main方法，不需要类:
+
+```groovy
+int a = 1 + 1
+int b = 1 + 2
+println("(1 + 1) * 3 + (1 + 2) = ${(a * 3 + b)}")
+```
 
 <!-- more -->
 
@@ -56,18 +80,18 @@ object Hello {
 
 ```groovy
 //例子代码
-object Hello {
-  def main(args: Array[String]) {
-    val a = 1 + 1
-    val b = 1 + 2
-    println("(1 + 1) * 3 + (1 + 2) = " + (a * 3 + b))
-  }
+public class Hello{
+    public static void main(String[] args){
+        int a = 1 + 1;
+        int b = 1 + 2;
+        System.out.println("(1 + 1) * 3 + (1 + 2) = " + (a * 3 + b));
+    }
 }
 ```
 
 -   注释
 -   标识符(Hello,args)
--   关键字(object,def,val)
+-   关键字(public,class,static,void)
 -   字面量(字符串) ("(1 + 1) * 3 + (1 + 2) = ")
 -   变量(args,a,b)
 -   类
@@ -105,7 +129,7 @@ object Hello {
 
 ## 关键字
 
-![]({{site.CDN_PATH}}/assets/how/language/javase/javabasic/3.jpg)
+![]({{site.CDN_PATH}}/assets/how/language/Groovyse/Groovybasic/3.jpg)
 
 ## 字面量
 
@@ -137,11 +161,11 @@ object Hello {
 -   方法调用[递归调用]
 
 ```groovy
-object Hello {
-  def main(args: Array[String]) {
-    println("Hello")
-    main(null)
-  }
+public class Hello{
+    public static void main(String[] args){
+        System.out.println("Hello");
+        Hello.main(null);
+    }
 }
 ```
 
@@ -149,22 +173,22 @@ object Hello {
 
 --------------
 
-![]({{site.CDN_PATH}}/assets/how/language/javase/javabasic/4.jpg)
+![]({{site.CDN_PATH}}/assets/how/language/Groovyse/Groovybasic/4.jpg)
 
 ## 使用递归来计算基本类型的范围
 
 ```groovy
 
-object Test {
-  def p(num: Integer): Long = {
-    if (num == 0) return 1
-    return 2 * p(num - 1)
-  }
+public class Test{
+    public static long p(int num){
+        if(num == 0) return 1;
+        return 2 * p(--num);  //--num 与 num--
+    }
 
-  def caculateRange(num: Integer): Long = {
-    if (num == 0) return 1
-    return p(num) + caculateRange(num - 1)
-  }
+    public static long caculateRange(int num){
+        if(num == 0) return 1;
+        return p(num) + caculateRange(--num);
+    }
 }
 ```
 
@@ -178,10 +202,11 @@ object Test {
 
 ```groovy
 
-val arr:Array[Integer]
+int[] arr;
+int arr[];
 //初始化
 arr = {1,2,3};
-arr = new Array[Integer](10)  //默认初始化
+arr = new int[3];  //默认初始化
 //使用,下标从0开始
 arr[0];
 ```
@@ -217,22 +242,29 @@ int[][][] arr = new int[2][3][4];
 *    乘法 - 相乘操作符两侧的值
 /    除法 - 左操作数除以右操作数
 %    取模 - 右操作数除左操作数的余数
+++   自增 - 操作数的值增加1
+-    自减 - 操作数的值减少1
 ```
 
 ## 实例
 
 ```groovy
-object Test {
-  def main(args: Array[String]) {
-    val a = 10
-    val b = 20
-    val c = 25
-    System.out.println("a + b = " + (a + b) )
-    System.out.println("a - b = " + (a - b) )
-    System.out.println("a * b = " + (a * b) )
-    System.out.println("b / a = " + (b / a) )
-    System.out.println("b % a = " + (b % a) )
-    System.out.println("c % a = " + (c % a) )
+public class Test {
+  public static void main(String args[]) {
+     int a = 10;
+     int b = 20;
+     int c = 25;
+     int d = 25;
+     System.out.println("a + b = " + (a + b) );
+     System.out.println("a - b = " + (a - b) );
+     System.out.println("a * b = " + (a * b) );
+     System.out.println("b / a = " + (b / a) );
+     System.out.println("b % a = " + (b % a) );
+     System.out.println("c % a = " + (c % a) );
+     System.out.println("a++   = " +  (a++) );
+     System.out.println("b--   = " +  (a--) );
+     System.out.println("d++   = " +  (d++) );
+     System.out.println("++d   = " +  (++d) );
   }
 }
 ```
@@ -251,16 +283,16 @@ object Test {
 ## 实例
 
 ```groovy
-object Test {
-  def main(args: Array[String]) {
-    val a = 10
-    val b = 20
-    System.out.println("a == b = " + (a == b) )
-    System.out.println("a != b = " + (a != b) )
-    System.out.println("a > b = " + (a > b) )
-    System.out.println("a < b = " + (a < b) )
-    System.out.println("b >= a = " + (b >= a) )
-    System.out.println("b <= a = " + (b <= a) )
+public class Test {
+  public static void main(String args[]) {
+     int a = 10;
+     int b = 20;
+     System.out.println("a == b = " + (a == b) );
+     System.out.println("a != b = " + (a != b) );
+     System.out.println("a > b = " + (a > b) );
+     System.out.println("a < b = " + (a < b) );
+     System.out.println("b >= a = " + (b >= a) );
+     System.out.println("b <= a = " + (b <= a) );
   }
 }
 ```
@@ -281,25 +313,25 @@ object Test {
 
 ```groovy
 
-object Test {
-  def main(args: Array[String]) {
-    val a = 60 /* 60 = 0011 1100 */
-    val b = 13 /* 13 = 0000 1101 */
-    var c = 0
-    c = a & b       /* 12 = 0000 1100 */
-    System.out.println("a & b = " + c )
-    c = a | b       /* 61 = 0011 1101 */
-    System.out.println("a | b = " + c )
-    c = a ^ b       /* 49 = 0011 0001 */
-    System.out.println("a ^ b = " + c )
-    c = ~a          /*-61 = 1100 0011 */
-    System.out.println("~a = " + c )
-    c = a << 2     /* 240 = 1111 0000 */
-    System.out.println("a << 2 = " + c )
-    c = a >> 2     /* 215 = 1111 */
-    System.out.println("a >> 2  = " + c )
-    c = a >>> 2     /* 215 = 0000 1111 */
-    System.out.println("a >>> 2 = " + c )
+public class Test {
+  public static void main(String args[]) {
+     int a = 60; /* 60 = 0011 1100 */
+     int b = 13; /* 13 = 0000 1101 */
+     int c = 0;
+     c = a & b;       /* 12 = 0000 1100 */
+     System.out.println("a & b = " + c );
+     c = a | b;       /* 61 = 0011 1101 */
+     System.out.println("a | b = " + c );
+     c = a ^ b;       /* 49 = 0011 0001 */
+     System.out.println("a ^ b = " + c );
+     c = ~a;          /*-61 = 1100 0011 */
+     System.out.println("~a = " + c );
+     c = a << 2;     /* 240 = 1111 0000 */
+     System.out.println("a << 2 = " + c );
+     c = a >> 2;     /* 215 = 1111 */
+     System.out.println("a >> 2  = " + c );
+     c = a >>> 2;     /* 215 = 0000 1111 */
+     System.out.println("a >>> 2 = " + c );
   }
 }
 ```
@@ -317,13 +349,13 @@ object Test {
 
 ```groovy
 
-object Test {
-  def main(args: Array[String]) {
-    val a = true
-    val b = false
-    System.out.println("a && b = " + (a&&b))
-    System.out.println("a || b = " + (a||b) )
-    System.out.println("!(a && b) = " + !(a && b))
+public class Test {
+  public static void main(String args[]) {
+     boolean a = true;
+     boolean b = false;
+     System.out.println("a && b = " + (a&&b));
+     System.out.println("a || b = " + (a||b) );
+     System.out.println("!(a && b) = " + !(a && b));
   }
 }
 ```
@@ -349,20 +381,17 @@ object Test {
 
 ```groovy
 
-object Test {
-  def main(args: Array[String]) {
-    var a = 10
-    val b = 20
-    var c = 0
-    c = a + b
-    System.out.println("c = a + b = " + c )
-    c += a
-    System.out.println("c += a  = " + c )
-    c -= a
-    System.out.println("c -= a = " + c )
-    c *= a
-    System.out.println("c *= a = " + c )
-    a = 10 ;c = 15;c /= a
+public class Test {
+  public static void main(String args[]) {
+     int a = 10; int b = 20; int c = 0; c = a + b;
+     System.out.println("c = a + b = " + c );
+     c += a ;
+     System.out.println("c += a  = " + c );
+     c -= a ;
+     System.out.println("c -= a = " + c );
+     c *= a ;
+     System.out.println("c *= a = " + c );
+     a = 10; c = 15; c /= a ;
   }
 }
 ```
@@ -447,13 +476,13 @@ if(布尔表达式) {
 
 ```groovy
 
-object Test {
-  def main(args: Array[String]) {
-    val x = 10
-    if( x < 20 ){
-      System.out.print("这是 if 语句")
-    }
-  }
+public class Test {
+   public static void main(String args[]){
+      int x = 10;
+      if( x < 20 ){
+         System.out.print("这是 if 语句");
+      }
+   }
 }
 ```
 
@@ -470,15 +499,15 @@ if(布尔表达式){
 
 ```groovy
 
-object Test {
-  def main(args: Array[String]) {
-    val x = 30
-    if( x < 20 ){
-      System.out.print("这是 if 语句")
-    }else{
-      System.out.print("这是 else 语句")
-    }
-  }
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      if( x < 20 ){
+         System.out.print("这是 if 语句");
+      }else{
+         System.out.print("这是 else 语句");
+      }
+   }
 }
 ```
 
@@ -502,19 +531,19 @@ if(布尔表达式 1){
 
 ```groovy
 
-object Test {
-  def main(args: Array[String]) {
-    val x = 30
-    if( x == 10 ){
-      System.out.print("Value of X is 10")
-    }else if( x == 20 ){
-      System.out.print("Value of X is 20")
-    }else if( x == 30 ){
-      System.out.print("Value of X is 30")
-    }else{
-      System.out.print("This is else statement")
-    }
-  }
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      if( x == 10 ){
+         System.out.print("Value of X is 10");
+      }else if( x == 20 ){
+         System.out.print("Value of X is 20");
+      }else if( x == 30 ){
+         System.out.print("Value of X is 30");
+      }else{
+         System.out.print("This is else statement");
+      }
+   }
 }
 ```
 
@@ -522,16 +551,16 @@ object Test {
 
 ```groovy
 
-object Test {
-  def main(args: Array[String]) {
-    val x = 30
-    val y = 10
-    if( x == 30 ){
-      if( y == 10 ){
-        System.out.print("X = 30 and Y = 10")
-      }
+public class Test {
+   public static void main(String args[]){
+      int x = 30;
+      int y = 10;
+      if( x == 30 ){
+         if( y == 10 ){
+             System.out.print("X = 30 and Y = 10");
+          }
+       }
     }
-  }
 }
 ```
 
@@ -600,15 +629,15 @@ while( 布尔表达式 ) {
 
 ```groovy
 
-object Test {
-  def main(args: Array[String]) {
-    var x = 10
-    while( x < 20 ) {
-      System.out.print("value of x : " + x )
-      x += 1
-      System.out.print("\n")
-    }
-  }
+public class Test {
+   public static void main(String args[]) {
+      int x = 10;
+      while( x < 20 ) {
+         System.out.print("value of x : " + x );
+         x++;
+         System.out.print("\n");
+      }
+   }
 }
 ```
 
@@ -623,15 +652,15 @@ do {
 
 ```groovy
 
-object Test {
-  def main(args: Array[String]) {
-    var x = 10
-    do{
-      System.out.print("value of x : " + x )
-      x += 1
-      System.out.print("\n")
-    }while( x < 20 )
-  }
+public class Test {
+   public static void main(String args[]){
+      int x = 10;
+      do{
+         System.out.print("value of x : " + x );
+         x++;
+         System.out.print("\n");
+      }while( x < 20 );
+   }
 }
 ```
 

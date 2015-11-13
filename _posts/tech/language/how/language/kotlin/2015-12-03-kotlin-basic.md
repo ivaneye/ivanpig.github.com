@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Scala环境与语法
+title: Kotlin环境与语法
 categories: train
-tags: [how,language,scala]
+tags: [how,language,kotlin]
 avatarimg: "/img/head.jpg"
 author: Ivan
 published: false
@@ -11,11 +11,11 @@ published: false
 
 # 简介
 
-本文是对[如何学习一门编程语言]({% post_url /tech/language/how/language/2015-11-01-language %})的具体实践-Scala语言第一篇。
+本文是对[如何学习一门编程语言]({% post_url /tech/language/how/language/2015-11-01-language %})的具体实践-Kotlin语言第一篇。
 
-# Scala环境搭建
+# Kotlin环境搭建
 
--   到[Scala官方网站](http://scala-lang.org/)下载相应操作系统的包进行安装即可
+-   到[Kotlin官方网站](http://scala-lang.org/)下载相应操作系统的包进行安装即可
 -   打开命令行,输入
 
 ```

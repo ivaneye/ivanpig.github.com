@@ -30,18 +30,14 @@ Scala code runner version 2.11.7 -- Copyright 2002-2013, LAMP/EPFL
 
 # 第一个程序
 
--   创建文件Hello.scala
+-   创建文件hello.clj
 -   输入如下代码
 
 ```scala
 //例子代码
-object Hello {
-  def main(args: Array[String]) {
-    val a = 1 + 1
-    val b = 1 + 2
-    println("(1 + 1) * 3 + (1 + 2) = " + (a * 3 + b))
-  }
-}
+(def a (+ 1 1))
+(def b (+ 1 2))
+(println "(1 + 1) * 3 + (1 + 2) = "  (+ (* a 3) b))
 ```
 
 -   打开命令行,切换到文件所在路径
