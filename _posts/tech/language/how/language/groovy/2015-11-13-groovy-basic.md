@@ -5,6 +5,7 @@ categories: train
 tags: [how,language,groovy]
 avatarimg: "/img/head.jpg"
 author: Ivan
+published: false
 
 ---
 
