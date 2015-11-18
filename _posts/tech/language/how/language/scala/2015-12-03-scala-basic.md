@@ -96,16 +96,27 @@ object Hello {
 
 ## 标识符
 
--   标识符由字母（A-Z或者a-z）,美元符（\$）、下划线（\_）或数字组成
--   标识符都应该以字母（A-Z或者a-z）,美元符（\$）、或者下划线（\_）开始
--   关键字不能用作标识符
+-   首字符为字母，后续字符任意字母和数字，可后接下划线_
+-   首字符为操作符，后续字符为任意操作符
+-   以反引号 "`" 括起来的任意字符串(除了反引号)
+-   关键字不能用作标识符,但是使用`包围后可以
 -   标识符是大小写敏感的
--   合法标识符举例：age、\$salary、~value~、\_~1value~
+-   合法标识符举例：+  , `yield`  ,  αρετη ,  \_y ,  dot\_product\_\*
 -   非法标识符举例：123abc、-salary
 
 ## 关键字
 
-![]({{site.CDN_PATH}}/assets/how/language/javase/javabasic/3.jpg)
+```
+abstract    case        catch       class       def
+do          else        extends     false       final
+finally     for         forSome     if          implicit
+import      lazy        macro       match       new
+null        object      override    package     private
+protected   return      sealed      super       this
+throw       trait       try         true        type
+val         var         while       with        yield
+_    :    =    =>    <-    <:    <%     >:    #    @
+```
 
 ## 字面量
 
