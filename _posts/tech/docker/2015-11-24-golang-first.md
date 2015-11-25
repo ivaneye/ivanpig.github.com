@@ -5,7 +5,6 @@ categories: [golang]
 tags: [golang,language]
 avatarimg: "/img/head.jpg"
 author: Ivan
-published: false
 
 ---
 
@@ -15,7 +14,7 @@ published: false
 
 其实之前看过golang，对其语法无爱，所以就没太关注。
 
-这次抛开成见，简单梳理一下个人感觉比较有新意的地方！
+这次先简单梳理一下个人感觉比较有新意的地方！
 
 # Less is more
 
@@ -61,9 +60,9 @@ func main() {
 
 <!-- more -->
 
-# gofmt
+# go fmt
 
-gofmt算是个比较"变态"的功能。语言级提供format功能。连大括号的位置都有限制，否则无法编译通过!
+go fmt算是个比较"变态"的功能。语言级提供format功能。连大括号的位置都有限制，否则无法编译通过!
 
 ```go
 //go实现
@@ -117,6 +116,26 @@ gofmt和目录结构在语言层面处理了Java原来外部工具做的事情�
 ```go
 var a int
 //.\hello.go:10: a declared and not used
+```
+
+go可以同时赋值多个变量
+
+```go
+func main() {
+	 a,b := 3,4
+	 fmt.Println(a,b)
+}
+```
+
+那么如果你想交换两个变量的值，就很简单了
+
+```go
+func main() {
+	 a,b := 3,4
+	 fmt.Println(a,b)
+	 b,a = a,b
+	 fmt.Println(a,b)
+}
 ```
 
 # 面向类型
@@ -317,6 +336,72 @@ func (this Circle) area() {
 
 - Rect和Circle并没有像在Java里一样实现了interface,而是有和在interface里面定义的方法相同的方法
 - exec函数接收参数为interface
+
+# 传值还是传引用还是传指针？
+
+看如下Java代码
+
+```java
+public class Test {
+    public static void change(int num){
+        num = 0;
+    }
+
+    public static void main(String[] args) {
+        int num = 1;
+        change(num);
+        System.out.println("num = " + num);
+    }
+}
+```
+
+大家肯定都知道，这样是改不了num的值的。因为传递给change方法的是num的拷贝，而不是num自身。
+
+golang里，也是一样的
+
+```go
+//例子
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	num := 1
+	change(num)
+	fmt.Println(num)
+}
+
+func change(num int){
+	num = 0
+}
+```
+
+打印结果也是1
+
+但是go可以传指针，和C很类似。
+
+```go
+//例子
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	num := 1
+	change(&num)
+	fmt.Println(num)
+}
+
+func change(num *int){
+	*num = 0
+}
+```
+
+
 
 # 线程与协程
 
