@@ -1,11 +1,10 @@
 ---
 layout: post
-title: Go语言手册（Version of August 5, 2015）
+title: Go语言手册（Version of August 5, 2015）- UnDone
 categories: train
 tags: [how,language,go]
 avatarimg: "/img/head.jpg"
 author: Ivan
-published: false
 
 ---
 
