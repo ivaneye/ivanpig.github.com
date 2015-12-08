@@ -142,12 +142,12 @@ continue     for          import       return       var
 ```
 +    &     +=    &=     &&    ==    !=    (    )
 -    |     -=    |=     ||    <     <=    [    ]
-*    ^     * =    ^=     <-    >     >=    {    }
+*    ^     *=    ^=     <-    >     >=    {    }
 /    <<    /=    <<=    ++    =     :=    ,    ;
 %    >>    %=    >>=    --    !     ...   .    :
      &^          &^=
 ```
-
+****
 ## 整数字面量
 
 一个数字序列所表示的整数常量成为整数字面量。非十进制数可以使用相应的前缀做区分：0为八进制，0x或者0X为十六进制。十六进制中，字母a-f和A-F表示数字10-15。
@@ -209,7 +209,10 @@ imaginary_lit = (decimals | float_lit) "i" .
 
 ## Rune literals
 
-A rune literal represents a rune constant, an integer value identifying a Unicode code point. A rune literal is expressed as one or more characters enclosed in single quotes, as in 'x' or '\n'. Within the quotes, any character may appear except newline and unescaped single quote. A single quoted character represents the Unicode value of the character itself, while multi-character sequences beginning with a backslash encode values in various formats.
+rune字面量表示rune常量，它是一个标示Unicode码点的整型值。一个rune字面量可以通过一个
+或多个包含在单引号里的字符表示，例如'x'或者'\n'。在单引号内，除了换行和未转义的单引号，
+所有字符都可见。单引号包含的字符表示该字符所对应的Unicode值，而以反斜杠加字符的序列可转义
+为多种结果。
 
 The simplest form represents the single character within the quotes; since Go source text is Unicode characters encoded in UTF-8, multiple UTF-8-encoded bytes may represent a single integer value. For instance, the literal 'a' holds a single byte representing a literal a, Unicode U+0061, value 0x61, while 'ä' holds two bytes (0xc3 0xa4) representing a literal a-dieresis, U+00E4, value 0xe4.
 
