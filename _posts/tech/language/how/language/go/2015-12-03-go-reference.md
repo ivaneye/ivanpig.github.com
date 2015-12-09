@@ -71,7 +71,7 @@ unicode_digit  = /* 类型为“十进制数字”的 Unicode 码点 */ .
 
 # 字母和数字
 
-下划线字符 _（U+005F）被视为一个字母。
+下划线字符 \_（U+005F）被视为一个字母。
 
 ```
 letter        = unicode_letter | "_" .
@@ -119,7 +119,7 @@ identifier = letter { letter | unicode_digit } .
 ```
 ```
 a
-_x9_
+_x9
 ThisVariableIsExported
 αβ
 Some identifiers are predeclared.
@@ -147,7 +147,7 @@ continue     for          import       return       var
 %    >>    %=    >>=    --    !     ...   .    :
      &^          &^=
 ```
-****
+
 ## 整数字面量
 
 一个数字序列所表示的整数常量成为整数字面量。非十进制数可以使用相应的前缀做区分：0为八进制，0x或者0X为十六进制。十六进制中，字母a-f和A-F表示数字10-15。
@@ -207,36 +207,32 @@ imaginary_lit = (decimals | float_lit) "i" .
 .12345E+5i
 ```
 
-## Rune literals
+## Rune字面量
 
-rune字面量表示rune常量，它是一个标示Unicode码点的整型值。一个rune字面量可以通过一个
-或多个包含在单引号里的字符表示，例如'x'或者'\n'。在单引号内，除了换行和未转义的单引号，
-所有字符都可见。单引号包含的字符表示该字符所对应的Unicode值，而以反斜杠加字符的序列可转义
-为多种结果。
+rune字面量表示rune常量，它是一个标示Unicode码点的整型值。一个rune字面量可以通过一个或多个包含在单引号里的字符表示，例如'x'或者'\n'。在单引号内，除了换行和未转义的单引号，可以使用任意字符。单引号包含的字符表示该字符所对应的Unicode值，而以反斜杠加字符的序列可转义为多种结果。
 
+表示单个字符最简单的方式是使用单引号包裹；因为 Go 源文本使用 UTF-8 编码的 Unicode字符，所以多个UTF-8字节可能只代表一个整数值。比如,'a'是一个单字节，它表示字面量a（UnicodeU+0061）,值是0x61。而'ä'是两个字节(0xc3 0xa4)，表示字面量a-dieresis（ U+00E4）,值是0xe4
 
-The simplest form represents the single character within the quotes; since Go source text is Unicode characters encoded in UTF-8, multiple UTF-8-encoded bytes may represent a single integer value. For instance, the literal 'a' holds a single byte representing a literal a, Unicode U+0061, value 0x61, while 'ä' holds two bytes (0xc3 0xa4) representing a literal a-dieresis, U+00E4, value 0xe4.
+一些转义字符可以转义为ASCII码。有四种方式可以表示这种数字字面量：\x后面跟两个十六进制位；\u后面跟4个十六进制位；\U后面跟八个十六进制位；一个反斜杠，后面跟三个八进制位。每种表示方式所代表的值均是当前进制换算得到的值。
 
-Several backslash escapes allow arbitrary values to be encoded as ASCII text. There are four ways to represent the integer value as a numeric constant: \x followed by exactly two hexadecimal digits; \u followed by exactly four hexadecimal digits; \U followed by exactly eight hexadecimal digits, and a plain backslash \ followed by exactly three octal digits. In each case the value of the literal is the value represented by the digits in the corresponding base.
+虽然上面的表示方法都表示一个整数，但是它们的有效范围不同。八进制在0～255之间。十六进制表示必须满足前面说的构造限制。\u和\UUnicode码点会存在一些非法的值，这些非法值一般大于0x10FFFF和surrogate halves（不知道怎么翻译！～）
 
-Although these representations all result in an integer, they have different valid ranges. Octal escapes must represent a value between 0 and 255 inclusive. Hexadecimal escapes satisfy this condition by construction. The escapes \u and \U represent Unicode code points so within them some values are illegal, in particular those above 0x10FFFF and surrogate halves.
-
-After a backslash, certain single-character escapes represent special values:
+在反斜杠后面某些固定的字符代表一些特殊的值：
 
 ```
-\a   U+0007 alert or bell
-\b   U+0008 backspace
-\f   U+000C form feed
-\n   U+000A line feed or newline
-\r   U+000D carriage return
-\t   U+0009 horizontal tab
-\v   U+000b vertical tab
-\\   U+005c backslash
-\'   U+0027 single quote  (valid escape only within rune literals)
-\"   U+0022 double quote  (valid escape only within string literals)
+\a   U+0007 响铃符
+\b   U+0008 退格
+\f   U+000C 换页
+\n   U+000A 换行
+\r   U+000D 回车
+\t   U+0009 水平制表符
+\v   U+000b 垂直制表符
+\\   U+005c 反斜杠
+\'   U+0027 单引号
+\"   U+0022 双引号
 ```
 
-All other sequences starting with a backslash are illegal inside rune literals.
+其它以反斜杠开始的序列都是非法的rune字面量
 
 ```
 rune_lit         = "'" ( unicode_value | byte_value ) "'" .
@@ -262,20 +258,22 @@ escaped_char     = `\` ( "a" | "b" | "f" | "n" | "r" | "t" | "v" | `\` | "'" | `
 '\u12e4'
 '\U00101234'
 '\''         // rune literal containing single quote character
-'aa'         // illegal: too many characters
-'\xa'        // illegal: too few hexadecimal digits
-'\0'         // illegal: too few octal digits
-'\uDFFF'     // illegal: surrogate half
-'\U00110000' // illegal: invalid Unicode code point
+'aa'         // 非法: 太多的字符
+'\xa'        // 非法: 太少的十六进制位
+'\0'         // 非法: 太少的八进制位
+'\uDFFF'     // 非法: surrogate half
+'\U00110000' // 非法: 无效的Unicode码点
 ```
 
-## String literals
+## 字符串字面量
 
-A string literal represents a string constant obtained from concatenating a sequence of characters. There are two forms: raw string literals and interpreted string literals.
+字符串字面量就是由一系列的字符连接在一起组成的一个字符串常量。它有两种形式：一种是原生字符串(raw string literals)，一种是可解释的字符串(interpreted string literals)。
 
-Raw string literals are character sequences between back quotes, as in `foo`. Within the quotes, any character may appear except back quote. The value of a raw string literal is the string composed of the uninterpreted (implicitly UTF-8-encoded) characters between the quotes; in particular, backslashes have no special meaning and the string may contain newlines. Carriage return characters ('\r') inside raw string literals are discarded from the raw string value.
+原生字符串就是包括在两个反向单引号内的字符序列(Tab上面那个键)，例如`foo`。在引号内，除了反向单引号外可以包含任意字符。一个原生字符串的值就是将引号内的所有字符都按字面意思来看（UTF-8 字符）而形成的字符串；比如说，反斜杠不会转义；可以包含换行符。原生字符串中的回车符('\r')在字符串求值的过程中会被忽略掉。
 
-Interpreted string literals are character sequences between double quotes, as in "bar". Within the quotes, any character may appear except newline and unescaped double quote. The text between the quotes forms the value of the literal, with backslash escapes interpreted as they are in rune literals (except that \' is illegal and \" is legal), with the same restrictions. The three-digit octal (\nnn) and two-digit hexadecimal (\xnn) escapes represent individual bytes of the resulting string; all other escapes represent the (possibly multi-byte) UTF-8 encoding of individual characters. Thus inside a string literal \377 and \xFF represent a single byte of value 0xFF=255, while ÿ, \u00FF, \U000000FF and \xc3\xbf represent the two bytes 0xc3 0xbf of the UTF-8 encoding of character U+00FF.
+
+可解释的字符串是包括在双引号内的字符序列，例如"bar"。双引号内不能包括换行和非转义的双引号。双引号里的文本组成了该字面量，其中的转义规则和rune字面量相同(除了\'是非法的，而\"是合法的)。
+三个八进制\nnn或是两个十六进制\xnn都是对单个字节的字符串表示；而其他的转义形式都指的是（可能是多个字节的）UTF-8编码的单个字符。所以，在字符串值中的\377和\xFF都表示的是单个字节，值是0xFF=255；而ÿ、\u00FF、\U000000FF和\xc3\xbf都是对UTF-8编码的字符U+00FF(两个字节0xc3 0xbf)的表示。
 
 ```
 string_lit             = raw_string_lit | interpreted_string_lit .
@@ -283,7 +281,7 @@ raw_string_lit         = "`" { unicode_char | newline } "`" .
 interpreted_string_lit = `"` { unicode_value | byte_value } `"` .
 ```
 
-```
+```go
 `abc`                // same as "abc"
 `\n
 \n`                  // same as "\\n\n\\n"
@@ -297,7 +295,7 @@ interpreted_string_lit = `"` { unicode_value | byte_value } `"` .
 "\U00110000"         // illegal: invalid Unicode code point
 ```
 
-These examples all represent the same string:
+下面的例子表示相同的值:
 
 ```
 "日本語"                                 // UTF-8 input text
@@ -307,13 +305,14 @@ These examples all represent the same string:
 "\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e"  // the explicit UTF-8 bytes
 ```
 
-If the source code represents a character as two code points, such as a combining form involving an accent and a letter, the result will be an error if placed in a rune literal (it is not a single code point), and will appear as two code points if placed in a string literal.
+如果源代码需要使用两个码点表示一个字符，比如组合一个重音和一个字母，那么如果将这个字符放入到rune字面量中会有问题（因为它不是一个码点），而如果放在字符串中它占据两个代码点。
 
-## Constants
+# 常量
 
-There are boolean constants, rune constants, integer constants, floating-point constants, complex constants, and string constants. Rune, integer, floating-point, and complex constants are collectively called numeric constants.
+Go语言中常量包括:布尔常量，rune常量，整型常量，浮点型常量，复数常量和字符串常量。其中，rune,整型，浮点型和复数常量统称为数值常量。
 
-A constant value is represented by a rune, integer, floating-point, imaginary, or string literal, an identifier denoting a constant, a constant expression, a conversion with a result that is a constant, or the result value of some built-in functions such as unsafe.Sizeof applied to any value, cap or len applied to some expressions, real and imag applied to a complex constant and complex applied to numeric constants. The boolean truth values are represented by the predeclared constants true and false. The predeclared identifier iota denotes an integer constant.
+
+A constant value is 0 by a rune, integer, floating-point, imaginary, or string literal, an identifier denoting a constant, a constant expression, a conversion with a result that is a constant, or the result value of some built-in functions such as unsafe.Sizeof applied to any value, cap or len applied to some expressions, real and imag applied to a complex constant and complex applied to numeric constants. The boolean truth values are represented by the predeclared constants true and false. The predeclared identifier iota denotes an integer constant.
 
 In general, complex constants are a form of constant expression and are discussed in that section.
 
@@ -337,7 +336,7 @@ Implementation restriction: Although numeric constants have arbitrary precision 
 
 These requirements apply both to literal constants and to the result of evaluating constant expressions.
 
-## Variables
+# 变量
 
 A variable is a storage location for holding a value. The set of permissible values is determined by the variable's type.
 
@@ -347,7 +346,7 @@ Structured variables of array, slice, and struct types have elements and fields 
 
 The static type (or just type) of a variable is the type given in its declaration, the type provided in the new call or composite literal, or the type of an element of a structured variable. Variables of interface type also have a distinct dynamic type, which is the concrete type of the value assigned to the variable at run time (unless the value is the predeclared identifier nil, which has no type). The dynamic type may vary during execution but values stored in interface variables are always assignable to the static type of the variable.
 
-```
+```go
 var x interface{}  // x is nil and has static type interface{}
 var v *T           // v has value nil, static type *T
 x = 42             // x has value 42 and dynamic type int
@@ -376,13 +375,13 @@ Each type T has an underlying type: If T is one of the predeclared boolean, nume
    type T2 T1
    type T3 []T1
    type T4 T3
-``
+```
 
 The underlying type of string, T1, and T2 is string. The underlying type of []T1, T3, and T4 is []T1.
 
 ## Method sets
 
-A type may have a method set associated with it. The method set of an interface type is its interface. The method set of any other type T consists of all methods declared with receiver type T. The method set of the corresponding pointer type *T is the set of all methods declared with receiver *T or T (that is, it also contains the method set of T). Further rules apply to structs containing anonymous fields, as described in the section on struct types. Any other type has an empty method set. In a method set, each method must have a unique non-blank method name.
+A type may have a method set associated with it. The method set of an interface type is its interface. The method set of any other type T consists of all methods declared with receiver type T. The method set of the corresponding pointer type \*T is the set of all methods declared with receiver \*T or T (that is, it also contains the method set of T). Further rules apply to structs containing anonymous fields, as described in the section on struct types. Any other type has an empty method set. In a method set, each method must have a unique non-blank method name.
 
 The method set of a type determines the interfaces that the type implements and the methods that can be called using a receiver of that type.
 
@@ -507,7 +506,7 @@ struct {
 }
 ```
 
-A field declared with a type but no explicit field name is an anonymous field, also called an embedded field or an embedding of the type in the struct. An embedded type must be specified as a type name T or as a pointer to a non-interface type name *T, and T itself may not be a pointer type. The unqualified type name acts as the field name.
+A field declared with a type but no explicit field name is an anonymous field, also called an embedded field or an embedding of the type in the struct. An embedded type must be specified as a type name T or as a pointer to a non-interface type name \*T, and T itself may not be a pointer type. The unqualified type name acts as the field name.
 
 ```
 // A struct with four anonymous fields of type T1, *T2, P.T3 and *P.T4
@@ -535,8 +534,8 @@ Promoted fields act like ordinary fields of a struct except that they cannot be 
 
 Given a struct type S and a type named T, promoted methods are included in the method set of the struct as follows:
 
-If S contains an anonymous field T, the method sets of S and *S both include promoted methods with receiver T. The method set of *S also includes promoted methods with receiver *T.
-If S contains an anonymous field *T, the method sets of S and *S both include promoted methods with receiver T or *T.
+If S contains an anonymous field T, the method sets of S and \*S both include promoted methods with receiver T. The method set of \*S also includes promoted methods with receiver \*T.
+If S contains an anonymous field \*T, the method sets of S and \*S both include promoted methods with receiver T or \*T.
 A field declaration may be followed by an optional string literal tag, which becomes an attribute for all the fields in the corresponding field declaration. The tags are made visible through a reflection interface and take part in type identity for structs but are otherwise ignored.
 
 ```
@@ -788,7 +787,7 @@ struct{ a, b *T5 } and struct{ a, b *T5 }
 func(x int, y float64) *[]string and func(int, float64) (result *[]string)
 ```
 
-T0 and T1 are different because they are named types with distinct declarations; func(int, float64) *T0 and func(x int, y float64) *[]string are different because T0 is different from []string.
+T0 and T1 are different because they are named types with distinct declarations; func(int, float64) \*T0 and func(x int, y float64) \*[]string are different because T0 is different from []string.
 
 ## - Assignability
 
@@ -852,7 +851,7 @@ Labels are declared by labeled statements and are used in the "break", "continue
 
 ## Blank identifier
 
-The blank identifier is represented by the underscore character _. It serves as an anonymous placeholder instead of a regular (non-blank) identifier and has special meaning in declarations, as an operand, and in assignments.
+The blank identifier is represented by the underscore character \_. It serves as an anonymous placeholder instead of a regular (non-blank) identifier and has special meaning in declarations, as an operand, and in assignments.
 
 ## Predeclared identifiers
 
@@ -1148,7 +1147,7 @@ MethodDecl   = "func" Receiver MethodName ( Function | Signature ) .
 Receiver     = Parameters .
 ```
 
-The receiver is specified via an extra parameter section preceding the method name. That parameter section must declare a single parameter, the receiver. Its type must be of the form T or *T (possibly using parentheses) where T is a type name. The type denoted by T is called the receiver base type; it must not be a pointer or interface type and it must be declared in the same package as the method. The method is said to be bound to the base type and the method name is visible only within selectors for type T or *T.
+The receiver is specified via an extra parameter section preceding the method name. That parameter section must declare a single parameter, the receiver. Its type must be of the form T or \*T (possibly using parentheses) where T is a type name. The type denoted by T is called the receiver base type; it must not be a pointer or interface type and it must be declared in the same package as the method. The method is said to be bound to the base type and the method name is visible only within selectors for type T or \*T.
 
 A non-blank receiver identifier must be unique in the method signature. If the receiver's value is not referenced inside the body of the method, its identifier may be omitted in the declaration. The same applies in general to parameters of functions and methods.
 
@@ -1167,7 +1166,7 @@ func (p *Point) Scale(factor float64) {
 }
 ```
 
-bind the methods Length and Scale, with receiver type *Point, to the base type Point.
+bind the methods Length and Scale, with receiver type \*Point, to the base type Point.
 
 The type of a method is the type of a function with the receiver as first argument. For instance, the method Scale has type
 
@@ -1279,7 +1278,7 @@ tmp := [n]T{x1, x2, … xn}
 tmp[0 : n]
 ```
 
-Within a composite literal of array, slice, or map type T, elements or map keys that are themselves composite literals may elide the respective literal type if it is identical to the element or key type of T. Similarly, elements or keys that are addresses of composite literals may elide the &T when the element or key type is *T.
+Within a composite literal of array, slice, or map type T, elements or map keys that are themselves composite literals may elide the respective literal type if it is identical to the element or key type of T. Similarly, elements or keys that are addresses of composite literals may elide the &T when the element or key type is \*T.
 
 ```
 [...]Point{{1.5, -3.5}, {0, 0}}     // same as [...]Point{Point{1.5, -3.5}, Point{0, 0}}
@@ -1377,15 +1376,15 @@ For a primary expression x that is not a package name, the selector expression
 x.f
 ```
 
-denotes the field or method f of the value x (or sometimes *x; see below). The identifier f is called the (field or method) selector; it must not be the blank identifier. The type of the selector expression is the type of f. If x is a package name, see the section on qualified identifiers.
+denotes the field or method f of the value x (or sometimes \*x; see below). The identifier f is called the (field or method) selector; it must not be the blank identifier. The type of the selector expression is the type of f. If x is a package name, see the section on qualified identifiers.
 
 A selector f may denote a field or method f of a type T, or it may refer to a field or method f of a nested anonymous field of T. The number of anonymous fields traversed to reach f is called its depth in T. The depth of a field or method f declared in T is zero. The depth of a field or method f declared in an anonymous field A in T is the depth of f in A plus one.
 
 The following rules apply to selectors:
 
-- For a value x of type T or *T where T is not a pointer or interface type, x.f denotes the field or method at the shallowest depth in T where there is such an f. If there is not exactly one f with shallowest depth, the selector expression is illegal.
+- For a value x of type T or \*T where T is not a pointer or interface type, x.f denotes the field or method at the shallowest depth in T where there is such an f. If there is not exactly one f with shallowest depth, the selector expression is illegal.
 - For a value x of type I where I is an interface type, x.f denotes the actual method with name f of the dynamic value of x. If there is no method with name f in the method set of I, the selector expression is illegal.
-- As an exception, if the type of x is a named pointer type and (*x).f is a valid selector expression denoting a field (but not a method), x.f is shorthand for (*x).f.
+- As an exception, if the type of x is a named pointer type and (\*x).f is a valid selector expression denoting a field (but not a method), x.f is shorthand for (\*x).f.
 - In all other cases, x.f is illegal.
 - If x is of pointer type and has the value nil and x.f denotes a struct field, assigning to or evaluating x.f causes a run-time panic.
 - If x is of interface type and has the value nil, calling or evaluating the method x.f causes a run-time panic.
@@ -1449,7 +1448,7 @@ MethodExpr    = ReceiverType "." MethodName .
 ReceiverType  = TypeName | "(" "*" TypeName ")" | "(" ReceiverType ")" .
 ```
 
-Consider a struct type T with two methods, Mv, whose receiver is of type T, and Mp, whose receiver is of type *T.
+Consider a struct type T with two methods, Mv, whose receiver is of type T, and Mp, whose receiver is of type \*T.
 
 ```
 type T struct {
@@ -1512,7 +1511,7 @@ If the expression x has static type T and M is in the method set of type T, x.M 
 
 The type T may be an interface or non-interface type.
 
-As in the discussion of method expressions above, consider a struct type T with two methods, Mv, whose receiver is of type T, and Mp, whose receiver is of type *T.
+As in the discussion of method expressions above, consider a struct type T with two methods, Mv, whose receiver is of type T, and Mp, whose receiver is of type \*T.
 
 ```
 type T struct {
@@ -1546,7 +1545,7 @@ yields a function value of type
 ```
 func(float32) float32
 ```
-As with selectors, a reference to a non-interface method with a value receiver using a pointer will automatically dereference that pointer: pt.Mv is equivalent to (*pt).Mv.
+As with selectors, a reference to a non-interface method with a value receiver using a pointer will automatically dereference that pointer: pt.Mv is equivalent to (\*pt).Mv.
 
 As with method calls, a reference to a non-interface method with a pointer receiver using an addressable value will automatically take the address of that value: t.Mp is equivalent to (&t).Mp.
 ```
@@ -1583,7 +1582,7 @@ For a of array type A:
 
 For a of pointer to array type:
 
-- a[x] is shorthand for (*a)[x]
+- a[x] is shorthand for (\*a)[x]
 
 For a of slice type S:
 
@@ -1642,7 +1641,7 @@ a[2:]  // same as a[2 : len(a)]
 a[:3]  // same as a[0 : 3]
 a[:]   // same as a[0 : len(a)]
 ```
-If a is a pointer to an array, a[low : high] is shorthand for (*a)[low : high].
+If a is a pointer to an array, a[low : high] is shorthand for (\*a)[low : high].
 
 For arrays or strings, the indices are in range if 0 <= low <= high <= len(a), otherwise they are out of range. For slices, the upper index bound is the slice capacity cap(a) rather than the length. A constant index must be non-negative and representable by a value of type int; for arrays or constant strings, constant indices must also be in range. If both indices are constant, they must satisfy low <= high. If the indices are out of range at run time, a run-time panic occurs.
 
@@ -1666,7 +1665,7 @@ the slice t has type []int, length 2, capacity 4, and elements
 t[0] == 2
 t[1] == 3
 ```
-As for simple slice expressions, if a is a pointer to an array, a[low : high : max] is shorthand for (*a)[low : high : max]. If the sliced operand is an array, it must be addressable.
+As for simple slice expressions, if a is a pointer to an array, a[low : high : max] is shorthand for (\*a)[low : high : max]. If the sliced operand is an array, it must be addressable.
 
 The indices are in range if 0 <= low <= high <= max <= cap(a), otherwise they are out of range. A constant index must be non-negative and representable by a value of type int; for arrays, constant indices must also be in range. If multiple indices are constant, the constants that are present must be in range relative to each other. If the indices are out of range at run time, a run-time panic occurs.
 
@@ -1793,7 +1792,7 @@ var w int64 = 1.0<<33  // 1.0<<33 is a constant shift expression
 
 ### Operator precedence
 
-Unary operators have the highest precedence. As the ++ and -- operators form statements, not expressions, they fall outside the operator hierarchy. As a consequence, statement *p++ is the same as (*p)++.
+Unary operators have the highest precedence. As the ++ and -- operators form statements, not expressions, they fall outside the operator hierarchy. As a consequence, statement \*p++ is the same as (\*p)++.
 
 There are five precedence levels for binary operators. Multiplication operators bind strongest, followed by addition operators, comparison operators, && (logical AND), and finally || (logical OR):
 ```
@@ -1816,7 +1815,7 @@ x == y+1 && <-chanPtr > 0
 
 ## Arithmetic operators
 
-Arithmetic operators apply to numeric values and yield a result of the same type as the first operand. The four standard arithmetic operators (+, -, *, /) apply to integer, floating-point, and complex types; + also applies to strings. The bitwise logical and shift operators apply to integers only.
+Arithmetic operators apply to numeric values and yield a result of the same type as the first operand. The four standard arithmetic operators (+, -, \*, /) apply to integer, floating-point, and complex types; + also applies to strings. The bitwise logical and shift operators apply to integers only.
 ```
 +    sum                    integers, floats, complex values, strings
 -    difference             integers, floats, complex values
@@ -1869,13 +1868,13 @@ For integer operands, the unary operators +, -, and ^ are defined as follows:
 -x    negation              is 0 - x
 ^x    bitwise complement    is m ^ x  with m = "all bits set to 1" for unsigned x
                                       and  m = -1 for signed x
-``
+```
 
 ### Integer overflow
 
-For unsigned integer values, the operations +, -, *, and << are computed modulo 2n, where n is the bit width of the unsigned integer's type. Loosely speaking, these unsigned integer operations discard high bits upon overflow, and programs may rely on ``wrap around''.
+For unsigned integer values, the operations +, -, \*, and << are computed modulo 2n, where n is the bit width of the unsigned integer's type. Loosely speaking, these unsigned integer operations discard high bits upon overflow, and programs may rely on \`\`wrap around''.
 
-For signed integers, the operations +, -, *, and << may legally overflow and the resulting value exists and is deterministically defined by the signed integer representation, the operation, and its operands. No exception is raised as a result of overflow. A compiler may not optimize code under the assumption that overflow does not occur. For instance, it may not assume that x < x + 1 is always true.
+For signed integers, the operations +, -, \*, and << may legally overflow and the resulting value exists and is deterministically defined by the signed integer representation, the operation, and its operands. No exception is raised as a result of overflow. A compiler may not optimize code under the assumption that overflow does not occur. For instance, it may not assume that x < x + 1 is always true.
 
 ### Floating-point operators
 
@@ -1945,9 +1944,9 @@ Logical operators apply to boolean values and yield a result of the same type as
 
 ## Address operators
 
-For an operand x of type T, the address operation &x generates a pointer of type *T to x. The operand must be addressable, that is, either a variable, pointer indirection, or slice indexing operation; or a field selector of an addressable struct operand; or an array indexing operation of an addressable array. As an exception to the addressability requirement, x may also be a (possibly parenthesized) composite literal. If the evaluation of x would cause a run-time panic, then the evaluation of &x does too.
+For an operand x of type T, the address operation &x generates a pointer of type \*T to x. The operand must be addressable, that is, either a variable, pointer indirection, or slice indexing operation; or a field selector of an addressable struct operand; or an array indexing operation of an addressable array. As an exception to the addressability requirement, x may also be a (possibly parenthesized) composite literal. If the evaluation of x would cause a run-time panic, then the evaluation of &x does too.
 
-For an operand x of pointer type *T, the pointer indirection *x denotes the variable of type T pointed to by x. If x is nil, an attempt to evaluate *x will cause a run-time panic.
+For an operand x of pointer type \*T, the pointer indirection \*x denotes the variable of type T pointed to by x. If x is nil, an attempt to evaluate \*x will cause a run-time panic.
 ```
 &x
 &a[f(2)]
@@ -2830,7 +2829,7 @@ var z complex128
 
 ## Allocation
 
-The built-in function new takes a type T, allocates storage for a variable of that type at run time, and returns a value of type *T pointing to it. The variable is initialized as described in the section on initial values.
+The built-in function new takes a type T, allocates storage for a variable of that type at run time, and returns a value of type \*T pointing to it. The variable is initialized as described in the section on initial values.
 ```
 new(T)
 ```
@@ -2839,11 +2838,11 @@ For instance
 type S struct { a int; b float64 }
 new(S)
 ```
-allocates storage for a variable of type S, initializes it (a=0, b=0.0), and returns a value of type *S containing the address of the location.
+allocates storage for a variable of type S, initializes it (a=0, b=0.0), and returns a value of type \*S containing the address of the location.
 
 ## Making slices, maps and channels
 
-The built-in function make takes a type T, which must be a slice, map or channel type, optionally followed by a type-specific list of expressions. It returns a value of type T (not *T). The memory is initialized as described in the section on initial values.
+The built-in function make takes a type T, which must be a slice, map or channel type, optionally followed by a type-specific list of expressions. It returns a value of type T (not \*T). The memory is initialized as described in the section on initial values.
 ```
 Call             Type T     Result
 
@@ -3020,7 +3019,7 @@ The PackageName is used in qualified identifiers to access exported identifiers 
 
 The interpretation of the ImportPath is implementation-dependent but it is typically a substring of the full file name of the compiled package and may be relative to a repository of installed packages.
 
-Implementation restriction: A compiler may restrict ImportPaths to non-empty strings using only characters belonging to Unicode's L, M, N, P, and S general categories (the Graphic characters without spaces) and may also exclude the characters !"#$%&'()*,:;<=>?[\]^`{|} and the Unicode replacement character U+FFFD.
+Implementation restriction: A compiler may restrict ImportPaths to non-empty strings using only characters belonging to Unicode's L, M, N, P, and S general categories (the Graphic characters without spaces) and may also exclude the characters !"#$%&'()\*,:;<=>?[\]^\`{|} and the Unicode replacement character U+FFFD.
 
 Assume we have compiled a package containing the package clause package math, which exports function Sin, and installed the compiled package in the file identified by "lib/math". This table illustrates how Sin is accessed in files that import the package after the various types of import declaration.
 ```
@@ -3210,7 +3209,7 @@ var p ptr = nil
 ```
 The functions Alignof and Sizeof take an expression x of any type and return the alignment or size, respectively, of a hypothetical variable v as if v was declared via var v = x.
 
-The function Offsetof takes a (possibly parenthesized) selector s.f, denoting a field f of the struct denoted by s or *s, and returns the field offset in bytes relative to the struct's address. If f is an embedded field, it must be reachable without pointer indirections through fields of the struct. For a struct s with field f:
+The function Offsetof takes a (possibly parenthesized) selector s.f, denoting a field f of the struct denoted by s or \*s, and returns the field offset in bytes relative to the struct's address. If f is an embedded field, it must be reachable without pointer indirections through fields of the struct. For a struct s with field f:
 ```
 uintptr(unsafe.Pointer(&s)) + unsafe.Offsetof(s.f) == uintptr(unsafe.Pointer(&s.f))
 ```
