@@ -309,36 +309,35 @@ interpreted_string_lit = `"` { unicode_value | byte_value } `"` .
 
 # 常量
 
-Go语言中常量包括:布尔常量，rune常量，整型常量，浮点型常量，复数常量和字符串常量。其中，rune,整型，浮点型和复数常量统称为数值常量。
+Go语言中常量包括:布尔常量，rune常量，整型常量，浮点型常量，复数常量和字符串常量。其中，rune，整型，浮点型和复数常量统称为数值常量。
 
+常量值可以是一个rune，整数，浮点数，虚数或者字符串字面量，也可以是表示常量的标识符、常量表达式、一个结果为常量的类型转换，或者是一些内置函数的结果(比如unsafe.Sizeof,cap或者len)，亦或包含实部和虚部的复数常量和复杂的数值常量。布尔型的值可以使用预定义的常量true和false表示。预定义的iota表示一个整数型常量。
 
-A constant value is 0 by a rune, integer, floating-point, imaginary, or string literal, an identifier denoting a constant, a constant expression, a conversion with a result that is a constant, or the result value of some built-in functions such as unsafe.Sizeof applied to any value, cap or len applied to some expressions, real and imag applied to a complex constant and complex applied to numeric constants. The boolean truth values are represented by the predeclared constants true and false. The predeclared identifier iota denotes an integer constant.
+一般来说，复数常量是一种常量表达式，会在常量表达式章节讨论。
 
-In general, complex constants are a form of constant expression and are discussed in that section.
+数值常量表示任意精度的值，不会溢出。
 
-Numeric constants represent values of arbitrary precision and do not overflow.
+常量可能是有类型(typed)的也可以是没有类型(untyped)的。字面常量、true、false、iota和一些只包含没有类型的操作数的常量表达式都是没有类型的。
 
-Constants may be typed or untyped. Literal constants, true, false, iota, and certain constant expressions containing only untyped constant operands are untyped.
+可以通过如下方式给常量赋类型：通过常量定义或者类型转换可以进行显示赋类型，通过变量定义或者变量分配或者作为表达式中的操作数这样的方式进行隐式赋类型。如果一个常量不能用它对应的类型来表示，那么这就是个错误。例如：3.0可以传递给任意整型或者浮点型，而2147483648.0 (1<<31)可以传递给float32,float64,uint32但是不能传递给int32或者字符串类型。
 
-A constant may be given a type explicitly by a constant declaration or conversion, or implicitly when used in a variable declaration or an assignment or as an operand in an expression. It is an error if the constant value cannot be represented as a value of the respective type. For instance, 3.0 can be given any integer or any floating-point type, while 2147483648.0 (equal to 1<<31) can be given the types float32, float64, or uint32 but not int32 or string.
+一个没有类型的常量实际上是有默认类型的，这个类型是被隐式转换的，是这个常量在当前上下文中所需要的那个类型，举例来说，通过变量定义语法糖定义一个变量i:=0,这个i没有明确的类型。一个没有类型的常量的默认类型可以是bool,rune,int,float64,complex128或者字符串，取决于它是布尔型，rune型，整型，浮点型，复数型还是字符串型。
 
-An untyped constant has a default type which is the type to which the constant is implicitly converted in contexts where a typed value is required, for instance, in a short variable declaration such as i := 0 where there is no explicit type. The default type of an untyped constant is bool, rune, int, float64, complex128 or string respectively, depending on whether it is a boolean, rune, integer, floating-point, complex, or string constant.
+没有常量能代表 IEEE-754 的无穷大和非数值这两个值，但是math包中的 Inf、NaN、IsInf、和IsNaN 函数可以在运行时来返回或是测试这些值。
 
-There are no constants denoting the IEEE-754 infinity and not-a-number values, but the math package's Inf, NaN, IsInf, and IsNaN functions return and test for those values at run time.
+实现约束： 尽管说数值常量在语言中是任意精度的，但是一个编译器可能在实现的时候在内部只是用有限的精度来表示。所以，对于实现，需要遵循如下约束：
 
-Implementation restriction: Although numeric constants have arbitrary precision in the language, a compiler may implement them using an internal representation with limited precision. That said, every implementation must:
+- 整型常量至少 256 比特位；
+- 浮点常量，也包括复数常量的浮点部分，至少应该有 256 比特位的尾数和一个 32 比特位的有符号指数部分；
+- 如果不能精确地表示某个整数常量，就给出一个错误；
+- 如果因为溢出不能表示一个浮点数或是复数常量，就给出一个错误；
+- 如果不能精确的表示一个浮点数或是复数常量，那么就四舍五入到最近的那个能表示的常量。
 
-- Represent integer constants with at least 256 bits.
-- Represent floating-point constants, including the parts of a complex constant, with a mantissa of at least 256 bits and a signed exponent of at least 32 bits.
-- Give an error if unable to represent an integer constant precisely.
-- Give an error if unable to represent a floating-point or complex constant due to overflow.
-- Round to the nearest representable constant if unable to represent a floating-point or complex constant due to limits on precision.
-
-These requirements apply both to literal constants and to the result of evaluating constant expressions.
+这些约束适用于字面常量和常量表达式的结果。
 
 # 变量
 
-A variable is a storage location for holding a value. The set of permissible values is determined by the variable's type.
+变量实际上是一个存储空间，用来持有一个值的。变量可以持有哪些值，由变量的类型来决定。
 
 A variable declaration or, for function parameters and results, the signature of a function declaration or function literal reserves storage for a named variable. Calling the built-in function new or taking the address of a composite literal allocates storage for a variable at run time. Such an anonymous variable is referred to via a (possibly implicit) pointer indirection.
 
