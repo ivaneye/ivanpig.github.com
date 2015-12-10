@@ -257,7 +257,7 @@ escaped_char     = `\` ( "a" | "b" | "f" | "n" | "r" | "t" | "v" | `\` | "'" | `
 '\xff'
 '\u12e4'
 '\U00101234'
-'\''         // rune literal containing single quote character
+'\''         // 包含单引号的rune字面量
 'aa'         // 非法: 太多的字符
 '\xa'        // 非法: 太少的十六进制位
 '\0'         // 非法: 太少的八进制位
@@ -282,27 +282,27 @@ interpreted_string_lit = `"` { unicode_value | byte_value } `"` .
 ```
 
 ```go
-`abc`                // same as "abc"
+`abc`                // 等同于"abc"
 `\n
-\n`                  // same as "\\n\n\\n"
+\n`                  // 等同于"\\n\n\\n"
 "\n"
-"\""                 // same as `"`
+"\""                 // 等同于 `"`
 "Hello, world!\n"
 "日本語"
 "\u65e5本\U00008a9e"
 "\xff\u00FF"
-"\uD800"             // illegal: surrogate half
-"\U00110000"         // illegal: invalid Unicode code point
+"\uD800"             // 非法: surrogate half
+"\U00110000"         // 非法: 无效的Unicode码点
 ```
 
 下面的例子表示相同的值:
 
 ```
-"日本語"                                 // UTF-8 input text
-`日本語`                                 // UTF-8 input text as a raw literal
-"\u65e5\u672c\u8a9e"                    // the explicit Unicode code points
-"\U000065e5\U0000672c\U00008a9e"        // the explicit Unicode code points
-"\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e"  // the explicit UTF-8 bytes
+"日本語"                                 // UTF-8文本
+`日本語`                                 // UTF-8文本
+"\u65e5\u672c\u8a9e"                    // Unicode码点形式
+"\U000065e5\U0000672c\U00008a9e"        // Unicode码点形式
+"\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e"  // UTF-8字节
 ```
 
 如果源代码需要使用两个码点表示一个字符，比如组合一个重音和一个字母，那么如果将这个字符放入到rune字面量中会有问题（因为它不是一个码点），而如果放在字符串中它占据两个代码点。
@@ -339,11 +339,11 @@ Go语言中常量包括:布尔常量，rune常量，整型常量，浮点型常�
 
 变量实际上是一个存储空间，用来持有一个值的。变量可以持有哪些值，由变量的类型来决定。
 
-A variable declaration or, for function parameters and results, the signature of a function declaration or function literal reserves storage for a named variable. Calling the built-in function new or taking the address of a composite literal allocates storage for a variable at run time. Such an anonymous variable is referred to via a (possibly implicit) pointer indirection.
+一个变量声明，或者函数参数和结果，函数声明签名或者函数字面量都会导致开辟空间存放这些具名变量。调用内建函数new或者获取一个复合字面量(composite literal)的地址，都会导致在运行时开辟一个存放变量的空间。这些匿名变量会被一个指针间接引用。
 
-Structured variables of array, slice, and struct types have elements and fields that may be addressed individually. Each such element acts like a variable.
+结构化的变量，比如数组，切片(slice)和结构(struct)，它们包含了元素和字段，这些元素和字段会被独立寻址。每个元素可以当作一个独立的变量来对待。
 
-The static type (or just type) of a variable is the type given in its declaration, the type provided in the new call or composite literal, or the type of an element of a structured variable. Variables of interface type also have a distinct dynamic type, which is the concrete type of the value assigned to the variable at run time (unless the value is the predeclared identifier nil, which has no type). The dynamic type may vary during execution but values stored in interface variables are always assignable to the static type of the variable.
+在声明一个变量时指定了类型，那么这个类型称为静态类型(或者就称为类型)。类型可以在如下情况下指定:调用new函数时，复合字面量内，结构化变量的元素上。接口类型的变量还有个动态类型，这个类型取决于该变量在运行时被赋值给了哪个类型(除非这个变量的值是nil，nil是没有类型的)。动态类型需要在运行时才能确定，但是可以确定的是，该接口变量所持有的值可以赋值给和接口变量相同的静态类型的其它变量。
 
 ```go
 var x interface{}  // x is nil and has static type interface{}
@@ -352,11 +352,11 @@ x = 42             // x has value 42 and dynamic type int
 x = v              // x has value (*T)(nil) and dynamic type *T
 ```
 
-A variable's value is retrieved by referring to the variable in an expression; it is the most recent value assigned to the variable. If a variable has not yet been assigned a value, its value is the zero value for its type.
+变量在表达式内会被求值；这个值是该变量被求值前被赋予的最新值。如果一个变量没有被赋值，则会被默认赋符合该变量类型的0值(相当于Java中的默认值)
 
-## Types
+# Types
 
-A type determines the set of values and operations specific to values of that type. Types may be named or unnamed. Named types are specified by a (possibly qualified) type name; unnamed types are specified using a type literal, which composes a new type from existing types.
+一种类型决定了一个值的类型以及能对这个值所进行的操作。 类型可以是具名(named)的也可以是不具名(unnamed)的。具名类型由(可能要限定的)类型名指定； 不具名类型由类型字面量指定，它是由预声明的类型组合而成。
 
 ```
 Type      = TypeName | TypeLit | "(" Type ")" .
@@ -365,7 +365,7 @@ TypeLit   = ArrayType | StructType | PointerType | FunctionType | InterfaceType 
 	    SliceType | MapType | ChannelType .
 ```
 
-Named instances of the boolean, numeric, and string types are predeclared. Composite types—array, struct, pointer, function, interface, slice, map, and channel types—may be constructed using type literals.
+Go语言中具名的类型有：布尔类型、数值类型和字符串类型，这些都是内置的。 复合类型 — 比如数组、结构体、指针、函数、接口、切片、映射和管道类型 — 需要通过类型字面量构造。
 
 Each type T has an underlying type: If T is one of the predeclared boolean, numeric, or string types, or a type literal, the corresponding underlying type is T itself. Otherwise, T's underlying type is the underlying type of the type to which T refers in its type declaration.
 
